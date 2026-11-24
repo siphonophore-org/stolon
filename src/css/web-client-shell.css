@@ -1,0 +1,292 @@
+/* A page in the web client shell, laid out as the web client's pages are, its look from the web client's own stylesheets */
+/* Example: <body class="stolon-shell" data-stolon-access="user"><header class="stolon-shell-bar"></header><main class="stolon-shell-main"></main></body> */
+.stolon-shell {
+    margin: 0;
+    min-height: 100vh;
+}
+.stolon-shell[data-stolon-access="user"]:not([data-stolon-ready]) .stolon-shell-content,
+.stolon-shell[data-stolon-access="administrator"]:not([data-stolon-ready]) .stolon-shell-content,
+.stolon-shell[data-stolon-access="selected"]:not([data-stolon-ready]) .stolon-shell-content { display: none; }
+
+/* The app bar, fixed at the top, clear until the page scrolls and then the theme's bar color, as the web client's */
+/* Example: <header class="skinHeader MuiAppBar-root stolon-shell-bar stolon-shell-scrolled"><div class="MuiToolbar-root stolon-shell-toolbar"></div></header> */
+.stolon-shell-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--stolon-shell-layer-drawer);
+    color: var(--stolon-fg);
+    background-color: transparent;
+    background-image: none;
+    transition: box-shadow 0.3s var(--stolon-shell-ease);
+}
+.stolon-shell-bar.stolon-shell-scrolled {
+    background-color: var(--stolon-shell-bar-bg);
+    background-image: var(--stolon-shell-overlay-1);
+}
+.stolon-shell-toolbar {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    min-height: var(--stolon-shell-bar);
+    padding-top: env(safe-area-inset-top);
+}
+.stolon-shell-toolbar > * { flex-shrink: 0; }
+
+/* The bar's round icon button, such as the drawer's menu button */
+/* Example: <button class="paper-icon-button-light stolon-shell-icon-button" aria-label="Open menu"><svg></svg></button> */
+.stolon-shell-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: var(--stolon-shell-button);
+    height: var(--stolon-shell-button);
+    margin: 0;
+    padding: calc(var(--stolon-shell-unit) * 1.5);
+    border: 0;
+    border-radius: var(--stolon-radius-round);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+.stolon-shell-icon-button > svg { width: var(--stolon-shell-icon-bar); height: var(--stolon-shell-icon-bar); fill: currentColor; }
+
+/* The server's name and logo, a link to the web client's home, as Material UI's large text button */
+/* Example: <a class="stolon-shell-server" href="web/"><span class="stolon-shell-server-icon"><img src="web/icon.png" alt=""></span><span class="stolon-shell-server-name">Jellyfin</span></a> */
+.stolon-shell-server {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--stolon-shell-unit) calc(var(--stolon-shell-unit) * 1.375);
+    border-radius: var(--stolon-radius-small);
+    color: inherit;
+    font-size: var(--stolon-shell-font);
+    font-weight: 700;
+    line-height: 1.75;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.stolon-shell-server-name { overflow: hidden; text-overflow: ellipsis; }
+.stolon-shell-server-icon { display: inherit; margin: 0 var(--stolon-shell-unit) 0 calc(var(--stolon-shell-unit) / -2); }
+.stolon-shell-server-icon:empty { display: none; }
+.stolon-shell-server-icon > img { width: 1.85em; height: 1.85em; object-fit: contain; }
+
+/* The libraries in the bar, Favorites, the menu links, and the viewer's libraries, as Material UI's text buttons, the page it is on in the accent */
+/* Example: <nav class="stolon-shell-nav"><a class="stolon-shell-nav-button" aria-current="page" href="./"><span class="stolon-shell-nav-icon"><svg></svg></span>Requests</a></nav> */
+.stolon-shell-nav {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+.stolon-shell-nav-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: calc(var(--stolon-shell-unit) * 8);
+    min-height: calc(var(--stolon-shell-unit) * 5.5);
+    margin: 0 0 0 calc(var(--stolon-shell-unit) / 2);
+    padding: calc(var(--stolon-shell-unit) * 0.75) var(--stolon-shell-unit);
+    border: 0;
+    border-radius: var(--stolon-radius-small);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--stolon-shell-font-small);
+    font-weight: 500;
+    line-height: 1.75;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+}
+.stolon-shell-nav-button[aria-current] { color: var(--stolon-accent); }
+.stolon-shell-nav-icon { display: inherit; margin: 0 var(--stolon-shell-unit) 0 calc(var(--stolon-shell-unit) / -2); }
+.stolon-shell-nav-end-icon { display: inherit; margin: 0 calc(var(--stolon-shell-unit) / -2) 0 var(--stolon-shell-unit); }
+.stolon-shell-nav-icon > svg,
+.stolon-shell-nav-end-icon > svg { width: var(--stolon-shell-icon-small); height: var(--stolon-shell-icon-small); fill: currentColor; }
+.stolon-shell-nav-icon > .material-icons { width: var(--stolon-shell-icon-small); height: var(--stolon-shell-icon-small); overflow: hidden; font-size: var(--stolon-shell-icon-small); }
+@media (hover: hover) and (pointer: fine) {
+    .stolon-shell-icon-button:hover,
+    .stolon-shell-nav-button:hover,
+    .stolon-shell-server:hover { background-color: var(--stolon-shell-hover); }
+}
+.stolon-shell-icon-button:focus-visible,
+.stolon-shell-nav-button:focus-visible,
+.stolon-shell-server:focus-visible,
+.stolon-shell-avatar:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+/* The end of the bar, with the viewer's avatar, which opens the user menu */
+/* Example: <div class="stolon-shell-end"><button class="MuiAvatar-root stolon-shell-avatar" aria-label="User menu"><img src="Users/u1/Images/Primary" alt=""></button></div> */
+.stolon-shell-end {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding-left: var(--stolon-shell-unit);
+}
+.stolon-shell-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--stolon-shell-avatar);
+    height: var(--stolon-shell-avatar);
+    padding: 0;
+    border: 0;
+    border-radius: var(--stolon-radius-round);
+    overflow: hidden;
+    background: var(--stolon-shell-avatar-bg);
+    color: var(--stolon-fg);
+    cursor: pointer;
+}
+.stolon-shell-avatar > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.stolon-shell-avatar > svg { width: 75%; height: 75%; fill: currentColor; }
+
+/* A menu, the user menu or the libraries that do not fit the bar, as Material UI's menu: it grows in from its corner */
+/* Example: <div class="MuiMenu-paper stolon-shell-menu"><ul role="menu"><li role="none"><a class="stolon-shell-menu-item" role="menuitem" href="web/#/mypreferencesmenu"><span class="stolon-shell-menu-icon"><svg></svg></span><span>Settings</span></a></li></ul></div> */
+.stolon-shell-menu {
+    position: fixed;
+    z-index: var(--stolon-shell-layer-menu);
+    max-width: calc(100vw - var(--stolon-shell-unit) * 4);
+    padding: var(--stolon-shell-unit) 0;
+    border-radius: var(--stolon-radius-small);
+    color: var(--stolon-fg);
+    background-color: var(--stolon-surface);
+    background-image: var(--stolon-shell-overlay-8);
+    box-shadow: var(--stolon-shell-shadow-menu);
+    transform-origin: top right;
+    transition: opacity 0.3s var(--stolon-shell-ease), transform 0.2s var(--stolon-shell-ease);
+}
+.stolon-shell-menu.stolon-shell-nav-menu { transform-origin: top left; }
+.stolon-shell-menu.stolon-shell-growing { opacity: 0; transform: scale(0.75, 0.5625); }
+.stolon-shell-menu ul { list-style: none; margin: 0; padding: 0; }
+.stolon-shell-menu-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: calc(var(--stolon-shell-unit) * 0.75) calc(var(--stolon-shell-unit) * 2);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: var(--stolon-shell-font);
+    line-height: 1.5;
+    text-align: left;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.stolon-shell-menu-item > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.stolon-shell-menu-item:hover { background-color: var(--stolon-shell-hover); }
+.stolon-shell-menu-item:focus-visible { background-color: var(--stolon-shell-focus); outline: 0; }
+.stolon-shell-menu-icon { display: inline-flex; flex-shrink: 0; min-width: calc(var(--stolon-shell-unit) * 4.5); color: var(--stolon-shell-icon-color); }
+.stolon-shell-menu-icon > svg { width: var(--stolon-shell-icon); height: var(--stolon-shell-icon); fill: currentColor; }
+.stolon-shell-menu-icon > .material-icons { width: var(--stolon-shell-icon); height: var(--stolon-shell-icon); overflow: hidden; font-size: var(--stolon-shell-icon); }
+.stolon-shell-menu-divider > hr,
+.stolon-shell-divider { margin: var(--stolon-shell-unit) 0; border: 0; border-bottom: 1px solid var(--stolon-shell-divider); }
+.stolon-shell-divider { margin: 0; }
+
+/* The drawer, from the left over a dimmed page on a screen narrower than 900px, as the web client's */
+/* Example: <nav class="MuiDrawer-paper stolon-shell-drawer stolon-shell-open"><ul class="stolon-shell-drawer-list"><li><a class="stolon-shell-drawer-item" href="web/"><span class="stolon-shell-drawer-icon"><svg></svg></span><span class="stolon-shell-drawer-text">Home</span></a></li></ul></nav> */
+.stolon-shell-drawer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--stolon-shell-layer-drawer);
+    box-sizing: border-box;
+    max-width: calc(100vw - var(--stolon-shell-unit) * 7);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: calc(var(--stolon-shell-unit) * 8);
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    color: var(--stolon-fg);
+    background-color: var(--stolon-surface);
+    background-image: var(--stolon-shell-overlay-16);
+    box-shadow: var(--stolon-shell-shadow-drawer);
+    transform: translateX(-105%);
+    visibility: hidden;
+    transition: transform 225ms cubic-bezier(0, 0, 0.2, 1), visibility 0s 225ms;
+}
+.stolon-shell-drawer.stolon-shell-open {
+    transform: none;
+    visibility: visible;
+    transition: transform 225ms cubic-bezier(0, 0, 0.2, 1);
+}
+.stolon-shell-scrim {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--stolon-shell-layer-drawer);
+    background-color: var(--stolon-shell-scrim);
+}
+.stolon-shell-drawer-list { list-style: none; margin: 0; padding: var(--stolon-shell-unit) 0; }
+.stolon-shell-drawer-list:first-child { padding-top: 0; }
+.stolon-shell-drawer-item {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: var(--stolon-shell-unit) calc(var(--stolon-shell-unit) * 2);
+    color: inherit;
+    font-size: var(--stolon-shell-font);
+    line-height: 1.5;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.stolon-shell-drawer-item[aria-current] { background-color: var(--stolon-shell-selected); }
+@media (hover: hover) and (pointer: fine) {
+    .stolon-shell-drawer-item:hover { background-color: var(--stolon-shell-hover); }
+}
+.stolon-shell-drawer-icon { display: inline-flex; flex-shrink: 0; min-width: calc(var(--stolon-shell-unit) * 4.5); color: var(--stolon-shell-icon-color); }
+.stolon-shell-drawer-icon > svg { width: var(--stolon-shell-icon); height: var(--stolon-shell-icon); fill: currentColor; }
+.stolon-shell-drawer-icon > .material-icons { width: var(--stolon-shell-icon); height: var(--stolon-shell-icon); overflow: hidden; font-size: var(--stolon-shell-icon); }
+.stolon-shell-drawer-text { flex: 1 1 auto; min-width: 0; margin: calc(var(--stolon-shell-unit) / 2) 0; overflow: hidden; text-overflow: ellipsis; }
+.stolon-shell-drawer-subheader {
+    padding: 0 calc(var(--stolon-shell-unit) * 2);
+    color: var(--stolon-shell-text-secondary);
+    font-size: var(--stolon-shell-font-small);
+    font-weight: 500;
+    line-height: var(--stolon-shell-bar);
+}
+.stolon-shell-drawer-server .stolon-shell-drawer-icon { min-width: calc(var(--stolon-shell-unit) * 7); }
+.stolon-shell-drawer-server .stolon-shell-drawer-icon > img { width: 2.5rem; height: 2.5rem; object-fit: contain; }
+.stolon-shell-drawer-server-name { display: block; font-size: var(--stolon-shell-font-title); font-weight: 500; line-height: 1.6; overflow: hidden; text-overflow: ellipsis; }
+.stolon-shell-drawer-server-version { display: block; color: var(--stolon-shell-text-secondary); font-size: var(--stolon-shell-font-small); line-height: 1.43; }
+.stolon-shell-drawer-server-version:empty { display: none; }
+
+/* Under 900px the bar keeps the menu button and the avatar, and the server and libraries move into the drawer, as the web client's */
+@media (max-width: 899.98px) {
+    .stolon-shell-toolbar > .stolon-shell-server,
+    .stolon-shell-toolbar > .stolon-shell-nav { display: none; }
+}
+@media (min-width: 900px) {
+    .stolon-shell-toolbar > .stolon-shell-drawer-button,
+    .stolon-shell-drawer,
+    .stolon-shell-scrim { display: none; }
+}
+
+/* The page under the bar, which the plugin's content fills, and the gate where the page script asks the viewer to sign in */
+/* Example: <main class="stolon-shell-main"><div class="stolon-user-page-gate stolon-shell-gate" hidden></div><div class="stolon-shell-content"></div></main> */
+.stolon-shell-main {
+    display: block;
+    padding-top: calc(var(--stolon-shell-bar) + env(safe-area-inset-top));
+}
+.stolon-shell-gate {
+    max-width: calc(var(--stolon-size-large) * 11);
+    margin: 0 auto;
+    padding: calc(var(--stolon-gap-wide) * 2) var(--stolon-gap-wide);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stolon-shell-bar,
+    .stolon-shell-menu,
+    .stolon-shell-drawer { transition: none; }
+}

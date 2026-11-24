@@ -12,7 +12,8 @@ var ALLOWED = {
     expand_more: 'opens or closes a section, card, or panel',
     keyboard_arrow_down: 'opens a dropdown, or moves an item or steps a number down',
     keyboard_arrow_up: 'moves an item or steps a number up',
-    chevron_right: 'separates the levels of a trail, or opens a record from its row',
+    chevron_right: 'separates the levels of a trail, opens a record from its row, or scrolls a row of cards on, as the web client does',
+    chevron_left: 'scrolls a row of cards back, as the web client does',
     arrow_upward: 'a rising trend, or the folder above',
     arrow_downward: 'a falling trend',
     arrow_forward: 'a route from one place to the next, turned down when the places stack'

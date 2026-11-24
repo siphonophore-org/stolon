@@ -1,0 +1,155 @@
+/* An empty state, the web client's icon over a heading and a line, centered, for what the web client has no message of its own for */
+/* Example: <div class="stolon-web-empty"><span class="material-icons list" aria-hidden="true"></span><h2>Nothing here</h2><div class="secondaryText">Add one to start.</div></div> */
+.stolon-web-empty {
+    padding: calc(var(--stolon-gap-wide) * 3) var(--stolon-gap-narrow);
+    text-align: center;
+}
+.stolon-web-empty > h2 { margin: 0 0 var(--stolon-gap-narrow); }
+.stolon-web-empty > .material-icons { display: block; margin: 0 auto var(--stolon-gap-narrow); font-size: calc(var(--stolon-shell-icon) * 2.5); opacity: 0.4; }
+
+/* An error line under a form or in a dialog, red, hidden while empty */
+/* Example: <div class="stolon-web-error" role="alert">Could not save.</div> */
+.stolon-web-error {
+    margin-top: var(--stolon-gap-narrow);
+    color: var(--stolon-red-fg);
+}
+.stolon-web-error:empty { display: none; }
+
+/* A link in a line of text that keeps the text's color, such as a director's name */
+/* Example: <a class="button-link emby-button stolon-web-inherit" href="#">Name</a> */
+.stolon-web-inherit { color: inherit; }
+
+/* A toast with room for one action, such as Undo */
+/* Example: <div class="toast stolon-web-toast"><span>Removed.</span><button type="button">Undo</button></div> */
+.stolon-web-toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--stolon-gap-wide);
+    max-width: calc(100vw - var(--stolon-gap-wide));
+}
+.stolon-web-toast > button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--stolon-accent);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Reset filters, Material UI's primary text button with its icon, as the library toolbar's */
+/* Example: <button class="MuiButton-root stolon-web-reset-filters"><span class="MuiButton-startIcon"><svg></svg></span><span>Reset filters</span></button> */
+.stolon-web-reset-filters {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-width: calc(var(--stolon-shell-unit) * 8);
+    margin: 0;
+    padding: calc(var(--stolon-shell-unit) * 0.75) var(--stolon-shell-unit);
+    border: 0;
+    border-radius: var(--stolon-radius-small);
+    background: none;
+    color: var(--stolon-accent);
+    font: inherit;
+    font-size: var(--stolon-shell-font-small);
+    font-weight: 500;
+    line-height: 1.75;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.stolon-web-reset-filters:hover { background-color: var(--stolon-accent-wash); }
+.stolon-web-reset-filters:focus-visible { background-color: var(--stolon-accent-wash-strong); outline: 0; }
+.stolon-web-reset-filters:disabled { color: var(--stolon-shell-text-secondary); opacity: 0.5; cursor: default; background: none; }
+.stolon-web-reset-filters svg { display: block; width: var(--stolon-shell-icon-small); height: var(--stolon-shell-icon-small); margin-right: var(--stolon-shell-unit); fill: currentColor; }
+
+/* The filter popover, Material UI's popover paper with a section per filter, each a heading that opens its checkboxes */
+/* Example: <div class="MuiPopover-paper stolon-web-filters" role="dialog"><div class="stolon-web-filter"><h3 class="stolon-web-filter-heading"><button class="stolon-web-filter-summary" aria-expanded="false"></button></h3></div></div> */
+.stolon-web-filters {
+    position: fixed;
+    z-index: var(--stolon-shell-layer-menu);
+    box-sizing: border-box;
+    width: calc(var(--stolon-shell-unit) * 31.25);
+    max-width: calc(100vw - var(--stolon-shell-unit) * 4);
+    max-height: 50%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    border-radius: var(--stolon-radius-small);
+    color: var(--stolon-fg);
+    background-color: var(--stolon-surface);
+    background-image: var(--stolon-shell-overlay-8);
+    box-shadow: var(--stolon-shell-shadow-menu);
+}
+.stolon-web-filter { position: relative; border-top: 1px solid var(--stolon-shell-divider); }
+.stolon-web-filter-heading { margin: 0; font: inherit; }
+.stolon-web-filter-summary {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: var(--stolon-shell-bar);
+    margin: 0;
+    padding: 0 calc(var(--stolon-shell-unit) * 2);
+    border: 0;
+    background-color: var(--stolon-wash-faint);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.stolon-web-filter-summary:focus-visible { background-color: var(--stolon-shell-focus); outline: 0; }
+.stolon-web-filter-title { display: flex; flex-grow: 1; margin: calc(var(--stolon-shell-unit) * 1.5) 0 calc(var(--stolon-shell-unit) * 1.5) var(--stolon-shell-unit); }
+.stolon-web-filter-text { margin: 0; font-size: var(--stolon-shell-font-small); line-height: 1.5; }
+.stolon-web-filter-expand { display: flex; transition: transform 150ms var(--stolon-shell-ease); }
+.stolon-web-filter-summary[aria-expanded="true"] .stolon-web-filter-expand { transform: rotate(90deg); }
+.stolon-web-filter-expand > svg { width: var(--stolon-icon-small); height: var(--stolon-icon-small); fill: currentColor; }
+.stolon-web-filter-details { padding: calc(var(--stolon-shell-unit) * 2); }
+.stolon-web-filter-group { display: flex; flex-direction: column; }
+.stolon-web-filter-option { display: inline-flex; align-items: center; cursor: pointer; }
+.stolon-web-filter-box {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    padding: calc(var(--stolon-shell-unit) * 1.125);
+    border-radius: var(--stolon-radius-round);
+    color: var(--stolon-shell-text-secondary);
+}
+.stolon-web-filter-box:hover { background-color: var(--stolon-shell-hover); }
+.stolon-web-filter-input { position: absolute; top: 0; left: 0; z-index: 1; width: 100%; height: 100%; margin: 0; padding: 0; opacity: 0; cursor: inherit; }
+.stolon-web-filter-input:checked ~ svg { color: var(--stolon-accent); }
+.stolon-web-filter-box > svg { width: var(--stolon-shell-icon); height: var(--stolon-shell-icon); fill: currentColor; }
+.stolon-web-filter-input:checked ~ .stolon-web-unchecked,
+.stolon-web-filter-input:not(:checked) ~ .stolon-web-checked { display: none; }
+.stolon-web-filters .stolon-web-reset-filters { display: flex; margin: calc(var(--stolon-shell-unit) / 2) var(--stolon-shell-unit) var(--stolon-shell-unit) auto; }
+
+/* A loading placeholder card or line, a pulsing bar in place of text and a pulsing picture */
+/* Example: <div class="card portraitCard stolon-web-skeleton"><div class="cardPadder stolon-web-skeleton-padder"></div><span class="stolon-web-skeleton-bar"></span></div> */
+.stolon-web-skeleton-padder {
+    background: var(--stolon-wash-strong);
+    border-radius: var(--stolon-radius-small);
+    animation: stolon-web-pulse 1.4s ease-in-out infinite;
+}
+.stolon-web-skeleton-bar {
+    display: inline-block;
+    width: 70%;
+    height: 0.8em;
+    vertical-align: middle;
+    border-radius: var(--stolon-radius-small);
+    background: var(--stolon-wash-heavy);
+    animation: stolon-web-pulse 1.4s ease-in-out infinite;
+}
+.stolon-web-skeleton-line { display: block; width: 100%; height: 0.9em; margin: var(--stolon-gap-narrow) 0; }
+.stolon-web-skeleton-line:last-child { width: 60%; }
+
+/* Content that fades in once it has waited a moment, so a quick answer never flashes a placeholder */
+/* Example: <span class="stolon-web-appear"></span> */
+.stolon-web-appear { animation: stolon-web-appear 0.25s ease-out 0.3s both; }
+@keyframes stolon-web-pulse { 50% { opacity: 0.45; } }
+@keyframes stolon-web-appear { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+    .stolon-web-skeleton-padder,
+    .stolon-web-skeleton-bar,
+    .stolon-web-appear { animation: none; }
+}

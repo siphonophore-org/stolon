@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="{{LANGUAGE}}" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<!-- base, the server root relative to this page, so every address below and in the content works under any base path -->
+<base href="{{ROOT}}" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="referrer" content="no-referrer" />
+<!-- server, the id whose stored sign-in and theme the page reads -->
+<meta name="stolon-server-id" content="{{SERVER_ID}}" />
+<title>{{TITLE}}</title>
+<!-- favicon -->
+{{FAVICON}}
+<!-- manifest, when the plugin offers the page as an app -->
+{{MANIFEST}}
+<!-- web client, the rules its index.html carries and its stylesheets, in its order -->
+{{WEB_CLIENT}}
+<!-- fonts, the web client's Noto Sans faces and font stacks -->
+{{FONTS}}
+<!-- theme, the one the viewer picked in the web client, written before the first paint -->
+<script>
+(function () {
+    var theme = 'dark';
+    try {
+        var meta = document.querySelector('meta[name="stolon-server-id"]');
+        var id = meta ? meta.getAttribute('content') : '';
+        var servers = (JSON.parse(localStorage.getItem('jellyfin_credentials') || '{}') || {}).Servers;
+        var server = Array.isArray(servers) ? servers.filter(function (s) { return s && s.Id === id && s.AccessToken; })[0] : null;
+        var user = server && typeof server.UserId === 'string' ? server.UserId : null;
+        var picked = (user && localStorage.getItem(user + '-appTheme')) || localStorage.getItem('appTheme');
+        if (picked && /^[A-Za-z0-9_-]{1,64}$/.test(picked)) theme = picked;
+    } catch (e) {
+        theme = 'dark';
+    }
+    document.write('<link rel="stylesheet" id="stolon-shell-theme" href="web/themes/' + theme + '/theme.css" />');
+    document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+<noscript><link rel="stylesheet" href="web/themes/dark/theme.css" /></noscript>
+<!-- styles, the plugin's shared Stolon CSS. The page script adds the server's and the viewer's custom CSS after the content -->
+<link rel="stylesheet" href="{{STYLESHEET}}" />
+</head>
+<body class="stolon-shell" data-stolon-access="{{ACCESS}}" data-stolon-access-check="{{ACCESS_CHECK}}" data-stolon-mark="{{MARK}}" data-stolon-mark-icon="{{MARK_ICON}}">
+<!-- backdrop, the web client's page backdrop behind the theme's background -->
+<div class="backdropContainer"><div class="backdropImage"></div></div>
+<div class="backgroundContainer"></div>
+<!-- app bar -->
+<header class="skinHeader MuiPaper-root MuiAppBar-root stolon-shell-bar">
+<div class="MuiToolbar-root MuiToolbar-dense padded-left padded-right stolon-shell-toolbar">
+<button type="button" class="paper-icon-button-light stolon-shell-icon-button stolon-shell-drawer-button" aria-controls="stolon-shell-drawer" aria-expanded="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"></path></svg></button>
+<a class="stolon-shell-server" href="web/"><span class="MuiButton-startIcon stolon-shell-server-icon">{{LOGO}}</span><span class="stolon-shell-server-name">{{SERVER}}</span></a>
+<nav class="stolon-shell-nav" hidden></nav>
+<div class="stolon-shell-end">
+<button type="button" class="MuiAvatar-root stolon-shell-avatar" aria-haspopup="true" aria-controls="stolon-shell-user-menu" aria-expanded="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4m0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4"></path></svg></button>
+</div>
+</div>
+</header>
+<!-- menus, the libraries that do not fit the bar and the user menu, filled by the page script -->
+<div class="MuiPaper-root MuiMenu-paper stolon-shell-menu stolon-shell-nav-menu" id="stolon-shell-nav-menu" hidden><ul class="MuiList-root MuiMenu-list" role="menu"></ul></div>
+<div class="MuiPaper-root MuiMenu-paper stolon-shell-menu" id="stolon-shell-user-menu" hidden><ul class="MuiList-root MuiMenu-list" role="menu"></ul></div>
+<!-- drawer, for narrow screens -->
+<div class="stolon-shell-scrim" hidden></div>
+<nav class="MuiPaper-root MuiDrawer-paper stolon-shell-drawer" id="stolon-shell-drawer" tabindex="-1">
+<ul class="MuiList-root stolon-shell-drawer-list">
+<li><a class="MuiListItemButton-root stolon-shell-drawer-item stolon-shell-drawer-server" href="web/"><span class="MuiListItemIcon-root stolon-shell-drawer-icon">{{LOGO}}</span><span class="MuiListItemText-root stolon-shell-drawer-text"><span class="stolon-shell-drawer-server-name">{{SERVER}}</span><span class="stolon-shell-drawer-server-version"></span></span></a></li>
+<li><a class="MuiListItemButton-root stolon-shell-drawer-item" href="web/"><span class="MuiListItemIcon-root stolon-shell-drawer-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path></svg></span><span class="MuiListItemText-root stolon-shell-drawer-text stolon-shell-drawer-home"></span></a></li>
+</ul>
+<div class="stolon-shell-drawer-nav"></div>
+</nav>
+<!-- main, under the bar -->
+<main class="stolon-shell-main">
+<!-- gate, where the page script asks the viewer to sign in -->
+<div class="stolon-user-page-gate stolon-shell-gate" hidden></div>
+<!-- content -->
+<div class="stolon-shell-content">
+{{CONTENT}}
+</div>
+</main>
+{{DETAILS}}
+<!-- script, the plugin's shared Stolon JS, which checks the viewer and fills the bar -->
+<script type="module">
+import { startWebClientShell } from '{{SCRIPT}}';
+startWebClientShell({{OPTIONS}});
+</script>
+</body>
+</html>
