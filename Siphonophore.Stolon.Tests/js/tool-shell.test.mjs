@@ -143,3 +143,36 @@ test('destroy removes the resize listener', function () {
     ui.shell.destroy();
     assert.equal(dom.windowListeners('resize'), before);
 });
+
+test('a foldable shell puts a fold button with the name atop the sidebar, and folds to icons with names on hover', function () {
+    var folds = [];
+    var ui = build({ foldable: true, name: 'Necto', onFold: function (folded) { folds.push(folded); } });
+    var fold = ui.nav.querySelector('.stolon-tool-shell-fold');
+    assert.equal(fold.querySelector('.stolon-tool-shell-name').textContent, 'Necto');
+    assert.equal(fold.getAttribute('aria-label'), 'Collapse sidebar');
+    assert.equal(fold.getAttribute('aria-expanded'), 'true');
+    fold.click();
+    assert.ok(ui.shell.element.classList.contains('stolon-folded'));
+    assert.equal(fold.getAttribute('aria-label'), 'Expand sidebar');
+    assert.equal(fold.getAttribute('aria-expanded'), 'false');
+    assert.equal(ui.nav.querySelector('[data-key="vpn"]').getAttribute('title'), 'VPN');
+    assert.deepEqual(folds, [true]);
+    fold.click();
+    assert.ok(!ui.shell.element.classList.contains('stolon-folded'));
+    assert.equal(ui.nav.querySelector('[data-key="vpn"]').getAttribute('title'), null);
+    assert.deepEqual(folds, [true, false]);
+});
+
+test('a shell can start folded, and setFolded folds it from code without calling onFold', function () {
+    var folds = [];
+    var ui = build({ foldable: true, folded: true, onFold: function (folded) { folds.push(folded); } });
+    assert.ok(ui.shell.isFolded());
+    ui.shell.setFolded(false);
+    assert.ok(!ui.shell.isFolded());
+    assert.deepEqual(folds, []);
+});
+
+test('a shell that is not foldable has no fold button', function () {
+    var ui = build();
+    assert.equal(ui.nav.querySelector('.stolon-tool-shell-fold'), null);
+});

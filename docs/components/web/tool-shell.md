@@ -6,7 +6,8 @@ The outer layout of a page that holds several tools. A wide shell lists the tool
 
 | When | Use |
 | :--- | :--- |
-| A plugin page that gathers several tools, each with its own address | Tool Shell |
+| A plugin's tools, swapped in place on one page | [Tool App](tool-app.md), which builds the shell |
+| A page that lays out its own tools | Tool Shell |
 | Switching tools in place, without leaving the page | `onSelect` with `event.preventDefault()` |
 | Sections inside one tool | [Sub Tabs](sub-tabs.md) or [Tabs](tabs.md), inside the shell's `content` |
 | An overview of every tool | A [Status Card](status-card.md) grid in the shell's `content` |
@@ -37,13 +38,14 @@ Classes: `stolon-tool-shell`, with the parts `stolon-tool-shell-nav`, `stolon-to
 * `badge` is text or `{ label, color }` after the name, gray unless it names a color, in the sidebar and the menu.
 * `title` sets the heading, which is the current tool's name by default. `setCurrent(key, title)` marks another tool and sets the heading to the title or the tool's name. `setTools(tools, current)` replaces the tools.
 * The shell turns compact by its own width, when the sidebar and 480 pixels of content no longer fit side by side. It carries `stolon-compact`, the sidebar hides, and the heading becomes the title menu, a button such as "VPN" with a dropdown chevron. The heading stays for a screen reader.
+* `name` shows beside the fold button, such as the plugin's name. `foldable` puts a button atop the sidebar that folds it to its icons, with each name on hover, and back. `onFold(folded)` runs when it is used, and `setFolded` sets it from code.
 * The sidebar is a `nav` landmark named by `label`, "Tools" by default. The current entry carries `aria-current="page"` and the shared selection look.
 * The title menu is an [Overflow Menu](overflow-menu.md) with `text`. It opens on the current tool, the arrow keys move through the list, Home and End jump, and Escape closes it and returns focus to the button.
 
 ## Gotchas
 
 * The shell draws no back link. The browser's own back button returns to the tool before.
-* The sidebar sticks to the top of the page while the content scrolls.
+* The sidebar starts in line with the heading and scrolls with the page. Jellyfin clips each page, so a sidebar that stuck in place would only shift down.
 
 ## Reference
 
@@ -63,7 +65,11 @@ The outer layout of a page that holds several tools. A wide shell lists the tool
 | `current` | <code>string</code> | key of the tool shown, highlighted in the sidebar and the menu [optional] |
 | `title` | <code>string</code> | heading over the content (default the current tool's name) |
 | `label` | <code>string</code> | aria-label of the sidebar and the menu (default 'Tools') |
+| `foldable` | <code>boolean</code> | true to put a button atop the sidebar that folds it to its icons and back [optional] |
+| `folded` | <code>boolean</code> | true to start folded [optional] |
+| `name` | <code>string</code> | name shown beside the fold button, such as the plugin's, hidden while folded [optional] |
 | `onSelect` | <code>(key: string, tool: ToolShellTool, event: MouseEvent): void</code> | function(key, tool, event) called when a tool is chosen. A tool with an href follows it unless onSelect calls event.preventDefault() [optional] |
+| `onFold` | <code>(folded: boolean): void</code> | function(folded) called when the sidebar is folded or unfolded by its button [optional] |
 
 | Handle member | Type |
 | :--- | :--- |
@@ -71,6 +77,8 @@ The outer layout of a page that holds several tools. A wide shell lists the tool
 | `getCurrent` | <code>(): string &#124; null</code> |
 | `setCurrent` | <code>(key: string, title?: string): void</code> |
 | `setTools` | <code>(next: ToolShellTool[], current?: string): void</code> |
+| `isFolded` | <code>(): boolean</code> |
+| `setFolded` | <code>(folded: boolean): void</code> |
 | `destroy` | <code>(): void</code> |
 
 | Type | What it is |
@@ -80,12 +88,14 @@ The outer layout of a page that holds several tools. A wide shell lists the tool
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-tool-shell` | Page of several tools, a sidebar of tools beside the current tool's heading and content, built by createToolShell |
-| `stolon-tool-shell-nav` | Sidebar that lists every tool, five large controls wide, held in view while the page scrolls |
+| `stolon-tool-shell-nav` | Sidebar that lists every tool, five large controls wide, its top in line with the tool's heading |
 | `stolon-tool-shell-item.stolon-menu-item` | One tool in the sidebar, a menu item one large control tall with its icon, name, and badge, the current one in the shared selection look |
 | `stolon-tool-shell-main` | The current tool's heading and content, which take the width beside the sidebar |
 | `stolon-tool-shell-title` | Heading over a tool's content in the page heading size, cut with an ellipsis |
 | `stolon-tool-shell-switcher` | Title menu button that lists every tool, shown in place of the sidebar on a narrow shell, its text in line with the content's edge |
-| `stolon-tool-shell.stolon-compact` | A shell too narrow for its sidebar, by its own width, with the title menu button in place of the sidebar and the heading |
+| `stolon-tool-shell-fold.stolon-menu-item` | Button atop the sidebar that folds it to its icons and back, drawn as a sidebar entry so its icon lines up with theirs |
+| `stolon-tool-shell-name` | The plugin's name beside the fold button, in the weight of a heading |
+| `stolon-tool-shell.stolon-folded` | A folded sidebar, one large control wide, each entry a square with its icon centered and its name on hover |
 
 <!-- reference:end -->
 

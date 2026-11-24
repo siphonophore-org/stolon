@@ -188,7 +188,12 @@ export class FakeElement extends FakeNode {
     }
     click() { if (!this.disabled) this.dispatch('click'); }
     // Delivers an Event object, as the browser's dispatchEvent does.
-    dispatchEvent(event) { return !this.dispatch(event.type, { bubbles: event.bubbles }).defaultPrevented; }
+    // A CustomEvent's detail reaches the listeners, and a listener's preventDefault reaches the event sent.
+    dispatchEvent(event) {
+        var sent = this.dispatch(event.type, { bubbles: event.bubbles, detail: event.detail, cancelable: event.cancelable });
+        if (sent.defaultPrevented && event.cancelable && typeof event.preventDefault === 'function') event.preventDefault();
+        return !sent.defaultPrevented;
+    }
     select() {}
     setSelectionRange() {}
     get _canFocus() {

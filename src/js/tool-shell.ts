@@ -19,7 +19,11 @@ export interface ToolShellOptions {
     current?: string;
     title?: string;
     label?: string;
+    foldable?: boolean;
+    folded?: boolean;
+    name?: string;
     onSelect?(key: string, tool: ToolShellTool, event: MouseEvent): void;
+    onFold?(folded: boolean): void;
 }
 
 /** What createToolShell returns. content is the element the current tool's page goes in. */
@@ -28,6 +32,8 @@ export interface ToolShellHandle extends ComponentHandle {
     getCurrent(): string | null;
     setCurrent(key: string, title?: string): void;
     setTools(next: ToolShellTool[], current?: string): void;
+    isFolded(): boolean;
+    setFolded(folded: boolean): void;
     destroy(): void;
 }
 
@@ -42,9 +48,13 @@ var CONTENT_MIN = 480;
  *   current  : key of the tool shown, highlighted in the sidebar and the menu [optional]
  *   title    : heading over the content (default the current tool's name)
  *   label    : aria-label of the sidebar and the menu (default 'Tools')
+ *   foldable : true to put a button atop the sidebar that folds it to its icons and back [optional]
+ *   folded   : true to start folded [optional]
+ *   name     : name shown beside the fold button, such as the plugin's, hidden while folded [optional]
  *   onSelect : function(key, tool, event) called when a tool is chosen. A tool with an href follows it unless onSelect calls event.preventDefault() [optional]
+ *   onFold   : function(folded) called when the sidebar is folded or unfolded by its button [optional]
  * }
- * @returns { element, content, getCurrent, setCurrent, setTools, destroy }. setCurrent(key, title) highlights a tool and sets the heading to the title or the tool's name.
+ * @returns { element, content, getCurrent, setCurrent, setTools, isFolded, setFolded, destroy }. setCurrent(key, title) highlights a tool and sets the heading to the title or the tool's name.
  * The sidebar is a nav landmark whose current entry carries aria-current. The title menu opens a list the arrow keys move through, and Escape closes it.
  */
 export function createToolShell(options?: ToolShellOptions): ToolShellHandle {
@@ -70,6 +80,18 @@ export function createToolShell(options?: ToolShellOptions): ToolShellHandle {
         onSelect: function (value: unknown, item: OverflowMenuItem, event: MouseEvent): void { choose(String(value), event); }
     });
     menu.element.classList.add('stolon-tool-shell-switcher');
+    var folded = !!options.folded;
+    var fold: HTMLButtonElement | null = null;
+    if (options.foldable) {
+        fold = make('button', 'stolon-menu-item stolon-icon-text stolon-tool-shell-item stolon-tool-shell-fold', { type: 'button' }) as HTMLButtonElement;
+        fold.appendChild(icon('menu_open'));
+        if (options.name) fold.appendChild(make('span', 'stolon-menu-label stolon-tool-shell-name', null, options.name));
+        fold.addEventListener('click', function (): void {
+            setFolded(!folded);
+            if (options!.onFold) options!.onFold(folded);
+        });
+        nav.appendChild(fold);
+    }
     nav.appendChild(list);
     head.appendChild(title);
     head.appendChild(menu.element);
@@ -98,6 +120,8 @@ export function createToolShell(options?: ToolShellOptions): ToolShellHandle {
         el.setAttribute('data-key', key);
         if (on) el.setAttribute('aria-current', 'page');
         if (tool.icon) el.appendChild(icon(tool.icon));
+        // A folded sidebar shows only the icon, so the name shows on hover and names the entry for a screen reader.
+        if (folded) el.setAttribute('title', tool.name);
         el.appendChild(make('span', 'stolon-menu-label', { title: tool.name }, tool.name));
         var badge = menuBadge(tool.badge);
         if (badge) el.appendChild(badge);
@@ -123,6 +147,21 @@ export function createToolShell(options?: ToolShellOptions): ToolShellHandle {
         var text = fixedTitle || (tool ? tool.name : '');
         title.textContent = text;
         menu.setText(text);
+    }
+
+    // Folds the sidebar to its icons, or unfolds it to icons and names.
+    function setFolded(next: boolean): void {
+        folded = !!next;
+        root.classList.toggle('stolon-folded', folded);
+        if (fold) {
+            var text = stolonText(folded ? 'Stolon.ExpandSidebar' : 'Stolon.CollapseSidebar');
+            fold.setAttribute('aria-label', text);
+            fold.setAttribute('title', text);
+            fold.setAttribute('aria-expanded', folded ? 'false' : 'true');
+        }
+        navWidth = 0;
+        draw();
+        fit();
     }
 
     function setCurrent(key: string, nextTitle?: string): void {
@@ -151,8 +190,7 @@ export function createToolShell(options?: ToolShellOptions): ToolShellHandle {
     var tick = setTimeout(fit, 0);
     cleanups.push(function (): void { clearTimeout(tick); });
 
-    draw();
-    fit();
+    setFolded(folded);
 
     return {
         element: root,
@@ -164,6 +202,8 @@ export function createToolShell(options?: ToolShellOptions): ToolShellHandle {
             if (key !== undefined) current = String(key);
             draw();
         },
+        isFolded: function (): boolean { return folded; },
+        setFolded: setFolded,
         destroy: function (): void {
             runAll(cleanups);
             menu.destroy();

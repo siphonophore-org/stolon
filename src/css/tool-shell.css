@@ -7,12 +7,10 @@
     min-width: 0;
 }
 
-/* Sidebar that lists every tool, five large controls wide, held in view while the page scrolls */
+/* Sidebar that lists every tool, five large controls wide, its top in line with the tool's heading */
 /* Example: <nav class="stolon-tool-shell-nav" aria-label="Tools"><ul class="stolon-tool-shell-list"><li class="stolon-tool-shell-entry"></li></ul></nav> */
 .stolon-tool-shell-nav {
     flex: 0 0 calc(var(--stolon-size-large) * 5);
-    position: sticky;
-    top: var(--stolon-gap-wide);
     min-width: 0;
 }
 .stolon-tool-shell-list {
@@ -77,6 +75,29 @@
 
 /* A shell too narrow for its sidebar, by its own width, with the title menu button in place of the sidebar and the heading */
 /* Example: <div class="stolon-tool-shell stolon-compact"></div> */
+/* Button atop the sidebar that folds it to its icons and back, drawn as a sidebar entry so its icon lines up with theirs */
+/* Example: <button type="button" class="stolon-menu-item stolon-icon-text stolon-tool-shell-item stolon-tool-shell-fold" aria-label="Collapse sidebar" aria-expanded="true"><span class="material-icons" aria-hidden="true">menu_open</span></button> */
+.stolon-tool-shell-fold.stolon-menu-item { margin-bottom: var(--stolon-gap-narrow); }
+
+/* The plugin's name beside the fold button, in the weight of a heading */
+/* Example: <span class="stolon-menu-label stolon-tool-shell-name">Zooid</span> */
+.stolon-tool-shell-name { font-weight: 600; }
+
+/* A folded sidebar, one large control wide, each entry a square with its icon centered and its name on hover */
+/* Example: <div class="stolon-tool-shell stolon-folded"><nav class="stolon-tool-shell-nav"></nav></div> */
+.stolon-tool-shell.stolon-folded > .stolon-tool-shell-nav { flex-basis: var(--stolon-size-large); }
+.stolon-tool-shell.stolon-folded .stolon-tool-shell-item.stolon-menu-item {
+    width: var(--stolon-size-large);
+    height: var(--stolon-size-large);
+    padding: 0;
+    justify-content: center;
+}
+/* The fold button's icon turns to point outward while folded, so it reads as the way back */
+/* Example: <div class="stolon-tool-shell stolon-folded"><button class="stolon-tool-shell-fold"><span class="material-icons">menu_open</span></button></div> */
+.stolon-tool-shell.stolon-folded .stolon-tool-shell-fold > .material-icons { transform: scaleX(-1); }
+.stolon-tool-shell.stolon-folded .stolon-tool-shell-item > .stolon-menu-label,
+.stolon-tool-shell.stolon-folded .stolon-tool-shell-item > .stolon-menu-badge { display: none; }
+
 .stolon-tool-shell.stolon-compact { display: block; }
 .stolon-tool-shell.stolon-compact > .stolon-tool-shell-nav { display: none; }
 .stolon-tool-shell.stolon-compact .stolon-tool-shell-switcher { display: inline-block; }

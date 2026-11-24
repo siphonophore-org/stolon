@@ -124,6 +124,7 @@ The CSS is written to survive the desktop app's Qt WebEngine and older TV webvie
 | [Indent](indent.md) | A left ruled group under a toggle |
 | [Reset Group](reset-group.md) | Rows that pair a description with an action |
 | [Sub Tabs](sub-tabs.md) | An in page tab list with panels |
+| [Tool App](tool-app.md) | One page that holds a plugin's tools, dashboard first, and swaps them in place |
 | [Tool Shell](tool-shell.md) | A sidebar of tools beside the current tool, or a title menu of tools when narrow |
 | [Breadcrumbs](breadcrumbs.md) | A trail of places |
 | [Stepper](stepper.md) | Numbered steps for a flow |

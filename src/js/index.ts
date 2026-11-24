@@ -118,6 +118,8 @@ export { createStatusCard, createStatusCardGrid } from './status-card.js';
 export type * from './status-card.js';
 export { createToolShell } from './tool-shell.js';
 export type * from './tool-shell.js';
+export { createToolApp, setToolTitle, refreshTools, openTool, TOOL_TITLE_EVENT, TOOLS_CHANGE_EVENT, TOOL_OPEN_EVENT, TOOL_PARAM_ATTRIBUTE } from './tool-app.js';
+export type * from './tool-app.js';
 export { createProgressRing } from './progress-ring.js';
 export type * from './progress-ring.js';
 export { createTimeline } from './timeline.js';

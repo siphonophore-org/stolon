@@ -84,6 +84,7 @@ nav:
               - Indent: components/web/indent.md
               - Reset Group: components/web/reset-group.md
               - Sub Tabs: components/web/sub-tabs.md
+              - Tool App: components/web/tool-app.md
               - Tool Shell: components/web/tool-shell.md
               - Breadcrumbs: components/web/breadcrumbs.md
               - Stepper: components/web/stepper.md
