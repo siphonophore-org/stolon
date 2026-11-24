@@ -405,7 +405,7 @@ function html(parent, markup) {
         body.innerHTML = '<div class="inputContainer"><label>Name</label><input type="text" id="demoEditorName" value="Living room"></div>' +
             '<div class="inputContainer"><label>Starts on</label><input type="date" value="2026-03-10"></div>';
         const input = body.querySelector('input');
-        const editor = base.openEditorDialog({
+        base.openEditorDialog({
             title: 'Edit Record', body: body, serialize: () => input.value, cancelText: 'Cancel',
             onRemove: (close) => close('removed'),
             onDone: () => true,

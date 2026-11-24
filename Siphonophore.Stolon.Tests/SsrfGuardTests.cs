@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -1099,9 +1100,9 @@ public class SsrfGuardTests
     [Fact]
     public async Task ValidateUrlAsync_AnyResolverFailure_RefusedAndCancellationPropagates()
     {
-        foreach (Exception failure in new Exception[] { new ArgumentException("bad"), new InvalidOperationException("bad"), new IOException("bad") })
+        var failures = new Exception[] { new ArgumentException("bad"), new InvalidOperationException("bad"), new IOException("bad") };
+        foreach (var guard in failures.Select(failure => new SsrfGuard(true, (_, _) => throw failure)))
         {
-            var guard = new SsrfGuard(true, (_, _) => throw failure);
 
             var error = await guard.ValidateUrlAsync("http://odd.test/", allowUnresolved: true, cancellationToken: CancellationToken.None);
 

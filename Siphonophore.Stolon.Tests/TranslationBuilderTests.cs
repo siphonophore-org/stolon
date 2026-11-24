@@ -388,9 +388,9 @@ public class TranslationBuilderTests
     public void StolonStrings_FollowThePluginRules()
     {
         var root = Root();
-        var snapshot = JellyfinSnapshot.Load(System.IO.Path.Combine(root, "dist", "jellyfin"));
+        var snapshot = JellyfinSnapshot.Load(System.IO.Path.Join(root, "dist", "jellyfin"));
         Assert.NotNull(snapshot);
-        var folder = System.IO.Path.Combine(root, "strings");
+        var folder = System.IO.Path.Join(root, "strings");
         var diagnostics = new List<TranslationDiagnostic>();
         var files = System.IO.Directory.EnumerateFiles(folder, "*.json")
             .Where(f => TranslationBuilder.TryLanguageCode(System.IO.Path.GetFileNameWithoutExtension(f), out _))
@@ -400,7 +400,7 @@ public class TranslationBuilderTests
                 return LocalStringFile.Parse(f, language, System.IO.File.ReadAllBytes(f), diagnostics);
             })
             .ToList();
-        var declarations = SharedDeclarations.Read(System.IO.Path.Combine(folder, SharedDeclarations.FileName));
+        var declarations = SharedDeclarations.Read(System.IO.Path.Join(folder, SharedDeclarations.FileName));
 
         Assert.NotEmpty(declarations.Strings);
         diagnostics.AddRange(TranslationBuilder.CheckShared(new SharedStrings(files, declarations.Strings), declarations.TextMatches, snapshot!));
@@ -410,7 +410,7 @@ public class TranslationBuilderTests
     private static string Root()
     {
         var dir = new System.IO.DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !System.IO.File.Exists(System.IO.Path.Combine(dir.FullName, "jellyfin.json")))
+        while (dir is not null && !System.IO.File.Exists(System.IO.Path.Join(dir.FullName, "jellyfin.json")))
         {
             dir = dir.Parent;
         }

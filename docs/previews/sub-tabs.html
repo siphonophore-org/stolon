@@ -2,7 +2,6 @@
 <div id="mount"></div>
 <script type="module">
 const base = await window.__baseReady;
-const view = document.getElementById('view');
 const mount = document.getElementById('mount');
 mount.appendChild(base.createSubTabs({
     tabs: [{ id: 'general', label: 'General', text: 'General settings live here.' }, { id: 'advanced', label: 'Advanced' }, { id: 'off', label: 'Disabled', disabled: true }, { id: 'logs', label: 'Logs' }],

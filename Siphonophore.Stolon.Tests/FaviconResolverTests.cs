@@ -27,8 +27,8 @@ public class FaviconResolverTests
         var web = NewTempDir();
         try
         {
-            File.WriteAllText(Path.Combine(web, "index.html"), "<link rel=\"shortcut icon\" href=\"favicon.abc123.ico\">");
-            File.WriteAllBytes(Path.Combine(web, "favicon.abc123.ico"), new byte[] { 1, 2, 3, 4 });
+            File.WriteAllText(Path.Join(web, "index.html"), "<link rel=\"shortcut icon\" href=\"favicon.abc123.ico\">");
+            File.WriteAllBytes(Path.Join(web, "favicon.abc123.ico"), new byte[] { 1, 2, 3, 4 });
 
             var favicon = FaviconResolver.Resolve(PathsFor(web));
 
@@ -53,8 +53,8 @@ public class FaviconResolverTests
         var web = NewTempDir();
         try
         {
-            File.WriteAllText(Path.Combine(web, "index.html"), "<link rel=\"icon\" href=\"favicon.abc.png\">");
-            File.WriteAllBytes(Path.Combine(web, "favicon.abc.png"), new byte[] { 1 });
+            File.WriteAllText(Path.Join(web, "index.html"), "<link rel=\"icon\" href=\"favicon.abc.png\">");
+            File.WriteAllBytes(Path.Join(web, "favicon.abc.png"), new byte[] { 1 });
 
             var favicon = FaviconResolver.Resolve(PathsFor(web));
 
@@ -77,7 +77,7 @@ public class FaviconResolverTests
         var web = NewTempDir();
         try
         {
-            File.WriteAllBytes(Path.Combine(web, "favicon.fallback.ico"), new byte[] { 9 });
+            File.WriteAllBytes(Path.Join(web, "favicon.fallback.ico"), new byte[] { 9 });
 
             var favicon = FaviconResolver.Resolve(PathsFor(web));
 
@@ -101,10 +101,10 @@ public class FaviconResolverTests
         var root = NewTempDir();
         try
         {
-            var web = Path.Combine(root, "web");
+            var web = Path.Join(root, "web");
             Directory.CreateDirectory(web);
-            File.WriteAllText(Path.Combine(web, "index.html"), "<link rel=\"icon\" href=\"../evil.ico\">");
-            File.WriteAllBytes(Path.Combine(root, "evil.ico"), new byte[] { 6, 6, 6 });
+            File.WriteAllText(Path.Join(web, "index.html"), "<link rel=\"icon\" href=\"../evil.ico\">");
+            File.WriteAllBytes(Path.Join(root, "evil.ico"), new byte[] { 6, 6, 6 });
 
             // The web folder holds no favicon file, so a rejected link must give nothing.
             Assert.Null(FaviconResolver.Resolve(PathsFor(web)));
@@ -123,7 +123,7 @@ public class FaviconResolverTests
     [Fact]
     public void Resolve_ReturnsNullWhenWebPathMissing()
     {
-        Assert.Null(FaviconResolver.Resolve(PathsFor(Path.Combine(Path.GetTempPath(), "stolon-fav-missing-" + Guid.NewGuid()))));
+        Assert.Null(FaviconResolver.Resolve(PathsFor(Path.Join(Path.GetTempPath(), "stolon-fav-missing-" + Guid.NewGuid()))));
     }
 
     /// <summary>
@@ -138,8 +138,8 @@ public class FaviconResolverTests
         var b = NewTempDir();
         try
         {
-            File.WriteAllBytes(Path.Combine(a, "favicon.a.ico"), new byte[] { 1 });
-            File.WriteAllBytes(Path.Combine(b, "favicon.b.ico"), new byte[] { 2 });
+            File.WriteAllBytes(Path.Join(a, "favicon.a.ico"), new byte[] { 1 });
+            File.WriteAllBytes(Path.Join(b, "favicon.b.ico"), new byte[] { 2 });
 
             Assert.Equal(new byte[] { 1 }, FaviconResolver.Resolve(PathsFor(a))!.Value.Bytes);
             Assert.Equal(new byte[] { 2 }, FaviconResolver.Resolve(PathsFor(b))!.Value.Bytes);
@@ -154,7 +154,7 @@ public class FaviconResolverTests
 
     private static string NewTempDir()
     {
-        var dir = Path.Combine(Path.GetTempPath(), "stolon-fav-" + Guid.NewGuid().ToString("N"));
+        var dir = Path.Join(Path.GetTempPath(), "stolon-fav-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(dir);
         return dir;
     }

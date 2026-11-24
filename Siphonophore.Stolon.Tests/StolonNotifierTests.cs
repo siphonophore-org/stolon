@@ -275,7 +275,8 @@ public class StolonNotifierTests
 
         Assert.All(results, r => Assert.True(r.Ok));
         Assert.Equal("Sent.", results[0].Message);
-        Assert.Equal((previews[0].Body, "application/json", (string?)null), sent[0]);
+        string? noKey = null;
+        Assert.Equal((previews[0].Body, "application/json", noKey), sent[0]);
         Assert.Equal((previews[1].Body, "application/json", "abc"), sent[1]);
         Assert.Equal("POST", previews[0].Method);
         Assert.Equal("Media Bot", previews[0].Discord!["username"]!.GetValue<string>());

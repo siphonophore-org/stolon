@@ -168,12 +168,9 @@ public static partial class NotifyTemplate
         switch (node)
         {
             case JsonObject obj:
-                foreach (var key in obj.Select(p => p.Key).ToList())
+                foreach (var key in obj.Where(p => LeaveOutEmpty(p.Value)).Select(p => p.Key).ToList())
                 {
-                    if (LeaveOutEmpty(obj[key]))
-                    {
-                        obj.Remove(key);
-                    }
+                    obj.Remove(key);
                 }
 
                 return obj.Count == 0;

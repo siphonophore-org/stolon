@@ -1,4 +1,4 @@
-import { make, icon, listen, runAll, clear } from './lib/dom.js';
+import { make, icon, runAll, clear } from './lib/dom.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
 

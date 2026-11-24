@@ -60,7 +60,11 @@ public class HashUtilitiesTests
         Assert.True(stream.CanRead);
     }
 
-    private static string SyncHash(byte[] data) => HashUtilities.ComputeSha256Hash(new MemoryStream(data));
+    private static string SyncHash(byte[] data)
+    {
+        using var stream = new MemoryStream(data);
+        return HashUtilities.ComputeSha256Hash(stream);
+    }
 
     private static byte[] Data(int length)
     {
@@ -98,9 +102,12 @@ public class HashUtilitiesTests
     [Fact]
     public void ComputeSha256Hash_OfAStream_IsPinned()
     {
-        Assert.Equal("e3b0c44298fc1c149afbf4c8996fb924", HashUtilities.ComputeSha256Hash(new MemoryStream()));
-        Assert.Equal("ba7816bf8f01cfea414140de5dae2223", HashUtilities.ComputeSha256Hash(new MemoryStream(Encoding.UTF8.GetBytes("abc"))));
-        Assert.Equal("e24bc62381f1224fbbb74688663f8f97", HashUtilities.ComputeSha256Hash(new MemoryStream(Data(200_000))));
+        using var empty = new MemoryStream();
+        using var abc = new MemoryStream(Encoding.UTF8.GetBytes("abc"));
+        using var large = new MemoryStream(Data(200_000));
+        Assert.Equal("e3b0c44298fc1c149afbf4c8996fb924", HashUtilities.ComputeSha256Hash(empty));
+        Assert.Equal("ba7816bf8f01cfea414140de5dae2223", HashUtilities.ComputeSha256Hash(abc));
+        Assert.Equal("e24bc62381f1224fbbb74688663f8f97", HashUtilities.ComputeSha256Hash(large));
     }
 
     /// <summary>
@@ -165,7 +172,8 @@ public class HashUtilitiesTests
     {
         var data = Data(length);
 
-        var (hash, counted) = await HashUtilities.ComputeSha256HashAsync(new MemoryStream(data), CancellationToken.None);
+        using var stream = new MemoryStream(data);
+        var (hash, counted) = await HashUtilities.ComputeSha256HashAsync(stream, CancellationToken.None);
 
         Assert.Equal(length, counted);
         Assert.Equal(SyncHash(data), hash);
@@ -206,7 +214,8 @@ public class HashUtilitiesTests
         using var cts = new CancellationTokenSource();
         await cts.CancelAsync();
 
-        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => HashUtilities.ComputeSha256HashAsync(new MemoryStream(new byte[10]), cts.Token));
+        using var ten = new MemoryStream(new byte[10]);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => HashUtilities.ComputeSha256HashAsync(ten, cts.Token));
         await Assert.ThrowsAsync<ArgumentNullException>(() => HashUtilities.ComputeSha256HashAsync(null!));
     }
 }

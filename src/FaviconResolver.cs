@@ -37,14 +37,14 @@ public static partial class FaviconResolver
             var rootPrefix = root.EndsWith(Path.DirectorySeparatorChar) ? root : root + Path.DirectorySeparatorChar;
             string? file = null;
 
-            var indexPath = Path.Combine(root, "index.html");
+            var indexPath = Path.Join(root, "index.html");
             if (File.Exists(indexPath))
             {
                 var match = IconLinkPattern().Match(File.ReadAllText(indexPath));
                 if (match.Success)
                 {
                     var href = match.Groups[1].Value.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
-                    var candidate = Path.GetFullPath(Path.Combine(root, href));
+                    var candidate = Path.GetFullPath(Path.Join(root, href));
                     if (candidate.StartsWith(rootPrefix, StringComparison.Ordinal) && File.Exists(candidate))
                     {
                         file = candidate;

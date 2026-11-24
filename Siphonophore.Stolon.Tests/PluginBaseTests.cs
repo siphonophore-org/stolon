@@ -15,7 +15,7 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that <see cref="PluginBase{TPlugin, TConfiguration}"/> guards the configuration with one lock and registers the shared asset pages.</summary>
 public sealed class PluginBaseTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-plugin-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-plugin-" + Guid.NewGuid().ToString("N"));
 
     public PluginBaseTests() => Directory.CreateDirectory(_dir);
 
@@ -120,8 +120,8 @@ public sealed class PluginBaseTests : IDisposable
     {
         var plugin = NewPlugin();
         _ = plugin.Configuration;
-        var inMutation = new ManualResetEventSlim();
-        var release = new ManualResetEventSlim();
+        using var inMutation = new ManualResetEventSlim();
+        using var release = new ManualResetEventSlim();
         var saveStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         string? seenAfterRelease = null;
 

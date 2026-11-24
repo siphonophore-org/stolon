@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using MediaBrowser.Controller;
@@ -114,14 +115,7 @@ public sealed class HostedPage
     internal static string RootFor(PathString path)
     {
         var value = path.Value ?? string.Empty;
-        var depth = 0;
-        foreach (var c in value)
-        {
-            if (c == '/')
-            {
-                depth++;
-            }
-        }
+        var depth = value.Count(c => c == '/');
 
         if (depth <= 1)
         {

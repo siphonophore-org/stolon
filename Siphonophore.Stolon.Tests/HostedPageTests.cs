@@ -12,7 +12,7 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that <see cref="HostedPage"/> and <see cref="HostedPageContent"/> render a page whose links work from any path, with its content encoded and its headers set.</summary>
 public sealed class HostedPageTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-hosted-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-hosted-" + Guid.NewGuid().ToString("N"));
 
     public HostedPageTests() => Directory.CreateDirectory(_dir);
 
@@ -187,8 +187,8 @@ public sealed class HostedPageTests : IDisposable
     [Fact]
     public void Serve_AnswersWithHeadersAndServerName()
     {
-        File.WriteAllText(Path.Combine(_dir, "favicon.9.ico"), "x");
-        File.WriteAllText(Path.Combine(_dir, "index.html"), "<link rel=\"shortcut icon\" href=\"favicon.9.ico\">");
+        File.WriteAllText(Path.Join(_dir, "favicon.9.ico"), "x");
+        File.WriteAllText(Path.Join(_dir, "index.html"), "<link rel=\"shortcut icon\" href=\"favicon.9.ico\">");
         var host = Substitute.For<IServerApplicationHost>();
         host.FriendlyName.Returns("Den");
         var paths = Substitute.For<IServerApplicationPaths>();

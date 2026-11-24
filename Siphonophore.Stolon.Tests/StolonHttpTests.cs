@@ -237,7 +237,7 @@ public class StolonHttpTests
     [Fact]
     public async Task SendAsync_ReturnsErrorStatusesAndReportsNetworkFaults()
     {
-        var notFound = new StubHandler((_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("nope") }));
+        using var notFound = new StubHandler((_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("nope") }));
         var result = await StolonHttp.SendAsync(Factory(notFound), HttpMethod.Get, Url, CancellationToken.None);
         Assert.Equal(404, result.Status);
         Assert.Equal("nope", result.Body);

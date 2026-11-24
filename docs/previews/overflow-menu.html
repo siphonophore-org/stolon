@@ -3,7 +3,6 @@
 <div id="mount"></div>
 <script type="module">
 const base = await window.__baseReady;
-const view = document.getElementById('view');
 const mount = document.getElementById('mount');
 const menu = base.createOverflowMenu({
     items: [{ label: 'Edit', value: 'edit', icon: 'edit' }, { label: 'Duplicate', value: 'duplicate', disabled: true }, { label: 'Remove', value: 'remove', destructive: true, icon: 'delete' }],

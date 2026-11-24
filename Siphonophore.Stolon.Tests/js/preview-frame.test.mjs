@@ -1,5 +1,5 @@
 // Behavior tests for createPreviewFrame, run on the stub DOM in fake-dom.mjs.
-import { test, beforeEach, afterEach, mock } from 'node:test';
+import { test, beforeEach, mock } from 'node:test';
 import assert from 'node:assert/strict';
 import { installFakeDom, all } from './fake-dom.mjs';
 

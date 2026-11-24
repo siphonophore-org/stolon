@@ -213,7 +213,7 @@ test('createList can take over an element a page already has', function () {
 
 test('onEndReached runs when the end comes into view, measured in the window for a growing list', function () {
     var calls = 0;
-    var list = build({ onEndReached: function () { calls++; } });
+    build({ onEndReached: function () { calls++; } });
     var o = liveObserver();
     assert.equal(o.init.root, null);
     assert.equal(o.targets[0].classList.contains('stolon-list-sentinel'), true);

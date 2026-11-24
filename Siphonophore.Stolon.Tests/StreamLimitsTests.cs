@@ -78,7 +78,8 @@ public class StreamLimitsTests
     {
         var data = Data(length);
 
-        var result = await StreamLimits.ReadCappedAsync(new MemoryStream(data), max, CancellationToken.None);
+        using var stream = new MemoryStream(data);
+        var result = await StreamLimits.ReadCappedAsync(stream, max, CancellationToken.None);
 
         Assert.Equal(data, result);
     }
@@ -94,7 +95,8 @@ public class StreamLimitsTests
     [InlineData(1, 0)]
     public async Task ReadCappedAsync_PastTheCap_ReturnsNull(int length, int max)
     {
-        var result = await StreamLimits.ReadCappedAsync(new MemoryStream(Data(length)), max, CancellationToken.None);
+        using var stream = new MemoryStream(Data(length));
+        var result = await StreamLimits.ReadCappedAsync(stream, max, CancellationToken.None);
 
         Assert.Null(result);
     }
@@ -175,7 +177,8 @@ public class StreamLimitsTests
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => StreamLimits.ReadCappedAsync(new CountingStream(10), 100, cts.Token));
         await Assert.ThrowsAsync<ArgumentNullException>(() => StreamLimits.ReadCappedAsync(null!, 1, CancellationToken.None));
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => StreamLimits.ReadCappedAsync(new MemoryStream(), -1, CancellationToken.None));
+        using var empty = new MemoryStream();
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => StreamLimits.ReadCappedAsync(empty, -1, CancellationToken.None));
     }
 
     private sealed class HugeStream : Stream
@@ -213,7 +216,8 @@ public class StreamLimitsTests
     {
         Assert.Null(await StreamLimits.ReadCappedAsync(new HugeStream(), long.MaxValue, CancellationToken.None));
 
-        var small = await StreamLimits.ReadCappedAsync(new MemoryStream(new byte[] { 1, 2 }), long.MaxValue, CancellationToken.None);
+        using var two = new MemoryStream(new byte[] { 1, 2 });
+        var small = await StreamLimits.ReadCappedAsync(two, long.MaxValue, CancellationToken.None);
         Assert.Equal(new byte[] { 1, 2 }, small);
     }
 }

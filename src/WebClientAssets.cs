@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Siphonophore.Stolon;
@@ -30,7 +31,7 @@ internal static partial class WebClientAssets
             }
 
             var root = Path.GetFullPath(webPath);
-            var index = Path.Combine(root, "index.html");
+            var index = Path.Join(root, "index.html");
             var stamp = File.Exists(index) ? File.GetLastWriteTimeUtc(index).Ticks : 0L;
             lock (Gate)
             {
@@ -89,16 +90,15 @@ internal static partial class WebClientAssets
     /// <returns>The rule, or empty when no linked stylesheet holds one.</returns>
     internal static string IconFace(string root, string indexHtml)
     {
-        foreach (Match link in StylesheetPattern().Matches(indexHtml))
+        foreach (var href in StylesheetPattern().Matches(indexHtml).Select(link => link.Groups[1].Value))
         {
-            var href = link.Groups[1].Value;
             var query = href.IndexOf('?', StringComparison.Ordinal);
             if (Inside(root, query < 0 ? href : href[..query]) is not { } file)
             {
                 continue;
             }
 
-            var face = IconFacePattern().Match(File.ReadAllText(Path.Combine(root, file)));
+            var face = IconFacePattern().Match(File.ReadAllText(Path.Join(root, file)));
             if (!face.Success)
             {
                 continue;
@@ -123,7 +123,7 @@ internal static partial class WebClientAssets
         }
 
         var rootPrefix = root.EndsWith(Path.DirectorySeparatorChar) ? root : root + Path.DirectorySeparatorChar;
-        var candidate = Path.GetFullPath(Path.Combine(root, href.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar)));
+        var candidate = Path.GetFullPath(Path.Join(root, href.Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar)));
         return candidate.StartsWith(rootPrefix, StringComparison.Ordinal) && File.Exists(candidate)
             ? candidate[rootPrefix.Length..]
             : null;

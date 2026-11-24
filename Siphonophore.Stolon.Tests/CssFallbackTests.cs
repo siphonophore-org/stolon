@@ -199,9 +199,8 @@ public class CssFallbackTests
         {
             foreach (var container in FieldContainers)
             {
-                foreach (var child in new[] { "button", "label", "input", "[class^=\"stolon-\"]", "[class*=\" stolon-\"]" })
+                foreach (var selector in new[] { "button", "label", "input", "[class^=\"stolon-\"]", "[class*=\" stolon-\"]" }.Select(child => scope + " " + container + " > " + child))
                 {
-                    var selector = scope + " " + container + " > " + child;
                     var rule = rules.FirstOrDefault(r => r.Selectors.Contains(selector));
                     Assert.True(rule != null, "form-fields.css must reset the margin of " + selector);
                     Assert.Contains(rule!.Declarations, d => d.Property == "margin" && d.Value == "0 !important");
@@ -415,7 +414,7 @@ public class CssFallbackTests
     [Fact]
     public void BadgeStates_HaveRules()
     {
-        var core = File.ReadAllText(Path.Combine(RepositoryRoot(), "src", "js", "badge.ts"));
+        var core = File.ReadAllText(Path.Join(RepositoryRoot(), "src", "js", "badge.ts"));
         var names = ReadList(core, "names");
         var colors = ReadList(core, "colors");
         var selectors = CssRules.Parse(Source("badge.css")).SelectMany(r => r.Selectors).ToHashSet(StringComparer.Ordinal);
@@ -437,7 +436,7 @@ public class CssFallbackTests
     private static string RepositoryRoot()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir != null && !File.Exists(Path.Combine(dir.FullName, "src", "css", "design-tokens.css")))
+        while (dir != null && !File.Exists(Path.Join(dir.FullName, "src", "css", "design-tokens.css")))
         {
             dir = dir.Parent;
         }
@@ -456,8 +455,8 @@ public class CssFallbackTests
     private static string Source(string file)
     {
         var sources = CssRules.KitSources();
-        Assert.True(sources.ContainsKey(file), file + " must be embedded in the test assembly.");
-        return sources[file];
+        Assert.True(sources.TryGetValue(file, out var css), file + " must be embedded in the test assembly.");
+        return css!;
     }
 
     private static string Where(CssRules.Rule rule, CssRules.Declaration decl) =>

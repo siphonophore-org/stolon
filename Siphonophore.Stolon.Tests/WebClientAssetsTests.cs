@@ -9,7 +9,7 @@ public sealed class WebClientAssetsTests : IDisposable
 {
     private const string Face = "@font-face{font-display:block;font-family:Material Icons;font-style:normal;src:local(\"x\"),url(MaterialIcons-Regular.ab.woff2) format(\"woff2\"),url('https://cdn.example/a.woff') format(\"woff\")}";
 
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-webclient-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-webclient-" + Guid.NewGuid().ToString("N"));
 
     public WebClientAssetsTests() => Directory.CreateDirectory(_dir);
 
@@ -29,7 +29,7 @@ public sealed class WebClientAssetsTests : IDisposable
     [Fact]
     public void FaviconHref_UsesTheLinkedIcon()
     {
-        File.WriteAllText(Path.Combine(_dir, "favicon.12.ico"), "x");
+        File.WriteAllText(Path.Join(_dir, "favicon.12.ico"), "x");
 
         Assert.Equal("favicon.12.ico", WebClientAssets.FaviconHref(_dir, "<link rel=\"shortcut icon\" href=\"favicon.12.ico\">"));
     }
@@ -42,10 +42,10 @@ public sealed class WebClientAssetsTests : IDisposable
     [Fact]
     public void FaviconHref_RefusesALinkOutsideTheFolder()
     {
-        File.WriteAllText(Path.Combine(_dir, "favicon.ico"), "x");
+        File.WriteAllText(Path.Join(_dir, "favicon.ico"), "x");
 
         Assert.Equal("favicon.ico", WebClientAssets.FaviconHref(_dir, "<link rel=\"icon\" href=\"../secret.ico\">"));
-        var empty = Directory.CreateDirectory(Path.Combine(_dir, "empty")).FullName;
+        var empty = Directory.CreateDirectory(Path.Join(_dir, "empty")).FullName;
         Assert.Null(WebClientAssets.FaviconHref(empty, "<link rel=\"icon\" href=\"https://example.com/x.ico\">"));
     }
 
@@ -57,7 +57,7 @@ public sealed class WebClientAssetsTests : IDisposable
     [Fact]
     public void IconFace_FindsTheFaceAndMovesItsAddresses()
     {
-        File.WriteAllText(Path.Combine(_dir, "1133.ab.css"), ".x{color:red}" + Face + ".material-icons{font-family:Material Icons}");
+        File.WriteAllText(Path.Join(_dir, "1133.ab.css"), ".x{color:red}" + Face + ".material-icons{font-family:Material Icons}");
 
         var face = WebClientAssets.IconFace(_dir, "<link href=\"main.css?v=1\" rel=\"stylesheet\"><link href=\"1133.ab.css?v=1\" rel=\"stylesheet\">");
 
@@ -75,7 +75,7 @@ public sealed class WebClientAssetsTests : IDisposable
     [Fact]
     public void For_MissingFolderGivesNothing()
     {
-        var found = WebClientAssets.For(Path.Combine(_dir, "missing"));
+        var found = WebClientAssets.For(Path.Join(_dir, "missing"));
 
         Assert.Null(found.FaviconHref);
         Assert.Equal(string.Empty, found.IconFace);
@@ -90,9 +90,9 @@ public sealed class WebClientAssetsTests : IDisposable
     [Fact]
     public void For_ReadsAgainWhenIndexChanges()
     {
-        var index = Path.Combine(_dir, "index.html");
-        File.WriteAllText(Path.Combine(_dir, "favicon.a.ico"), "x");
-        File.WriteAllText(Path.Combine(_dir, "favicon.b.ico"), "x");
+        var index = Path.Join(_dir, "index.html");
+        File.WriteAllText(Path.Join(_dir, "favicon.a.ico"), "x");
+        File.WriteAllText(Path.Join(_dir, "favicon.b.ico"), "x");
         File.WriteAllText(index, "<link rel=\"icon\" href=\"favicon.a.ico\">");
         File.SetLastWriteTimeUtc(index, new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc));
         Assert.Equal("favicon.a.ico", WebClientAssets.For(_dir).FaviconHref);

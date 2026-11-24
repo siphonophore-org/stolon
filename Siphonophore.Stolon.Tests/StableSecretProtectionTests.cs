@@ -15,7 +15,7 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that <see cref="StableSecretProtection"/> builds one launch independent key ring per plugin that keeps encrypted secrets readable.</summary>
 public sealed class StableSecretProtectionTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-stable-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-stable-" + Guid.NewGuid().ToString("N"));
 
     public StableSecretProtectionTests() => Directory.CreateDirectory(_dir);
 
@@ -48,7 +48,7 @@ public sealed class StableSecretProtectionTests : IDisposable
         var stored = protector.Protect("hunter2");
         Assert.True(SecretProtector.IsProtected(stored));
         Assert.Equal("hunter2", protector.Unprotect(stored));
-        Assert.True(Directory.Exists(Path.Combine(_dir, "Test.Plugin.RoundTrip.Keys")));
+        Assert.True(Directory.Exists(Path.Join(_dir, "Test.Plugin.RoundTrip.Keys")));
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public sealed class StableSecretProtectionTests : IDisposable
     [Fact]
     public void Build_ConcurrentCallersShareOneProvider()
     {
-        var keys = Path.Combine(_dir, "Race.Keys");
+        var keys = Path.Join(_dir, "Race.Keys");
         using var start = new ManualResetEventSlim();
         var results = new ConcurrentBag<object?>();
         var threads = Enumerable.Range(0, 16).Select(_ => new Thread(() =>
@@ -159,10 +159,10 @@ public sealed class StableSecretProtectionTests : IDisposable
     [Fact]
     public void Build_UncreatableKeyFolderGivesNull()
     {
-        var blocker = Path.Combine(_dir, "blocker");
+        var blocker = Path.Join(_dir, "blocker");
         File.WriteAllText(blocker, "a file where a folder is needed");
 
-        var provider = StableSecretProtection.Build(Path.Combine(blocker, "keys"), "Test.Plugin.Blocked", NullLogger.Instance);
+        var provider = StableSecretProtection.Build(Path.Join(blocker, "keys"), "Test.Plugin.Blocked", NullLogger.Instance);
 
         Assert.Null(provider);
     }

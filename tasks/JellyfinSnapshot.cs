@@ -50,7 +50,7 @@ internal sealed class JellyfinSnapshot
     /// <returns>The snapshot, or <c>null</c> when the folder has no readable source.json.</returns>
     public static JellyfinSnapshot? Load(string directory)
     {
-        var sourcePath = Path.Combine(directory, "source.json");
+        var sourcePath = Path.Join(directory, "source.json");
         if (!File.Exists(sourcePath))
         {
             return null;
@@ -70,7 +70,7 @@ internal sealed class JellyfinSnapshot
 
             return new JellyfinSnapshot(string.Join(", ", tags), languages, (name, language) =>
             {
-                var file = Path.Combine(directory, name, language + ".json");
+                var file = Path.Join(directory, name, language + ".json");
                 return File.Exists(file) ? JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllBytes(file)) : null;
             });
         }

@@ -119,7 +119,8 @@ public class StreamUtilitiesTests
     {
         var waits = new List<TimeSpan>();
         using var source = new MemoryStream(data);
-        destination ??= new MemoryStream();
+        using var owned = destination is null ? new MemoryStream() : null;
+        destination ??= owned!;
 
         await StreamUtilities.CopyThrottledAsync(
             source,

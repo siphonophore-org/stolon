@@ -2,7 +2,6 @@
 <div id="mount"></div>
 <script type="module">
 const base = await window.__baseReady;
-const view = document.getElementById('view');
 const mount = document.getElementById('mount');
 mount.style.cssText = 'display:flex;align-items:center;gap:12px';
 ['green', 'red', 'orange', 'purple', 'blue', 'gray'].forEach((color) => mount.appendChild(base.createStatusDot({ color }).element));

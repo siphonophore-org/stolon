@@ -235,4 +235,4 @@ B.setUserPageMessage(view, 'danger', 'No.');
 
 var thumbColumn: B.TableColumn<Row> = { key: 'name', label: 'Name', image: function () { return function () { return Promise.resolve(new Blob()); }; } };
 
-export { page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer };
+export { page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn };

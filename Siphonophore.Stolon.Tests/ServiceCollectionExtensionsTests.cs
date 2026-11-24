@@ -14,7 +14,7 @@ namespace Siphonophore.Stolon.Tests;
 [Collection("ActivityLogger.Current")]
 public sealed class ServiceCollectionExtensionsTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-di-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-di-" + Guid.NewGuid().ToString("N"));
 
     public ServiceCollectionExtensionsTests() => Directory.CreateDirectory(_dir);
 

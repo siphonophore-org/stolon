@@ -11,7 +11,7 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that <see cref="PublicPage"/> sets hardening headers and serves the web client's favicon.</summary>
 public sealed class PublicPageTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-public-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-public-" + Guid.NewGuid().ToString("N"));
 
     public PublicPageTests() => Directory.CreateDirectory(_dir);
 
@@ -48,7 +48,7 @@ public sealed class PublicPageTests : IDisposable
     [Fact]
     public void Favicon_ServesFileWithCacheHeader()
     {
-        File.WriteAllBytes(Path.Combine(_dir, "favicon.ico"), new byte[] { 7, 8 });
+        File.WriteAllBytes(Path.Join(_dir, "favicon.ico"), new byte[] { 7, 8 });
         var paths = Substitute.For<IServerApplicationPaths>();
         paths.WebPath.Returns(_dir);
         var context = new DefaultHttpContext();
@@ -68,7 +68,7 @@ public sealed class PublicPageTests : IDisposable
     public void Favicon_MissingIsNotFound()
     {
         var paths = Substitute.For<IServerApplicationPaths>();
-        paths.WebPath.Returns(Path.Combine(_dir, "missing"));
+        paths.WebPath.Returns(Path.Join(_dir, "missing"));
 
         Assert.IsType<NotFoundResult>(PublicPage.Favicon(paths, new DefaultHttpContext().Response));
     }

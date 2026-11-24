@@ -75,9 +75,8 @@ public sealed class StolonBuildTranslations : Task
 
         var diagnostics = new List<TranslationDiagnostic>();
         var files = new List<LocalStringFile>();
-        foreach (var item in LocalFiles)
+        foreach (var path in LocalFiles.Select(item => item.GetMetadata("FullPath")))
         {
-            var path = item.GetMetadata("FullPath");
             // The casing list sits beside the language files, and is read on its own.
             if (string.Equals(Path.GetFileName(path), Tasks.CasingFile.FileName, StringComparison.OrdinalIgnoreCase))
             {
@@ -176,7 +175,7 @@ public sealed class StolonBuildTranslations : Task
             }
         }
 
-        return new SharedStrings(files, SharedDeclarations.Read(Path.Combine(StolonStringsDirectory, SharedDeclarations.FileName)).Strings);
+        return new SharedStrings(files, SharedDeclarations.Read(Path.Join(StolonStringsDirectory, SharedDeclarations.FileName)).Strings);
     }
 
     private void WriteLanguages(SortedDictionary<string, SortedDictionary<string, string>> languages)
@@ -184,15 +183,12 @@ public sealed class StolonBuildTranslations : Task
         Directory.CreateDirectory(OutputDirectory);
         foreach (var (language, strings) in languages)
         {
-            WriteIfChanged(Path.Combine(OutputDirectory, language + ".json"), JsonSerializer.Serialize(strings, _json));
+            WriteIfChanged(Path.Join(OutputDirectory, language + ".json"), JsonSerializer.Serialize(strings, _json));
         }
 
-        foreach (var file in Directory.EnumerateFiles(OutputDirectory, "*.json"))
+        foreach (var file in Directory.EnumerateFiles(OutputDirectory, "*.json").Where(f => !languages.ContainsKey(Path.GetFileNameWithoutExtension(f))))
         {
-            if (!languages.ContainsKey(Path.GetFileNameWithoutExtension(file)))
-            {
-                File.Delete(file);
-            }
+            File.Delete(file);
         }
     }
 

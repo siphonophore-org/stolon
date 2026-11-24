@@ -223,19 +223,19 @@ public class StolonTranslationsTests
     public void StolonText_InTheCodeMatchesTheShippedStrings()
     {
         var root = Root();
-        var shipped = JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, string>>(File.ReadAllBytes(Path.Combine(root, "strings", "en-us.json")))!;
+        var shipped = JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, string>>(File.ReadAllBytes(Path.Join(root, "strings", "en-us.json")))!;
         var used = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
-        foreach (var file in Directory.EnumerateFiles(Path.Combine(root, "src"), "*.cs"))
+        foreach (var file in Directory.EnumerateFiles(Path.Join(root, "src"), "*.cs"))
         {
             foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(File.ReadAllText(file), "Text\\(\\s*\"(Stolon\\.[A-Za-z0-9]+)\",\\s*(\"(?:[^\"\\\\]|\\\\.)*\"|[A-Za-z]+)"))
             {
                 var key = m.Groups[1].Value;
                 used.Add(key);
-                Assert.True(shipped.ContainsKey(key), key + " is not in strings/en-us.json");
+                Assert.True(shipped.TryGetValue(key, out var shippedText), key + " is not in strings/en-us.json");
                 var english = m.Groups[2].Value.StartsWith('"') ? System.Text.RegularExpressions.Regex.Unescape(m.Groups[2].Value[1..^1]) : null;
                 if (english is not null)
                 {
-                    Assert.Equal(english, shipped[key]);
+                    Assert.Equal(english, shippedText);
                 }
             }
         }
@@ -248,7 +248,7 @@ public class StolonTranslationsTests
     private static string Root()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "jellyfin.json")))
+        while (dir is not null && !File.Exists(Path.Join(dir.FullName, "jellyfin.json")))
         {
             dir = dir.Parent;
         }

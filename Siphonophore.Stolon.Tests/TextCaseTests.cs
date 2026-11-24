@@ -19,7 +19,7 @@ public class TextCaseTests
         get
         {
             var data = new TheoryData<string, string, string, string?, string>();
-            using var json = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(Root(), "Siphonophore.Stolon.Tests", "Fixtures", "casing-cases.json")));
+            using var json = JsonDocument.Parse(File.ReadAllBytes(Path.Join(Root(), "Siphonophore.Stolon.Tests", "Fixtures", "casing-cases.json")));
             foreach (var c in json.RootElement.EnumerateArray())
             {
                 var exceptions = c.TryGetProperty("exceptions", out var e) ? string.Join("|", e.EnumerateArray().Select(w => w.GetString())) : string.Empty;
@@ -98,7 +98,7 @@ public class TextCaseTests
     private static string Root()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "jellyfin.json")))
+        while (dir is not null && !File.Exists(Path.Join(dir.FullName, "jellyfin.json")))
         {
             dir = dir.Parent;
         }

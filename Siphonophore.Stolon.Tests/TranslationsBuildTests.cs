@@ -87,7 +87,7 @@ public sealed class TranslationsBuildTests : IDisposable
         Assert.Equal("Select all", english["SelectAll"]);
         Assert.Equal("Abbrechen", Strings(resources["Stolon.Translations.de.json"])["ButtonCancel"]);
         Assert.Contains("TV", JsonSerializer.Deserialize<string[]>(resources["Stolon.Casing.json"])!);
-        Assert.False(File.Exists(Path.Combine(_project, "obj", "Debug", "net10.0", "stolon-translations", "TranslationKeys.g.cs")));
+        Assert.False(File.Exists(Path.Join(_project, "obj", "Debug", "net10.0", "stolon-translations", "TranslationKeys.g.cs")));
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public sealed class TranslationsBuildTests : IDisposable
         var (code, output) = Build();
         Assert.True(code == 0, output);
         Assert.Empty(Resources());
-        Assert.False(Directory.Exists(Path.Combine(_project, "obj", "Debug", "net10.0", "stolon-translations")));
+        Assert.False(Directory.Exists(Path.Join(_project, "obj", "Debug", "net10.0", "stolon-translations")));
     }
 
     /// <summary>
@@ -126,7 +126,7 @@ public sealed class TranslationsBuildTests : IDisposable
         Assert.Equal("Continue watching", Strings(resources["Stolon.Translations.en-gb.json"])["HeaderContinueWatching"]);
         Assert.Equal("Weiterschauen", Strings(resources["Stolon.Translations.de.json"])["HeaderContinueWatching"]);
         Assert.Contains("Skip", JsonSerializer.Deserialize<string[]>(resources["Stolon.Casing.json"])!);
-        Assert.Contains("/// <summary>Continue watching</summary>", File.ReadAllText(Path.Combine(_project, "obj", "Debug", "net10.0", "stolon-translations", "TranslationKeys.g.cs")), StringComparison.Ordinal);
+        Assert.Contains("/// <summary>Continue watching</summary>", File.ReadAllText(Path.Join(_project, "obj", "Debug", "net10.0", "stolon-translations", "TranslationKeys.g.cs")), StringComparison.Ordinal);
 
         Project("<JellyfinString Include=\"HeaderContinueWatching;MediaSegmentAction.AskToSkip\" Case=\"title\" />");
         (code, output) = Build();
@@ -169,11 +169,11 @@ public sealed class TranslationsBuildTests : IDisposable
                 <TargetFramework>net10.0</TargetFramework>
                 <Nullable>enable</Nullable>
                 <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-                <StolonJellyfinStringsDirectory>{Path.Combine(root, "dist", "jellyfin")}/</StolonJellyfinStringsDirectory>
+                <StolonJellyfinStringsDirectory>{Path.Join(root, "dist", "jellyfin")}/</StolonJellyfinStringsDirectory>
                 <StolonTasksAssembly>{typeof(Tasks.StolonBuildTranslations).Assembly.Location}</StolonTasksAssembly>
               </PropertyGroup>
               <ItemGroup>{items}</ItemGroup>
-              <Import Project="{Path.Combine(root, "build", "Siphonophore.Stolon.Translations.targets")}" />
+              <Import Project="{Path.Join(root, "build", "Siphonophore.Stolon.Translations.targets")}" />
             </Project>
             """);
     }
@@ -203,14 +203,13 @@ public sealed class TranslationsBuildTests : IDisposable
 
     private System.Collections.Generic.Dictionary<string, byte[]> Resources()
     {
-        using var stream = File.OpenRead(Path.Combine(_project, "bin", "Debug", "net10.0", "Fixture.dll"));
+        using var stream = File.OpenRead(Path.Join(_project, "bin", "Debug", "net10.0", "Fixture.dll"));
         using var pe = new PEReader(stream);
         var metadata = pe.GetMetadataReader();
         var resources = new System.Collections.Generic.Dictionary<string, byte[]>(StringComparer.Ordinal);
         var directory = pe.GetSectionData(pe.PEHeaders.CorHeader!.ResourcesDirectory.RelativeVirtualAddress);
-        foreach (var handle in metadata.ManifestResources)
+        foreach (var resource in metadata.ManifestResources.Select(metadata.GetManifestResource))
         {
-            var resource = metadata.GetManifestResource(handle);
             var reader = directory.GetReader((int)resource.Offset, directory.Length - (int)resource.Offset);
             resources[metadata.GetString(resource.Name)] = reader.ReadBytes(reader.ReadInt32());
         }
@@ -220,7 +219,7 @@ public sealed class TranslationsBuildTests : IDisposable
 
     private void Write(string relative, string text)
     {
-        var path = Path.Combine(_project, relative);
+        var path = Path.Join(_project, relative);
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         File.WriteAllText(path, text);
     }
@@ -228,7 +227,7 @@ public sealed class TranslationsBuildTests : IDisposable
     private static string Root()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "jellyfin.json")))
+        while (dir is not null && !File.Exists(Path.Join(dir.FullName, "jellyfin.json")))
         {
             dir = dir.Parent;
         }

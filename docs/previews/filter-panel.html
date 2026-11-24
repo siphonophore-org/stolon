@@ -4,7 +4,6 @@
 <p id="note"></p>
 <script type="module">
 const base = await window.__baseReady;
-const view = document.getElementById('view');
 const mount = document.getElementById('mount');
 const note = document.getElementById('note');
 const show = (value) => { note.textContent = 'Status ' + (value.status.join(', ') || 'any') + ', kind ' + (value.kind[0] || 'any') + '.'; };

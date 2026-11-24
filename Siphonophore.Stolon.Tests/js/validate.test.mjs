@@ -1,7 +1,7 @@
 // Behavior tests for the validation core in lib/validate.ts, and the components that check through it, run on the stub DOM in fake-dom.mjs.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { installFakeDom, shown } from './fake-dom.mjs';
+import { installFakeDom } from './fake-dom.mjs';
 
 var dom = installFakeDom();
 var { validateValue, readRules, bindValidation, validateAll, validationOf } = await import('../../src/js/lib/validate.js');

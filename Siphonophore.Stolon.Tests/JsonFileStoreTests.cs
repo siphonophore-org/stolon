@@ -12,7 +12,7 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that <see cref="JsonFileStore{T}"/> reads and writes one JSON value safely, including after a crash or a corrupt file.</summary>
 public sealed class JsonFileStoreTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-store-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-store-" + Guid.NewGuid().ToString("N"));
 
     public JsonFileStoreTests() => Directory.CreateDirectory(_dir);
 
@@ -31,7 +31,7 @@ public sealed class JsonFileStoreTests : IDisposable
         }
     }
 
-    private string PathFor(string name) => Path.Combine(_dir, name);
+    private string PathFor(string name) => Path.Join(_dir, name);
 
     /// <summary>
     /// A file that does not exist loads as a fresh value.
@@ -153,7 +153,7 @@ public sealed class JsonFileStoreTests : IDisposable
     [Fact]
     public void Save_CreatesTheParentFolder()
     {
-        var path = Path.Combine(_dir, "nested", "deeper", "state.json");
+        var path = Path.Join(_dir, "nested", "deeper", "state.json");
 
         new JsonFileStore<Counter>(path).Save(new Counter { Count = 2 });
 

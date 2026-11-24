@@ -101,7 +101,8 @@ public class StolonRetryHandlerTests
         var inner = new ScriptedHandler(Answer(HttpStatusCode.BadGateway), Answer(HttpStatusCode.OK));
         var (client, _, _) = Build(inner);
 
-        using var response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, Url));
+        using var request = new HttpRequestMessage(HttpMethod.Head, Url);
+        using var response = await client.SendAsync(request);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal(2, inner.Calls);

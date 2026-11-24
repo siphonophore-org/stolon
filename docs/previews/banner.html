@@ -2,7 +2,6 @@
 <div id="mount"></div>
 <script type="module">
 const base = await window.__baseReady;
-const view = document.getElementById('view');
 const mount = document.getElementById('mount');
 ['info', 'success', 'warn', 'error', 'neutral'].forEach((kind) => {
     mount.appendChild(base.createBanner({ kind, title: kind === 'warn' ? 'Back up first' : '', text: 'This is a ' + kind + ' banner.' }).element);

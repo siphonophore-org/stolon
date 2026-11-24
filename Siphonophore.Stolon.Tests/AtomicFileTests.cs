@@ -11,13 +11,13 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that <see cref="AtomicFile"/> never leaves a part written file, and that a failed write keeps the old file and leaves no temp file.</summary>
 public sealed class AtomicFileTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-atomic-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-atomic-" + Guid.NewGuid().ToString("N"));
 
     public AtomicFileTests() => Directory.CreateDirectory(_dir);
 
     public void Dispose() => Directory.Delete(_dir, recursive: true);
 
-    private string FilePath(string name = "data.bin") => Path.Combine(_dir, name);
+    private string FilePath(string name = "data.bin") => Path.Join(_dir, name);
 
     private string[] Files() => Directory.GetFileSystemEntries(_dir).Select(Path.GetFileName).Order(StringComparer.Ordinal).ToArray()!;
 
@@ -92,11 +92,11 @@ public sealed class AtomicFileTests : IDisposable
     [Fact]
     public void WriteAllBytes_WithAMissingFolder_ThrowsAndCreatesNothing()
     {
-        var path = Path.Combine(_dir, "missing", "data.bin");
+        var path = Path.Join(_dir, "missing", "data.bin");
 
         Assert.Throws<DirectoryNotFoundException>(() => AtomicFile.WriteAllBytes(path, new byte[] { 1 }));
 
-        Assert.False(Directory.Exists(Path.Combine(_dir, "missing")));
+        Assert.False(Directory.Exists(Path.Join(_dir, "missing")));
     }
 
     /// <summary>

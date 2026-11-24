@@ -12,7 +12,7 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that <see cref="DatabaseSchema"/> versions a database, migrates it safely, and moves an unreadable file aside.</summary>
 public sealed class DatabaseSchemaTests : IDisposable
 {
-    private readonly string _dir = Path.Combine(Path.GetTempPath(), "stolon-schema-" + Guid.NewGuid().ToString("N"));
+    private readonly string _dir = Path.Join(Path.GetTempPath(), "stolon-schema-" + Guid.NewGuid().ToString("N"));
 
     public DatabaseSchemaTests() => Directory.CreateDirectory(_dir);
 
@@ -22,7 +22,7 @@ public sealed class DatabaseSchemaTests : IDisposable
         Directory.Delete(_dir, recursive: true);
     }
 
-    private string DbPath => Path.Combine(_dir, "test.db");
+    private string DbPath => Path.Join(_dir, "test.db");
 
     private SqliteConnection OpenDb()
     {
@@ -149,7 +149,7 @@ public sealed class DatabaseSchemaTests : IDisposable
     {
         for (var i = 0; i < 3; i++)
         {
-            File.WriteAllText(Path.Combine(_dir, "test.db.newer-2026010" + i + "-000000"), "old");
+            File.WriteAllText(Path.Join(_dir, "test.db.newer-2026010" + i + "-000000"), "old");
         }
 
         File.WriteAllText(DbPath, "db");
