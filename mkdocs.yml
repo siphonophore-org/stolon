@@ -1,4 +1,4 @@
-site_name: Jellyfin Plugin Stolon
+site_name: Stolon
 site_description: Shared C# helpers and configuration page components for Jellyfin plugins.
 site_url: https://siphonophore-org.github.io/stolon/
 repo_url: https://github.com/siphonophore-org/stolon

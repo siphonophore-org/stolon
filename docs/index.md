@@ -1,4 +1,4 @@
-# Jellyfin Plugin Stolon
+# Stolon
 
 Shared configuration page components and C# helpers for Jellyfin plugins, delivered as the `Siphonophore.Stolon` NuGet package. The source and assets are compiled into each plugin at build time, so a plugin stays a single DLL with nothing extra to ship.
 

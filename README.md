@@ -6,7 +6,7 @@ Shared configuration page components and C# helpers for Jellyfin plugins, delive
 
 ## Documentation
 
-Usage, translations, every C# helper, every web component, and how a release works are covered in the **[Jellyfin Plugin Stolon documentation](https://siphonophore-org.github.io/stolon/)**.
+Usage, translations, every C# helper, every web component, and how a release works are covered in the **[Stolon documentation](https://siphonophore-org.github.io/stolon/)**.
 
 ## Package
 
