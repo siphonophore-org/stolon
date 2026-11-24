@@ -43,12 +43,14 @@ public class StreamIdleTimeoutTests
         using var destination = new MemoryStream();
 
         await StreamUtilities.CopyWithIdleTimeoutAsync(
-            new QuietAfterPrefix("img-", trickle: 30, interval: TimeSpan.FromMilliseconds(100)),
+            new QuietAfterPrefix("img-", trickle: 60, interval: TimeSpan.FromMilliseconds(50)),
             destination,
-            TimeSpan.FromSeconds(1),
+            // Forty times the gap between bytes, so a busy machine pausing the test never reads as a stall, and still
+            // shorter than the three seconds the whole copy takes.
+            TimeSpan.FromSeconds(2),
             cancellationToken: CancellationToken.None);
 
-        Assert.Equal("img-" + new string('t', 30), Encoding.ASCII.GetString(destination.ToArray()));
+        Assert.Equal("img-" + new string('t', 60), Encoding.ASCII.GetString(destination.ToArray()));
     }
 
     /// <summary>
