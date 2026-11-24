@@ -1,0 +1,269 @@
+/* A whole page a plugin hosts for regular users, on the dark page color with the web client's font and field sizes a step up for touch */
+/* Example: <body class="stolon-user-page" data-stolon-access="anyone"><header class="stolon-user-page-header"></header><main class="stolon-user-page-column"></main></body> */
+.stolon-user-page {
+    --stolon-field-height: var(--stolon-size-large);
+    --stolon-field-font: var(--stolon-font-large);
+    --stolon-field-pad: var(--stolon-pad-medium);
+    margin: 0;
+    min-height: 100vh;
+    background: var(--stolon-page-bg);
+    color: var(--stolon-fg);
+    font-family: var(--stolon-sans);
+    font-size: var(--stolon-font-medium);
+    line-height: var(--stolon-line-medium);
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+}
+.stolon-user-page *,
+.stolon-user-page *::before,
+.stolon-user-page *::after { box-sizing: border-box; }
+
+/* The web client's icon font, which a user page links from the web client, drawn at the large icon size */
+/* Example: <span class="material-icons" aria-hidden="true">check_circle</span> */
+.stolon-user-page .material-icons {
+    font-family: "Material Icons";
+    font-weight: normal;
+    font-style: normal;
+    font-size: var(--stolon-icon-large);
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: "liga";
+    font-feature-settings: "liga";
+}
+
+/* The header, the server's name as a link to the web client and the plugin's mark, as wide as the column */
+/* Example: <header class="stolon-user-page-header"><a class="stolon-user-page-server" href="web/">Jellyfin</a><span class="stolon-user-page-mark stolon-icon-text"><span>Invites</span></span></header> */
+.stolon-user-page-header {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-wide);
+    max-width: calc(var(--stolon-size-large) * 11 + var(--stolon-gap-wide) * 2);
+    margin: 0 auto;
+    padding: var(--stolon-gap-wide);
+    border-bottom: 1px solid var(--stolon-line);
+}
+.stolon-user-page-server {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: inherit;
+    font-size: var(--stolon-font-large);
+    line-height: var(--stolon-line-large);
+    font-weight: 600;
+    text-decoration: none;
+}
+.stolon-user-page-server:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; border-radius: var(--stolon-radius-small); }
+.stolon-user-page-mark {
+    flex: 0 0 auto;
+    color: var(--stolon-text-muted);
+    white-space: nowrap;
+}
+
+/* The centered column under the header that holds the cards */
+/* Example: <main class="stolon-user-page-column"><div class="stolon-user-page-content"></div></main> */
+.stolon-user-page-column {
+    display: block;
+    max-width: calc(var(--stolon-size-large) * 11 + var(--stolon-gap-wide) * 2);
+    margin: 0 auto;
+    padding: calc(var(--stolon-gap-wide) * 2) var(--stolon-gap-wide);
+}
+.stolon-user-page-content,
+.stolon-user-page-gate {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-wide);
+}
+
+/* The wide column, for content set side by side such as a QR code beside its steps */
+/* Example: <body class="stolon-user-page stolon-wide"></body> */
+.stolon-user-page.stolon-wide .stolon-user-page-header,
+.stolon-user-page.stolon-wide .stolon-user-page-column { max-width: calc(var(--stolon-size-large) * 22 + var(--stolon-gap-wide) * 2); }
+
+/* A page only signed in viewers may open keeps its content hidden until the page script has checked the viewer */
+/* Example: <body class="stolon-user-page" data-stolon-access="user" data-stolon-ready></body> */
+.stolon-user-page[data-stolon-access="user"]:not([data-stolon-ready]) .stolon-user-page-content,
+.stolon-user-page[data-stolon-access="administrator"]:not([data-stolon-ready]) .stolon-user-page-content { display: none; }
+
+/* A card on the surface, the one frame every step of a user page sits in */
+/* Example: <section class="stolon-user-page-card"><h1 class="stolon-user-page-title">Create your account</h1></section> */
+.stolon-user-page-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-wide);
+    min-width: 0;
+    padding: calc(var(--stolon-gap-wide) * 1.5);
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-line);
+    border-radius: var(--stolon-radius-large);
+}
+.stolon-user-page-card > * { margin: 0; }
+.stolon-user-page-card[hidden] { display: none; }
+
+/* The card's heading, and the short paragraph under it */
+/* Example: <h1 class="stolon-user-page-title">Set up your device</h1><p class="stolon-user-page-lead">Scan the code with the WireGuard app.</p> */
+.stolon-user-page-title {
+    font-size: calc(var(--stolon-font-large) * 1.5);
+    line-height: calc(var(--stolon-line-large) * 1.25);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+.stolon-user-page-subtitle {
+    font-size: var(--stolon-font-large);
+    line-height: var(--stolon-line-large);
+    font-weight: 600;
+}
+.stolon-user-page-lead { color: var(--stolon-text-muted); overflow-wrap: anywhere; }
+
+/* A stack of fields, each a label over its input with an optional hint under it */
+/* Example: <form class="stolon-user-page-form"><div class="stolon-user-page-field"><label for="name">Username</label><input id="name" type="text"></div></form> */
+.stolon-user-page-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-wide);
+    margin: 0;
+}
+.stolon-user-page-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+    min-width: 0;
+}
+.stolon-user-page-field > label { font-weight: 600; }
+.stolon-user-page-hint {
+    color: var(--stolon-text-muted);
+    font-size: var(--stolon-font-small);
+    line-height: var(--stolon-line-small);
+}
+.stolon-user-page-field > input,
+.stolon-user-page-field > select,
+.stolon-user-page-field > textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: var(--stolon-field-height);
+    margin: 0;
+    padding: 0 var(--stolon-field-pad);
+    background: var(--stolon-wash-strong);
+    color: inherit;
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-small);
+    font: inherit;
+    font-size: var(--stolon-field-font);
+}
+.stolon-user-page-field > textarea { height: auto; padding: var(--stolon-pad-small) var(--stolon-field-pad); }
+.stolon-user-page-field > input:focus,
+.stolon-user-page-field > select:focus,
+.stolon-user-page-field > textarea:focus { outline: none; border-color: var(--stolon-accent); }
+.stolon-user-page-field > input[aria-invalid="true"] { border-color: var(--stolon-error); }
+.stolon-user-page-field > input:disabled { opacity: 0.5; }
+
+/* A stack of full width buttons at the end of a card */
+/* Example: <div class="stolon-user-page-actions"><button class="raised stolon-button primary large fill" type="submit">Create account</button></div> */
+.stolon-user-page-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-user-page .stolon-button {
+    font-family: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.stolon-user-page .stolon-button:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+.stolon-user-page .stolon-button:disabled { opacity: 0.5; cursor: default; }
+
+/* Short numbered steps, such as how to add a tunnel on one platform */
+/* Example: <ol class="stolon-user-page-steps"><li>Install WireGuard from the App Store.</li><li>Tap Add a tunnel.</li></ol> */
+.stolon-user-page-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-wide);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: stolon-user-page-step;
+}
+.stolon-user-page-steps > li {
+    position: relative;
+    min-height: var(--stolon-size-medium);
+    padding-left: calc(var(--stolon-size-medium) + var(--stolon-gap-narrow) * 1.5);
+    padding-top: calc((var(--stolon-size-medium) - var(--stolon-line-medium)) / 2);
+    overflow-wrap: anywhere;
+    counter-increment: stolon-user-page-step;
+}
+.stolon-user-page-steps > li::before {
+    content: counter(stolon-user-page-step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--stolon-size-medium);
+    height: var(--stolon-size-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--stolon-radius-round);
+    background: var(--stolon-accent-wash-strong);
+    color: var(--stolon-accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Two parts side by side that stack once the column is too narrow for both, such as a QR code and its steps */
+/* Example: <div class="stolon-user-page-split"><section class="stolon-user-page-card"></section><section class="stolon-user-page-card"></section></div> */
+.stolon-user-page-split {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--stolon-gap-wide);
+}
+.stolon-user-page-split > * {
+    flex: 1 1 calc(var(--stolon-size-large) * 8);
+    min-width: 0;
+}
+
+/* The finished state, or the page script's sign in ask: a round icon in its state's color over a heading, a sentence, and its buttons */
+/* Example: <section class="stolon-user-page-card stolon-user-page-done" data-stolon-state="success"><span class="stolon-user-page-done-icon"><span class="material-icons" aria-hidden="true">check_circle</span></span><h1 class="stolon-user-page-title">You are all set</h1></section> */
+.stolon-user-page-done {
+    align-items: center;
+    text-align: center;
+}
+.stolon-user-page-done > .stolon-user-page-actions { align-self: stretch; }
+.stolon-user-page-done-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--stolon-size-large) * 1.5);
+    height: calc(var(--stolon-size-large) * 1.5);
+    border-radius: var(--stolon-radius-round);
+    background: var(--stolon-green-soft);
+    color: var(--stolon-green-fg);
+}
+.stolon-user-page-done-icon > .material-icons { font-size: calc(var(--stolon-icon-large) * 1.6); }
+.stolon-user-page-done[data-stolon-state="info"] .stolon-user-page-done-icon { background: var(--stolon-blue-soft); color: var(--stolon-blue-fg); }
+.stolon-user-page-done[data-stolon-state="warn"] .stolon-user-page-done-icon { background: var(--stolon-orange-soft); color: var(--stolon-orange-fg); }
+.stolon-user-page-done[data-stolon-state="error"] .stolon-user-page-done-icon { background: var(--stolon-red-soft); color: var(--stolon-red-fg); }
+
+/* A message in a card, a callout with the icon of its state, which setUserPageMessage writes */
+/* Example: <div class="stolon-user-page-message stolon-error stolon-icon-text" role="alert"><span class="material-icons" aria-hidden="true">error</span><span>That username is taken.</span></div> */
+.stolon-user-page-message.stolon-icon-text { font-size: var(--stolon-font-medium); }
+.stolon-user-page-message.stolon-info > .material-icons { color: var(--stolon-blue-fg); }
+.stolon-user-page-message.stolon-success > .material-icons { color: var(--stolon-green-fg); }
+.stolon-user-page-message.stolon-warn > .material-icons { color: var(--stolon-orange-fg); }
+.stolon-user-page-message.stolon-error > .material-icons { color: var(--stolon-red-fg); }
+.stolon-user-page-message[hidden] { display: none; }
+
+/* A phone has less room around the cards */
+@media (max-width: 600px) {
+    .stolon-user-page-column { padding: var(--stolon-gap-wide); }
+    .stolon-user-page-card { padding: var(--stolon-gap-wide); }
+    .stolon-user-page-title { font-size: calc(var(--stolon-font-large) * 1.25); line-height: var(--stolon-line-large); }
+}

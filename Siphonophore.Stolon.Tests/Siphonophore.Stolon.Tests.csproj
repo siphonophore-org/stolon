@@ -46,6 +46,13 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <!-- A plugin's own page content, for HostedPage.FromResource. -->
+  <ItemGroup>
+    <EmbeddedResource Include="Fixtures\Pages\*.html">
+      <LogicalName>Siphonophore.Stolon.Tests.Web.%(Filename).html</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <!-- Translations as the build embeds them in a plugin, for StolonTranslations. -->
   <ItemGroup>
     <EmbeddedResource Include="Fixtures\Translations\*.json">

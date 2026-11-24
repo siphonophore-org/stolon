@@ -143,8 +143,11 @@
     "setFieldState",
     "setTabs",
     "setTooltip",
+    "setUserPageMessage",
     "shiftDays",
+    "showUserPageView",
     "snapTime",
+    "startUserPage",
     "subscribeWebPush",
     "textOn",
     "titleCase",
@@ -160,7 +163,7 @@
   ],
   "components": {
     "access-schedule": 5579,
-    "audio-player": 3696,
+    "audio-player": 3700,
     "avatar-stack": 1483,
     "avatar": 2970,
     "badge": 850,
@@ -227,7 +230,7 @@
     "lib/qr": 5849,
     "lib/row-editor": 3294,
     "lib/selection": 1929,
-    "lib/stolon-text": 11260,
+    "lib/stolon-text": 11507,
     "lib/text-case": 3309,
     "lib/thumb": 3206,
     "lib/typeahead": 4387,
@@ -287,9 +290,10 @@
     "tree-view": 7464,
     "usage-meter": 3053,
     "user-multi-selector": 1196,
+    "user-page": 4187,
     "user-selector": 1529,
     "web-push": 731,
     "world-map": 6234
   },
-  "bytes": 509881
+  "bytes": 514369
 }

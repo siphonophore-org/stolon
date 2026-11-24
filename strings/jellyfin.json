@@ -11,6 +11,7 @@
     {"key": "ButtonInfo"},
     {"key": "ButtonPause"},
     {"key": "ButtonRemove"},
+    {"key": "ButtonSignIn", "case": "sentence"},
     {"key": "Copied"},
     {"key": "Copy"},
     {"key": "Custom"},

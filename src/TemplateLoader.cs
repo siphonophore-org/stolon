@@ -56,7 +56,17 @@ public static partial class TemplateLoader
     public static string Fill(string name, IReadOnlyDictionary<string, string> values)
     {
         ArgumentNullException.ThrowIfNull(values);
-        var template = Load(name);
+        return FillText(Load(name), values);
+    }
+
+    /// <summary>
+    /// Replaces the <c>{{KEY}}</c> tokens of a text in a single pass, as <see cref="Fill"/> does for a loaded template.
+    /// </summary>
+    /// <param name="template">The text that holds the tokens.</param>
+    /// <param name="values">Token values keyed by name (without braces).</param>
+    /// <returns>The filled text.</returns>
+    internal static string FillText(string template, IReadOnlyDictionary<string, string> values)
+    {
         return TokenPattern().Replace(
             template,
             match => values.TryGetValue(match.Groups[1].Value, out var value) ? value : match.Value);
