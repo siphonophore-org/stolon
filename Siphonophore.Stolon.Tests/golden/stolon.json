@@ -355,7 +355,7 @@
     "qr-code": 6350,
     "record-list": 2797,
     "relative-time": 3034,
-    "repeater": 5963,
+    "repeater": 6062,
     "rule-builder": 5840,
     "save-bar": 1977,
     "schedule-picker": 2260,
@@ -394,5 +394,5 @@
     "web-push": 731,
     "world-map": 6264
   },
-  "bytes": 597226
+  "bytes": 597325
 }

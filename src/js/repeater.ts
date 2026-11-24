@@ -181,7 +181,12 @@ export function buildRepeater(options: RepeaterOptions, parts: RepeaterParts | n
         height: opts.height,
         maxHeight: opts.maxHeight,
         minHeight: opts.minHeight,
-        onChange: changed
+        onChange: changed,
+        // With no row, the column labels and the empty list give way to the empty sentence.
+        onCount: function (count: number): void {
+            if (head) head.hidden = opts.showLabels === false || count === 0;
+            body.hidden = count === 0;
+        }
     });
     root.appendChild(body);
     root.appendChild(set.empty);

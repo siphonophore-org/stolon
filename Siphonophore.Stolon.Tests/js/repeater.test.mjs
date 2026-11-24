@@ -234,3 +234,17 @@ test('transform rewrites a text field as it is typed', function () {
     assert.equal(input.value, 'API_KEY');
     assert.deepEqual(ui.changes[ui.changes.length - 1], [{ name: 'API_KEY' }]);
 });
+
+test('with no row the labels and the list hide, and they come back with the first row', function () {
+    var handle = createRepeater({ fields: [{ key: 'Name', label: 'Name' }], emptyText: 'No one yet.' });
+    dom.document.body.appendChild(handle.element);
+    var head = handle.element.querySelector('.stolon-repeater-head');
+    var rows = handle.element.querySelector('.stolon-repeater-rows');
+    assert.equal(head.hidden, true);
+    assert.equal(rows.hidden, true);
+    handle.setValue([{ Name: 'Ann' }]);
+    assert.equal(head.hidden, false);
+    assert.equal(rows.hidden, false);
+    handle.setValue([]);
+    assert.equal(head.hidden, true);
+});

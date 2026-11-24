@@ -9,6 +9,8 @@
 }
 .stolon-repeater > .stolon-repeater-head,
 .stolon-repeater > .stolon-repeater-rows { align-self: stretch; }
+.stolon-repeater > .stolon-repeater-head[hidden],
+.stolon-repeater > .stolon-repeater-rows[hidden] { display: none; }
 
 /* Column labels over inline rows, on the rows' own tracks with room for the row buttons */
 /* Example: <div class="stolon-repeater-head"><span>Name</span><span>Port</span></div> */
