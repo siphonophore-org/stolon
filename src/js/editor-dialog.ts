@@ -60,21 +60,21 @@ export function openEditorDialog(opts?: EditorDialogOptions): EditorDialogHandle
     }
     var buttons: DialogButton[] = [];
     if (!opts.isNew && opts.onRemove) {
-        buttons.push({ text: opts.removeText || stolonText('ButtonRemove'), className: 'stolon-button destructive', action: function (close): void { opts.onRemove!(close); } });
+        buttons.push({ text: opts.removeText || stolonText('ButtonRemove'), className: 'stolon-button stolon-destructive', action: function (close): void { opts.onRemove!(close); } });
     }
     // The footer reads destructive first, then the extra actions, then Cancel, then the primary.
     var extras = (opts.actions || []).filter(Boolean);
     var ordered = extras.filter(function (a) { return a.variant === 'destructive'; }).concat(extras.filter(function (a) { return a.variant !== 'destructive'; }));
     ordered.forEach(function (a) {
         var variant = a.variant === 'primary' || a.variant === 'destructive' ? a.variant : 'secondary';
-        buttons.push({ text: a.text, icon: a.icon, className: 'stolon-button ' + variant, action: function (close, dismiss, btn): void { a.onClick(handle, btn); } });
+        buttons.push({ text: a.text, icon: a.icon, className: 'stolon-button stolon-' + variant, action: function (close, dismiss, btn): void { a.onClick(handle, btn); } });
     });
-    buttons.push({ text: opts.cancelText || stolonText('ButtonCancel'), className: 'stolon-button secondary', action: function (close, dismiss): void { dismiss(); } });
+    buttons.push({ text: opts.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close, dismiss): void { dismiss(); } });
     // Done stays disabled while onDone is pending, and a rejection re-enables it since onDone reports its own error.
     var busy: boolean = false;
     buttons.push({
         text: opts.doneText || stolonText('Stolon.Done'),
-        className: 'stolon-button primary',
+        className: 'stolon-button stolon-primary',
         action: function (close, dismiss, btn): void {
             if (busy) return;
             var verdict: boolean | void | PromiseLike<boolean | void> = opts.onDone ? opts.onDone(close) : true;

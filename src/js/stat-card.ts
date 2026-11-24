@@ -38,7 +38,7 @@ export interface StatCardHandle extends ComponentHandle {
  * @param options {
  *   value         : the number or text shown large, such as 1204 or 'Delivered 3m ago'. Text wraps and is never shrunk [optional]
  *   label         : text under the value, or above it with layout 'label-top' [optional]
- *   color         : card color name such as 'blue' or 'green', as the stolon-card modifiers [optional]
+ *   color         : card color name such as 'blue' or 'green', drawn as its stolon-card modifier, such as stolon-blue [optional]
  *   trend         : change as a number, where 12 is up 12 and -3 is down 3 [optional]
  *   trendSuffix   : text after the trend number, such as '%' [optional]
  *   trendLabel    : text after the trend, such as 'vs last week' [optional]
@@ -62,7 +62,7 @@ export function createStatCard(options?: StatCardOptions): StatCardHandle {
     var root = card.element;
     var valueEl = card.count;
     var labelEl = card.label;
-    var trendEl = make('span', 'stolon-stat-trend stolon-icon-text small');
+    var trendEl = make('span', 'stolon-stat-trend stolon-icon-text stolon-small');
     root.appendChild(trendEl);
     var detailEls: HTMLElement[] = [];
     var state: StatCardOptions = {};
@@ -92,7 +92,7 @@ export function createStatCard(options?: StatCardOptions): StatCardHandle {
         var labelTop = next.layout === 'label-top';
         var text = toText(next.value);
         var isText = /[^\d\s.,:%+\-\/]/.test(text);
-        root.className = 'stolon-card stolon-stat' + (labelTop ? ' label-top' : '') + (isText ? ' text' : '');
+        root.className = 'stolon-card stolon-stat' + (labelTop ? ' stolon-label-top' : '') + (isText ? ' stolon-text' : '');
         applyColor(root, next.color);
         if (labelTop) root.insertBefore(labelEl, valueEl);
         else root.insertBefore(valueEl, labelEl);
@@ -107,7 +107,7 @@ export function createStatCard(options?: StatCardOptions): StatCardHandle {
         if (!hasTrend) return;
         var direction = next.trend! > 0 ? 'up' : (next.trend! < 0 ? 'down' : 'flat');
         var good = direction === 'flat' ? null : ((direction === 'up') === (next.positiveIsGood !== false));
-        trendEl.className = 'stolon-stat-trend stolon-icon-text small ' + (good === null ? 'flat' : (good ? 'good' : 'bad'));
+        trendEl.className = 'stolon-stat-trend stolon-icon-text stolon-small ' + (good === null ? 'stolon-flat' : (good ? 'stolon-good' : 'stolon-bad'));
         trendEl.appendChild(icon(direction === 'up' ? 'arrow_upward' : (direction === 'down' ? 'arrow_downward' : 'remove')));
         var word = direction === 'up' ? (options!.trendUpText || stolonText('Up')) : (direction === 'down' ? (options!.trendDownText || stolonText('Down')) : (options!.trendFlatText || stolonText('Stolon.NoChange')));
         trendEl.appendChild(make('span', 'stolon-sr-only', null, word));

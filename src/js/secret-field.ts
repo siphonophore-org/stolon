@@ -30,12 +30,12 @@ export function bindSecretField(input: HTMLInputElement | null, hasStored: boole
     opts = opts || {};
     var clear = opts.clearButton;
     if (clear) {
-        clear.classList.toggle('hidden', !hasStored);
+        clear.classList.toggle('stolon-hidden', !hasStored);
         if (!clear.dataset.stolonSecretClear) {
             clear.dataset.stolonSecretClear = '1';
             clear.addEventListener('click', function () {
                 clearSecretField(input);
-                clear!.classList.add('hidden');
+                clear!.classList.add('stolon-hidden');
                 input.dispatchEvent(new Event('input', { bubbles: true }));
             });
         }

@@ -31,7 +31,7 @@ test('a missing value breaks the line into two runs and draws no dot', function 
 test('area shades under the line, and dots false makes the chart quiet', function () {
     var chart = build({ labels: ['a', 'b'], area: true, dots: false, series: [{ values: [1, 2] }] });
     assert.equal(all(chart.element, '.stolon-chart-area').length, 1);
-    assert.ok(chart.element.classList.contains('quiet'));
+    assert.ok(chart.element.classList.contains('stolon-quiet'));
 });
 
 test('a higher value sits higher on the plot', function () {

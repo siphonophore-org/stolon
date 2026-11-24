@@ -1,5 +1,5 @@
 /* Pill that shows a short status label in a status color */
-/* Example: <span class="stolon-badge green">Active</span> */
+/* Example: <span class="stolon-badge stolon-green">Active</span> */
 .stolon-badge,
 .stolon-table-status-badge {
     display: inline-flex;
@@ -13,18 +13,18 @@
     white-space: nowrap;
     border: none;
 }
-.stolon-badge.green, .stolon-table-status-badge.Active, .stolon-table-status-badge.Synced, .stolon-table-status-badge.Downloaded, .stolon-table-status-badge.Completed, .stolon-table-status-badge.Enabled { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
-.stolon-badge.red, .stolon-table-status-badge.Disabled, .stolon-table-status-badge.Errored, .stolon-table-status-badge.Error, .stolon-table-status-badge.Deleting, .stolon-table-status-badge.Pending-Deletion, .stolon-table-status-badge.Failed { background: var(--stolon-red-bg); color: var(--stolon-red-fg); }
-.stolon-badge.orange, .stolon-table-status-badge.Expired, .stolon-table-status-badge.Queued, .stolon-table-status-badge.Paused { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
-.stolon-badge.purple, .stolon-table-status-badge.Locked, .stolon-table-status-badge.Running, .stolon-table-status-badge.Downloading, .stolon-table-status-badge.Pending, .stolon-table-status-badge.Pending-Download { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
-.stolon-badge.blue, .stolon-table-status-badge.Admin, .stolon-table-status-badge.Imported, .stolon-table-status-badge.Pending-Replacement { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); }
-.stolon-badge.gray, .stolon-table-status-badge.Ignored, .stolon-table-status-badge.Group, .stolon-table-status-badge.Skipped, .stolon-table-status-badge.Unknown { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
-.stolon-badge.yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
-.stolon-badge.pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
-.stolon-badge.teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
-.stolon-badge.custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); }
+.stolon-badge.stolon-green, .stolon-table-status-badge.stolon-Active, .stolon-table-status-badge.stolon-Synced, .stolon-table-status-badge.stolon-Downloaded, .stolon-table-status-badge.stolon-Completed, .stolon-table-status-badge.stolon-Enabled { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
+.stolon-badge.stolon-red, .stolon-table-status-badge.stolon-Disabled, .stolon-table-status-badge.stolon-Errored, .stolon-table-status-badge.stolon-Error, .stolon-table-status-badge.stolon-Deleting, .stolon-table-status-badge.stolon-Pending-Deletion, .stolon-table-status-badge.stolon-Failed { background: var(--stolon-red-bg); color: var(--stolon-red-fg); }
+.stolon-badge.stolon-orange, .stolon-table-status-badge.stolon-Expired, .stolon-table-status-badge.stolon-Queued, .stolon-table-status-badge.stolon-Paused { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
+.stolon-badge.stolon-purple, .stolon-table-status-badge.stolon-Locked, .stolon-table-status-badge.stolon-Running, .stolon-table-status-badge.stolon-Downloading, .stolon-table-status-badge.stolon-Pending, .stolon-table-status-badge.stolon-Pending-Download { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
+.stolon-badge.stolon-blue, .stolon-table-status-badge.stolon-Admin, .stolon-table-status-badge.stolon-Imported, .stolon-table-status-badge.stolon-Pending-Replacement { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); }
+.stolon-badge.stolon-gray, .stolon-table-status-badge.stolon-Ignored, .stolon-table-status-badge.stolon-Group, .stolon-table-status-badge.stolon-Skipped, .stolon-table-status-badge.stolon-Unknown { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
+.stolon-badge.stolon-yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
+.stolon-badge.stolon-pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
+.stolon-badge.stolon-teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
+.stolon-badge.stolon-custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); }
 
 /* A badge at the medium or large size of the scale */
-/* Example: <span class="stolon-badge green medium">Synced</span> */
-.stolon-badge.medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); }
-.stolon-badge.large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
+/* Example: <span class="stolon-badge stolon-green stolon-medium">Synced</span> */
+.stolon-badge.stolon-medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); }
+.stolon-badge.stolon-large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }

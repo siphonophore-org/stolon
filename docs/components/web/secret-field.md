@@ -15,7 +15,7 @@ The browser half of `SecretProtector`. A credential input that never receives th
 <div class="inputContainer">
     <label for="txtApiKey">API Key</label>
     <input is="emby-input" type="password" id="txtApiKey" />
-    <button is="emby-button" type="button" id="btnClearApiKey" class="raised stolon-button secondary small hidden"><span>Clear</span></button>
+    <button is="emby-button" type="button" id="btnClearApiKey" class="raised stolon-button stolon-secondary stolon-small stolon-hidden"><span>Clear</span></button>
 </div>
 ```
 

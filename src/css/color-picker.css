@@ -89,5 +89,5 @@
 }
 
 /* Only the opacity box, for a color that comes from elsewhere, such as an image */
-/* Example: <div class="stolon-color-picker alpha opacity-only"><div class="stolon-color-picker-row"><div class="stolon-color-picker-box"></div><div class="stolon-color-alpha"></div></div></div> */
-.stolon-color-picker.opacity-only .stolon-color-picker-box { display: none; }
+/* Example: <div class="stolon-color-picker alpha stolon-opacity-only"><div class="stolon-color-picker-row"><div class="stolon-color-picker-box"></div><div class="stolon-color-alpha"></div></div></div> */
+.stolon-color-picker.stolon-opacity-only .stolon-color-picker-box { display: none; }

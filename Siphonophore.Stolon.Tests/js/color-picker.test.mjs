@@ -67,25 +67,25 @@ test('text that is not a color shows the message on change and keeps the value',
     assert.equal(picker.getValue(), '#123456');
     assert.equal(picker.isValid(), false);
     var msg = picker.element.querySelector('.stolon-field-message');
-    assert.equal(msg.classList.contains('error'), true);
+    assert.equal(msg.classList.contains('stolon-error'), true);
     picker.setValue('#abcdef');
     assert.equal(picker.input.value, 'abcdef');
-    assert.equal(msg.classList.contains('error'), false);
+    assert.equal(msg.classList.contains('stolon-error'), false);
 });
 
 test('opacityOnly shows only the opacity box, and setOpacityOnly switches back keeping the color', function () {
     var picker = createColorPicker({ value: '#3498db', opacityOnly: true });
-    assert.equal(picker.element.classList.contains('opacity-only'), true);
+    assert.equal(picker.element.classList.contains('stolon-opacity-only'), true);
     assert.ok(picker.element.querySelector('.stolon-color-alpha-input'));
     picker.input.value = 'nope';
     assert.equal(picker.isValid(), true);
     picker.input.value = '3498db';
     picker.setOpacityOnly(false);
-    assert.equal(picker.element.classList.contains('opacity-only'), false);
+    assert.equal(picker.element.classList.contains('stolon-opacity-only'), false);
     assert.equal(picker.getValue(), '#3498dbff');
     picker.setOpacityOnly(true);
-    assert.equal(picker.element.classList.contains('opacity-only'), true);
+    assert.equal(picker.element.classList.contains('stolon-opacity-only'), true);
     var plain = createColorPicker({ value: '#3498db' });
     plain.setOpacityOnly(true);
-    assert.equal(plain.element.classList.contains('opacity-only'), false);
+    assert.equal(plain.element.classList.contains('stolon-opacity-only'), false);
 });

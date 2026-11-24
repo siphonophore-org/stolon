@@ -45,8 +45,8 @@ test('it draws one bar per value in its series color, each named with its label 
     assert.equal(bars.length, 3);
     assert.equal(bars[0].getAttribute('aria-label'), 'Mon, A, 4');
     var groups = all(chart.element, '.stolon-chart-series');
-    assert.ok(groups[0].classList.contains('blue'));
-    assert.ok(groups[1].classList.contains('custom'));
+    assert.ok(groups[0].classList.contains('stolon-blue'));
+    assert.ok(groups[1].classList.contains('stolon-custom'));
     assert.match(groups[1].getAttribute('style'), /--stolon-custom: #e91e63/);
 });
 

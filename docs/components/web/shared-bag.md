@@ -33,7 +33,7 @@ The state is `pluginId` and `apiPrefix`.
 
 ## States and Modifiers
 
-* `setVisible(idOrEl, visible)` toggles the `hidden` class.
+* `setVisible(idOrEl, visible)` toggles the `stolon-hidden` class.
 * `bindReveal(checkboxId, targetId, invert)` shows or hides the target from a checkbox, binds once, and applies the current state on every call. Call it after loading the config.
 * `setValue` turns null into an empty value.
 * `getConfig` calls `ApiClient.getPluginConfiguration(pluginId)`, and `saveConfig` calls `ApiClient.updatePluginConfiguration`.

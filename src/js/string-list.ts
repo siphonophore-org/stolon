@@ -85,7 +85,7 @@ export function createStringList(options?: StringListOptions): StringListHandle 
     var add = make('div', 'stolon-string-add');
     var input = make('input', '', { type: 'text', 'aria-label': options.inputLabel || stolonText('Stolon.NewItem'), autocomplete: 'off' });
     if (options.placeholder) input.setAttribute('placeholder', options.placeholder);
-    var addButton = make('button', 'raised stolon-button field', { type: 'button' }, options.addText || stolonText('Add'));
+    var addButton = make('button', 'raised stolon-button stolon-field', { type: 'button' }, options.addText || stolonText('Add'));
     var message = createFieldMessage({ input: input });
     add.appendChild(input);
     add.appendChild(addButton);

@@ -105,7 +105,7 @@ export function createInheritField<V = unknown>(options: InheritFieldOptions<V>)
         return toText(inherited);
     }
 
-    var root = make('div', 'stolon-inherit' + (checkbox ? ' check' : ''));
+    var root = make('div', 'stolon-inherit' + (checkbox ? ' stolon-check' : ''));
     var slot = make('div', 'stolon-inherit-field');
     if (fieldEl.parentNode) fieldEl.parentNode.insertBefore(root, fieldEl);
     slot.appendChild(fieldEl);
@@ -136,7 +136,7 @@ export function createInheritField<V = unknown>(options: InheritFieldOptions<V>)
         var before = inherit;
         if (next && !before) own = read();
         inherit = next;
-        root.classList.toggle('inheriting', inherit);
+        root.classList.toggle('stolon-inheriting', inherit);
         if (inherit) {
             if (!before) {
                 parts = Array.prototype.map.call(control ? [control] : fieldEl.querySelectorAll('input, select, textarea, button'), function (el: HTMLInputElement) { return { el: el, was: el.disabled }; }) as Array<{ el: HTMLInputElement; was: boolean }>;

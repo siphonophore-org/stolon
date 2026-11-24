@@ -81,12 +81,12 @@ export function createPreviewFrame(options?: PreviewFrameOptions): PreviewFrameH
     choices.hidden = opts.backgrounds === false;
     var zoomable = opts.zoom !== false;
     var stage: HTMLElement = zoomable
-        ? make('button', 'stolon-preview-frame-stage ' + background, { type: 'button', title: opts.zoomText || stolonText('Stolon.Zoom'), 'aria-label': (opts.zoomText || stolonText('Stolon.Zoom')) + ' ' + label })
-        : make('div', 'stolon-preview-frame-stage ' + background);
+        ? make('button', 'stolon-preview-frame-stage stolon-' + background, { type: 'button', title: opts.zoomText || stolonText('Stolon.Zoom'), 'aria-label': (opts.zoomText || stolonText('Stolon.Zoom')) + ' ' + label })
+        : make('div', 'stolon-preview-frame-stage stolon-' + background);
     var thumb = buildThumb({ icon: 'image', className: 'stolon-preview-frame-thumb', imageClass: 'stolon-preview-frame-image', alt: label });
     stage.appendChild(thumb.element);
     var statusId = nextId('preview');
-    var status = make('div', 'stolon-preview-frame-status stolon-icon-text small', { id: statusId, role: 'status' });
+    var status = make('div', 'stolon-preview-frame-status stolon-icon-text stolon-small', { id: statusId, role: 'status' });
     var spinner = createSpinner({ size: 'small', label: opts.renderingText || stolonText('Stolon.Rendering') });
     spinner.element.removeAttribute('role');
     var statusText = make('span', 'stolon-preview-frame-status-text');
@@ -107,7 +107,7 @@ export function createPreviewFrame(options?: PreviewFrameOptions): PreviewFrameH
     function setBackground(next: PreviewBackground): void {
         if (BACKGROUNDS.indexOf(next) === -1) return;
         background = next;
-        BACKGROUNDS.forEach(function (b) { stage.classList.toggle(b, b === next); });
+        BACKGROUNDS.forEach(function (b) { stage.classList.toggle('stolon-' + b, b === next); });
         pressed.setValues([next]);
     }
 
@@ -122,12 +122,12 @@ export function createPreviewFrame(options?: PreviewFrameOptions): PreviewFrameH
         else if (result && typeof Blob !== 'undefined' && result instanceof Blob) url = objectUrl = URL.createObjectURL(result);
         else url = typeof result === 'string' ? result : '';
         thumb.setSrc(url);
-        root.classList.toggle('empty', !url);
+        root.classList.toggle('stolon-empty', !url);
         if (zoomable) (stage as HTMLButtonElement).disabled = !url;
     }
 
     function setBusy(busy: boolean, text: string): void {
-        root.classList.toggle('busy', busy);
+        root.classList.toggle('stolon-busy', busy);
         spinner.element.hidden = !busy;
         statusText.textContent = text;
         status.hidden = !text;
@@ -157,7 +157,7 @@ export function createPreviewFrame(options?: PreviewFrameOptions): PreviewFrameH
     if (zoomable) {
         cleanups.push(listen(stage, 'click', function () {
             if (!url) return;
-            var body = make('div', 'stolon-preview-frame-zoom ' + background);
+            var body = make('div', 'stolon-preview-frame-zoom stolon-' + background);
             body.appendChild(make('img', 'stolon-preview-frame-zoom-image', { src: url, alt: label }));
             openDialog({ title: label, body: body, size: 'large' });
         }));

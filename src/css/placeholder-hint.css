@@ -6,7 +6,7 @@
 .stolon-dialog .inputContainer > .stolon-placeholder-hint { margin-top: var(--stolon-gap-narrow) !important; }
 
 /* The hint's toggle, a text button built as small stolon-icon-text whose color shows its state: secondary gray while its list is hidden, accent while it shows and on hover */
-/* Example: <button class="stolon-hint-button stolon-icon-text small collapsed" aria-expanded="false" aria-controls="list"><span class="material-icons" aria-hidden="true">help_outline</span><span>Placeholders</span></button> */
+/* Example: <button class="stolon-hint-button stolon-icon-text stolon-small stolon-collapsed" aria-expanded="false" aria-controls="list"><span class="material-icons" aria-hidden="true">help_outline</span><span>Placeholders</span></button> */
 .stolon-hint-button {
     background: none;
     border: 0;
@@ -45,9 +45,9 @@
 }
 .stolon-tag-button:hover { background: var(--stolon-accent-wash-strong); }
 /* A placeholder just copied in a hint in copy mode, green for a moment as a copy that worked */
-/* Example: <button class="stolon-tag stolon-tag-button copied">{{title}}</button> */
-.stolon-tag-button.copied,
-.stolon-tag-button.copied:hover {
+/* Example: <button class="stolon-tag stolon-tag-button stolon-copied">{{title}}</button> */
+.stolon-tag-button.stolon-copied,
+.stolon-tag-button.stolon-copied:hover {
     background: var(--stolon-green-bg);
     color: var(--stolon-green-fg);
 }

@@ -109,13 +109,13 @@ test('the dropdown opens as a fixed popover as wide as the input box, and closes
     type(ta.input, 't');
     assert.equal(ta.isOpen(), true);
     assert.equal(ta.dropdown.hidden, false);
-    assert.equal(ta.dropdown.classList.contains('hidden'), false);
+    assert.equal(ta.dropdown.classList.contains('stolon-hidden'), false);
     assert.equal(ta.dropdown.style['--stolon-combo-width'], '300px');
     assert.equal(parseFloat(ta.dropdown.style.top), 140);
     assert.equal(parseFloat(ta.dropdown.style.left), 20);
     ta.close();
     assert.equal(ta.dropdown.hidden, true);
-    assert.equal(ta.dropdown.classList.contains('hidden'), true);
+    assert.equal(ta.dropdown.classList.contains('stolon-hidden'), true);
 });
 
 test('the dropdown flips above near the bottom and stays inside a 375 pixel screen', function () {
@@ -169,7 +169,7 @@ test('the media picker shows the list empty text after the list, and hides it on
     var picker = createMediaPicker({ emptyText: 'Nothing yet.' });
     var list = picker.element.querySelector('.stolon-media-picker-items');
     var empty = picker.element.querySelector('.stolon-list-empty');
-    assert.ok(empty.classList.contains('outside'));
+    assert.ok(empty.classList.contains('stolon-outside'));
     assert.ok(empty.classList.contains('stolon-media-picker-empty'));
     assert.equal(empty.textContent, 'Nothing yet.');
     var kids = Array.prototype.slice.call(picker.element.children);

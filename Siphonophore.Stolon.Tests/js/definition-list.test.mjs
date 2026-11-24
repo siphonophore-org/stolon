@@ -55,7 +55,7 @@ test('destroy empties the list', function () {
 test('by default the dl grows with its rows and keeps its own semantics, with only row groups inside', function () {
     var list = createDefinitionList({ items: [{ label: 'A', value: '1' }] });
     assert.equal(list.element.getAttribute('role'), null);
-    assert.equal(list.element.classList.contains('scrolls'), false);
+    assert.equal(list.element.classList.contains('stolon-scrolls'), false);
     var row = list.element.children[0];
     assert.equal(row.tagName, 'DIV');
     assert.ok(row.classList.contains('stolon-defs-row'));
@@ -67,15 +67,15 @@ test('by default the dl grows with its rows and keeps its own semantics, with on
 
 test('height, maxHeight, and minHeight reach the dl, and setHeight switches them', function () {
     var list = createDefinitionList({ height: 240, minHeight: 100 });
-    assert.ok(list.element.classList.contains('fixed'));
+    assert.ok(list.element.classList.contains('stolon-fixed'));
     assert.equal(list.element.style['--stolon-list-height'], '240px');
     assert.equal(list.element.style['--stolon-list-min'], '100px');
     list.setHeight('auto', 300);
-    assert.equal(list.element.classList.contains('fixed'), false);
-    assert.ok(list.element.classList.contains('capped'));
+    assert.equal(list.element.classList.contains('stolon-fixed'), false);
+    assert.ok(list.element.classList.contains('stolon-capped'));
     assert.equal(list.element.style['--stolon-list-max'], '300px');
     list.setHeight('fill');
-    assert.ok(list.element.classList.contains('fill'));
+    assert.ok(list.element.classList.contains('stolon-fill'));
 });
 
 test('a value may be a node, a badge, a link, or mono text, and an empty one shows the empty text', function () {
@@ -104,8 +104,8 @@ test('a value may be a node, a badge, a link, or mono text, and an empty one sho
 
 test('by default the list keeps the rows layout, with no columns class or route arrow', function () {
     var list = createDefinitionList({ items: [{ label: 'A', value: '1' }, { label: 'B', value: '2' }] });
-    assert.equal(list.element.classList.contains('columns'), false);
-    assert.equal(list.element.classList.contains('grid'), false);
+    assert.equal(list.element.classList.contains('stolon-columns'), false);
+    assert.equal(list.element.classList.contains('stolon-grid'), false);
     assert.equal(list.element.querySelector('.stolon-defs-arrow'), null);
 });
 
@@ -115,8 +115,8 @@ test('the columns layout is a balanced grid of label over value, with meta and n
         { label: 'Local Path', value: '/data/movies', note: 'Not synced yet.' },
         { label: 'Library' }
     ] });
-    assert.ok(list.element.classList.contains('columns'));
-    assert.ok(list.element.classList.contains('grid'));
+    assert.ok(list.element.classList.contains('stolon-columns'));
+    assert.ok(list.element.classList.contains('stolon-grid'));
     var rows = list.element.querySelectorAll('.stolon-defs-row');
     assert.equal(rows[0].querySelector('.stolon-defs-meta').textContent, '4.2 GB');
     assert.equal(rows[0].querySelector('.stolon-defs-meta').tagName, 'DD');
@@ -130,7 +130,7 @@ test('arrow on the list draws a route arrow between items, and arrow on an item 
     var rows = list.element.querySelectorAll('.stolon-defs-row');
     assert.equal(rows[0].querySelector('.stolon-defs-arrow').textContent, 'arrow_forward');
     assert.equal(rows[0].querySelector('.stolon-defs-arrow').getAttribute('aria-hidden'), 'true');
-    assert.ok(rows[0].classList.contains('has-arrow'));
+    assert.ok(rows[0].classList.contains('stolon-has-arrow'));
     assert.equal(rows[1].querySelector('.stolon-defs-arrow'), null);
     var one = createDefinitionList({ layout: 'columns', items: [{ label: 'A', value: '1' }, { label: 'From', value: 'x', arrow: true }, { label: 'To', value: 'y' }] });
     assert.deepEqual(Array.from(one.element.querySelectorAll('.stolon-defs-row')).map(function (r) { return !!r.querySelector('.stolon-defs-arrow'); }), [false, true, false]);
@@ -138,13 +138,13 @@ test('arrow on the list draws a route arrow between items, and arrow on an item 
 
 test('the columns layout turns compact by its own width, so the route arrow turns down', function () {
     var list = createDefinitionList({ layout: 'columns', arrow: true, items: [{ label: 'From', value: 'Movies' }, { label: 'To', value: 'Films' }] });
-    assert.equal(list.element.classList.contains('compact'), false);
+    assert.equal(list.element.classList.contains('stolon-compact'), false);
     Object.defineProperty(list.element, 'clientWidth', { value: 340, configurable: true });
     list.setItems(list.getValue());
-    assert.ok(list.element.classList.contains('compact'));
+    assert.ok(list.element.classList.contains('stolon-compact'));
     Object.defineProperty(list.element, 'clientWidth', { value: 800, configurable: true });
     list.setItems(list.getValue());
-    assert.equal(list.element.classList.contains('compact'), false);
+    assert.equal(list.element.classList.contains('stolon-compact'), false);
     list.destroy();
 });
 

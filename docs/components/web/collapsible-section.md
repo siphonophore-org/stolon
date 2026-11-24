@@ -14,14 +14,14 @@ A section whose header toggles a body. The header is a native button. Its header
 
 ```html
 <div class="stolon-collapsible-section">
-    <button type="button" class="stolon-collapsible-header collapsed" aria-expanded="false" data-target="advancedBody">
+    <button type="button" class="stolon-collapsible-header stolon-collapsed" aria-expanded="false" data-target="advancedBody">
         <span class="stolon-collapsible-title">Advanced</span>
         <span class="stolon-collapsible-icon"></span>
     </button>
-    <div id="advancedBody" class="stolon-collapsible-content collapsed">
+    <div id="advancedBody" class="stolon-collapsible-content stolon-collapsed">
         <div class="inputContainer"><label for="txtName">Name</label><input is="emby-input" type="text" id="txtName" /></div>
         <div class="stolon-collapsible-actions">
-            <button is="emby-button" type="button" class="raised stolon-button primary small"><span>Save</span></button>
+            <button is="emby-button" type="button" class="raised stolon-button stolon-primary stolon-small"><span>Save</span></button>
         </div>
     </div>
 </div>
@@ -72,14 +72,14 @@ card.setSubtitle('Main Server Shows to Shows');
 The same panel written by hand. A fixed header is a `div`, and `initCollapsibles` leaves it alone:
 
 ```html
-<div class="stolon-collapsible-section fixed stolon-panel">
+<div class="stolon-collapsible-section stolon-fixed stolon-panel">
     <div class="stolon-collapsible-header">
         <span class="stolon-collapsible-tile" aria-hidden="true"><span class="material-icons">video_library</span></span>
         <span class="stolon-collapsible-heading">
             <span class="stolon-collapsible-title" title="Movies">Movies</span>
             <span class="stolon-collapsible-subtitle">Main Server to This Server</span>
         </span>
-        <span class="stolon-collapsible-aside"><span class="stolon-badge gray">Copy</span></span>
+        <span class="stolon-collapsible-aside"><span class="stolon-badge stolon-gray">Copy</span></span>
     </div>
     <div class="stolon-collapsible-content">Fields go here.</div>
 </div>
@@ -93,14 +93,14 @@ A collapsible header with an aside written by hand. A button cannot hold a contr
         <button type="button" class="stolon-collapsible-header" data-target="relayBody">
             <span class="stolon-collapsible-heading"><span class="stolon-collapsible-title">Relay</span></span>
         </button>
-        <span class="stolon-collapsible-aside"><button is="emby-button" type="button" class="raised stolon-button small"><span>Test</span></button></span>
+        <span class="stolon-collapsible-aside"><button is="emby-button" type="button" class="raised stolon-button stolon-small"><span>Test</span></button></span>
         <span class="stolon-collapsible-icon"></span>
     </div>
     <div id="relayBody" class="stolon-collapsible-content">Fields go here.</div>
 </div>
 ```
 
-Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-section`, `stolon-collapsible-header`, `stolon-collapsible-title`, `stolon-collapsible-badge`, `stolon-collapsible-icon`, `stolon-collapsible-content`, `stolon-collapsible-actions`, `stolon-collapsible-tile`, `stolon-collapsible-heading`, `stolon-collapsible-subtitle`, `stolon-collapsible-aside`, `stolon-collapsible-bar`, and the `fixed`, `compact`, and `has-tile` modifiers.
+Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-section`, `stolon-collapsible-header`, `stolon-collapsible-title`, `stolon-collapsible-badge`, `stolon-collapsible-icon`, `stolon-collapsible-content`, `stolon-collapsible-actions`, `stolon-collapsible-tile`, `stolon-collapsible-heading`, `stolon-collapsible-subtitle`, `stolon-collapsible-aside`, `stolon-collapsible-bar`, and the `stolon-fixed`, `stolon-compact`, and `stolon-has-tile` modifiers.
 
 ## States and Modifiers
 
@@ -117,8 +117,8 @@ Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-sec
 * `subtitle` is a dimmed line under the title, as text that ends in an ellipsis with its tooltip, or a node such as a From and To route. `setSubtitle` replaces it, and `null` removes it.
 * `aside` is a node at the right of the header, such as a badge, a button, or a toggle, centered on the header's line. `setAside` replaces it, and `null` empties it. A collapsible header with an aside sits in a `stolon-collapsible-bar` with the chevron beside it, so a control in the aside never sits inside the header button, and a click on the aside never toggles the section.
 * With any slot the title sits in `stolon-collapsible-heading` and ends in an ellipsis with its full text in its tooltip. A section with no slot keeps the plain markup above.
-* A section with an aside narrower than 480 pixels, by its own width, takes `compact` and puts the aside on its own line under the title, so the title is never squeezed. The heading keeps its own width, so the aside drops to its own line rather than covering the title. Hand written markup can add `compact` itself.
-* `collapsible: false` draws a fixed panel: the section takes `fixed` and `stolon-panel`, so it is framed on the panel surface, the header is a `div` with no chevron, it is always open, `setValue` does nothing, and `onToggle` never runs. `stolon-panel` on a collapsible section, through `className`, frames it the same way.
+* A section with an aside narrower than 480 pixels, by its own width, takes `stolon-compact` and puts the aside on its own line under the title, so the title is never squeezed. The heading keeps its own width, so the aside drops to its own line rather than covering the title. Hand written markup can add `stolon-compact` itself.
+* `collapsible: false` draws a fixed panel: the section takes `stolon-fixed` and `stolon-panel`, so it is framed on the panel surface, the header is a `div` with no chevron, it is always open, `setValue` does nothing, and `onToggle` never runs. `stolon-panel` on a collapsible section, through `className`, frames it the same way.
 * `numbered` on each section of a run numbers their titles 1, 2, 3 in order, for a form split into ordered steps. The number comes from a CSS counter, so markup holds no numbers, and a numbered title keeps the case it is written in. Sections that share a parent count as one run.
 
 ## Gotchas
@@ -192,15 +192,15 @@ Builds a collapsible section, the same markup initCollapsibles binds, with an op
 | `stolon-collapsible-icon` | The expand_more chevron, down while collapsed and turned up while open, as Jellyfin's expanders turn. Any control with aria-expanded that holds it turns it too, such as a card head |
 | `stolon-collapsible-content` | Section body, flush left, hidden when collapsed |
 | `stolon-collapsible-actions` | Footer action row inside a section, with a divider above, its buttons and status text centered on one line |
-| `stolon-collapsible-actions.flush` | A footer action row with no divider or space above it, for a row that follows its fields directly |
-| `stolon-collapsible-section.numbered` | A section in a numbered run, whose title starts with a round number counted from the sections before it |
+| `stolon-collapsible-actions.stolon-flush` | A footer action row with no divider or space above it, for a row that follows its fields directly |
+| `stolon-collapsible-section.stolon-numbered` | A section in a numbered run, whose title starts with a round number counted from the sections before it |
 | `stolon-collapsible-tile` | A Material icon in a rounded tile before the title, the size of an avatar, in the accent or a status color or hex code |
 | `stolon-collapsible-heading` | The title and its subtitle stacked in the free width, the title ending in an ellipsis with the full text in its tooltip |
 | `stolon-collapsible-subtitle` | A dimmed line under the title, as text that ends in an ellipsis or a node such as a route |
 | `stolon-collapsible-aside` | A node at the right of the header, such as a badge, a button, or a toggle, centered on the header's line |
 | `stolon-collapsible-bar` | The row of a collapsible header that has an aside: the header button, the aside beside it, and the chevron, since a button cannot hold a control |
-| `stolon-collapsible-section.compact` | A narrow section, chosen by its own width, puts its aside on a line of its own under the title |
-| `stolon-collapsible-section.fixed` | A fixed panel, always open, whose header is a plain heading with no chevron |
+| `stolon-collapsible-section.stolon-compact` | A narrow section, chosen by its own width, puts its aside on a line of its own under the title |
+| `stolon-collapsible-section.stolon-fixed` | A fixed panel, always open, whose header is a plain heading with no chevron |
 | `stolon-collapsible-section.stolon-panel` | A section on the panel surface, its header and body inset by the panel's padding, collapsible or fixed |
 
 <!-- reference:end -->

@@ -37,7 +37,7 @@ diff.setRows([
 ]);
 ```
 
-Classes: `stolon-compare-table`, `stolon-compare-toggle`, `stolon-compare-value` with `differs` and `missing`, `stolon-compare-section`, `stolon-compare-note`. The handle is `{ element, setRows, getOnlyChanges, setOnlyChanges, getChanged, destroy }`.
+Classes: `stolon-compare-table`, `stolon-compare-toggle`, `stolon-compare-value` with `stolon-differs` and `stolon-missing`, `stolon-compare-section`, `stolon-compare-note`. The handle is `{ element, setRows, getOnlyChanges, setOnlyChanges, getChanged, destroy }`.
 
 ## States and Modifiers
 

@@ -83,7 +83,7 @@ setInterval(function () { load().then(function (rows) { queue.setItems(rows); })
 * The empty sentence is "Nothing matches." unless `emptyText` replaces it.
 * With `fetch`, `immediate: false` waits for the first `query` or `reload`, and `loadOnScroll: false` stops the end of the list from loading the next page.
 * `onSearch(text)` runs before a typed search and returns `false` to run it another way. `onChange(state)` runs after the items shown change.
-* `itemClass(item, index)` gives class names for an item's row, such as `selected` for an item picked somewhere else. It runs after every draw and every refresh, and a reused row drops the names it was given before. The names are cleaned, so text from data cannot leave the class attribute. With `selectable` on, the selection owns `selected`, so give a picked row another name.
+* `itemClass(item, index)` gives class names for an item's row, such as `stolon-selected` for an item picked somewhere else. It runs after every draw and every refresh, and a reused row drops the names it was given before. The names are cleaned, so text from data cannot leave the class attribute. With `selectable` on, the selection owns `stolon-selected`, so give a picked row another name.
 
 ## Reference
 
@@ -100,7 +100,7 @@ The List with a search, filters, a sort, a summary line, selection, and actions.
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `render` (required) | <code>(item: T, index: number, check?: HTMLInputElement &#124; null): ListContent</code> | function(item, index, check) drawing one item, such as a media card, where check is the item's checkbox with multiple selection, placed by render or else at the item's start [required] |
-| `itemClass` | <code>(item: T, index: number): unknown</code> | function(item, index) returning class names for the item's row, such as 'selected' for an item picked elsewhere. It runs after every draw and refresh, and replaces the names it gave before [optional] |
+| `itemClass` | <code>(item: T, index: number): unknown</code> | function(item, index) returning class names for the item's row, such as 'stolon-selected' for an item picked elsewhere. It runs after every draw and refresh, and replaces the names it gave before [optional] |
 | `items` | <code>T[] &#124; null</code> | local items [optional] |
 | `fetch` | <code>(query: DataQuery): Promise&lt;PagedResult&lt;T&gt; &#124; T[]&gt; &#124; PagedResult&lt;T&gt; &#124; T[]</code> | function(query) returning a page { Items, TotalCount } or an array, for server data [optional] |
 | `rowKey` | <code>string &#124; ((item: T) =&gt; unknown); search?: { keys?: string[]</code> | the field or function that names an item, so a refresh keeps what did not change (default 'id' while selectable) |

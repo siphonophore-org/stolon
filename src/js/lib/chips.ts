@@ -42,7 +42,7 @@ export function renderChips(tags: HTMLElement, opts: ChipsOptions): void {
         var chip = make('span', 'stolon-tag' + (opts.pill ? ' stolon-tag-pill' : ''));
         var picture = opts.thumbs ? opts.thumbs[index] : null;
         if (hasThumbSource(picture)) {
-            chip.classList.add('has-thumb');
+            chip.classList.add('stolon-has-thumb');
             chip.appendChild(buildThumb({ src: picture, icon: 'image', className: 'stolon-tag-thumb' }).element);
         }
         chip.appendChild(make('span', null, null, label));

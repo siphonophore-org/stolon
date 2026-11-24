@@ -159,7 +159,7 @@ interface FilterRow {
 // Builds a Stolon button for an action, with its icon beside its label.
 function actionButton(spec: { id: string; label: string; icon?: string; variant?: string }, size: string): HTMLButtonElement {
     var variant = spec.variant === 'primary' || spec.variant === 'destructive' ? spec.variant : 'secondary';
-    var btn = make('button', 'raised stolon-button ' + variant + ' ' + size + ' stolon-filtered-action', { type: 'button', 'data-action': spec.id });
+    var btn = make('button', 'raised stolon-button stolon-' + variant + ' stolon-' + size + ' stolon-filtered-action', { type: 'button', 'data-action': spec.id });
     if (spec.icon) btn.appendChild(icon(spec.icon));
     btn.appendChild(make('span', '', null, spec.label));
     return btn;
@@ -209,7 +209,7 @@ function actionButton(spec: { id: string; label: string; icon?: string; variant?
  *   summary     : false hides the summary line, except the limit note (default true)
  *   summaryText : the summary line, with {shown} and {total} (default 'Showing {shown} of {total}.')
  *   size        : 'small', 'medium', or 'large' for its fields (default 'medium')
- *   itemClass   : function(item, index) returning class names for the item's row, such as 'selected' for an item picked elsewhere. It runs after every draw and refresh, and replaces the names it gave before [optional]
+ *   itemClass   : function(item, index) returning class names for the item's row, such as 'stolon-selected' for an item picked elsewhere. It runs after every draw and refresh, and replaces the names it gave before [optional]
  *   onOpen      : function(item) when an item is clicked or gets Enter or Space, apart from its checkbox, such as to open a detail dialog [optional]
  *   onSelectionChange : function(ids, items) after the selection changes [optional]
  *   onSearch    : function(text) called when the reader types a search, before it runs, which returns false to run it another way [optional]
@@ -264,7 +264,7 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
             multiple: true,
             onChange: function (values) {
                 var on = values.filter(function (v): v is string { return v !== null; });
-                row.classList.toggle('picking', on.length > 0);
+                row.classList.toggle('stolon-picking', on.length > 0);
                 set(filter.name, on);
             }
         });
@@ -283,7 +283,7 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
             row.el.appendChild(card.element);
         });
         row.group.setValues(picked[filter.name]);
-        row.el.classList.toggle('picking', picked[filter.name].length > 0);
+        row.el.classList.toggle('stolon-picking', picked[filter.name].length > 0);
     }
 
     var toolbar = make('div', 'stolon-filtered-toolbar');
@@ -384,9 +384,9 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
         var row = pillRows[filter.name];
         clear(row.el);
         row.counts = {};
-        row.el.appendChild(make('button', 'stolon-pill small', { type: 'button', 'data-value': '', 'aria-pressed': 'false' }, opts.allText || stolonText('All')));
+        row.el.appendChild(make('button', 'stolon-pill stolon-small', { type: 'button', 'data-value': '', 'aria-pressed': 'false' }, opts.allText || stolonText('All')));
         filter.options.forEach(function (o) {
-            var pill = make('button', 'stolon-pill small', { type: 'button', 'data-value': o.value, 'aria-pressed': 'false' });
+            var pill = make('button', 'stolon-pill stolon-small', { type: 'button', 'data-value': o.value, 'aria-pressed': 'false' });
             pill.appendChild(make('span', '', null, o.label));
             var count = make('span', 'stolon-filtered-pill-count');
             pill.appendChild(count);
@@ -409,7 +409,7 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
     var reloadButton: HTMLButtonElement | null = null;
     var counting = bulk.length > 0 || !!opts.selectedText;
     if (multiple && (opts.selectAll !== false || counting)) {
-        selectBar = make('div', 'stolon-filtered-selectbar' + (counting ? ' actions' : ''));
+        selectBar = make('div', 'stolon-filtered-selectbar' + (counting ? ' stolon-actions' : ''));
         if (opts.selectAll !== false) {
             selectAllBox = makeCheck('stolon-filtered-selectall-box');
             selectAllRow = makeCheckRow(selectAllBox, opts.selectAllText || stolonText('SelectAll'), 'stolon-filtered-selectall');
@@ -438,9 +438,9 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
     // Runs onReload with the reload icon turning, until the promise it returns settles, failed or not.
     function runReload(): void {
         var btn = reloadButton!;
-        btn.classList.add('spinning');
+        btn.classList.add('stolon-spinning');
         btn.disabled = true;
-        function stop(): void { btn.classList.remove('spinning'); btn.disabled = false; }
+        function stop(): void { btn.classList.remove('stolon-spinning'); btn.disabled = false; }
         var result: unknown;
         try { result = opts.onReload!(); } catch (err) { stop(); throw err; }
         Promise.resolve(result).then(stop, stop);
@@ -501,7 +501,7 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
         } : undefined
     });
     root.appendChild(list.element);
-    if (selecting) list.element.classList.add(multiple ? 'checking' : 'picking');
+    if (selecting) list.element.classList.add(multiple ? 'stolon-checking' : 'stolon-picking');
     var scrollMore = true;
     // A list that waits for its first query says it is loading until the first fetch starts.
     var waiting = opts.immediate === false;
@@ -551,17 +551,17 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
             var key = keyOf(item);
             if (rowKey !== undefined) cell.setAttribute('data-key', key);
             if (opts.itemClass) markItem(cell, classNames(opts.itemClass(item, i)));
-            if (opts.onOpen) cell.classList.add('openable');
+            if (opts.onOpen) cell.classList.add('stolon-openable');
             if (opts.onOpen || opts.selectable === 'single') cell.setAttribute('tabindex', '0');
             if (!selecting) return;
             var on = selection.has(key);
-            cell.classList.toggle('selected', on);
+            cell.classList.toggle('stolon-selected', on);
             if (!multiple) cell.setAttribute('aria-selected', on ? 'true' : 'false');
         });
         if (checks) checks.paint();
         var count = selection.size();
-        if (selectBar) selectBar.classList.toggle('active', count > 0);
-        if (selectAllRow) selectAllRow.classList.toggle('hidden', !list.getItems().length);
+        if (selectBar) selectBar.classList.toggle('stolon-active', count > 0);
+        if (selectAllRow) selectAllRow.classList.toggle('stolon-hidden', !list.getItems().length);
         if (countEl) countEl.textContent = fillAll(opts.selectedText || stolonText('Stolon.CountSelected'), { count: String(count) });
         bulkButtons.forEach(function (btn) { btn.disabled = count === 0; });
     }
@@ -700,7 +700,7 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
         rows.forEach(function (row, i) {
             var prev = rows[i - 1];
             var beside = !!prev && !row.hidden && !prev.hidden && Math.abs(row.getBoundingClientRect().top - prev.getBoundingClientRect().top) < 2;
-            row.classList.toggle('beside', beside);
+            row.classList.toggle('stolon-beside', beside);
         });
     }
     if (typeof ResizeObserver !== 'undefined') {
@@ -723,7 +723,7 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
         setFilter: function (name, values) {
             var next = (values || []).map(String);
             if (selects[name]) selects[name].el.value = next.length === 1 ? next[0] : '';
-            if (cardRows[name]) { cardRows[name].group.setValues(next); cardRows[name].el.classList.toggle('picking', next.length > 0); }
+            if (cardRows[name]) { cardRows[name].group.setValues(next); cardRows[name].el.classList.toggle('stolon-picking', next.length > 0); }
             if (pillRows[name]) pillRows[name].group.setValues(next.length ? [next[0]] : ['']);
             if (ranges[name]) ranges[name].setValue({ from: next[0] || '', to: next[1] || '' });
             set(name, next);

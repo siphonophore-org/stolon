@@ -50,17 +50,17 @@ export function createHelpHint(options: HelpHintOptions): HelpHintHandle {
         align: 'start',
         inside: [root],
         returnFocus: false,
-        onDismiss: function (): void { pinned = false; root.classList.remove('open'); }
+        onDismiss: function (): void { pinned = false; root.classList.remove('stolon-open'); }
     });
 
     function reveal(): void {
         popover.open();
-        root.classList.add('open');
+        root.classList.add('stolon-open');
     }
 
     function conceal(): void {
         popover.close();
-        root.classList.remove('open');
+        root.classList.remove('stolon-open');
     }
 
     // Hover and focus show the bubble only while they last, and a click pins it until a second click.

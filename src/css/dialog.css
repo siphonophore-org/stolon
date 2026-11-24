@@ -12,7 +12,7 @@
 }
 
 /* Centered, scrollable modal panel, 60% of the window wide at the medium size, whose padding every part inside it is set by */
-/* Example: <div class="stolon-dialog-content medium"></div> */
+/* Example: <div class="stolon-dialog-content stolon-medium"></div> */
 .stolon-dialog-content {
     --stolon-dialog-pad: calc(var(--stolon-pad-large) * 1.5);
     box-sizing: border-box;
@@ -31,13 +31,13 @@
 }
 
 /* A small panel, 40% of the window wide, for a short prompt or confirmation */
-/* Example: <div class="stolon-dialog-content small"></div> */
-.stolon-dialog-content.small { width: 40vw; min-width: 320px; min-width: min(320px, 100%); }
+/* Example: <div class="stolon-dialog-content stolon-small"></div> */
+.stolon-dialog-content.stolon-small { width: 40vw; min-width: 320px; min-width: min(320px, 100%); }
 
 /* A large panel, 80% of the window wide, for an editor, with its buttons pinned at the bottom and the whole screen on a phone. A drawer's footer shares the pinned row */
-/* Example: <div class="stolon-dialog-content large"></div> */
-.stolon-dialog-content.large { width: 80vw; min-width: 560px; min-width: min(560px, 100%); }
-.stolon-dialog-content.large .stolon-modal-button-row,
+/* Example: <div class="stolon-dialog-content stolon-large"></div> */
+.stolon-dialog-content.stolon-large { width: 80vw; min-width: 560px; min-width: min(560px, 100%); }
+.stolon-dialog-content.stolon-large .stolon-modal-button-row,
 .stolon-drawer-content .stolon-drawer-footer {
     position: sticky;
     bottom: calc(-1 * var(--stolon-dialog-pad));
@@ -48,19 +48,19 @@
     background: inherit;
     border-top: 1px solid var(--stolon-border);
 }
-.stolon-dialog-content.large .stolon-modal-button,
+.stolon-dialog-content.stolon-large .stolon-modal-button,
 .stolon-drawer-content .stolon-drawer-footer .stolon-modal-button { flex: none; min-width: 7em; }
 /* The destructive buttons sit at the start and the rest at the end, however many of each */
-.stolon-dialog-content.large .stolon-modal-button.stolon-button.destructive + .stolon-modal-button:not(.destructive),
-.stolon-drawer-content .stolon-drawer-footer .stolon-modal-button.stolon-button.destructive + .stolon-modal-button:not(.destructive) { margin-left: auto; }
+.stolon-dialog-content.stolon-large .stolon-modal-button.stolon-button.stolon-destructive + .stolon-modal-button:not(.stolon-destructive),
+.stolon-drawer-content .stolon-drawer-footer .stolon-modal-button.stolon-button.stolon-destructive + .stolon-modal-button:not(.stolon-destructive) { margin-left: auto; }
 @media (max-width: 600px) {
     /* On a phone every panel takes the width of the screen, and a large one or a drawer takes the whole screen. */
     .stolon-dialog-content { width: 100%; min-width: 0; }
-    .stolon-dialog:has(.stolon-dialog-content.large) { padding: 0; align-items: stretch; }
+    .stolon-dialog:has(.stolon-dialog-content.stolon-large) { padding: 0; align-items: stretch; }
     /* The same by the class openDialog sets on the overlay, for engines without :has(). */
-    .stolon-dialog.large,
+    .stolon-dialog.stolon-large,
     .stolon-dialog.stolon-drawer { padding: 0; align-items: stretch; }
-    .stolon-dialog-content.large,
+    .stolon-dialog-content.stolon-large,
     .stolon-dialog-content.stolon-drawer-content {
         --stolon-dialog-pad: var(--stolon-gap-wide);
         display: flex;
@@ -73,21 +73,21 @@
         border-radius: 0;
         padding: calc(var(--stolon-dialog-pad) + env(safe-area-inset-top)) var(--stolon-dialog-pad) 0;
     }
-    .stolon-dialog-content.large .stolon-dialog-close,
+    .stolon-dialog-content.stolon-large .stolon-dialog-close,
     .stolon-dialog-content.stolon-drawer-content .stolon-dialog-close { top: calc(var(--stolon-dialog-pad) + env(safe-area-inset-top)); }
-    .stolon-dialog-content.large .stolon-modal-button-row,
+    .stolon-dialog-content.stolon-large .stolon-modal-button-row,
     .stolon-drawer-content .stolon-drawer-footer {
         bottom: 0;
         margin: auto calc(-1 * var(--stolon-dialog-pad)) 0;
         padding: var(--stolon-pad-medium) var(--stolon-dialog-pad) calc(var(--stolon-pad-medium) + env(safe-area-inset-bottom));
     }
-    .stolon-dialog-content.large .stolon-modal-title { font-size: 1.3em; }
+    .stolon-dialog-content.stolon-large .stolon-modal-title { font-size: 1.3em; }
     /* Buttons wrap on a narrow screen, with a destructive one last rather than alone on the first line. */
     .stolon-modal-button-row { flex-wrap: wrap; row-gap: var(--stolon-gap-narrow); }
-    .stolon-dialog-content.large .stolon-modal-button,
+    .stolon-dialog-content.stolon-large .stolon-modal-button,
     .stolon-drawer-content .stolon-drawer-footer .stolon-modal-button { flex: 1 1 auto; }
-    .stolon-modal-button-row .stolon-modal-button.stolon-button.destructive { order: 1; }
-    .stolon-modal-button-row .stolon-modal-button.stolon-button.destructive + .stolon-modal-button:not(.destructive) { margin-left: 0; }
+    .stolon-modal-button-row .stolon-modal-button.stolon-button.stolon-destructive { order: 1; }
+    .stolon-modal-button-row .stolon-modal-button.stolon-button.stolon-destructive + .stolon-modal-button:not(.stolon-destructive) { margin-left: 0; }
 }
 
 /* The corner close button, a row button pinned to the top right corner of the panel and inset by the panel's padding, level with the title */
@@ -141,7 +141,7 @@
 }
 
 /* A footer button that cannot be pressed yet, such as a typed confirm before its text matches, dimmed with no pointer */
-/* Example: <button class="stolon-modal-button raised stolon-button destructive" disabled>Delete</button> */
+/* Example: <button class="stolon-modal-button raised stolon-button stolon-destructive" disabled>Delete</button> */
 .stolon-modal-button:disabled {
     opacity: 0.5;
     cursor: default;

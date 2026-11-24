@@ -84,7 +84,7 @@ A color field: a swatch inside the box that opens the browser's color picker, th
 | `stolon-color-hash` | The # before the hex digits, part of the box so it is never typed |
 | `stolon-color-swatch` | The square at the leading end of the box showing the color, over a soft checkerboard so a see-through color reads as one |
 | `stolon-color-alpha` | The opacity box in percent beside the hex box, with the shared up and down arrows and a percent sign before them |
-| `stolon-color-picker.opacity-only` | Only the opacity box, for a color that comes from elsewhere, such as an image |
+| `stolon-color-picker.stolon-opacity-only` | Only the opacity box, for a color that comes from elsewhere, such as an image |
 
 <!-- reference:end -->
 

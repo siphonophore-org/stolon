@@ -12,5 +12,5 @@
 .stolon-rule-value { min-width: 0; }
 
 /* The warning under the rules, a Field Message in the warning state */
-/* Example: <div class="stolon-rule-warning"><div class="stolon-field-message stolon-icon-text warn"></div></div> */
+/* Example: <div class="stolon-rule-warning"><div class="stolon-field-message stolon-icon-text stolon-warn"></div></div> */
 .stolon-rule-warning { align-self: stretch; }

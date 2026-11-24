@@ -181,7 +181,7 @@ export function createTreeView(options?: TreeViewOptions): TreeViewHandle {
     function row(r: TreeRow): ListItemHandle {
         var e = entries[r.id];
         var n = e.node;
-        var el = make('div', 'stolon-tree-row' + (r.state === 'on' ? ' selected' : ''), { role: 'treeitem', 'data-id': r.id, 'aria-level': String(r.level + 1), 'aria-posinset': String(r.pos), 'aria-setsize': String(r.size), tabindex: r.active ? '0' : '-1' });
+        var el = make('div', 'stolon-tree-row' + (r.state === 'on' ? ' stolon-selected' : ''), { role: 'treeitem', 'data-id': r.id, 'aria-level': String(r.level + 1), 'aria-posinset': String(r.pos), 'aria-setsize': String(r.size), tabindex: r.active ? '0' : '-1' });
         el.style.setProperty('--stolon-tree-level', String(r.level));
         if (opts.selectable) el.setAttribute('aria-checked', r.state === 'on' ? 'true' : r.state === 'mixed' ? 'mixed' : 'false');
         var thumbs: Array<{ destroy(): void }> = [];
@@ -207,7 +207,7 @@ export function createTreeView(options?: TreeViewOptions): TreeViewHandle {
         }
         if (n.image !== undefined && n.image !== null) {
             var shape: ThumbShape = n.imageShape || 'square';
-            var thumb = buildThumb({ src: n.image, icon: n.icon || SHAPE_ICONS[shape], className: 'stolon-tree-thumb ' + shape, lazy: true });
+            var thumb = buildThumb({ src: n.image, icon: n.icon || SHAPE_ICONS[shape], className: 'stolon-tree-thumb stolon-' + shape, lazy: true });
             thumbs.push(thumb);
             el.appendChild(thumb.element);
         } else if (n.icon) {

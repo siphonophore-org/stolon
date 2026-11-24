@@ -24,9 +24,9 @@
 }
 
 /* A tag at the medium or large size of the scale */
-/* Example: <span class="stolon-tag medium">name</span> */
-.stolon-tag.medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); }
-.stolon-tag.large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
+/* Example: <span class="stolon-tag stolon-medium">name</span> */
+.stolon-tag.stolon-medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); }
+.stolon-tag.stolon-large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
 
 /* Small x control at the end of a tag, a square the size of the tag's icon that turns red on hover. A button gets the same look as a span */
 /* Example: <button type="button" class="stolon-tag-remove" aria-label="Remove name"><span class="material-icons" aria-hidden="true">close</span></button> */
@@ -47,8 +47,8 @@
 }
 .stolon-tag-remove.material-icons,
 .stolon-tag-remove .material-icons { font-family: 'Material Icons'; font-size: inherit; line-height: 1; }
-.stolon-tag.medium .stolon-tag-remove { width: var(--stolon-icon-medium); height: var(--stolon-icon-medium); font-size: var(--stolon-icon-medium); }
-.stolon-tag.large .stolon-tag-remove { width: var(--stolon-icon-large); height: var(--stolon-icon-large); font-size: var(--stolon-icon-large); }
+.stolon-tag.stolon-medium .stolon-tag-remove { width: var(--stolon-icon-medium); height: var(--stolon-icon-medium); font-size: var(--stolon-icon-medium); }
+.stolon-tag.stolon-large .stolon-tag-remove { width: var(--stolon-icon-large); height: var(--stolon-icon-large); font-size: var(--stolon-icon-large); }
 button.stolon-tag-remove {
     background: none;
     border: 0;
@@ -82,13 +82,13 @@ button.stolon-tag-remove:focus-visible { outline: 2px solid var(--stolon-accent)
     background: color-mix(in srgb, currentColor 15%, transparent);
     color: var(--stolon-on-warning);
 }
-.stolon-tag-pill.medium .stolon-tag-remove {
+.stolon-tag-pill.stolon-medium .stolon-tag-remove {
     width: calc(var(--stolon-size-medium) - var(--stolon-gap-narrow) * 3 / 4);
     height: calc(var(--stolon-size-medium) - var(--stolon-gap-narrow) * 3 / 4);
     margin-right: calc(var(--stolon-gap-narrow) * 3 / 8 - var(--stolon-pad-medium));
     font-size: calc((var(--stolon-size-medium) - var(--stolon-gap-narrow) * 3 / 4) * 0.7);
 }
-.stolon-tag-pill.large .stolon-tag-remove {
+.stolon-tag-pill.stolon-large .stolon-tag-remove {
     width: calc(var(--stolon-size-large) - var(--stolon-gap-narrow) * 3 / 4);
     height: calc(var(--stolon-size-large) - var(--stolon-gap-narrow) * 3 / 4);
     margin-right: calc(var(--stolon-gap-narrow) * 3 / 8 - var(--stolon-pad-large));
@@ -101,14 +101,14 @@ button.stolon-tag-remove:focus-visible { outline: 2px solid var(--stolon-accent)
 }
 
 /* A tag tinted with a status color, or a hex code through custom */
-/* Example: <span class="stolon-tag green"><span>Invited</span></span> */
-.stolon-tag.green { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
-.stolon-tag.red { background: var(--stolon-red-bg); color: var(--stolon-red-fg); }
-.stolon-tag.orange { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
-.stolon-tag.purple { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
-.stolon-tag.blue { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); }
-.stolon-tag.gray { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
-.stolon-tag.yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
-.stolon-tag.pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
-.stolon-tag.teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
-.stolon-tag.custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); }
+/* Example: <span class="stolon-tag stolon-green"><span>Invited</span></span> */
+.stolon-tag.stolon-green { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
+.stolon-tag.stolon-red { background: var(--stolon-red-bg); color: var(--stolon-red-fg); }
+.stolon-tag.stolon-orange { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
+.stolon-tag.stolon-purple { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
+.stolon-tag.stolon-blue { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); }
+.stolon-tag.stolon-gray { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
+.stolon-tag.stolon-yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
+.stolon-tag.stolon-pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
+.stolon-tag.stolon-teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
+.stolon-tag.stolon-custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); }

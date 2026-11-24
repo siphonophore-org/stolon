@@ -61,7 +61,7 @@ export function createFieldMessage(options?: FieldMessageOptions): FieldMessageH
     // Draws the current state and keeps the bound input's aria attributes in step.
     function reflect(): void {
         var shown = !!(state && text);
-        el.className = 'stolon-field-message stolon-icon-text' + (shown ? ' ' + state : '');
+        el.className = 'stolon-field-message stolon-icon-text' + (shown ? ' stolon-' + state : '');
         glyph.hidden = !shown;
         textEl.hidden = !shown;
         glyph.textContent = shown && has(GLYPHS, state) ? GLYPHS[state] : '';

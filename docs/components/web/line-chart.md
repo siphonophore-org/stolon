@@ -62,7 +62,7 @@ A line chart on the shared chart core, drawn as inline SVG at its own width. Eac
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-chart-line` | A line chart on the shared chart core: a line per series with a dot on each point, and an optional shaded area under it |
-| `stolon-line-chart.quiet` | A quiet line chart, whose dots show only under the pointer |
+| `stolon-line-chart.stolon-quiet` | A quiet line chart, whose dots show only under the pointer |
 
 <!-- reference:end -->
 

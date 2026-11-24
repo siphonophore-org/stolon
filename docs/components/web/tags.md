@@ -47,11 +47,11 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | :--- | :--- |
 | `stolon-tags` | Row of removable tag chips that wraps |
 | `stolon-tag` | Single rounded tag chip with a remove control |
-| `stolon-tag.medium` | A tag at the medium or large size of the scale |
+| `stolon-tag.stolon-medium` | A tag at the medium or large size of the scale |
 | `stolon-tag-remove` | Small x control at the end of a tag, a square the size of the tag's icon that turns red on hover. A button gets the same look as a span |
 | `stolon-tag.stolon-tag-off` | Faded, struck through tag for something switched off, such as a turned off destination |
 | `stolon-tag.stolon-tag-pill` | Round tag filled with the blue token, with dark text and its x inset in a filled circle a little smaller than the tag |
-| `stolon-tag.green` | A tag tinted with a status color, or a hex code through custom |
+| `stolon-tag.stolon-green` | A tag tinted with a status color, or a hex code through custom |
 
 <!-- reference:end -->
 

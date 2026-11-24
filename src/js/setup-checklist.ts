@@ -148,8 +148,8 @@ export function createSetupChecklist(options?: SetupChecklistOptions): SetupChec
         else if (typeof step.content === 'string') body.innerHTML = step.content;
         if (step.action && step.action.text) {
             var spec = step.action;
-            var row = make('div', 'stolon-collapsible-actions flush');
-            var button = make('button', 'raised stolon-button ' + (spec.className || 'primary'), { type: 'button' }, spec.text);
+            var row = make('div', 'stolon-collapsible-actions stolon-flush');
+            var button = make('button', 'raised stolon-button ' + (spec.className || 'stolon-primary'), { type: 'button' }, spec.text);
             cleanups.push(listen(button, 'click', function (): void { if (spec.onClick) spec.onClick(step.key); }));
             row.appendChild(button);
             body.appendChild(row);

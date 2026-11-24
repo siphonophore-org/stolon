@@ -97,7 +97,7 @@ Every plugin compiles Stolon in, so each change is seen by every one of them. A 
 * **A behavior change is an API change.** A changed return value, a new exception, a different default, or a different default label reaches every plugin.
 * **A name that exists in Stolon must never exist in a plugin.** Stolon compiles into the plugin's assembly, so a plugin copy with the same name is ambiguous. A new public name should be unlikely to match a plugin's own type. When a plain name could match one, start it with `Stolon`, as `StolonHttp` and `StolonTranslations` do. The same goes for an MSBuild property, item, or target in `build/`, such as `StolonLocalizationDirectory`. Stolon uses no `Jpk` prefix.
 * **Keep the signatures of C# members binary and source compatible** where you can, since a plugin compiles against the source and a recompile is the only fix.
-* **A class is a contract.** Do not rename a `stolon-` class, change what a modifier means, or change a token's value for a different look. A plugin page depends on them.
+* **A class is a contract.** Do not rename a `stolon-` class, change what a modifier means, or change a token's value for a different look. A plugin page depends on them. Every class Stolon owns, modifiers included, starts with `stolon-`. Only Jellyfin's classes and the classes a plugin passes in do not. See [naming](style.md#naming).
 * **Older engines count.** CSS must still pass [the fallback tests](testing.md#css-tests), and JS stays in the style the existing files use.
 * **A removal needs a path.** When a rename is approved, name the replacement in the commit, keep the old name for one release when that is possible, and tell the plugin authors the steps.
 * **Check the consumers.** Before you call a change done, build a consuming plugin against a local pack. See [release.md](release.md#before-the-release).
@@ -161,7 +161,7 @@ Two lines above each component selector. The first says what it looks like, and 
 
 ```css
 /* Rounded translucent card holding a count and a label */
-/* Example: <div class="stolon-card blue"><span class="stolon-card-count">5</span></div> */
+/* Example: <div class="stolon-card stolon-blue"><span class="stolon-card-count">5</span></div> */
 .stolon-card { ... }
 ```
 

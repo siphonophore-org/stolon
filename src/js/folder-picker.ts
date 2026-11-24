@@ -131,7 +131,7 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
         input.setAttribute('aria-label', pathLabel);
     }
     var field = make('div', 'stolon-folder-picker-field');
-    var browseButton = make('button', 'raised stolon-button field stolon-folder-picker-browse', { type: 'button' }, options.browseText || stolonText('Browse'));
+    var browseButton = make('button', 'raised stolon-button stolon-field stolon-folder-picker-browse', { type: 'button' }, options.browseText || stolonText('Browse'));
     field.appendChild(input);
     field.appendChild(browseButton);
     root.appendChild(field);
@@ -299,8 +299,8 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
             body: body,
             className: 'stolon-folder-picker-dialog',
             buttons: [
-                { text: options!.cancelText || stolonText('ButtonCancel'), className: 'stolon-button secondary', action: function (close, dismiss) { dismiss(); } },
-                { text: options!.selectText || stolonText('Select'), className: 'stolon-button primary stolon-folder-picker-select', action: function (close) { choose(close); } }
+                { text: options!.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close, dismiss) { dismiss(); } },
+                { text: options!.selectText || stolonText('Select'), className: 'stolon-button stolon-primary stolon-folder-picker-select', action: function (close) { choose(close); } }
             ],
             onClose: function () {
                 runAll(inner);

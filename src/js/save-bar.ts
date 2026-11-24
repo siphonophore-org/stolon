@@ -71,7 +71,7 @@ export function createSaveBar(options?: SaveBarOptions): SaveBarHandle {
 
     var root = make('div', 'stolon-save-bar');
     var status = make('div', 'stolon-status-text stolon-save-status');
-    var button = make('button', 'raised stolon-button primary stolon-save-button' + (opts.fill ? ' fill' : ''), { type: 'button' }, opts.saveText || stolonText('Save'));
+    var button = make('button', 'raised stolon-button stolon-primary stolon-save-button' + (opts.fill ? ' stolon-fill' : ''), { type: 'button' }, opts.saveText || stolonText('Save'));
     root.appendChild(status);
     root.appendChild(button);
 

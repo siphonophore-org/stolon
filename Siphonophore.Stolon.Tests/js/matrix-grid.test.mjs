@@ -125,8 +125,8 @@ test('badge and static cells show their value with no input, keep it, and skip i
     var cells = all(row(ui, 'movies'), '.stolon-data-cell');
     var limited = cells[1].querySelector('.stolon-badge');
     assert.equal(limited.textContent, 'Limited');
-    assert.ok(limited.classList.contains('orange'));
-    assert.ok(cells[2].querySelector('.stolon-badge').classList.contains('gray'));
+    assert.ok(limited.classList.contains('stolon-orange'));
+    assert.ok(cells[2].querySelector('.stolon-badge').classList.contains('stolon-gray'));
     assert.equal(cells[3].querySelector('.stolon-matrix-text').textContent, 'Only some');
     assert.equal(row(ui, 'movies').querySelector('input, select'), null);
     assert.equal(row(ui, 'shows').querySelector('.stolon-badge'), null);
@@ -145,7 +145,7 @@ test('a note is a dimmed line under the grid', function () {
 test('a disabled cell greys out its control, keeps its value, and isValid skips it', function () {
     var ui = build({ rows: [{ key: 'movies', label: 'Movies', cells: { limit: { disabled: true } } }, { key: 'shows', label: 'Shows' }], value: { movies: { limit: 99 } } });
     var cell = row(ui, 'movies').querySelector('.stolon-data-cell[data-column="limit"] .stolon-matrix-cell');
-    assert.equal(cell.classList.contains('disabled'), true);
+    assert.equal(cell.classList.contains('stolon-disabled'), true);
     assert.equal(cell.querySelector('input').disabled, true);
     assert.equal(ui.grid.getValue().movies.limit, 99);
     assert.equal(ui.grid.isValid(), true);

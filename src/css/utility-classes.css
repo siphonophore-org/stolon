@@ -1,6 +1,6 @@
 /* Hides an element outright */
-/* Example: <div class="hidden"></div> */
-.hidden { display: none !important; }
+/* Example: <div class="stolon-hidden"></div> */
+.stolon-hidden { display: none !important; }
 
 /* Makes the hidden attribute win over a component's own display rule (a flex row, a grid) */
 /* Example: <div class="stolon-field-row" hidden></div> */
@@ -80,7 +80,7 @@
     object-fit: cover;
 }
 .stolon-thumb-image[hidden] { display: none; }
-.stolon-thumb-image.pending { visibility: hidden; }
+.stolon-thumb-image.stolon-pending { visibility: hidden; }
 
 /* An icon beside text that may wrap, with the icon centered on the first line of text, medium unless small or large */
 /* Example: <div class="stolon-icon-text"><span class="material-icons" aria-hidden="true">error</span><span>Enter a port from 1 to 65535.</span></div> */
@@ -100,10 +100,10 @@
     font-size: var(--stolon-icon-medium);
     line-height: 1;
 }
-.stolon-icon-text.small { font-size: var(--stolon-font-small); line-height: var(--stolon-line-small); }
-.stolon-icon-text.small > .material-icons { height: var(--stolon-line-small); font-size: var(--stolon-icon-small); }
-.stolon-icon-text.large { font-size: var(--stolon-font-large); line-height: var(--stolon-line-large); }
-.stolon-icon-text.large > .material-icons { height: var(--stolon-line-large); font-size: var(--stolon-icon-large); }
+.stolon-icon-text.stolon-small { font-size: var(--stolon-font-small); line-height: var(--stolon-line-small); }
+.stolon-icon-text.stolon-small > .material-icons { height: var(--stolon-line-small); font-size: var(--stolon-icon-small); }
+.stolon-icon-text.stolon-large { font-size: var(--stolon-font-large); line-height: var(--stolon-line-large); }
+.stolon-icon-text.stolon-large > .material-icons { height: var(--stolon-line-large); font-size: var(--stolon-icon-large); }
 
 /* The surface every floating box shares, a menu, a filter panel, a help bubble, a tooltip, a dropdown, or a toast, over the page. anchorPopover adds it to the box it places */
 /* Example: <div class="stolon-menu-list stolon-float" role="menu"></div> */

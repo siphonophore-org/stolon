@@ -70,9 +70,9 @@ With layout 'inline' it draws only the text as a wrapped Copy Field that shows a
 
 | Class | What it looks like |
 | :--- | :--- |
-| `stolon-qr-code.compact` | A narrow QR code stacks: the code the full width, then the buttons and the text under it at the same width |
+| `stolon-qr-code.stolon-compact` | A narrow QR code stacks: the code the full width, then the buttons and the text under it at the same width |
 | `stolon-qr-code.stolon-qr-code-dialog` | The code in its dialog: stacked, a code-sized column centered in the dialog |
-| `stolon-qr-code.inline` | An inline QR code: its whole text as a wrapped Copy Field with a QR button beside Copy that opens the code in a dialog |
+| `stolon-qr-code.stolon-inline` | An inline QR code: its whole text as a wrapped Copy Field with a QR button beside Copy that opens the code in a dialog |
 | `stolon-qr-code-actions` | The Copy Image and Download buttons, two equal halves of a button row the code's width, a field tall like the Copy Field under them |
 
 <!-- reference:end -->

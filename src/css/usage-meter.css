@@ -17,30 +17,30 @@
 .stolon-usage-meter-text { font-size: var(--stolon-font-small); opacity: 0.7; font-variant-numeric: tabular-nums; }
 
 /* The bar, the progress bar's track a narrow gap tall, whose fills sit side by side, each as wide as its share */
-/* Example: <div class="stolon-progress stolon-usage-meter-bar"><div class="stolon-progress-bar stolon-usage-meter-fill blue" style="--stolon-usage-share: 30%"></div><div class="stolon-progress-bar stolon-usage-meter-fill green" style="--stolon-usage-share: 10%"></div></div> */
+/* Example: <div class="stolon-progress stolon-usage-meter-bar"><div class="stolon-progress-bar stolon-usage-meter-fill stolon-blue" style="--stolon-usage-share: 30%"></div><div class="stolon-progress-bar stolon-usage-meter-fill stolon-green" style="--stolon-usage-share: 10%"></div></div> */
 .stolon-progress.stolon-usage-meter-bar { display: flex; height: var(--stolon-gap-narrow); }
 .stolon-usage-meter-fill { flex: 0 0 auto; width: var(--stolon-usage-share, 0%); }
 .stolon-usage-meter-fill + .stolon-usage-meter-fill { border-left: 2px solid var(--stolon-surface); }
-.stolon-usage-meter-fill.green { background: var(--stolon-green-fg); }
-.stolon-usage-meter-fill.red { background: var(--stolon-red-fg); }
-.stolon-usage-meter-fill.orange { background: var(--stolon-orange-fg); }
-.stolon-usage-meter-fill.purple { background: var(--stolon-purple-fg); }
-.stolon-usage-meter-fill.blue { background: var(--stolon-blue-fg); }
-.stolon-usage-meter-fill.gray { background: var(--stolon-gray-fg); }
-.stolon-usage-meter-fill.yellow { background: var(--stolon-yellow-fg); }
-.stolon-usage-meter-fill.pink { background: var(--stolon-pink-fg); }
-.stolon-usage-meter-fill.teal { background: var(--stolon-teal-fg); }
-.stolon-usage-meter-fill.custom { background: var(--stolon-custom); }
+.stolon-usage-meter-fill.stolon-green { background: var(--stolon-green-fg); }
+.stolon-usage-meter-fill.stolon-red { background: var(--stolon-red-fg); }
+.stolon-usage-meter-fill.stolon-orange { background: var(--stolon-orange-fg); }
+.stolon-usage-meter-fill.stolon-purple { background: var(--stolon-purple-fg); }
+.stolon-usage-meter-fill.stolon-blue { background: var(--stolon-blue-fg); }
+.stolon-usage-meter-fill.stolon-gray { background: var(--stolon-gray-fg); }
+.stolon-usage-meter-fill.stolon-yellow { background: var(--stolon-yellow-fg); }
+.stolon-usage-meter-fill.stolon-pink { background: var(--stolon-pink-fg); }
+.stolon-usage-meter-fill.stolon-teal { background: var(--stolon-teal-fg); }
+.stolon-usage-meter-fill.stolon-custom { background: var(--stolon-custom); }
 
 /* A meter past its warning share turns orange, and past its danger share turns red, with its line in the same color. A segmented meter keeps its part colors and colors only the line */
-/* Example: <div class="stolon-usage-meter danger"><div class="stolon-progress stolon-usage-meter-bar"><div class="stolon-progress-bar stolon-usage-meter-fill whole"></div></div></div> */
-.stolon-usage-meter.warning .stolon-usage-meter-fill.whole { background: var(--stolon-orange-fg); }
-.stolon-usage-meter.danger .stolon-usage-meter-fill.whole { background: var(--stolon-red-fg); }
-.stolon-usage-meter.warning .stolon-usage-meter-text { color: var(--stolon-orange-fg); opacity: 1; }
-.stolon-usage-meter.danger .stolon-usage-meter-text { color: var(--stolon-red-fg); opacity: 1; }
+/* Example: <div class="stolon-usage-meter stolon-danger"><div class="stolon-progress stolon-usage-meter-bar"><div class="stolon-progress-bar stolon-usage-meter-fill stolon-whole"></div></div></div> */
+.stolon-usage-meter.stolon-warning .stolon-usage-meter-fill.stolon-whole { background: var(--stolon-orange-fg); }
+.stolon-usage-meter.stolon-danger .stolon-usage-meter-fill.stolon-whole { background: var(--stolon-red-fg); }
+.stolon-usage-meter.stolon-warning .stolon-usage-meter-text { color: var(--stolon-orange-fg); opacity: 1; }
+.stolon-usage-meter.stolon-danger .stolon-usage-meter-text { color: var(--stolon-red-fg); opacity: 1; }
 
 /* The legend of a segmented meter: a swatch, a name, and an amount per part, wrapping as a row */
-/* Example: <div class="stolon-usage-meter-legend"><span class="stolon-usage-meter-key"><span class="stolon-chart-swatch blue"></span><span>Movies</span><span class="stolon-usage-meter-amount">30 GB</span></span></div> */
+/* Example: <div class="stolon-usage-meter-legend"><span class="stolon-usage-meter-key"><span class="stolon-chart-swatch stolon-blue"></span><span>Movies</span><span class="stolon-usage-meter-amount">30 GB</span></span></div> */
 .stolon-usage-meter-legend {
     display: flex;
     flex-wrap: wrap;

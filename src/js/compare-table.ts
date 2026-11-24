@@ -111,7 +111,7 @@ export function createCompareTable(options?: CompareTableOptions): CompareTableH
         if (row.kind !== 'row') return '';
         var value = text(row.values ? row.values[column.key] : undefined);
         var differs = index > 0 && value !== text(row.values[columns[0].key]);
-        var cell = make('span', 'stolon-compare-value' + (differs ? ' differs' : '') + (value === '' ? ' missing' : ''), { title: value });
+        var cell = make('span', 'stolon-compare-value' + (differs ? ' stolon-differs' : '') + (value === '' ? ' stolon-missing' : ''), { title: value });
         cell.textContent = value === '' ? (opts.missingText || stolonText('None')) : value;
         return cell;
     }
@@ -161,7 +161,7 @@ export function createCompareTable(options?: CompareTableOptions): CompareTableH
         all.forEach(function (r) { kinds[r.key] = changed(r) ? 'changed' : r.kind; });
         Array.prototype.forEach.call(root.querySelectorAll('.stolon-data-row'), function (el: HTMLElement) {
             var kind = kinds[toText(el.getAttribute('data-key'))];
-            el.classList.toggle('changed', kind === 'changed');
+            el.classList.toggle('stolon-changed', kind === 'changed');
             el.classList.toggle('stolon-compare-section', kind === 'section');
             el.classList.toggle('stolon-compare-note', kind === 'note');
         });

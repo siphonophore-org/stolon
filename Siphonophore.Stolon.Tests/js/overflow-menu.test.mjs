@@ -45,7 +45,7 @@ test('the default label names the button and the menu, and the label and icon ca
 
 test('items carry destructive and disabled state from the data', function () {
     var ui = build();
-    assert.ok(items(ui)[2].classList.contains('destructive'));
+    assert.ok(items(ui)[2].classList.contains('stolon-destructive'));
     assert.equal(items(ui)[1].disabled, true);
     assert.equal(items(ui)[1].getAttribute('aria-disabled'), 'true');
 });

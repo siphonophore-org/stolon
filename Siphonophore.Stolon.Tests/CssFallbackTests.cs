@@ -53,7 +53,7 @@ public class CssFallbackTests
                 var previous = i > 0 ? rule.Declarations[i - 1] : null;
                 if (previous == null || previous.Property != decl.Property || previous.Value.Contains("color-mix(", StringComparison.Ordinal))
                 {
-                    problems.Add(Where(rule, decl) + " has no plain " + decl.Property + " on the line before it");
+                    problems.Add(Where(rule, decl) + " has no stolon-plain " + decl.Property + " on the line before it");
                 }
             }
         }
@@ -283,8 +283,8 @@ public class CssFallbackTests
     /// False: an older engine would drop the fill, or a mixed variable would wipe the plain color.
     /// </summary>
     [Theory]
-    [InlineData(".stolon-button.primary .stolon-btn-progress")]
-    [InlineData(".stolon-button.destructive .stolon-btn-progress")]
+    [InlineData(".stolon-button.stolon-primary .stolon-btn-progress")]
+    [InlineData(".stolon-button.stolon-destructive .stolon-btn-progress")]
     public void ButtonProgress_HasAPlainRuleBeforeTheSupportsUpgrade(string selector)
     {
         var rules = CssRules.Parse(Source("task-progress-button.css"), "task-progress-button.css");
@@ -349,7 +349,7 @@ public class CssFallbackTests
         var rules = CssRules.Parse(Source("list.css"), "list.css");
 
         var hover = rules.FindIndex(r => r.Selectors.Contains(".stolon-table-row:hover"));
-        var selected = rules.FindIndex(r => r.Selectors.Contains(".stolon-table-row.selected") && r.Selectors.Contains(".stolon-list-item.selected:not(.stolon-card-item)"));
+        var selected = rules.FindIndex(r => r.Selectors.Contains(".stolon-table-row.stolon-selected") && r.Selectors.Contains(".stolon-list-item.stolon-selected:not(.stolon-card-item)"));
 
         Assert.True(hover >= 0, "list.css must have a row hover rule.");
         Assert.True(selected > hover, "The selected row rule must come after the hover rule.");
@@ -365,9 +365,9 @@ public class CssFallbackTests
     public void OpenCard_KeepsThePlainSurface()
     {
         var rules = CssRules.Parse(Source("list.css"), "list.css");
-        Assert.DoesNotContain(rules, r => r.Selectors.Contains(".stolon-list-item.selected"));
-        Assert.Contains("border-color: var(--stolon-accent)", CssRules.BodyFor(Source("sortable-card-list.css"), ".stolon-card-item.selected") ?? string.Empty, StringComparison.Ordinal);
-        Assert.Contains("background: var(--stolon-accent-wash)", CssRules.BodyFor(Source("sortable-card-list.css"), ".stolon-card-item.selected > .stolon-card-item-head") ?? string.Empty, StringComparison.Ordinal);
+        Assert.DoesNotContain(rules, r => r.Selectors.Contains(".stolon-list-item.stolon-selected"));
+        Assert.Contains("border-color: var(--stolon-accent)", CssRules.BodyFor(Source("sortable-card-list.css"), ".stolon-card-item.stolon-selected") ?? string.Empty, StringComparison.Ordinal);
+        Assert.Contains("background: var(--stolon-accent-wash)", CssRules.BodyFor(Source("sortable-card-list.css"), ".stolon-card-item.stolon-selected > .stolon-card-item-head") ?? string.Empty, StringComparison.Ordinal);
     }
 
     /// <summary>
@@ -422,7 +422,7 @@ public class CssFallbackTests
 
         Assert.NotEmpty(names);
         Assert.NotEmpty(colors);
-        var missing = names.Select(n => ".stolon-table-status-badge." + n).Concat(colors.Select(c => ".stolon-badge." + c))
+        var missing = names.Select(n => ".stolon-table-status-badge.stolon-" + n).Concat(colors.Select(c => ".stolon-badge.stolon-" + c))
             .Where(s => !selectors.Contains(s)).ToList();
         Assert.True(missing.Count == 0, "No badge rule for " + string.Join(", ", missing));
     }

@@ -47,7 +47,7 @@ export function moveButtons(options: MoveButtonsOptions): HTMLButtonElement[] {
     return [-1, 1].map(function (delta) {
         var up = delta < 0;
         var label = rowLabel(up ? options.upLabel : options.downLabel, stolonText(up ? 'Stolon.MoveUpValue' : 'Stolon.MoveDownValue'), options.name);
-        var btn = iconButton('stolon-row-btn move' + (options.className ? ' ' + options.className + (up ? '-up' : '-down') : ''), up ? 'keyboard_arrow_up' : 'keyboard_arrow_down', label);
+        var btn = iconButton('stolon-row-btn stolon-move' + (options.className ? ' ' + options.className + (up ? '-up' : '-down') : ''), up ? 'keyboard_arrow_up' : 'keyboard_arrow_down', label);
         btn.title = up ? (options.upTitle || stolonText('Stolon.MoveUp')) : (options.downTitle || stolonText('Stolon.MoveDown'));
         btn.setAttribute('data-move', String(delta));
         btn.disabled = up ? options.index <= 0 : options.index >= options.count - 1;

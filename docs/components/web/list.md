@@ -116,15 +116,15 @@ Builds a list. The list is the frame, its height, and its empty and loading stat
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-list` | A column of items, bordered rows by default, that may scroll inside a fixed or filling height |
-| `stolon-list.rows` | Rows drawn as one bordered block with a divider between items |
-| `stolon-list.grid` | Tiles in as many columns as fit, each at least --stolon-list-column wide |
-| `stolon-list.scrolls` | A list that scrolls inside itself rather than growing the page |
-| `stolon-list.fill` | A list that reaches from its top to the bottom of the window, and flexes inside a bounded column |
-| `stolon-list-item.openable` | An item that opens or is picked by a click, with the shared row hover, and an accent ring for a keyboard user |
-| `stolon-list-item.selected` | A selected item or row, in the accent wash with a leading accent bar, the one selection look every list shares. An open record card keeps the accent on its outline and head only, so its body stays on the plain surface |
-| `stolon-list-item.text` | A text item, padded the way a component in a row pads itself |
+| `stolon-list.stolon-rows` | Rows drawn as one bordered block with a divider between items |
+| `stolon-list.stolon-grid` | Tiles in as many columns as fit, each at least --stolon-list-column wide |
+| `stolon-list.stolon-scrolls` | A list that scrolls inside itself rather than growing the page |
+| `stolon-list.stolon-fill` | A list that reaches from its top to the bottom of the window, and flexes inside a bounded column |
+| `stolon-list-item.stolon-openable` | An item that opens or is picked by a click, with the shared row hover, and an accent ring for a keyboard user |
+| `stolon-list-item.stolon-selected` | A selected item or row, in the accent wash with a leading accent bar, the one selection look every list shares. An open record card keeps the accent on its outline and head only, so its body stays on the plain surface |
+| `stolon-list-item.stolon-text` | A text item, padded the way a component in a row pads itself |
 | `stolon-list-empty` | The sentence a list shows while it holds no items |
-| `stolon-list-empty.outside` | The empty sentence of a ul or ol list, which sits after the list rather than in it |
+| `stolon-list-empty.stolon-outside` | The empty sentence of a ul or ol list, which sits after the list rather than in it |
 | `stolon-item-row` | A boxed row that looks like a field and is at least a field tall, with its text and row buttons centered, as in a string list |
 | `stolon-item-row-parts` | A row's text in two parts, a primary and a dimmed secondary that starts at the same place on every row of the list, and wraps under the primary when the row is too narrow for both |
 

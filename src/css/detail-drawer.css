@@ -1,5 +1,5 @@
 /* A dialog overlay whose panel docks to the right edge of the window at full height */
-/* Example: <div class="stolon-dialog stolon-drawer medium"><div class="stolon-dialog-content stolon-drawer-content medium"></div></div> */
+/* Example: <div class="stolon-dialog stolon-drawer stolon-medium"><div class="stolon-dialog-content stolon-drawer-content stolon-medium"></div></div> */
 .stolon-dialog.stolon-drawer {
     justify-content: flex-end;
     align-items: stretch;
@@ -7,7 +7,7 @@
 }
 
 /* The drawer panel, as wide as a dialog of its size, that slides in from the right with its header and footer fixed and its body scrolling between them */
-/* Example: <div class="stolon-dialog-content stolon-drawer-content medium"><div class="stolon-drawer-head"></div><div class="stolon-modal-body stolon-drawer-body"></div></div> */
+/* Example: <div class="stolon-dialog-content stolon-drawer-content stolon-medium"><div class="stolon-drawer-head"></div><div class="stolon-modal-body stolon-drawer-body"></div></div> */
 .stolon-dialog-content.stolon-drawer-content {
     display: flex;
     flex-direction: column;
@@ -36,7 +36,7 @@
 }
 
 /* The drawer header, the title with its badge and the subtitle under it, clear of the close button */
-/* Example: <div class="stolon-drawer-head"><div class="stolon-drawer-heading"><h2 class="stolon-modal-title stolon-drawer-title">Movies</h2><span class="stolon-badge green stolon-drawer-badge">Synced</span></div><p class="stolon-drawer-subtitle">Library</p></div> */
+/* Example: <div class="stolon-drawer-head"><div class="stolon-drawer-heading"><h2 class="stolon-modal-title stolon-drawer-title">Movies</h2><span class="stolon-badge stolon-green stolon-drawer-badge">Synced</span></div><p class="stolon-drawer-subtitle">Library</p></div> */
 .stolon-drawer-head {
     flex: 0 0 auto;
     padding-right: calc(var(--stolon-size-small) + var(--stolon-gap-narrow));
@@ -57,7 +57,7 @@
 .stolon-drawer-title[hidden] { display: none; }
 
 /* The badge beside the drawer title */
-/* Example: <span class="stolon-badge green stolon-drawer-badge">Synced</span> */
+/* Example: <span class="stolon-badge stolon-green stolon-drawer-badge">Synced</span> */
 .stolon-drawer-badge { flex: 0 0 auto; }
 
 /* The dimmed line under the drawer title */
@@ -80,5 +80,5 @@
 }
 
 /* The drawer footer, a row of dialog buttons pinned to the bottom of the panel */
-/* Example: <div class="stolon-modal-button-row stolon-drawer-footer"><button class="raised stolon-modal-button stolon-button primary">Edit</button></div> */
+/* Example: <div class="stolon-modal-button-row stolon-drawer-footer"><button class="raised stolon-modal-button stolon-button stolon-primary">Edit</button></div> */
 .stolon-drawer-content > .stolon-drawer-footer { flex: 0 0 auto; }

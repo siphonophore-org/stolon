@@ -98,7 +98,7 @@ Shows a message under an input, creating it on first use, and wires aria-invalid
 
 | Class | What it looks like |
 | :--- | :--- |
-| `stolon-field-message.error` | The color of each message state, one rule for the field message, the status line, and the toast's icon |
+| `stolon-field-message.stolon-error` | The color of each message state, one rule for the field message, the status line, and the toast's icon |
 
 <!-- reference:end -->
 

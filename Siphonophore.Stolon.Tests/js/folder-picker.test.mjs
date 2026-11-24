@@ -139,7 +139,7 @@ test('an empty folder shows the empty text, and emptyText replaces it', async fu
     var empty = dialog().querySelector('.stolon-folder-picker-empty');
     assert.equal(empty.hidden, false);
     assert.equal(empty.textContent, 'This folder is empty.');
-    assert.ok(empty.classList.contains('stolon-list-empty') && empty.classList.contains('outside'));
+    assert.ok(empty.classList.contains('stolon-list-empty') && empty.classList.contains('stolon-outside'));
     var parts = Array.prototype.slice.call(empty.parentNode.children);
     assert.equal(parts[parts.indexOf(empty) - 1], dialog().querySelector('.stolon-folder-picker-list'));
     dialog().querySelector('.stolon-dialog-close').click();
@@ -156,7 +156,7 @@ test('a folder that cannot be read shows the error under the list and keeps the 
     var message = dialog().querySelector('.stolon-field-message');
     assert.equal(shown(message), true);
     assert.equal(message.textContent.indexOf('Could not read this folder.') !== -1, true);
-    assert.equal(message.classList.contains('error'), true);
+    assert.equal(message.classList.contains('stolon-error'), true);
     assert.equal(pathField().getAttribute('aria-invalid'), 'true');
     assert.equal(dialog().querySelector('.stolon-folder-picker-empty').hidden, true);
     assert.deepEqual(names(), ['Go up']);
@@ -241,7 +241,7 @@ test('includeFiles lists files, and picking one fills the path for Select', asyn
     assert.equal(file.querySelector('.material-icons').textContent, 'insert_drive_file');
     assert.equal(file.getAttribute('aria-pressed'), 'false');
     file.click();
-    assert.equal(file.classList.contains('selected'), true);
+    assert.equal(file.classList.contains('stolon-selected'), true);
     assert.equal(file.getAttribute('aria-pressed'), 'true');
     assert.equal(pathField().value, '/notes.txt');
     selectButton().click();
@@ -255,7 +255,7 @@ test('picking a file marks it alone as pressed, and picking it again after an ed
     entry('a.txt').click();
     entry('b.txt').click();
     assert.equal(entry('a.txt').getAttribute('aria-pressed'), 'false');
-    assert.equal(entry('a.txt').classList.contains('selected'), false);
+    assert.equal(entry('a.txt').classList.contains('stolon-selected'), false);
     assert.equal(entry('b.txt').getAttribute('aria-pressed'), 'true');
     assert.equal(pathField().value, '/docs/b.txt');
     pathField().value = '/docs/other';
@@ -388,8 +388,8 @@ test('the dialog list keeps its ul and li rows, and caps at 50vh by default as t
     var items = list.children;
     assert.ok(items.length === 2 && items.every(function (li) { return li.tagName === 'LI' && !li.hasAttribute('role'); }));
     assert.ok(items[0].querySelector('.stolon-folder-picker-up'));
-    assert.ok(list.classList.contains('capped'));
-    assert.ok(list.classList.contains('scrolls'));
+    assert.ok(list.classList.contains('stolon-capped'));
+    assert.ok(list.classList.contains('stolon-scrolls'));
     assert.equal(list.style['--stolon-list-max'], '50vh');
 });
 
@@ -398,11 +398,11 @@ test('height and maxHeight size the dialog list, and setHeight reaches an open o
     ui.browse.click();
     await flush();
     var list = dialog().querySelector('.stolon-folder-picker-list');
-    assert.ok(list.classList.contains('fixed'));
+    assert.ok(list.classList.contains('stolon-fixed'));
     assert.equal(list.style['--stolon-list-height'], '240px');
-    assert.equal(list.classList.contains('capped'), false);
+    assert.equal(list.classList.contains('stolon-capped'), false);
     ui.picker.setHeight('auto', 300);
-    assert.equal(list.classList.contains('fixed'), false);
+    assert.equal(list.classList.contains('stolon-fixed'), false);
     assert.equal(list.style['--stolon-list-max'], '300px');
     button('Cancel').click();
     ui.browse.click();

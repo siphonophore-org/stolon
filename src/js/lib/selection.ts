@@ -134,7 +134,7 @@ export function bindChecks(container: HTMLElement, opts: CheckBindingOptions): C
             var on = opts.selection.has(box.getAttribute('data-id'));
             box.checked = on;
             var row = opts.rowClass ? box.closest<HTMLElement>('.' + opts.rowClass) : null;
-            if (row) row.classList.toggle('selected', on);
+            if (row) row.classList.toggle('stolon-selected', on);
         });
         opts.selection.syncBox(opts.selectAll, opts.ids());
     }

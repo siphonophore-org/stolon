@@ -95,7 +95,7 @@ export function createBanner(options?: BannerOptions): BannerHandle {
     root.appendChild(close);
 
     function reflect(): void {
-        root.className = 'stolon-banner stolon-icon-text stolon-' + kind + (close.hidden ? '' : ' dismissible');
+        root.className = 'stolon-banner stolon-icon-text stolon-' + kind + (close.hidden ? '' : ' stolon-dismissible');
         glyph.textContent = GLYPHS[kind];
         titleEl.textContent = title;
         titleEl.hidden = !title;
@@ -116,7 +116,7 @@ export function createBanner(options?: BannerOptions): BannerHandle {
         clear(actionRow);
         (list || []).forEach(function (action) {
             if (!action || !action.text) return;
-            var button = make('button', 'raised stolon-button small ' + (action.primary ? 'primary' : 'secondary') + (action.className ? ' ' + action.className : ''), { type: 'button' }, action.text);
+            var button = make('button', 'raised stolon-button stolon-small ' + (action.primary ? 'stolon-primary' : 'stolon-secondary') + (action.className ? ' ' + action.className : ''), { type: 'button' }, action.text);
             if (action.onClick) {
                 var run = action.onClick;
                 actionOff.push(listen(button, 'click', function () { run(button); }));

@@ -23,17 +23,17 @@
 }
 
 /* One lane, whose lines and arrows take the lane's color */
-/* Example: <g class="stolon-flow-diagram-lane blue"><path class="stolon-flow-diagram-line stolon-flow-diagram-stub" /></g> */
+/* Example: <g class="stolon-flow-diagram-lane stolon-blue"><path class="stolon-flow-diagram-line stolon-flow-diagram-stub" /></g> */
 .stolon-flow-diagram-lane { color: var(--stolon-gray-fg); }
-.stolon-flow-diagram-lane.green { color: var(--stolon-green-fg); }
-.stolon-flow-diagram-lane.red { color: var(--stolon-red-fg); }
-.stolon-flow-diagram-lane.orange { color: var(--stolon-orange-fg); }
-.stolon-flow-diagram-lane.purple { color: var(--stolon-purple-fg); }
-.stolon-flow-diagram-lane.blue { color: var(--stolon-blue-fg); }
-.stolon-flow-diagram-lane.yellow { color: var(--stolon-yellow-fg); }
-.stolon-flow-diagram-lane.pink { color: var(--stolon-pink-fg); }
-.stolon-flow-diagram-lane.teal { color: var(--stolon-teal-fg); }
-.stolon-flow-diagram-lane.custom { color: var(--stolon-custom-fg); }
+.stolon-flow-diagram-lane.stolon-green { color: var(--stolon-green-fg); }
+.stolon-flow-diagram-lane.stolon-red { color: var(--stolon-red-fg); }
+.stolon-flow-diagram-lane.stolon-orange { color: var(--stolon-orange-fg); }
+.stolon-flow-diagram-lane.stolon-purple { color: var(--stolon-purple-fg); }
+.stolon-flow-diagram-lane.stolon-blue { color: var(--stolon-blue-fg); }
+.stolon-flow-diagram-lane.stolon-yellow { color: var(--stolon-yellow-fg); }
+.stolon-flow-diagram-lane.stolon-pink { color: var(--stolon-pink-fg); }
+.stolon-flow-diagram-lane.stolon-teal { color: var(--stolon-teal-fg); }
+.stolon-flow-diagram-lane.stolon-custom { color: var(--stolon-custom-fg); }
 .stolon-flow-diagram-line,
 .stolon-flow-diagram-arrow {
     fill: none;
@@ -46,7 +46,7 @@
 .stolon-flow-diagram-arrow { stroke-width: 1.8; }
 
 /* A pill in a lane, a surface box with a status dot and a label, and an accent ring while focused */
-/* Example: <g class="stolon-flow-diagram-item"><rect class="stolon-flow-diagram-pill" /><circle class="stolon-flow-diagram-dot green" /><text class="stolon-flow-diagram-label">NAS</text></g> */
+/* Example: <g class="stolon-flow-diagram-item"><rect class="stolon-flow-diagram-pill" /><circle class="stolon-flow-diagram-dot stolon-green" /><text class="stolon-flow-diagram-label">NAS</text></g> */
 .stolon-flow-diagram-pill {
     fill: var(--stolon-surface);
     stroke: var(--stolon-border);
@@ -65,14 +65,14 @@
 .stolon-flow-diagram-item[role="button"]:hover .stolon-flow-diagram-pill { stroke: var(--stolon-accent); }
 
 /* Round status dot inside a pill, in a status color */
-/* Example: <circle class="stolon-flow-diagram-dot orange" r="4" /> */
+/* Example: <circle class="stolon-flow-diagram-dot stolon-orange" r="4" /> */
 .stolon-flow-diagram-dot { fill: var(--stolon-gray-fg); }
-.stolon-flow-diagram-dot.green { fill: var(--stolon-green-fg); }
-.stolon-flow-diagram-dot.red { fill: var(--stolon-red-fg); }
-.stolon-flow-diagram-dot.orange { fill: var(--stolon-orange-fg); }
-.stolon-flow-diagram-dot.purple { fill: var(--stolon-purple-fg); }
-.stolon-flow-diagram-dot.blue { fill: var(--stolon-blue-fg); }
-.stolon-flow-diagram-dot.yellow { fill: var(--stolon-yellow-fg); }
-.stolon-flow-diagram-dot.pink { fill: var(--stolon-pink-fg); }
-.stolon-flow-diagram-dot.teal { fill: var(--stolon-teal-fg); }
-.stolon-flow-diagram-dot.custom { fill: var(--stolon-custom-fg); }
+.stolon-flow-diagram-dot.stolon-green { fill: var(--stolon-green-fg); }
+.stolon-flow-diagram-dot.stolon-red { fill: var(--stolon-red-fg); }
+.stolon-flow-diagram-dot.stolon-orange { fill: var(--stolon-orange-fg); }
+.stolon-flow-diagram-dot.stolon-purple { fill: var(--stolon-purple-fg); }
+.stolon-flow-diagram-dot.stolon-blue { fill: var(--stolon-blue-fg); }
+.stolon-flow-diagram-dot.stolon-yellow { fill: var(--stolon-yellow-fg); }
+.stolon-flow-diagram-dot.stolon-pink { fill: var(--stolon-pink-fg); }
+.stolon-flow-diagram-dot.stolon-teal { fill: var(--stolon-teal-fg); }
+.stolon-flow-diagram-dot.stolon-custom { fill: var(--stolon-custom-fg); }

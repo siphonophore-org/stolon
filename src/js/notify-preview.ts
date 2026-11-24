@@ -166,7 +166,7 @@ function discordEmbed(embed: any, options: NotifyPreviewOptions): string {
     var color = typeof embed.color === 'number' ? '#' + ('000000' + (embed.color & 0xFFFFFF).toString(16)).slice(-6) : '';
     var author = embed.author && embed.author.name ? '<div class="stolon-notify-preview-discord-author">'
         + (safeUrl(embed.author.icon_url) ? '<img alt="" src="' + escapeHtml(safeUrl(embed.author.icon_url)) + '">' : '') + '<span>' + escapeHtml(embed.author.name) + '</span></div>' : '';
-    var title = embed.title ? '<div class="stolon-notify-preview-discord-title' + (embed.url ? ' linked' : '') + '">' + discordMarkdown(toText(embed.title)) + '</div>' : '';
+    var title = embed.title ? '<div class="stolon-notify-preview-discord-title' + (embed.url ? ' stolon-linked' : '') + '">' + discordMarkdown(toText(embed.title)) + '</div>' : '';
     var text = embed.description ? '<div class="stolon-notify-preview-discord-description">' + discordMarkdown(toText(embed.description)) + '</div>' : '';
     var fields = (Array.isArray(embed.fields) ? embed.fields : []).filter(function (f: any) { return f && (f.name || f.value); });
     var footerText = embed.footer && embed.footer.text ? escapeHtml(embed.footer.text) : '';
@@ -177,8 +177,8 @@ function discordEmbed(embed: any, options: NotifyPreviewOptions): string {
     var thumbnail = embed.thumbnail && safeUrl(embed.thumbnail.url);
     var image = embed.image && safeUrl(embed.image.url);
     // The embed's color comes from the post, as the custom color its bar reads.
-    return '<article class="stolon-notify-preview-discord-embed' + (color ? ' custom" style="--stolon-custom: ' + color : '') + '">'
-        + '<div class="stolon-notify-preview-discord-grid' + (thumbnail ? ' thumbnail' : '') + '">'
+    return '<article class="stolon-notify-preview-discord-embed' + (color ? ' stolon-custom" style="--stolon-custom: ' + color : '') + '">'
+        + '<div class="stolon-notify-preview-discord-grid' + (thumbnail ? ' stolon-thumbnail' : '') + '">'
         + '<div class="stolon-notify-preview-discord-main">' + author + title + text
         + (fields.length ? '<div class="stolon-notify-preview-discord-fields">' + discordFields(fields) + '</div>' : '')
         + (image ? '<img class="stolon-notify-preview-discord-image" alt="" src="' + escapeHtml(image) + '">' : '')

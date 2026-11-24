@@ -22,13 +22,13 @@ cards.appendChild(peer.element);
 peer.setValue({ value: 'Delivered 3m ago', valueColor: 'green', detail: 'Sends files and users' });
 ```
 
-Classes: `stolon-stat`, `stolon-stat-trend`, `stolon-stat-detail`, `label-top`. Place the cards in `stolon-cards`. The handle is `{ element, getValue, setValue, destroy }`.
+Classes: `stolon-stat`, `stolon-stat-trend`, `stolon-stat-detail`, `stolon-label-top`. Place the cards in `stolon-cards`. The handle is `{ element, getValue, setValue, destroy }`.
 
 ## States and Modifiers
 
 * `stolon-stat` is added to `stolon-card`, so the count, label, and color modifiers apply.
 * `trend` is a change, where 12 is up 12 and -3 is down 3. `trendSuffix` goes after the number, and `trendLabel` after that, such as `'vs last week'`.
-* `positiveIsGood: false` makes an increase red and a decrease green. The trend line carries `good`, `bad`, or `flat`.
+* `positiveIsGood: false` makes an increase red and a decrease green. The trend line carries `stolon-good`, `stolon-bad`, or `stolon-flat`.
 * `sparkline` is a list of numbers drawn as a [Sparkline](sparkline.md) under the trend, in the card's text color or `sparklineColor`, named by the label.
 * `value` may be text, such as "Delivered 3m ago". Text wraps at full size and is never shrunk to fit.
 * `valueColor` colors the value text by a status name or a hex code, through the color core, such as `orange` for a paused state. The value carries the color class.
@@ -53,7 +53,7 @@ A status card with a number or a short text status, a label, and an optional tre
 | :--- | :--- | :--- |
 | `value` | <code>unknown</code> | the number or text shown large, such as 1204 or 'Delivered 3m ago'. Text wraps and is never shrunk [optional] |
 | `label` | <code>string</code> | text under the value, or above it with layout 'label-top' [optional] |
-| `color` | <code>string</code> | card color name such as 'blue' or 'green', as the stolon-card modifiers [optional] |
+| `color` | <code>string</code> | card color name such as 'blue' or 'green', drawn as its stolon-card modifier, such as stolon-blue [optional] |
 | `trend` | <code>number</code> | change as a number, where 12 is up 12 and -3 is down 3 [optional] |
 | `trendSuffix` | <code>string</code> | text after the trend number, such as '%' [optional] |
 | `trendLabel` | <code>string</code> | text after the trend, such as 'vs last week' [optional] |
@@ -78,7 +78,7 @@ A status card with a number or a short text status, a label, and an optional tre
 | `stolon-stat-trend` | Status card that adds a trend line under its count and label, built by createStatCard, the trend built as small stolon-icon-text |
 | `stolon-stat` | A stat card whose value is text, which wraps between words at full size and is as wide as its longest word, never wider than its row |
 | `stolon-stat-detail` | Dimmed detail line under a stat card's value, cut with an ellipsis and titled with its full text |
-| `stolon-stat.label-top` | Stat card laid out label first, a small label over a text status and its details, aligned to the start |
+| `stolon-stat.stolon-label-top` | Stat card laid out label first, a small label over a text status and its details, aligned to the start |
 
 <!-- reference:end -->
 

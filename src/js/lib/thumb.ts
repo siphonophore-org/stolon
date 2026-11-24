@@ -163,7 +163,7 @@ export function buildThumb(opts: ThumbOptions): ThumbHandle {
         if (!src) {
             if (opts.keepImage) {
                 handle.image!.hidden = true;
-                handle.image!.classList.remove('pending');
+                handle.image!.classList.remove('stolon-pending');
                 handle.image!.removeAttribute('src');
             } else if (handle.image) {
                 frame.removeChild(handle.image);
@@ -174,14 +174,14 @@ export function buildThumb(opts: ThumbOptions): ThumbHandle {
         var image = handle.image || (handle.image = buildImage());
         image.hidden = false;
         // The image stays invisible until it loads, so a failed one never paints the browser's broken image mark.
-        image.classList.add('pending');
+        image.classList.add('stolon-pending');
         stopImage.push(listen(image, 'load', function () {
-            image.classList.remove('pending');
+            image.classList.remove('stolon-pending');
             if (!image.hidden) placeholder.hidden = true;
         }));
         stopImage.push(onImageError(image, function () {
             image.hidden = true;
-            image.classList.remove('pending');
+            image.classList.remove('stolon-pending');
             placeholder.hidden = false;
         }));
         image.setAttribute('src', src);

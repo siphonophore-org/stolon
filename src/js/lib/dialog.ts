@@ -10,7 +10,7 @@ var FOCUSABLE: string = 'a[href], button:not([disabled]), input:not([disabled]),
 // Whether el is visible, since FOCUSABLE also matches hidden controls that cannot take focus.
 function isVisible(el: HTMLElement): boolean {
     if ((el as HTMLInputElement).type === 'hidden') return false;
-    if (el.closest && el.closest('[hidden], .hidden')) return false;
+    if (el.closest && el.closest('[hidden], .stolon-hidden')) return false;
     return !!(el.getClientRects && el.getClientRects().length);
 }
 
@@ -65,7 +65,7 @@ function focusContainer(container: HTMLElement): void {
 export function focusFirst(container: HTMLElement, opts?: Pick<DialogOptions, 'autofocus'>): void {
     opts = opts || {};
     var touch: boolean = coarsePointer();
-    function safe(el: HTMLElement): boolean { return !(el.classList && el.classList.contains('stolon-button') && el.classList.contains('destructive')); }
+    function safe(el: HTMLElement): boolean { return !(el.classList && el.classList.contains('stolon-button') && el.classList.contains('stolon-destructive')); }
     function usable(el: HTMLElement): boolean { return safe(el) && !(touch && isTextEntry(el)); }
     if (opts.autofocus === false) { focusContainer(container); return; }
     if (opts.autofocus) {
@@ -120,7 +120,7 @@ export function restoreFocus(previouslyFocused: HTMLElement | null, opts?: Pick<
 /** Returns the rendered dialog on top, skipping in-page dialogs that stay in the markup while closed. */
 export function topDialog(): HTMLElement | null {
     var all: HTMLElement[] = Array.prototype.filter.call(document.querySelectorAll<HTMLElement>('.stolon-dialog'), function (d: HTMLElement): boolean {
-        return !d.classList.contains('hidden') && !d.hidden && d.getClientRects().length > 0;
+        return !d.classList.contains('stolon-hidden') && !d.hidden && d.getClientRects().length > 0;
     });
     return all.length ? all[all.length - 1] : null;
 }
@@ -255,9 +255,9 @@ export function createModalShell(opts: ModalShellOptions): ModalShell {
     var size: string = opts.size === 'small' || opts.size === 'large' ? opts.size : 'medium';
     var overlay = document.createElement('div');
     // The size on the overlay lets the phone layout match without :has(), which older engines lack.
-    overlay.className = 'stolon-dialog ' + size + (opts.overlayClass ? ' ' + opts.overlayClass : '');
+    overlay.className = 'stolon-dialog stolon-' + size + (opts.overlayClass ? ' ' + opts.overlayClass : '');
     var content = document.createElement('div');
-    content.className = 'stolon-dialog-content ' + (opts.contentClass ? opts.contentClass + ' ' : '') + size + (opts.className ? ' ' + opts.className : '');
+    content.className = 'stolon-dialog-content ' + (opts.contentClass ? opts.contentClass + ' ' : '') + 'stolon-' + size + (opts.className ? ' ' + opts.className : '');
     content.setAttribute('role', 'dialog');
     content.setAttribute('aria-modal', 'true');
     overlay.appendChild(content);
@@ -319,7 +319,7 @@ export function dialogButtonRow(buttons: DialogButton[] | null | undefined, clos
     buttons.forEach(function (spec: DialogButton): void {
         var btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'raised stolon-modal-button ' + (spec.className || 'stolon-button secondary');
+        btn.className = 'raised stolon-modal-button ' + (spec.className || 'stolon-button stolon-secondary');
         if (spec.icon) {
             btn.appendChild(icon(spec.icon));
             btn.appendChild(document.createElement('span')).textContent = spec.text || '';

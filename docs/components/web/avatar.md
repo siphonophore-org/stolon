@@ -27,9 +27,9 @@ Parts: `stolon-avatar-image`, `stolon-avatar-icon`, `stolon-user-chip-body`, `st
 
 * `size` is `small`, `medium` (default), or `large`. `src` is the image address. `image` wins over it, and is an address or a function that returns an address, a Blob, or a promise of one, with the `person` icon shown until it arrives.
 * An [Avatar Stack](avatar-stack.md) overlaps several avatars with a +N bubble.
-* With no `src`, or when the image fails, the avatar shows the `person` icon on a gray circle, as Jellyfin does for a user with no picture. It carries the `placeholder` modifier, and `color` tints the circle with a color name. `name` labels it for a screen reader.
+* With no `src`, or when the image fails, the avatar shows the `person` icon on a gray circle, as Jellyfin does for a user with no picture. It carries the `stolon-placeholder` modifier, and `color` tints the circle with a color name. `name` labels it for a screen reader.
 * `status` is `green`, `red`, `orange`, `purple`, `blue`, or `gray` and adds a dot. `statusLabel` names the state and defaults to the meaning of the color, such as "Active" for green. The dot has a title and `aria-label`.
-* `createUserChip` takes the avatar options and `text`, a line under the name. With `text`, the chip carries `two-line` and its avatar grows to span both lines.
+* `createUserChip` takes the avatar options and `text`, a line under the name. With `text`, the chip carries `stolon-two-line` and its avatar grows to span both lines.
 
 ## Reference
 
@@ -81,7 +81,7 @@ A pill with an avatar, a name, and an optional second line, for showing who owns
 | `stolon-avatar-icon` | The person icon an avatar shows with no picture, sized to its circle |
 | `stolon-avatar-status` | Dot at the bottom right of an avatar, ringed in the surface color |
 | `stolon-user-chip` | Pill with an avatar, a name, and an optional second line |
-| `stolon-user-chip.two-line` | A chip with a second line, whose avatar grows to span both lines |
+| `stolon-user-chip.stolon-two-line` | A chip with a second line, whose avatar grows to span both lines |
 
 <!-- reference:end -->
 

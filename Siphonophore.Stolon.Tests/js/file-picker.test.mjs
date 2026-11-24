@@ -54,10 +54,10 @@ test('dragging over marks the zone, and dropping a file returns File objects thr
     var ui = build();
     var over = ui.zone.dispatch('dragover');
     assert.equal(over.defaultPrevented, true);
-    assert.ok(ui.zone.classList.contains('dragover'));
+    assert.ok(ui.zone.classList.contains('stolon-dragover'));
     var png = file('logo.png', 'image/png');
     drop(ui, [png]);
-    assert.equal(ui.zone.classList.contains('dragover'), false);
+    assert.equal(ui.zone.classList.contains('stolon-dragover'), false);
     assert.equal(ui.picker.getValue()[0], png);
     assert.equal(ui.changes.length, 1);
     assert.deepEqual(names(ui), ['logo.png']);
@@ -89,7 +89,7 @@ test('accept filters by mime wildcard, extension, and exact type, and names the 
     assert.deepEqual(names(ui), ['a.png', 'b.JSON', 'c.pdf']);
     assert.equal(messageText(ui), 'd.exe is not an accepted type.');
     assert.deepEqual(ui.errors[0], ['d.exe is not an accepted type.']);
-    assert.equal(ui.picker.element.querySelector('.stolon-field-message').classList.contains('error'), true);
+    assert.equal(ui.picker.element.querySelector('.stolon-field-message').classList.contains('stolon-error'), true);
 });
 
 test('maxSize refuses a larger file with the limit in the message', function () {

@@ -20,14 +20,14 @@ view.querySelector('#meterHost').appendChild(meter.element);
 meter.setValue({ used: 20e9 });
 ```
 
-Classes: `stolon-usage-meter`, with the `warning` and `danger` modifiers, and the parts `stolon-usage-meter-head`, `stolon-usage-meter-label`, `stolon-usage-meter-text`, `stolon-usage-meter-bar`, `stolon-usage-meter-fill`, and `stolon-usage-meter-legend`. The handle is `{ element, getValue, setValue, destroy }`. `setValue` merges `{ used, total, parts }` and draws again.
+Classes: `stolon-usage-meter`, with the `stolon-warning` and `stolon-danger` modifiers, and the parts `stolon-usage-meter-head`, `stolon-usage-meter-label`, `stolon-usage-meter-text`, `stolon-usage-meter-bar`, `stolon-usage-meter-fill`, and `stolon-usage-meter-legend`. The handle is `{ element, getValue, setValue, destroy }`. `setValue` merges `{ used, total, parts }` and draws again.
 
 ## States and Modifiers
 
 * The bar is the [Progress Bar](progress-bar.md) track, `stolon-progress`, a narrow gap tall, with one `stolon-progress-bar` fill per part.
 * `bytes: true` writes the amounts as sizes, such as 12.4 GB, through the shared size format. Otherwise `unit` follows a plain number, and `format(value)` replaces both.
 * `usedText` is "{used} of {total} used" by default, and also takes `{percent}`.
-* The meter takes `warning` at 80 percent and `danger` at 95 percent by default. Its line takes the same color.
+* The meter takes `stolon-warning` at 80 percent and `stolon-danger` at 95 percent by default. Its line takes the same color.
 * `parts: [{ label, value, color }]` splits the used amount into segments, each in its color, a status color name or a hex code. A part with no color takes the chart series colors in turn. With two or more parts a legend lists each part and its amount. A segmented meter keeps its part colors past a threshold, and only its line turns orange or red.
 * `used` defaults to the sum of the parts. A `total` of 0 shows an empty bar.
 * The bar is a `meter` to a screen reader, named by the label, with the line as its value text.
@@ -69,7 +69,7 @@ A progress bar that shows how much of something is used, such as disk space, wit
 | :--- | :--- |
 | `stolon-usage-meter` | A progress bar of how much is used, with a label and an "X of Y used" line over it, and a legend under it when it holds several parts |
 | `stolon-progress.stolon-usage-meter-bar` | The bar, the progress bar's track a narrow gap tall, whose fills sit side by side, each as wide as its share |
-| `stolon-usage-meter.warning` | A meter past its warning share turns orange, and past its danger share turns red, with its line in the same color. A segmented meter keeps its part colors and colors only the line |
+| `stolon-usage-meter.stolon-warning` | A meter past its warning share turns orange, and past its danger share turns red, with its line in the same color. A segmented meter keeps its part colors and colors only the line |
 | `stolon-usage-meter-legend` | The legend of a segmented meter: a swatch, a name, and an amount per part, wrapping as a row |
 
 <!-- reference:end -->

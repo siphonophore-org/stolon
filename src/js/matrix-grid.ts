@@ -181,7 +181,7 @@ export function createMatrixGrid(options: MatrixGridOptions): MatrixGridHandle {
         var spec = { key: column.key, label: column.label, type: type, min: column.min, max: column.max };
         cell.binding = control.input && control.input.tagName !== 'BUTTON' ? bindValidation(control.input, Object.assign(validationFor(spec, function () { return control.getValue(); }, function () { return { item: values[row.key] || {}, index: 0 }; }), { message: message })) : null;
         cells.push(cell);
-        var box = make('span', 'stolon-matrix-cell' + (cell.disabled ? ' disabled' : ''));
+        var box = make('span', 'stolon-matrix-cell' + (cell.disabled ? ' stolon-disabled' : ''));
         box.appendChild(control.element);
         box.appendChild(message.element);
         return box;
@@ -213,7 +213,7 @@ export function createMatrixGrid(options: MatrixGridOptions): MatrixGridHandle {
     var root = table.element;
     root.classList.add('stolon-matrix-grid');
     // A unit takes room inside its box, so a grid with one gives its columns a wider floor and scrolls sideways before it hides digits.
-    if (columns.some(function (c) { return !!c.unit; }) || (opts.rows || []).some(function (r) { return !!r.cells && Object.keys(r.cells).some(function (k) { var part = r.cells![k]; return !!(part && part.unit); }); })) root.classList.add('has-units');
+    if (columns.some(function (c) { return !!c.unit; }) || (opts.rows || []).some(function (r) { return !!r.cells && Object.keys(r.cells).some(function (k) { var part = r.cells![k]; return !!(part && part.unit); }); })) root.classList.add('stolon-has-units');
     var hidden: Record<string, boolean> = {};
     columns.forEach(function (c) { if (c.hidden) hidden[c.key] = true; });
     if (opts.note) root.appendChild(make('div', 'fieldDescription stolon-matrix-note', null, opts.note));

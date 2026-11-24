@@ -1,5 +1,5 @@
 /* A sortable, filterable table, a Filtered List whose rows sit in a grid under a header of column headings */
-/* Example: <div class="stolon-filtered-list stolon-data-table"><div class="stolon-filtered-toolbar"></div><div class="stolon-data-grid" role="table"><div class="stolon-data-head" role="row"></div><div class="stolon-data-body stolon-list rows"></div></div></div> */
+/* Example: <div class="stolon-filtered-list stolon-data-table"><div class="stolon-filtered-toolbar"></div><div class="stolon-data-grid" role="table"><div class="stolon-data-head" role="row"></div><div class="stolon-data-body stolon-list stolon-rows"></div></div></div> */
 .stolon-data-table {
     --stolon-data-number: calc(var(--stolon-size-large) * 2.5);
     --stolon-data-min: calc(var(--stolon-size-large) * 2);
@@ -25,7 +25,7 @@
 }
 
 /* The header and the rows never shrink below their columns. A table too narrow for them scrolls its rows sideways inside the frame, so the frame keeps both edges, and the header follows */
-/* Example: <div class="stolon-data-grid"><div class="stolon-data-head"></div><div class="stolon-data-body stolon-list rows"><div class="stolon-data-row stolon-list-item"></div></div></div> */
+/* Example: <div class="stolon-data-grid"><div class="stolon-data-head"></div><div class="stolon-data-body stolon-list stolon-rows"><div class="stolon-data-row stolon-list-item"></div></div></div> */
 .stolon-data-grid > .stolon-data-head,
 .stolon-data-grid > .stolon-data-body.stolon-list {
     --stolon-data-gap: var(--stolon-gap-wide);
@@ -38,8 +38,8 @@
 }
 .stolon-data-grid > .stolon-data-body.stolon-list { overflow-x: auto; }
 .stolon-data-grid > .stolon-data-body.stolon-list > .stolon-data-row { min-width: var(--stolon-data-least); }
-.stolon-data-table.compact .stolon-data-grid > .stolon-data-head,
-.stolon-data-table.compact .stolon-data-grid > .stolon-data-body.stolon-list { --stolon-data-gap: var(--stolon-gap-narrow); }
+.stolon-data-table.stolon-compact .stolon-data-grid > .stolon-data-head,
+.stolon-data-table.stolon-compact .stolon-data-grid > .stolon-data-body.stolon-list { --stolon-data-gap: var(--stolon-gap-narrow); }
 .stolon-data-head,
 .stolon-data-row {
     display: grid;
@@ -56,18 +56,18 @@
     text-transform: uppercase;
     opacity: 0.7;
 }
-.stolon-data-heading.end,
-.stolon-data-cell.end { text-align: right; justify-self: stretch; }
-.stolon-data-heading.end { display: flex; justify-content: flex-end; }
+.stolon-data-heading.stolon-end,
+.stolon-data-cell.stolon-end { text-align: right; justify-self: stretch; }
+.stolon-data-heading.stolon-end { display: flex; justify-content: flex-end; }
 /* On a number column the arrow sits before the label, so the label ends where the digits end */
-.stolon-data-heading.end .stolon-data-sort { flex-direction: row-reverse; }
+.stolon-data-heading.stolon-end .stolon-data-sort { flex-direction: row-reverse; }
 
 /* A narrow centered column, such as a checkbox, its heading centered over its cells */
-/* Example: <div class="stolon-data-heading center" role="columnheader">Watched</div><div class="stolon-data-cell center" role="cell"><input type="checkbox" class="stolon-check-row-input"></div> */
-.stolon-data-heading.center,
-.stolon-data-cell.center { text-align: center; justify-self: stretch; }
-.stolon-data-heading.center,
-.stolon-data-cell.center { display: flex; justify-content: center; }
+/* Example: <div class="stolon-data-heading stolon-center" role="columnheader">Watched</div><div class="stolon-data-cell stolon-center" role="cell"><input type="checkbox" class="stolon-check-row-input"></div> */
+.stolon-data-heading.stolon-center,
+.stolon-data-cell.stolon-center { text-align: center; justify-self: stretch; }
+.stolon-data-heading.stolon-center,
+.stolon-data-cell.stolon-center { display: flex; justify-content: center; }
 
 /* A sortable heading, a button whose arrow shows only while the column is sorted, and turns over when descending */
 /* Example: <button class="stolon-data-sort"><span>Country</span><span class="material-icons">arrow_upward</span></button> */
@@ -91,23 +91,23 @@
     transition: transform 0.2s, opacity 0.2s;
 }
 .stolon-data-sort:hover .stolon-data-arrow { opacity: 0.5; }
-.stolon-data-heading.sorted { opacity: 1; }
-.stolon-data-heading.sorted .stolon-data-arrow { opacity: 1; }
-.stolon-data-heading.desc .stolon-data-arrow { transform: rotate(180deg); }
+.stolon-data-heading.stolon-sorted { opacity: 1; }
+.stolon-data-heading.stolon-sorted .stolon-data-arrow { opacity: 1; }
+.stolon-data-heading.stolon-desc .stolon-data-arrow { transform: rotate(180deg); }
 
 /* A narrow table: number columns shrink, and a heading with an icon shows the icon in place of its label */
-/* Example: <div class="stolon-data-table compact"><div class="stolon-data-heading end"><button class="stolon-data-sort"><span class="material-icons stolon-data-glyph">person</span><span class="stolon-data-label">People</span></button></div></div> */
+/* Example: <div class="stolon-data-table stolon-compact"><div class="stolon-data-heading stolon-end"><button class="stolon-data-sort"><span class="material-icons stolon-data-glyph">person</span><span class="stolon-data-label">People</span></button></div></div> */
 .stolon-data-glyph { display: none; font-size: var(--stolon-icon-medium); }
-.stolon-data-table.compact { --stolon-data-number: calc(var(--stolon-size-large) * 1.25); }
-.stolon-data-table.compact .stolon-data-glyph { display: inline-block; }
-.stolon-data-table.compact .stolon-data-heading.has-icon .stolon-data-label { display: none; }
-.stolon-data-table.compact .stolon-data-head,
-.stolon-data-table.compact .stolon-data-row { column-gap: var(--stolon-gap-narrow); }
+.stolon-data-table.stolon-compact { --stolon-data-number: calc(var(--stolon-size-large) * 1.25); }
+.stolon-data-table.stolon-compact .stolon-data-glyph { display: inline-block; }
+.stolon-data-table.stolon-compact .stolon-data-heading.stolon-has-icon .stolon-data-label { display: none; }
+.stolon-data-table.stolon-compact .stolon-data-head,
+.stolon-data-table.stolon-compact .stolon-data-row { column-gap: var(--stolon-gap-narrow); }
 /* A resizable heading, with a handle on its right edge that drags the column wider or narrower */
-/* Example: <div class="stolon-data-heading resizable" role="columnheader"><button class="stolon-data-sort">Device</button><span class="stolon-data-resize" role="separator" tabindex="0" aria-label="Resize Device"></span></div> */
-.stolon-data-heading.resizable { position: relative; min-width: 0; }
-.stolon-data-heading.resizable > .stolon-data-sort { max-width: 100%; min-width: 0; }
-.stolon-data-heading.resizable .stolon-data-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Example: <div class="stolon-data-heading stolon-resizable" role="columnheader"><button class="stolon-data-sort">Device</button><span class="stolon-data-resize" role="separator" tabindex="0" aria-label="Resize Device"></span></div> */
+.stolon-data-heading.stolon-resizable { position: relative; min-width: 0; }
+.stolon-data-heading.stolon-resizable > .stolon-data-sort { max-width: 100%; min-width: 0; }
+.stolon-data-heading.stolon-resizable .stolon-data-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .stolon-data-resize {
     position: absolute;
     top: 0;
@@ -134,14 +134,14 @@
 .stolon-data-heading:last-child > .stolon-data-resize { right: calc(var(--stolon-gap-narrow) / -2); }
 .stolon-data-head:hover .stolon-data-resize::after { opacity: 0.3; }
 .stolon-data-resize:hover::after,
-.stolon-data-heading.resizing .stolon-data-resize::after,
+.stolon-data-heading.stolon-resizing .stolon-data-resize::after,
 .stolon-data-resize:focus-visible::after { opacity: 1; }
 .stolon-data-resize:focus-visible { outline: none; }
-.stolon-data-table.compact .stolon-data-resize { right: calc(var(--stolon-gap-narrow) * -1); }
+.stolon-data-table.stolon-compact .stolon-data-resize { right: calc(var(--stolon-gap-narrow) * -1); }
 .stolon-data-sort:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; border-radius: var(--stolon-radius-small); }
 
 /* A body row at least a field tall, with a hover wash, and the accent wash with a leading bar while selected */
-/* Example: <div class="stolon-data-row selected" role="row" aria-selected="true"><div class="stolon-data-cell" role="cell">Germany</div></div> */
+/* Example: <div class="stolon-data-row stolon-selected" role="row" aria-selected="true"><div class="stolon-data-cell" role="cell">Germany</div></div> */
 .stolon-data-row {
     min-height: var(--stolon-field-height);
     box-sizing: border-box;
@@ -154,7 +154,7 @@
     white-space: nowrap;
     padding: calc(var(--stolon-gap-narrow) / 2) 0;
 }
-.stolon-data-cell.end { font-variant-numeric: tabular-nums; }
+.stolon-data-cell.stolon-end { font-variant-numeric: tabular-nums; }
 .stolon-data-cell.stolon-data-check,
 .stolon-data-heading.stolon-data-check { display: flex; align-items: center; }
 
@@ -164,8 +164,8 @@
 .stolon-data-heading.stolon-data-edit-cell { display: flex; align-items: center; justify-content: flex-end; overflow: visible; }
 
 /* An open row's editor under its cells, spanning every column: its fields in a grid, a message, and Save and Cancel */
-/* Example: <div class="stolon-data-row editing"><div class="stolon-data-editor" role="cell"><div class="stolon-field-group grid"></div><div class="stolon-button-row stolon-data-editor-actions"></div></div></div> */
-.stolon-data-row.editing { background: var(--stolon-wash); }
+/* Example: <div class="stolon-data-row stolon-editing"><div class="stolon-data-editor" role="cell"><div class="stolon-field-group stolon-grid"></div><div class="stolon-button-row stolon-data-editor-actions"></div></div></div> */
+.stolon-data-row.stolon-editing { background: var(--stolon-wash); }
 .stolon-data-editor {
     grid-column: 1 / -1;
     display: flex;
@@ -176,5 +176,5 @@
     white-space: normal;
     cursor: auto;
 }
-.stolon-data-editor > .stolon-field-group.grid { padding-right: 0; }
+.stolon-data-editor > .stolon-field-group.stolon-grid { padding-right: 0; }
 .stolon-data-editor-actions { display: flex; gap: var(--stolon-gap-narrow); flex-wrap: wrap; }

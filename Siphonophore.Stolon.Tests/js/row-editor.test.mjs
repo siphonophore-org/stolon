@@ -14,7 +14,7 @@ function icon(btn) { return btn.querySelector('.material-icons').textContent; }
 
 test('moveButtons builds an up and a down row button with the default titles, labels, and chevrons', function () {
     var [up, down] = moveButtons({ index: 1, count: 3, name: 'Verse' });
-    assert.ok(up.classList.contains('stolon-row-btn') && up.classList.contains('move'));
+    assert.ok(up.classList.contains('stolon-row-btn') && up.classList.contains('stolon-move'));
     assert.equal(up.getAttribute('data-move'), '-1');
     assert.equal(down.getAttribute('data-move'), '1');
     assert.equal(up.title, 'Move up');
@@ -143,7 +143,7 @@ test('createRowSet stops at maxRows with the limit message and shows the empty s
     var ui = rowSet({ maxRows: 1, emptyText: 'None.', emptyClass: 'stolon-kv-empty' });
     assert.equal(ui.set.empty.hidden, false);
     assert.equal(ui.set.empty.textContent, 'None.');
-    assert.equal(ui.set.empty.className, 'stolon-list-empty outside stolon-kv-empty');
+    assert.equal(ui.set.empty.className, 'stolon-list-empty stolon-outside stolon-kv-empty');
     assert.equal(ui.body.querySelector('.stolon-list-empty'), null);
     ui.addButton.click();
     assert.equal(ui.set.empty.hidden, true);

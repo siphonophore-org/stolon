@@ -1,5 +1,5 @@
 /* A Save button with its status line above it, the line in the state's color with its icon centered on the first line */
-/* Example: <div class="stolon-save-bar" data-state="pending"><div class="stolon-status-text stolon-save-status stolon-icon-text warn" role="status"></div><button class="raised stolon-button primary stolon-save-button">Save</button></div> */
+/* Example: <div class="stolon-save-bar" data-state="pending"><div class="stolon-status-text stolon-save-status stolon-icon-text stolon-warn" role="status"></div><button class="raised stolon-button stolon-primary stolon-save-button">Save</button></div> */
 .stolon-save-bar {
     display: flex;
     flex-direction: column;
@@ -8,9 +8,9 @@
 }
 .stolon-save-bar > .stolon-save-status { margin-top: 0; }
 .stolon-save-bar > .stolon-save-status:empty { display: none; }
-.stolon-save-bar > .stolon-save-button.fill { align-self: stretch; }
+.stolon-save-bar > .stolon-save-button.stolon-fill { align-self: stretch; }
 .stolon-save-bar > .stolon-save-button { margin: 0 !important; font-weight: 600; }
 
 /* A row of buttons right above a Save Bar sits one narrow gap above it */
-/* Example: <div class="stolon-button-row"><button class="raised stolon-button secondary">Reset</button></div><div class="stolon-save-bar"></div> */
+/* Example: <div class="stolon-button-row"><button class="raised stolon-button stolon-secondary">Reset</button></div><div class="stolon-save-bar"></div> */
 .stolon-button-row + .stolon-save-bar { margin-top: var(--stolon-gap-narrow); }

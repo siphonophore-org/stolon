@@ -117,8 +117,8 @@ export function createRuleBuilder(options: RuleBuilderOptions): RuleBuilderHandl
 
     var root = make('div', 'stolon-rule-builder');
     var pills = make('div', 'stolon-pill-group stolon-rule-match', { role: 'group', 'aria-label': opts.matchLabel || stolonText('Stolon.Match') });
-    pills.appendChild(make('button', 'stolon-pill small', { type: 'button', 'data-value': 'all', 'aria-pressed': match === 'all' ? 'true' : 'false' }, opts.allText || stolonText('Stolon.MatchAll')));
-    pills.appendChild(make('button', 'stolon-pill small', { type: 'button', 'data-value': 'any', 'aria-pressed': match === 'any' ? 'true' : 'false' }, opts.anyText || stolonText('Stolon.MatchAny')));
+    pills.appendChild(make('button', 'stolon-pill stolon-small', { type: 'button', 'data-value': 'all', 'aria-pressed': match === 'all' ? 'true' : 'false' }, opts.allText || stolonText('Stolon.MatchAll')));
+    pills.appendChild(make('button', 'stolon-pill stolon-small', { type: 'button', 'data-value': 'any', 'aria-pressed': match === 'any' ? 'true' : 'false' }, opts.anyText || stolonText('Stolon.MatchAny')));
     var choice = createPillGroup(pills, { onChange: function (v) { match = v === 'any' ? 'any' : 'all'; changed(); } });
     root.appendChild(pills);
 

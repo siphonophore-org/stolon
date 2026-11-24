@@ -87,7 +87,7 @@ Nested rows that open and close, on a List with the collapsible pattern. Childre
 
 | Class | What it looks like |
 | :--- | :--- |
-| `stolon-tree.stolon-list.plain` | A List of nested rows that open and close, one row per visible node |
+| `stolon-tree.stolon-list.stolon-plain` | A List of nested rows that open and close, one row per visible node |
 | `stolon-tree-row` | One node: indented by its level, then its open button, its checkbox, its picture, and its text. The focused row takes an accent ring, and a checked one the shared selection |
 | `stolon-tree-toggle` | The open button, a row button whose chevron points down while closed and turns up while open |
 | `stolon-tree-check` | The checkbox, the thumbnail a text line tall, the icon, and the text with its dimmed secondary part |

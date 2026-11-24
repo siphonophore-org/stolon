@@ -82,11 +82,11 @@ test('onReload draws a reload button at the end of the selection bar that turns 
     assert.equal(btn.getAttribute('aria-label'), 'Reload');
     btn.click();
     assert.equal(calls, 1);
-    assert.ok(btn.classList.contains('spinning'));
+    assert.ok(btn.classList.contains('stolon-spinning'));
     assert.equal(btn.disabled, true);
     pending.reject(new Error('offline'));
     await new Promise(function (r) { setTimeout(r, 0); });
-    assert.equal(btn.classList.contains('spinning'), false);
+    assert.equal(btn.classList.contains('stolon-spinning'), false);
     assert.equal(btn.disabled, false);
 });
 

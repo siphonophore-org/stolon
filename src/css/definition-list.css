@@ -13,16 +13,16 @@
     font-size: 0.95em;
 }
 /* The rows share one label column, as wide as the longest label up to 40% of the list, where a longer label wraps */
-/* Example: <dl class="stolon-defs stolon-list plain"><div class="stolon-defs-row"><dt class="stolon-defs-label">JF_COMMUNITY_RATING</dt><dd class="stolon-defs-value">8.1</dd></div></dl> */
+/* Example: <dl class="stolon-defs stolon-list stolon-plain"><div class="stolon-defs-row"><dt class="stolon-defs-label">JF_COMMUNITY_RATING</dt><dd class="stolon-defs-value">8.1</dd></div></dl> */
 @supports (grid-template-columns: subgrid) {
-    .stolon-defs.stolon-list:not(.columns) {
+    .stolon-defs.stolon-list:not(.stolon-columns) {
         display: grid;
         grid-template-columns: fit-content(40%) minmax(0, 1fr);
         column-gap: var(--stolon-gap-wide);
         row-gap: var(--stolon-gap-narrow);
     }
-    .stolon-defs.stolon-list:not(.columns) > * { grid-column: 1 / -1; }
-    .stolon-defs.stolon-list:not(.columns) > .stolon-defs-row { grid-template-columns: subgrid; }
+    .stolon-defs.stolon-list:not(.stolon-columns) > * { grid-column: 1 / -1; }
+    .stolon-defs.stolon-list:not(.stolon-columns) > .stolon-defs-row { grid-template-columns: subgrid; }
 }
 /* The dimmed label every label and value list shares, a definition list's and a record card's */
 /* Example: <dt class="stolon-defs-label">Version</dt> */
@@ -34,8 +34,8 @@
 
 /* On a phone each label sits over its value */
 @media (max-width: 600px) {
-    .stolon-defs.stolon-list:not(.columns) { display: flex; }
-    .stolon-defs.stolon-list:not(.columns) > .stolon-defs-row,
+    .stolon-defs.stolon-list:not(.stolon-columns) { display: flex; }
+    .stolon-defs.stolon-list:not(.stolon-columns) > .stolon-defs-row,
     .stolon-defs-row { grid-template-columns: minmax(0, 1fr); gap: 0.1em; }
 }
 
@@ -53,39 +53,39 @@
 .stolon-defs-meta { font-variant-numeric: tabular-nums; }
 
 /* A value drawn as a badge, a link, or mono text, which wrap beside each other */
-/* Example: <dd class="stolon-defs-value"><span class="stolon-badge green small stolon-defs-badge">Healthy</span><a class="stolon-defs-link" href="https://example.com">Example</a></dd> */
+/* Example: <dd class="stolon-defs-value"><span class="stolon-badge stolon-green stolon-small stolon-defs-badge">Healthy</span><a class="stolon-defs-link" href="https://example.com">Example</a></dd> */
 .stolon-defs-value > .stolon-defs-badge + * { margin-left: var(--stolon-gap-narrow); }
 .stolon-defs-link { color: var(--stolon-accent); overflow-wrap: anywhere; }
 
 /* The columns layout, each small uppercase label over its value, in balanced columns on the wash */
-/* Example: <dl class="stolon-defs columns stolon-list grid"><div class="stolon-defs-row"><dt class="stolon-defs-label">Last Sync</dt><dd class="stolon-defs-value">Today</dd></div><div class="stolon-defs-row"><dt class="stolon-defs-label">Library</dt><dd class="stolon-defs-value">Movies</dd></div></dl> */
-.stolon-defs.columns {
+/* Example: <dl class="stolon-defs stolon-columns stolon-list stolon-grid"><div class="stolon-defs-row"><dt class="stolon-defs-label">Last Sync</dt><dd class="stolon-defs-value">Today</dd></div><div class="stolon-defs-row"><dt class="stolon-defs-label">Library</dt><dd class="stolon-defs-value">Movies</dd></div></dl> */
+.stolon-defs.stolon-columns {
     padding: var(--stolon-pad-medium);
     border-radius: var(--stolon-radius-medium);
     background: var(--stolon-wash);
 }
-.stolon-defs.columns .stolon-defs-row {
+.stolon-defs.stolon-columns .stolon-defs-row {
     display: flex;
     flex-direction: column;
     gap: calc(var(--stolon-gap-narrow) / 4);
     min-width: 0;
 }
-.stolon-defs.columns .stolon-defs-label {
+.stolon-defs.stolon-columns .stolon-defs-label {
     font-size: var(--stolon-font-small);
     text-transform: uppercase;
 }
 
 /* A route arrow after an item, such as From to To, pointing on to the next column and down once the columns stack */
-/* Example: <dl class="stolon-defs columns stolon-list grid"><div class="stolon-defs-row has-arrow"><dt class="stolon-defs-label">From</dt><dd class="stolon-defs-value">Movies</dd><span class="material-icons stolon-defs-arrow">arrow_forward</span></div><div class="stolon-defs-row"><dt class="stolon-defs-label">To</dt><dd class="stolon-defs-value">Films</dd></div></dl> */
-.stolon-defs.columns .stolon-defs-row.has-arrow {
+/* Example: <dl class="stolon-defs stolon-columns stolon-list stolon-grid"><div class="stolon-defs-row stolon-has-arrow"><dt class="stolon-defs-label">From</dt><dd class="stolon-defs-value">Movies</dd><span class="material-icons stolon-defs-arrow">arrow_forward</span></div><div class="stolon-defs-row"><dt class="stolon-defs-label">To</dt><dd class="stolon-defs-value">Films</dd></div></dl> */
+.stolon-defs.stolon-columns .stolon-defs-row.stolon-has-arrow {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: var(--stolon-gap-wide);
     row-gap: calc(var(--stolon-gap-narrow) / 4);
     align-content: start;
 }
-.stolon-defs.columns .stolon-defs-row.has-arrow > dt,
-.stolon-defs.columns .stolon-defs-row.has-arrow > dd { grid-column: 1; }
+.stolon-defs.stolon-columns .stolon-defs-row.stolon-has-arrow > dt,
+.stolon-defs.stolon-columns .stolon-defs-row.stolon-has-arrow > dd { grid-column: 1; }
 .stolon-defs-arrow {
     grid-column: 2;
     grid-row: 1 / span 2;
@@ -93,8 +93,8 @@
     font-size: var(--stolon-icon-medium);
     opacity: 0.7;
 }
-.stolon-defs.columns.compact .stolon-defs-row.has-arrow { grid-template-columns: minmax(0, 1fr); }
-.stolon-defs.columns.compact .stolon-defs-arrow {
+.stolon-defs.stolon-columns.stolon-compact .stolon-defs-row.stolon-has-arrow { grid-template-columns: minmax(0, 1fr); }
+.stolon-defs.stolon-columns.stolon-compact .stolon-defs-arrow {
     grid-column: 1;
     grid-row: auto;
     justify-self: start;

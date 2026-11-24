@@ -387,7 +387,7 @@ export function buildChart(options: ChartOptions, core: ChartCore): ChartHandle 
         // SVG elements carry the color class, and a hex color its custom property, as every colored component does.
         function paint(el: SVGElement, color: string): void {
             el.setAttribute('class', 'stolon-chart-series ' + colorClass(color));
-            if (colorClass(color) === 'custom') el.setAttribute('style', '--stolon-custom: ' + color.trim());
+            if (colorClass(color) === 'stolon-custom') el.setAttribute('style', '--stolon-custom: ' + color.trim());
         }
         function text(x: number, yy: number, value: string, anchor: string, className: string): SVGTextElement {
             var t = svgEl('text', { x: x, y: yy, 'text-anchor': anchor, class: className });

@@ -70,7 +70,7 @@ export function createRecordList(options?: RecordListOptions): RecordListHandle 
     var rowKey = opts.rowKey === undefined ? 'id' : opts.rowKey;
 
     function row(item: RecordListItem): ListItemHandle {
-        var el = make('div', 'stolon-item-row stolon-record-list-row' + (opts.onOpen ? ' openable' : ''));
+        var el = make('div', 'stolon-item-row stolon-record-list-row' + (opts.onOpen ? ' stolon-openable' : ''));
         if (opts.onOpen) el.setAttribute('tabindex', '0');
         var body = make('div', 'stolon-record-list-body');
         var text = make('span', 'stolon-item-row-text');

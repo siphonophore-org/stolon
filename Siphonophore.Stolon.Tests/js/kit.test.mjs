@@ -35,7 +35,7 @@ test('focusFirst skips hidden controls and lands on the first visible field', fu
     var visible = dom.el('input', { type: 'text' });
     var body = bodyWith([
         dom.el('input', { type: 'hidden' }),
-        dom.el('div', { class: 'hidden' }, [dom.el('input', { type: 'text' })]),
+        dom.el('div', { class: 'stolon-hidden' }, [dom.el('input', { type: 'text' })]),
         dom.el('div', { hidden: true }, [dom.el('input', { type: 'text' })]),
         dom.el('input', { type: 'text', style: { display: 'none' } }),
         visible
@@ -50,8 +50,8 @@ test('focusFirst never picks a destructive button, preferring Cancel in the foot
         title: 'Remove?',
         body: '<p>Sure?</p>',
         buttons: [
-            { text: 'Remove', className: 'stolon-button destructive' },
-            { text: 'Cancel', className: 'stolon-button secondary' }
+            { text: 'Remove', className: 'stolon-button stolon-destructive' },
+            { text: 'Cancel', className: 'stolon-button stolon-secondary' }
         ]
     });
     assert.equal(dom.document.activeElement.textContent, 'Cancel');
@@ -60,7 +60,7 @@ test('focusFirst never picks a destructive button, preferring Cancel in the foot
 
 test('focusFirst skips a destructive button in the body too', function () {
     var keep = dom.el('button', { type: 'button' });
-    var handle = openDialog({ body: bodyWith([dom.el('button', { type: 'button', class: 'stolon-button destructive' }), keep]) });
+    var handle = openDialog({ body: bodyWith([dom.el('button', { type: 'button', class: 'stolon-button stolon-destructive' }), keep]) });
     assert.equal(dom.document.activeElement, keep);
     handle.close();
 });
@@ -88,7 +88,7 @@ test('autofocus picks the element asked for, and false focuses the panel', funct
 test('the Tab trap ignores hidden controls, so Tab from the last visible one wraps to the first', function () {
     var first = dom.el('input', { type: 'text' });
     var last = dom.el('input', { type: 'text' });
-    var handle = openDialog({ body: bodyWith([first, last, dom.el('input', { type: 'text', class: 'hidden' })]), closeButton: false });
+    var handle = openDialog({ body: bodyWith([first, last, dom.el('input', { type: 'text', class: 'stolon-hidden' })]), closeButton: false });
     last.focus();
     var e = dom.document.key('Tab');
     assert.ok(e.defaultPrevented);
@@ -119,7 +119,7 @@ test('focus goes to returnFocus when the opener is gone at close', function () {
 
 test('bindDialog adds dialog semantics and Escape on a confirm above it closes only the confirm', function () {
     var content = dom.el('div', { class: 'stolon-dialog-content' }, [dom.el('h2', { class: 'stolon-modal-title' }), dom.el('input', { type: 'text' })]);
-    var overlay = dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog hidden', id: 'ed' }, [content]));
+    var overlay = dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-hidden', id: 'ed' }, [content]));
     var closes = 0;
     var bound = bindDialog('ed', { onClose: function () { closes++; } });
     assert.equal(content.getAttribute('role'), 'dialog');
@@ -137,7 +137,7 @@ test('bindDialog adds dialog semantics and Escape on a confirm above it closes o
     dom.document.key('Escape');
     assert.equal(bound.isOpen(), false);
     assert.equal(closes, 1);
-    assert.ok(overlay.classList.contains('hidden'));
+    assert.ok(overlay.classList.contains('stolon-hidden'));
 });
 
 test('openEditorDialog disables Done while onDone is pending and re-enables it on failure', async function () {
@@ -180,17 +180,17 @@ test('openEditorDialog draws extra actions in the footer between Remove and Canc
     assert.deepEqual(buttons.map(function (b) { return b.textContent; }), ['Remove', 'Revoke', 'content_copyDuplicate', 'Send', 'Cancel', 'Done']);
     var duplicate = buttons[2];
     assert.ok(duplicate.classList.contains('stolon-button'));
-    assert.ok(duplicate.classList.contains('secondary'), 'an action is secondary by default');
+    assert.ok(duplicate.classList.contains('stolon-secondary'), 'an action is secondary by default');
     assert.ok(duplicate.classList.contains('raised'));
     assert.equal(duplicate.querySelector('.material-icons').textContent, 'content_copy');
     assert.equal(duplicate.querySelector('.material-icons').getAttribute('aria-hidden'), 'true');
-    assert.ok(buttons[1].classList.contains('destructive'));
-    assert.ok(buttons[3].classList.contains('primary'));
+    assert.ok(buttons[1].classList.contains('stolon-destructive'));
+    assert.ok(buttons[3].classList.contains('stolon-primary'));
     duplicate.click();
     assert.equal(seen.length, 1);
     assert.equal(seen[0][0], handle, 'onClick gets the editor handle');
     assert.equal(seen[0][1], duplicate);
-    assert.equal(handle.element.classList.contains('hidden'), false, 'an action leaves the editor open');
+    assert.equal(handle.element.classList.contains('stolon-hidden'), false, 'an action leaves the editor open');
     handle.close();
 });
 
@@ -202,14 +202,14 @@ test('openEditorDialog with no actions keeps Remove, Cancel, and Done', function
 
 test('bindDialog leaves semantics alone when the overlay already carries the role', function () {
     var content = dom.el('div', { class: 'stolon-dialog-content' });
-    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog hidden', id: 'm', role: 'dialog', 'aria-modal': 'true' }, [content]));
+    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-hidden', id: 'm', role: 'dialog', 'aria-modal': 'true' }, [content]));
     bindDialog('m');
     assert.equal(content.hasAttribute('role'), false);
 });
 
 test('an in-page dialog hidden by style does not count as the top one', function () {
     var content = dom.el('div', { class: 'stolon-dialog-content' }, [dom.el('input', { type: 'text' })]);
-    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog hidden', id: 'a' }, [content]));
+    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-hidden', id: 'a' }, [content]));
     dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog', style: { display: 'none' } }));
     var bound = bindDialog('a');
     bound.open();

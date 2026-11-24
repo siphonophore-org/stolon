@@ -102,7 +102,7 @@ A pie or donut chart on the shared chart core, drawn as inline SVG at a size fro
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-pie-chart` | A pie chart on the shared chart core: the pie, a diameter on the size scale, beside its legend |
-| `stolon-pie-chart.compact` | A narrow pie chart, which stacks the legend under the pie |
+| `stolon-pie-chart.stolon-compact` | A narrow pie chart, which stacks the legend under the pie |
 | `stolon-pie-chart-slice` | One slice in its color, parted from the next by a line of the surface, dimmed while another is under the pointer or selected |
 | `stolon-pie-chart-center` | The value and its label in a donut's center |
 | `stolon-pie-chart-legend` | The legend of a pie: a row per slice with its color dot, label, value, and percent, the values and percents each in one column |

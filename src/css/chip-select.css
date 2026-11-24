@@ -17,11 +17,11 @@
 
 
 /* A round picture at the start of a chip, from the thumb core, as tall as the chip's text and inset from its edge, for the chip select and the tag input */
-/* Example: <span class="stolon-tag has-thumb"><span class="stolon-thumb stolon-tag-thumb"><img class="stolon-thumb-image" alt="" src="poster.jpg"></span><span>Alien</span></span> */
+/* Example: <span class="stolon-tag stolon-has-thumb"><span class="stolon-thumb stolon-tag-thumb"><img class="stolon-thumb-image" alt="" src="poster.jpg"></span><span>Alien</span></span> */
 .stolon-tag-thumb {
     width: var(--stolon-icon-medium);
     height: var(--stolon-icon-medium);
     border-radius: var(--stolon-radius-round);
 }
 .stolon-tag-thumb .stolon-thumb-placeholder .material-icons { font-size: var(--stolon-icon-small); }
-.stolon-tag.has-thumb { padding-left: calc(var(--stolon-pad-small) / 2); }
+.stolon-tag.stolon-has-thumb { padding-left: calc(var(--stolon-pad-small) / 2); }

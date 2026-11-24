@@ -45,7 +45,7 @@ test('append takes a string, a record, and an array, and levels become classes w
     v.append({ text: 'careful', level: 'warn', time: '10:00' });
     v.append([{ text: 'bad', level: 'error' }, { text: 'odd', level: 'loud' }, { text: 'dbg', level: 'debug' }]);
     var all = lines(v);
-    assert.deepEqual(all.map(function (l) { return l.className; }), ['stolon-log-line info stolon-list-item', 'stolon-log-line warn stolon-list-item', 'stolon-log-line error stolon-list-item', 'stolon-log-line info stolon-list-item', 'stolon-log-line debug stolon-list-item']);
+    assert.deepEqual(all.map(function (l) { return l.className; }), ['stolon-log-line stolon-info stolon-list-item', 'stolon-log-line stolon-warn stolon-list-item', 'stolon-log-line stolon-error stolon-list-item', 'stolon-log-line stolon-info stolon-list-item', 'stolon-log-line stolon-debug stolon-list-item']);
     assert.equal(all[1].querySelector('.stolon-log-time').textContent, '10:00');
     assert.deepEqual(v.getValue()[1], { text: 'careful', level: 'warn', time: '10:00' });
 });
@@ -137,8 +137,8 @@ test('setValue replaces the lines, and destroy removes the listeners', function 
 test('the output keeps its 280px height and scrolls inside by default, and its lines carry no list roles', function () {
     var v = build({ lines: ['a'] });
     assert.ok(v.output.classList.contains('stolon-list'));
-    assert.ok(v.output.classList.contains('fixed'));
-    assert.ok(v.output.classList.contains('scrolls'));
+    assert.ok(v.output.classList.contains('stolon-fixed'));
+    assert.ok(v.output.classList.contains('stolon-scrolls'));
     assert.equal(v.output.style['--stolon-list-height'], '280px');
     assert.equal(v.output.getAttribute('role'), 'log');
     assert.equal(lines(v)[0].getAttribute('role'), null);
@@ -146,16 +146,16 @@ test('the output keeps its 280px height and scrolls inside by default, and its l
 
 test('height, maxHeight, and minHeight reach the output, and setHeight switches them', function () {
     var fill = build({ height: 'fill', minHeight: 200 });
-    assert.ok(fill.output.classList.contains('fill'));
+    assert.ok(fill.output.classList.contains('stolon-fill'));
     assert.equal(fill.output.style['--stolon-list-min'], '200px');
     var grow = build({ height: 'auto', maxHeight: '40vh' });
-    assert.equal(grow.output.classList.contains('fixed'), false);
-    assert.ok(grow.output.classList.contains('capped'));
+    assert.equal(grow.output.classList.contains('stolon-fixed'), false);
+    assert.ok(grow.output.classList.contains('stolon-capped'));
     assert.equal(grow.output.style['--stolon-list-max'], '40vh');
     grow.setHeight(120);
-    assert.ok(grow.output.classList.contains('fixed'));
+    assert.ok(grow.output.classList.contains('stolon-fixed'));
     assert.equal(grow.output.style['--stolon-list-height'], '120px');
-    assert.equal(grow.output.classList.contains('capped'), false);
+    assert.equal(grow.output.classList.contains('stolon-capped'), false);
 });
 
 test('append adds a node for the new line and keeps the nodes already drawn', function () {

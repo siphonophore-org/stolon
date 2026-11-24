@@ -75,7 +75,7 @@ export function createCheckbox(options?: CheckboxOptions): CheckboxHandle {
     var input = makeCheck('stolon-checkbox-input', attrs);
     input.checked = !!opts.checked;
     input.indeterminate = !!opts.indeterminate;
-    var root = makeCheckRow(input, null, 'stolon-checkbox ' + size + (opts.field && size !== 'large' ? ' field' : '') + (opts.boxed && size !== 'large' ? ' field boxed' : '') + (opts.className ? ' ' + opts.className : ''));
+    var root = makeCheckRow(input, null, 'stolon-checkbox stolon-' + size + (opts.field && size !== 'large' ? ' stolon-field' : '') + (opts.boxed && size !== 'large' ? ' stolon-field stolon-boxed' : '') + (opts.className ? ' ' + opts.className : ''));
     // The text block the Checkbox List rows use: the label, with the description under it.
     var text = make('span', 'stolon-check-text');
     var labelEl = make('span', 'stolon-check-label');
@@ -99,12 +99,12 @@ export function createCheckbox(options?: CheckboxOptions): CheckboxHandle {
     setText(opts.label || '', opts.description || '');
 
     // A large tile shows its state on the whole tile, so it carries the state as a class.
-    function paint(): void { root.classList.toggle('checked', input.checked); }
+    function paint(): void { root.classList.toggle('stolon-checked', input.checked); }
     paint();
 
     function setDisabled(disabled: boolean): void {
         input.disabled = !!disabled;
-        root.classList.toggle('disabled', !!disabled);
+        root.classList.toggle('stolon-disabled', !!disabled);
     }
     setDisabled(!!opts.disabled);
 

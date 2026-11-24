@@ -39,7 +39,7 @@ Classes: `stolon-choice-group`, `stolon-choice`, `stolon-choice-name`, `stolon-c
 ## States and Modifiers
 
 * `get()` returns the checked value or `null`. `set(value)` checks the matching input.
-* The `selected` class follows the checked input, and runs once on creation. A checked input gets the same look through `:has(input:checked)`, in its own rule so an engine without `:has()` keeps `.selected`.
+* The `stolon-selected` class follows the checked input, and runs once on creation. A checked input gets the same look through `:has(input:checked)`, in its own rule so an engine without `:has()` keeps `.stolon-selected`.
 * The radio input is visually hidden but stays in the tab order and keeps the native arrow keys within its group.
 * `createChoiceGroup` lays the cards out as [Balanced Rows](balanced-rows.md), up to three columns of at least 200px each, so no card sits alone on a row. Without the script, the cards are three equal columns, and one column at 768px and below.
 
@@ -59,7 +59,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createChoiceGroup(groupEl: HTMLElement, options?: ChoiceGroupOptions): ChoiceGroupHandle</code>
 
-Wires a group of stolon-choice radio cards, keeping the selected class in step with the checked input for browsers without :has(). It reports each change to onChange.
+Wires a group of stolon-choice radio cards, keeping the stolon-selected class in step with the checked input for browsers without :has(). It reports each change to onChange.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |

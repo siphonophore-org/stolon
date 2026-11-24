@@ -21,7 +21,7 @@ Rows for uploaded files, with a thumbnail, a name and reference, and action butt
         </div>
         <div class="stolon-asset-actions">
             <button type="button" class="stolon-row-btn" title="Copy" aria-label="Copy"><span class="material-icons" aria-hidden="true">content_copy</span></button>
-            <button type="button" class="stolon-row-btn destructive" title="Delete" aria-label="Delete"><span class="material-icons" aria-hidden="true">delete</span></button>
+            <button type="button" class="stolon-row-btn stolon-destructive" title="Delete" aria-label="Delete"><span class="material-icons" aria-hidden="true">delete</span></button>
         </div>
     </div>
 </div>

@@ -123,7 +123,7 @@ export function createList<T = any>(options: ListOptions<T>): ListHandle<T> {
     var itemsOnly = /^(UL|OL)$/.test(String(root.tagName).toUpperCase());
     // A ul or ol may hold only items, so its empty text lives outside it, where the caller puts emptyElement.
     var outside = options.emptyOutside === true || itemsOnly;
-    if (outside) { empty.classList.add('outside'); empty.hidden = true; }
+    if (outside) { empty.classList.add('stolon-outside'); empty.hidden = true; }
     // The list's own role, or none for a list whose element already carries its meaning, such as a log.
     var role = options.role === undefined ? 'list' : options.role;
     var wrap = options.wrap !== false;
@@ -134,7 +134,7 @@ export function createList<T = any>(options: ListOptions<T>): ListHandle<T> {
     var layout: ListLayout = LAYOUTS.indexOf(options.layout as ListLayout) === -1 ? 'rows' : options.layout as ListLayout;
     var fillFrame = 0;
 
-    root.classList.add('stolon-list', layout);
+    root.classList.add('stolon-list', 'stolon-' + layout);
     if (role) root.setAttribute('role', role);
     if (options.label) root.setAttribute('aria-label', options.label);
     if (layout === 'grid' && options.minColumn !== undefined) root.style.setProperty('--stolon-list-column', cssLength(options.minColumn));
@@ -182,18 +182,18 @@ export function createList<T = any>(options: ListOptions<T>): ListHandle<T> {
     }
 
     function applyHeight() {
-        root.classList.remove('fixed', 'fill', 'capped', 'scrolls');
+        root.classList.remove('stolon-fixed', 'stolon-fill', 'stolon-capped', 'stolon-scrolls');
         root.style.removeProperty('--stolon-list-height');
         root.style.removeProperty('--stolon-list-max');
         if (height === 'fill') {
-            root.classList.add('fill', 'scrolls');
+            root.classList.add('stolon-fill', 'stolon-scrolls');
             queueFill();
         } else if (height !== 'auto' && cssLength(height)) {
-            root.classList.add('fixed', 'scrolls');
+            root.classList.add('stolon-fixed', 'stolon-scrolls');
             root.style.setProperty('--stolon-list-height', cssLength(height));
         }
         if (cssLength(maxHeight)) {
-            root.classList.add('capped', 'scrolls');
+            root.classList.add('stolon-capped', 'stolon-scrolls');
             root.style.setProperty('--stolon-list-max', cssLength(maxHeight));
         }
         watchEnd();
@@ -231,7 +231,7 @@ export function createList<T = any>(options: ListOptions<T>): ListHandle<T> {
         if (content && (content as ListItemHandle).element) handle = content as ListItemHandle;
         var node = handle ? handle.element : content as HTMLElement;
         if (typeof content === 'string') {
-            cell = make('div', 'stolon-list-item text', null, content);
+            cell = make('div', 'stolon-list-item stolon-text', null, content);
         } else if (!wrap && node && node.classList) {
             // An unwrapped item is the rendered row itself, so the row keeps its place in the markup.
             cell = node;
@@ -338,7 +338,7 @@ export function createList<T = any>(options: ListOptions<T>): ListHandle<T> {
         if (loading) root.appendChild(busy);
         // Only a list that loads more needs the end marker, so other lists keep their last child.
         if (options.onEndReached) root.appendChild(sentinel);
-        root.classList.toggle('empty', !items.length);
+        root.classList.toggle('stolon-empty', !items.length);
         watchEnd();
         queueFill();
         alignParts();

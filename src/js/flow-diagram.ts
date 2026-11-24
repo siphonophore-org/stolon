@@ -293,7 +293,7 @@ export function createFlowDiagram(options?: FlowDiagramOptions): FlowDiagramHand
             drawStack(hub, lanes, room);
             return;
         }
-        root.classList.remove('stacked');
+        root.classList.remove('stolon-stacked');
         svg.setAttribute('viewBox', (-half).toFixed(0) + ' ' + minY.toFixed(0) + ' ' + (2 * half).toFixed(0) + ' ' + (maxY - minY).toFixed(0));
         svg.setAttribute('width', String(Math.round(2 * half)));
         root.appendChild(svg);
@@ -302,7 +302,7 @@ export function createFlowDiagram(options?: FlowDiagramOptions): FlowDiagramHand
     // The narrow layout: the hub on top and every lane as a list under it, each on its own upright line. The first lane's
     // line sits nearest the pills and ends first, so no line ever crosses another, and the text keeps its full size.
     function drawStack(hub: FlowDiagramHub, lanes: FlowDiagramLane[], room: number): void {
-        root.classList.add('stacked');
+        root.classList.add('stolon-stacked');
         var svg = svgEl('svg', null, { focusable: 'false' });
         var count = lanes.length;
         var trunkGap = 14;

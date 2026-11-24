@@ -27,7 +27,7 @@ function defaultValue(button: HTMLElement): string | null {
 }
 
 /**
- * Wires the buttons in el that match selector as on and off buttons. A button is on when aria-pressed is true or it has the selected class, and both are kept in step.
+ * Wires the buttons in el that match selector as on and off buttons. A button is on when aria-pressed is true or it has the stolon-selected class, and both are kept in step.
  * With multiple a click turns a button on or off, and without it a click turns the clicked button on and the rest off, and a click on the button already on does nothing, or turns it off with clearable.
  *
  * @param el element that holds the buttons
@@ -40,11 +40,11 @@ export function bindPressedGroup(el: HTMLElement, opts: PressedGroupOptions): Pr
     function buttons(): HTMLElement[] { return Array.prototype.slice.call(el.querySelectorAll(opts.selector)); }
 
     function isOn(button: HTMLElement): boolean {
-        return button.getAttribute('aria-pressed') === 'true' || button.classList.contains('selected');
+        return button.getAttribute('aria-pressed') === 'true' || button.classList.contains('stolon-selected');
     }
 
     function mark(button: HTMLElement, on: boolean): void {
-        button.classList.toggle('selected', on);
+        button.classList.toggle('stolon-selected', on);
         button.setAttribute('aria-pressed', on ? 'true' : 'false');
     }
 

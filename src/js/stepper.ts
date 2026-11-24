@@ -72,7 +72,7 @@ export function createStepper(options?: StepperOptions): StepperHandle {
     var current: number = 0;
 
     var segments: boolean = options.layout === 'segments';
-    var root = make('nav', 'stolon-stepper' + (segments ? ' segments' : ''), { 'aria-label': options.navLabel || stolonText('Stolon.Progress') });
+    var root = make('nav', 'stolon-stepper' + (segments ? ' stolon-segments' : ''), { 'aria-label': options.navLabel || stolonText('Stolon.Progress') });
     var list = make('ol', 'stolon-stepper-list');
     root.appendChild(list);
 
@@ -89,7 +89,7 @@ export function createStepper(options?: StepperOptions): StepperHandle {
         clear(list);
         steps.forEach(function (step, index) {
             var state: StepperStepState = step.state || (index < current ? 'completed' : (index === current ? 'current' : 'upcoming'));
-            var li = make('li', 'stolon-stepper-step ' + state);
+            var li = make('li', 'stolon-stepper-step stolon-' + state);
             var control = options!.clickable && (options!.clickable === 'all' || state !== 'upcoming')
                 ? make('button', 'stolon-stepper-control', { type: 'button' })
                 : make('div', 'stolon-stepper-control');

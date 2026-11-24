@@ -12,7 +12,7 @@ A group of sub fields under a toggle, indented with a 2px left rule.
 ## Usage
 
 ```html
-<div id="recyclingBinSettings" class="stolon-indent hidden">
+<div id="recyclingBinSettings" class="stolon-indent stolon-hidden">
     <div class="inputContainer"><label for="txtPath">Recycling bin path</label><input is="emby-input" type="text" id="txtPath" /></div>
 </div>
 ```
@@ -25,7 +25,7 @@ Class: `stolon-indent`.
 
 ## States and Modifiers
 
-* `bindReveal(checkboxId, targetId, invert)` shows or hides the target with the `hidden` class, binds once, and applies the current state on every call. Call it after loading the config.
+* `bindReveal(checkboxId, targetId, invert)` shows or hides the target with the `stolon-hidden` class, binds once, and applies the current state on every call. Call it after loading the config.
 
 ## Gotchas
 

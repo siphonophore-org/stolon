@@ -58,7 +58,7 @@
 .stolon-check-avatar .stolon-avatar-icon { font-size: var(--stolon-icon-large); }
 
 /* A badge or note at the end of a row, drawn as a stolon-badge */
-/* Example: <span class="stolon-badge gray stolon-check-note">Family</span> */
+/* Example: <span class="stolon-badge stolon-gray stolon-check-note">Family</span> */
 .stolon-check-badge,
 .stolon-check-note { flex: 0 0 auto; }
 

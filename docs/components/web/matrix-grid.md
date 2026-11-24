@@ -112,8 +112,8 @@ A grid of row labels, each with a hint, by column headers, with a control in eac
 | `stolon-matrix-cell` | One cell's control with its message under it. A toggle column takes the narrow number track with its box centered under its heading |
 | `stolon-matrix-badge` | A read only cell that shows its value as a badge or as text, centered on the row's line, with no control |
 | `stolon-matrix-note` | A dimmed line under the grid, inset to its rows |
-| `stolon-matrix-grid.has-units` | A grid with a unit in its number boxes, whose columns keep room for the digits, the unit, and the arrows, and scroll sideways before they would hide digits |
-| `stolon-matrix-cell.disabled` | A disabled cell, its control greyed out with its value still shown |
+| `stolon-matrix-grid.stolon-has-units` | A grid with a unit in its number boxes, whose columns keep room for the digits, the unit, and the arrows, and scroll sideways before they would hide digits |
+| `stolon-matrix-cell.stolon-disabled` | A disabled cell, its control greyed out with its value still shown |
 
 <!-- reference:end -->
 

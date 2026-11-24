@@ -298,7 +298,7 @@ export function createTypeahead<T>(opts: TypeaheadFieldOptions<T>): TypeaheadFie
         input.placeholder = opts.placeholder || '';
         element.appendChild(input);
     }
-    var dropdown = make('div', 'stolon-combo-dropdown hidden' + (opts.dropdownClass ? ' ' + opts.dropdownClass : ''));
+    var dropdown = make('div', 'stolon-combo-dropdown stolon-hidden' + (opts.dropdownClass ? ' ' + opts.dropdownClass : ''));
     element.appendChild(dropdown);
     var bound = bindTypeahead<T>(input, dropdown, opts);
     return {

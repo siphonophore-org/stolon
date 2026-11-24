@@ -23,7 +23,7 @@ Classes: `stolon-help`, `stolon-help-button`, `stolon-help-tip`. The handle is `
 
 * `text` is the plain text explanation and is required. Without it `createHelpHint` throws. `label` ("Help") names the button. `icon` defaults to `help_outline`.
 * The button is a [Row Button](row-button.md), `stolon-row-btn stolon-help-button`.
-* The bubble shows on hover, focus within, and the `open` modifier. The button is described by the bubble through `aria-describedby`.
+* The bubble shows on hover, focus within, and the `stolon-open` modifier. The button is described by the bubble through `aria-describedby`.
 * Hover and focus show it while they last. A click pins it open until a second click, Escape, or a click outside. `show()` and `hide()` pin and unpin it from code.
 * `getValue()` returns the text and `setValue` replaces it.
 

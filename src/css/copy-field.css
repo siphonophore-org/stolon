@@ -14,9 +14,9 @@
 .stolon-copy-field .stolon-row-btn { flex: 0 0 auto; }
 
 /* A wrapped copy field: the whole value as read-only text over as many lines as it needs, broken anywhere, with the buttons level with its first line */
-/* Example: <div class="stolon-copy-field wrap"><input type="text" readonly hidden><div class="stolon-copy-field-text stolon-mono" role="textbox" aria-readonly="true" tabindex="0">https://example.com/invite</div><button type="button" class="stolon-row-btn stolon-copy-button"></button></div> */
-.stolon-copy-field.wrap { align-items: flex-start; }
-.stolon-copy-field.wrap > .stolon-row-btn { margin-top: calc((var(--stolon-field-height) - var(--stolon-size-small)) / 2); }
+/* Example: <div class="stolon-copy-field stolon-wrap"><input type="text" readonly hidden><div class="stolon-copy-field-text stolon-mono" role="textbox" aria-readonly="true" tabindex="0">https://example.com/invite</div><button type="button" class="stolon-row-btn stolon-copy-button"></button></div> */
+.stolon-copy-field.stolon-wrap { align-items: flex-start; }
+.stolon-copy-field.stolon-wrap > .stolon-row-btn { margin-top: calc((var(--stolon-field-height) - var(--stolon-size-small)) / 2); }
 .stolon-copy-field-text {
     flex: 1 1 auto;
     min-width: 0;
@@ -42,7 +42,7 @@
 .stolon-copy-field > input[hidden] { display: none; }
 
 /* An inline copy field, in a row or a table cell, with none of a form field's space below it */
-/* Example: <div class="stolon-copy-field inline"><input type="text" readonly class="stolon-mono"><button type="button" class="stolon-row-btn stolon-copy-button"></button></div> */
-.stolon-copy-field.inline { min-width: 0; }
-.pluginConfigurationPage .stolon-copy-field.inline,
-.stolon-dialog .stolon-copy-field.inline { margin: 0 !important; }
+/* Example: <div class="stolon-copy-field stolon-inline"><input type="text" readonly class="stolon-mono"><button type="button" class="stolon-row-btn stolon-copy-button"></button></div> */
+.stolon-copy-field.stolon-inline { min-width: 0; }
+.pluginConfigurationPage .stolon-copy-field.stolon-inline,
+.stolon-dialog .stolon-copy-field.stolon-inline { margin: 0 !important; }

@@ -104,7 +104,7 @@
 .stolon-notify-preview-discord-description,
 .stolon-notify-preview-discord-field-value { white-space: pre-line; }
 .stolon-notify-preview-discord-link,
-.stolon-notify-preview-discord-title.linked { color: var(--stolon-discord-link); }
+.stolon-notify-preview-discord-title.stolon-linked { color: var(--stolon-discord-link); }
 .stolon-notify-preview-discord-code {
     padding: 0 calc(var(--stolon-pad-small) / 4);
     border: 1px solid var(--stolon-discord-edge);
@@ -115,7 +115,7 @@
 }
 
 /* One embed with a bar of its color, from the post as a custom color, beside its parts and an optional thumbnail */
-/* Example: <article class="stolon-notify-preview-discord-embed custom" style="--stolon-custom: #f44336"><div class="stolon-notify-preview-discord-grid">…</div></article> */
+/* Example: <article class="stolon-notify-preview-discord-embed stolon-custom" style="--stolon-custom: #f44336"><div class="stolon-notify-preview-discord-grid">…</div></article> */
 .stolon-notify-preview-discord-embed {
     max-width: calc(var(--stolon-size-large) * 13);
     margin-top: var(--stolon-gap-narrow);
@@ -124,7 +124,7 @@
     border-radius: var(--stolon-radius-small);
     background: var(--stolon-discord-embed);
 }
-.stolon-notify-preview-discord-embed.custom { border-left-color: var(--stolon-custom-fg); }
+.stolon-notify-preview-discord-embed.stolon-custom { border-left-color: var(--stolon-custom-fg); }
 .stolon-notify-preview-discord-grid { display: flex; gap: var(--stolon-gap-wide); padding: var(--stolon-pad-small) var(--stolon-pad-large) var(--stolon-pad-large) var(--stolon-pad-medium); }
 .stolon-notify-preview-discord-main { display: flex; flex: 1; flex-direction: column; gap: var(--stolon-gap-narrow); min-width: 0; font-size: var(--stolon-font-medium); line-height: var(--stolon-line-medium); }
 .stolon-notify-preview-discord-author { display: flex; align-items: center; gap: var(--stolon-gap-narrow); color: var(--stolon-discord-strong); font-weight: 600; }

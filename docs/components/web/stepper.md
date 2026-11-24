@@ -81,7 +81,7 @@ A row of numbered steps for a flow of several stages. Steps before the current o
 | `stolon-stepper-list` | Row of steps for a flow of stages, which becomes a column on a narrow screen |
 | `stolon-stepper-control` | One step, as a div or as a button when it can be chosen |
 | `stolon-stepper-number` | Round number, filled with the accent when current and green with a dark check when completed |
-| `stolon-stepper.segments` | A stepper drawn as a bar of one segment per step, in each step's color, for a summary of progress. Its labels are tooltips and hidden text |
+| `stolon-stepper.stolon-segments` | A stepper drawn as a bar of one segment per step, in each step's color, for a summary of progress. Its labels are tooltips and hidden text |
 
 <!-- reference:end -->
 

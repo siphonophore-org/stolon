@@ -14,7 +14,7 @@ mount.appendChild(log.element);
 let n = 0;
 const button = document.createElement('button');
 button.type = 'button';
-button.className = 'raised stolon-button small';
+button.className = 'raised stolon-button stolon-small';
 button.style.marginTop = '10px';
 button.textContent = 'Append Lines';
 button.addEventListener('click', () => { for (let i = 0; i < 5; i++) log.append('Line ' + (++n)); });

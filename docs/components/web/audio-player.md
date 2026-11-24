@@ -18,11 +18,11 @@ var player = createAudioPlayer({ title: 'theme.mp3', src: themeUrl });
 view.querySelector('#themeHost').appendChild(player.element);
 ```
 
-Classes: `stolon-audio-player`, with the `playing` modifier, and the parts `stolon-audio-player-toggle`, `stolon-audio-player-body`, `stolon-audio-player-title`, `stolon-audio-player-line`, and `stolon-audio-player-time`. The handle is `{ element, audio, getValue, setValue, play, pause, destroy }`, where `getValue()` returns the source and `setValue(src)` loads another.
+Classes: `stolon-audio-player`, with the `stolon-playing` modifier, and the parts `stolon-audio-player-toggle`, `stolon-audio-player-body`, `stolon-audio-player-title`, `stolon-audio-player-line`, and `stolon-audio-player-time`. The handle is `{ element, audio, getValue, setValue, play, pause, destroy }`, where `getValue()` returns the source and `setValue(src)` loads another.
 
 ## States and Modifiers
 
-* The button is a `stolon-button` with the `field` modifier, so it is a field tall. It shows `play_arrow` or `pause`, with `playText` ("Play") or `pauseText` ("Pause") as its title and name. `playing` is on the root while it plays.
+* The button is a `stolon-button` with the `stolon-field` modifier, so it is a field tall. It shows `play_arrow` or `pause`, with `playText` ("Play") or `pauseText` ("Pause") as its title and name. `playing` is on the root while it plays.
 * Starting a player pauses the one that was playing. `onPlay` runs when it starts, and `onPause` when it pauses or ends.
 * The player is a group named by `label`, the title by default, else "Audio".
 * The slider's value text reads the time, such as "0:42 of 3:05", and `seekText` ("Seek") names it.
@@ -71,7 +71,7 @@ A small audio player: a Play and Pause button, a seek slider on the Slider Field
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-audio-player` | A small audio player: a Play and Pause button a field tall, then the title over a seek slider and the current and total time |
-| `stolon-audio-player.failed` | A player whose audio could not load: the error in red in the title's place, and the button an X that resets it |
+| `stolon-audio-player.stolon-failed` | A player whose audio could not load: the error in red in the title's place, and the button an X that resets it |
 
 <!-- reference:end -->
 

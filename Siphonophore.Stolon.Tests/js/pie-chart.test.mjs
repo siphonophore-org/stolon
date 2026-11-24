@@ -57,15 +57,15 @@ test('slices take the series colors in order, and a named or hex color stays', f
     var chart = build({ slices: [{ label: 'a', value: 1 }, { label: 'b', value: 1 }, { label: 'c', value: 1, color: 'red' }, { label: 'd', value: 1, color: '#e91e63' }, { label: 'e', value: 1, color: 'nope' }] });
     var paths = all(chart.element, 'path.stolon-chart-mark');
     assert.equal(paths.length, 5);
-    assert.ok(paths[0].classList.contains('blue'));
-    assert.ok(paths[1].classList.contains('green'));
-    assert.ok(paths[2].classList.contains('red'));
-    assert.ok(paths[3].classList.contains('custom'));
+    assert.ok(paths[0].classList.contains('stolon-blue'));
+    assert.ok(paths[1].classList.contains('stolon-green'));
+    assert.ok(paths[2].classList.contains('stolon-red'));
+    assert.ok(paths[3].classList.contains('stolon-custom'));
     assert.match(paths[3].getAttribute('style'), /--stolon-custom: #e91e63/);
-    assert.ok(paths[4].classList.contains('red'));
+    assert.ok(paths[4].classList.contains('stolon-red'));
     var swatches = all(chart.element, '.stolon-pie-chart-key .stolon-chart-swatch');
-    assert.ok(swatches[0].classList.contains('blue'));
-    assert.ok(swatches[3].classList.contains('custom'));
+    assert.ok(swatches[0].classList.contains('stolon-blue'));
+    assert.ok(swatches[3].classList.contains('stolon-custom'));
 });
 
 test('each slice is a button named with its label, value, and percent', function () {
@@ -115,7 +115,7 @@ test('one slice draws a full circle', function () {
 
 test('a donut cuts a hole and writes its center text', function () {
     var chart = build({ donut: true, centerText: '2.2k GB', centerLabel: 'Total', slices: LIBRARIES });
-    assert.ok(chart.element.classList.contains('donut'));
+    assert.ok(chart.element.classList.contains('stolon-donut'));
     var d = chart.element.querySelector('path.stolon-chart-mark').getAttribute('d');
     assert.equal((d.match(/A/g) || []).length, 2);
     assert.doesNotMatch(d, /L[\d.]+ [\d.]+ Z$/);
@@ -144,12 +144,12 @@ test('a click on a slice or its legend row selects it, and a second click clears
     var rows = all(chart.element, '.stolon-pie-chart-key');
     paths[1].dispatch('click');
     assert.equal(chart.getSelected(), 1);
-    assert.ok(chart.element.classList.contains('has-selection'));
-    assert.ok(paths[1].classList.contains('selected'));
+    assert.ok(chart.element.classList.contains('stolon-has-selection'));
+    assert.ok(paths[1].classList.contains('stolon-selected'));
     assert.equal(rows[1].getAttribute('aria-pressed'), 'true');
     rows[1].dispatch('click');
     assert.equal(chart.getSelected(), -1);
-    assert.equal(chart.element.classList.contains('has-selection'), false);
+    assert.equal(chart.element.classList.contains('stolon-has-selection'), false);
     rows[2].dispatch('click');
     assert.equal(paths[2].getAttribute('aria-pressed'), 'true');
     assert.deepEqual(seen, [['Shows', 1], [null, -1], ['Music', 2]]);
@@ -190,8 +190,8 @@ test('the hidden table holds each value with its percent, and getValue returns c
 });
 
 test('size adds its modifier, medium adds none', function () {
-    assert.ok(build({ size: 'small', slices: LIBRARIES }).element.classList.contains('small'));
-    assert.ok(build({ size: 'large', slices: LIBRARIES }).element.classList.contains('large'));
+    assert.ok(build({ size: 'small', slices: LIBRARIES }).element.classList.contains('stolon-small'));
+    assert.ok(build({ size: 'large', slices: LIBRARIES }).element.classList.contains('stolon-large'));
     var medium = build({ slices: LIBRARIES }).element;
-    assert.equal(medium.classList.contains('small') || medium.classList.contains('large'), false);
+    assert.equal(medium.classList.contains('stolon-small') || medium.classList.contains('stolon-large'), false);
 });

@@ -22,8 +22,8 @@ test('every layer starts on, and totals add the layers that are on', function ()
     var map = createWorldMap({ layers: LAYERS, counts: COUNTS });
     assert.deepEqual(map.getActive(), ['people', 'failed', 'blocked']);
     assert.deepEqual(map.totals(), { US: 12, DE: 3, FR: 1 });
-    assert.equal(country(map, 'US').classList.contains('counted'), true);
-    assert.equal(country(map, 'GB').classList.contains('counted'), false);
+    assert.equal(country(map, 'US').classList.contains('stolon-counted'), true);
+    assert.equal(country(map, 'GB').classList.contains('stolon-counted'), false);
     assert.equal(country(map, 'US').getAttribute('tabindex'), '0');
     assert.equal(country(map, 'GB').getAttribute('tabindex'), null);
     assert.match(country(map, 'US').getAttribute('aria-label'), /United States of America, 12 \(People 10, Failed 2\)/);
@@ -36,7 +36,7 @@ test('a layer button turns its layer off and on, and the map reports it', functi
     assert.equal(layer(map, 'failed').getAttribute('aria-pressed'), 'false');
     assert.deepEqual(map.getActive(), ['people', 'blocked']);
     assert.deepEqual(map.totals(), { US: 10, FR: 1 });
-    assert.equal(country(map, 'DE').classList.contains('counted'), false);
+    assert.equal(country(map, 'DE').classList.contains('stolon-counted'), false);
     assert.deepEqual(reported[0], ['people', 'blocked']);
     map.setActive(['failed']);
     assert.equal(layer(map, 'failed').getAttribute('aria-pressed'), 'true');
@@ -81,7 +81,7 @@ test('a click on a counted country selects it and reports it, again clears it, a
     assert.deepEqual(picked, []);
     country(map, 'DE').click();
     assert.equal(map.getSelected(), 'DE');
-    assert.equal(country(map, 'DE').classList.contains('selected'), true);
+    assert.equal(country(map, 'DE').classList.contains('stolon-selected'), true);
     assert.equal(country(map, 'DE').getAttribute('aria-pressed'), 'true');
     country(map, 'DE').click();
     assert.equal(map.getSelected(), null);

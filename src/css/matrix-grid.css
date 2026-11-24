@@ -11,16 +11,16 @@
 .stolon-matrix-hint { font-size: var(--stolon-font-small); opacity: 0.7; }
 
 /* One cell's control with its message under it. A toggle column takes the narrow number track with its box centered under its heading */
-/* Example: <span class="stolon-matrix-cell"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" checked></label></div><div class="stolon-field-message"></div></span> */
+/* Example: <span class="stolon-matrix-cell"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" checked></label></div><div class="stolon-field-message"></div></span> */
 .stolon-matrix-cell { display: flex; flex-direction: column; min-width: 0; white-space: normal; }
-.stolon-data-cell.end > .stolon-matrix-cell { align-items: flex-end; }
-.stolon-data-cell.center > .stolon-matrix-cell { align-items: center; }
+.stolon-data-cell.stolon-end > .stolon-matrix-cell { align-items: flex-end; }
+.stolon-data-cell.stolon-center > .stolon-matrix-cell { align-items: center; }
 .stolon-matrix-cell .stolon-control > select,
 .stolon-matrix-cell .stolon-control > input,
 .stolon-matrix-cell .stolon-control > .stolon-adorned { width: 100%; min-width: 0; box-sizing: border-box; }
 
 /* A read only cell that shows its value as a badge or as text, centered on the row's line, with no control */
-/* Example: <span class="stolon-matrix-cell stolon-matrix-badge"><span class="stolon-badge green">Yes</span></span> */
+/* Example: <span class="stolon-matrix-cell stolon-matrix-badge"><span class="stolon-badge stolon-green">Yes</span></span> */
 .stolon-matrix-badge,
 .stolon-matrix-static { justify-content: center; min-height: var(--stolon-field-height); }
 .stolon-matrix-badge { align-items: flex-start; }
@@ -31,9 +31,9 @@
 .stolon-matrix-note { margin: var(--stolon-gap-narrow) 0 0; padding: 0 var(--stolon-pad-medium); }
 
 /* A grid with a unit in its number boxes, whose columns keep room for the digits, the unit, and the arrows, and scroll sideways before they would hide digits */
-/* Example: <div class="stolon-filtered-list stolon-data-table stolon-matrix-grid has-units"></div> */
-.stolon-matrix-grid.has-units { --stolon-data-min: calc(var(--stolon-size-large) * 3); }
+/* Example: <div class="stolon-filtered-list stolon-data-table stolon-matrix-grid stolon-has-units"></div> */
+.stolon-matrix-grid.stolon-has-units { --stolon-data-min: calc(var(--stolon-size-large) * 3); }
 
 /* A disabled cell, its control greyed out with its value still shown */
-/* Example: <span class="stolon-matrix-cell disabled"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox field"><input type="checkbox" disabled></label></div></span> */
-.stolon-matrix-cell.disabled { opacity: 0.45; cursor: not-allowed; }
+/* Example: <span class="stolon-matrix-cell stolon-disabled"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field"><input type="checkbox" disabled></label></div></span> */
+.stolon-matrix-cell.stolon-disabled { opacity: 0.45; cursor: not-allowed; }

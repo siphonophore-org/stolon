@@ -115,8 +115,8 @@ test('by default the rows keep their markup and grow with the page', function ()
     var ui = build();
     var body = ui.editor.element.querySelector('.stolon-kv-rows');
     assert.ok(body.classList.contains('stolon-list'));
-    assert.ok(body.classList.contains('plain'));
-    assert.equal(body.classList.contains('scrolls'), false);
+    assert.ok(body.classList.contains('stolon-plain'));
+    assert.equal(body.classList.contains('stolon-scrolls'), false);
     assert.equal(body.getAttribute('role'), null);
     assert.equal(rows(ui)[0].className, 'stolon-kv-row stolon-list-item');
     assert.equal(rows(ui)[0].getAttribute('role'), null);
@@ -135,12 +135,12 @@ test('removing a row keeps the other rows and what they hold', function () {
 test('height and maxHeight go to the list, and setHeight changes them', function () {
     var ui = build({ maxHeight: '18rem' });
     var body = ui.editor.element.querySelector('.stolon-kv-rows');
-    assert.ok(body.classList.contains('capped'));
+    assert.ok(body.classList.contains('stolon-capped'));
     assert.equal(body.style['--stolon-list-max'], '18rem');
     ui.editor.setHeight(260);
-    assert.ok(body.classList.contains('fixed'));
+    assert.ok(body.classList.contains('stolon-fixed'));
     assert.equal(body.style['--stolon-list-height'], '260px');
-    assert.equal(body.classList.contains('capped'), false);
+    assert.equal(body.classList.contains('stolon-capped'), false);
 });
 
 test('createKeyValueEditor puts size small or large on data-stolon-size, and leaves it off for medium or no size', function () {

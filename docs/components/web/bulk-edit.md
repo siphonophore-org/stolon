@@ -18,7 +18,7 @@ Inline editing blocks. A bordered bulk edit toolbar sits above a table, and tabl
     <div class="stolon-edit-line">
         <div class="stolon-field"><label for="txtArtist">Artist</label><input type="text" id="txtArtist"></div>
         <span class="stolon-edit-secondary">2.34 MB</span>
-        <button class="raised stolon-button small primary">Apply</button>
+        <button class="raised stolon-button stolon-small stolon-primary">Apply</button>
     </div>
 </div>
 

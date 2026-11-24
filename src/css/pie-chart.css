@@ -10,20 +10,20 @@
     width: calc(var(--stolon-size-medium) * 5);
     max-width: 100%;
 }
-.stolon-pie-chart.small > .stolon-chart-plot { width: calc(var(--stolon-size-small) * 5); }
-.stolon-pie-chart.large > .stolon-chart-plot { width: calc(var(--stolon-size-large) * 5); }
+.stolon-pie-chart.stolon-small > .stolon-chart-plot { width: calc(var(--stolon-size-small) * 5); }
+.stolon-pie-chart.stolon-large > .stolon-chart-plot { width: calc(var(--stolon-size-large) * 5); }
 .stolon-pie-chart > .stolon-chart-empty { flex: 1 1 auto; }
 
 /* A narrow pie chart, which stacks the legend under the pie */
-/* Example: <figure class="stolon-chart stolon-pie-chart compact"></figure> */
-.stolon-pie-chart.compact {
+/* Example: <figure class="stolon-chart stolon-pie-chart stolon-compact"></figure> */
+.stolon-pie-chart.stolon-compact {
     flex-direction: column;
     align-items: stretch;
 }
-.stolon-pie-chart.compact > .stolon-chart-plot { align-self: center; }
+.stolon-pie-chart.stolon-compact > .stolon-chart-plot { align-self: center; }
 
 /* One slice in its color, parted from the next by a line of the surface, dimmed while another is under the pointer or selected */
-/* Example: <path class="stolon-pie-chart-slice stolon-chart-series blue stolon-chart-mark selected" role="button" aria-pressed="true" aria-label="Movies, 820 GB, 41%"></path> */
+/* Example: <path class="stolon-pie-chart-slice stolon-chart-series stolon-blue stolon-chart-mark stolon-selected" role="button" aria-pressed="true" aria-label="Movies, 820 GB, 41%"></path> */
 .stolon-pie-chart-slice {
     fill: var(--stolon-chart-color);
     stroke: var(--stolon-surface);
@@ -33,9 +33,9 @@
     transition: opacity 0.15s ease-out;
 }
 .stolon-chart-plot:hover .stolon-pie-chart-slice { opacity: 0.75; }
-.stolon-pie-chart.has-selection .stolon-pie-chart-slice { opacity: 0.35; }
+.stolon-pie-chart.stolon-has-selection .stolon-pie-chart-slice { opacity: 0.35; }
 .stolon-chart-plot .stolon-pie-chart-slice:hover,
-.stolon-pie-chart.has-selection .stolon-pie-chart-slice.selected { opacity: 1; }
+.stolon-pie-chart.stolon-has-selection .stolon-pie-chart-slice.stolon-selected { opacity: 1; }
 
 /* The value and its label in a donut's center */
 /* Example: <text class="stolon-pie-chart-center">2.4k</text><text class="stolon-pie-chart-center-label">Total</text> */
@@ -44,7 +44,7 @@
 .stolon-pie-chart-center-label { opacity: 0.7; }
 
 /* The legend of a pie: a row per slice with its color dot, label, value, and percent, the values and percents each in one column */
-/* Example: <div class="stolon-chart-legend stolon-pie-chart-legend"><button type="button" class="stolon-pie-chart-key" aria-pressed="false"><span class="stolon-chart-swatch blue"></span><span class="stolon-pie-chart-key-label">Movies</span><span class="stolon-pie-chart-key-value">820 GB</span><span class="stolon-pie-chart-key-share">41%</span></button></div> */
+/* Example: <div class="stolon-chart-legend stolon-pie-chart-legend"><button type="button" class="stolon-pie-chart-key" aria-pressed="false"><span class="stolon-chart-swatch stolon-blue"></span><span class="stolon-pie-chart-key-label">Movies</span><span class="stolon-pie-chart-key-value">820 GB</span><span class="stolon-pie-chart-key-share">41%</span></button></div> */
 .stolon-pie-chart-legend {
     flex: 1 1 0;
     flex-direction: column;
@@ -74,7 +74,7 @@
 .stolon-pie-chart-key:hover { background: var(--stolon-wash); }
 .stolon-pie-chart-key:focus { outline: none; }
 .stolon-pie-chart-key:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
-.stolon-pie-chart-key.selected {
+.stolon-pie-chart-key.stolon-selected {
     background: var(--stolon-accent-wash);
     box-shadow: inset 3px 0 0 var(--stolon-accent);
 }

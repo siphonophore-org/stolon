@@ -1,5 +1,5 @@
 /* A row of overlapping avatars, each ringed in the surface color, ending in a +N bubble when there are more */
-/* Example: <div class="stolon-avatar-stack small" role="img" aria-label="Ada, Bob, Cy"><span class="stolon-avatar stolon-avatar-small"></span><span class="stolon-avatar stolon-avatar-small stolon-avatar-more">+2</span></div> */
+/* Example: <div class="stolon-avatar-stack stolon-small" role="img" aria-label="Ada, Bob, Cy"><span class="stolon-avatar stolon-avatar-small"></span><span class="stolon-avatar stolon-avatar-small stolon-avatar-more">+2</span></div> */
 .stolon-avatar-stack {
     display: inline-flex;
     align-items: center;
@@ -9,8 +9,8 @@
 .stolon-avatar-stack[hidden] { display: none; }
 .stolon-avatar-stack > .stolon-avatar { box-shadow: 0 0 0 2px var(--stolon-surface); }
 .stolon-avatar-stack > .stolon-avatar + .stolon-avatar { margin-left: calc(var(--stolon-gap-narrow) * -1); }
-.stolon-avatar-stack.medium > .stolon-avatar + .stolon-avatar,
-.stolon-avatar-stack.large > .stolon-avatar + .stolon-avatar { margin-left: calc(var(--stolon-gap-narrow) * -1.5); }
+.stolon-avatar-stack.stolon-medium > .stolon-avatar + .stolon-avatar,
+.stolon-avatar-stack.stolon-large > .stolon-avatar + .stolon-avatar { margin-left: calc(var(--stolon-gap-narrow) * -1.5); }
 
 /* The +N bubble that stands for the avatars past max, with their names in its tooltip */
 /* Example: <span class="stolon-avatar stolon-avatar-small stolon-avatar-more" data-stolon-tip="Dee, Eve">+2</span> */

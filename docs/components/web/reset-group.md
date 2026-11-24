@@ -19,7 +19,7 @@ A stack of rows that pair a description with an action button, as for per table 
             <div>Content Sync</div>
             <div class="fieldDescription">Forgets content tracking.</div>
         </div>
-        <button is="emby-button" type="button" class="raised stolon-button destructive small"><span>Reset</span></button>
+        <button is="emby-button" type="button" class="raised stolon-button stolon-destructive stolon-small"><span>Reset</span></button>
     </div>
 </div>
 ```

@@ -20,7 +20,7 @@ export interface BoundDialogHandle extends ComponentHandle {
 }
 
 /**
- * Gives a stolon-dialog already in the page markup the behavior openDialog builds, so it shows and hides by the hidden class, closes on backdrop click, Escape, and any .stolon-dialog-close button, each asking opts.beforeClose first, and traps and restores focus. The panel gets dialog semantics when the markup does not set them.
+ * Gives a stolon-dialog already in the page markup the behavior openDialog builds, so it shows and hides by the stolon-hidden class, closes on backdrop click, Escape, and any .stolon-dialog-close button, each asking opts.beforeClose first, and traps and restores focus. The panel gets dialog semantics when the markup does not set them.
  *
  * @param overlay the .stolon-dialog element, or its id within root
  * @param opts {
@@ -67,7 +67,7 @@ export function bindDialog(overlay: HTMLElement | string | null, opts?: BindDial
     function show(): void {
         if (open) return;
         open = true;
-        (overlay as HTMLElement).classList.remove('hidden');
+        (overlay as HTMLElement).classList.remove('stolon-hidden');
         modal.activate();
         if (opts!.onOpen) opts!.onOpen();
     }
@@ -76,7 +76,7 @@ export function bindDialog(overlay: HTMLElement | string | null, opts?: BindDial
     function close(value?: unknown): void {
         if (!open) return;
         open = false;
-        (overlay as HTMLElement).classList.add('hidden');
+        (overlay as HTMLElement).classList.add('stolon-hidden');
         modal.release();
         if (opts!.onClose) opts!.onClose(value);
     }

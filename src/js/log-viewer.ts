@@ -86,8 +86,8 @@ export function createLogViewer(options?: LogViewerOptions): LogViewerHandle {
     var toggle = makeCheck(null, { id: nextId('log') });
     toggle.checked = auto;
     var toggleLabel = makeCheckRow(toggle, options.autoScrollText || stolonText('Stolon.AutoScroll'), 'stolon-checkbox stolon-log-toggle');
-    var clearButton = make('button', 'raised stolon-button small secondary', { type: 'button' }, options.clearText || stolonText('Stolon.Clear'));
-    var copyButton = make('button', 'raised stolon-button small secondary', { type: 'button' }, options.copyText || stolonText('Stolon.CopyAll'));
+    var clearButton = make('button', 'raised stolon-button stolon-small stolon-secondary', { type: 'button' }, options.clearText || stolonText('Stolon.Clear'));
+    var copyButton = make('button', 'raised stolon-button stolon-small stolon-secondary', { type: 'button' }, options.copyText || stolonText('Stolon.CopyAll'));
     bar.appendChild(toggleLabel);
     bar.appendChild(clearButton);
     bar.appendChild(copyButton);
@@ -114,7 +114,7 @@ export function createLogViewer(options?: LogViewerOptions): LogViewerHandle {
     }
 
     function node(line: LogLine): HTMLDivElement {
-        var el = make('div', 'stolon-log-line ' + line.level);
+        var el = make('div', 'stolon-log-line stolon-' + line.level);
         if (line.time) el.appendChild(make('span', 'stolon-log-time', null, line.time));
         el.appendChild(make('span', 'stolon-log-text', null, line.text));
         return el;

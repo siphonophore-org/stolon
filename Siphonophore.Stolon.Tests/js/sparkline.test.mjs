@@ -38,8 +38,8 @@ test('no values draws nothing and keeps the label', function () {
 });
 
 test('a color takes the color core', function () {
-    assert.ok(createSparkline({ values: [1], color: 'red' }).element.classList.contains('red'));
-    assert.ok(createSparkline({ values: [1], color: '#123456' }).element.classList.contains('custom'));
+    assert.ok(createSparkline({ values: [1], color: 'red' }).element.classList.contains('stolon-red'));
+    assert.ok(createSparkline({ values: [1], color: '#123456' }).element.classList.contains('stolon-custom'));
 });
 
 test('a stat card with sparkline draws one under its trend, named by its label, and setValue replaces it', function () {

@@ -31,7 +31,7 @@ test('multiple selection draws a checkbox on each item and a select all that is 
     assert.ok(boxes(list).every(function (b) { return b.classList.contains('stolon-check-row-input'); }));
     check(boxes(list)[1], true);
     assert.deepEqual(heard[heard.length - 1], [['b'], ['Brazil']]);
-    assert.ok(cells(list)[1].classList.contains('selected'));
+    assert.ok(cells(list)[1].classList.contains('stolon-selected'));
     var selectAll = list.selectBar.querySelector('.stolon-filtered-selectall-box');
     assert.equal(selectAll.indeterminate, true);
     check(selectAll, true);
@@ -50,14 +50,14 @@ test('bulk actions say how many are selected, stay disabled while none are, and 
     var list = build({ selectable: 'multiple', bulkActions: [{ id: 'ignore', label: 'Ignore', icon: 'block', onClick: function (items) { got = items.map(function (i) { return i.id; }); } }] });
     var btn = list.bulkBar.querySelector('[data-action="ignore"]');
     var count = list.selectBar.querySelector('.stolon-filtered-selected');
-    assert.ok(btn.classList.contains('stolon-button') && btn.classList.contains('small'));
+    assert.ok(btn.classList.contains('stolon-button') && btn.classList.contains('stolon-small'));
     assert.equal(btn.disabled, true);
     assert.equal(count.textContent, '0 selected');
     check(boxes(list)[0], true);
     check(boxes(list)[2], true);
     assert.equal(count.textContent, '2 selected');
     assert.equal(btn.disabled, false);
-    assert.ok(list.selectBar.classList.contains('active'));
+    assert.ok(list.selectBar.classList.contains('stolon-active'));
     btn.click();
     assert.deepEqual(got, ['a', 'c']);
 });
@@ -67,7 +67,7 @@ test('onOpen runs on a click and on Enter or Space, and not from the checkbox', 
     var list = build({ selectable: 'multiple', onOpen: function (item) { opened.push(item.id); } });
     var cell = cells(list)[0];
     assert.equal(cell.getAttribute('tabindex'), '0');
-    assert.ok(cell.classList.contains('openable'));
+    assert.ok(cell.classList.contains('stolon-openable'));
     boxes(list)[0].dispatch('click', { bubbles: true });
     assert.deepEqual(opened, []);
     cell.dispatch('click', { bubbles: true });
@@ -129,7 +129,7 @@ test('setItems keeps the cells of unchanged items, draws only the changed one, a
     assert.equal(after[2], before[2]);
     assert.notEqual(after[1], before[1]);
     assert.equal(boxes(list)[0].checked, true);
-    assert.ok(after[0].classList.contains('selected'));
+    assert.ok(after[0].classList.contains('stolon-selected'));
 });
 
 test('a limit caps the items shown and puts limitText in the summary, even with the summary off', function () {
@@ -148,7 +148,7 @@ test('a toolbar action shows only while visible says so, and gets the state', fu
     var seen = null;
     var list = build({ actions: [{ id: 'retry', label: 'Retry Errors', icon: 'refresh', onClick: function (state) { seen = state.items.length; }, visible: function (state) { return state.items.some(function (i) { return i.state === 'Errored'; }); } }] });
     var btn = list.toolbar.querySelector('[data-action="retry"]');
-    assert.ok(btn.classList.contains('field'));
+    assert.ok(btn.classList.contains('stolon-field'));
     assert.equal(btn.hidden, false);
     btn.click();
     assert.equal(seen, 3);

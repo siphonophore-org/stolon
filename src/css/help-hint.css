@@ -20,4 +20,4 @@
     font-weight: normal;
     line-height: var(--stolon-line-small);
 }
-.stolon-help.open .stolon-help-tip { display: block; }
+.stolon-help.stolon-open .stolon-help-tip { display: block; }

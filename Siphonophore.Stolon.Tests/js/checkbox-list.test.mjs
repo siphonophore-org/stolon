@@ -34,20 +34,20 @@ test('the rows stay labels directly in the body, with no list role, so the marku
 
 test('by default the body caps at 320px and scrolls, as the stylesheet did', async function () {
     var ui = await build();
-    assert.ok(ui.body.classList.contains('capped'));
-    assert.ok(ui.body.classList.contains('scrolls'));
-    assert.equal(ui.body.classList.contains('fixed'), false);
+    assert.ok(ui.body.classList.contains('stolon-capped'));
+    assert.ok(ui.body.classList.contains('stolon-scrolls'));
+    assert.equal(ui.body.classList.contains('stolon-fixed'), false);
     assert.equal(ui.body.style['--stolon-list-max'], '320px');
 });
 
 test('height and maxHeight pass to the list, and null removes the cap', async function () {
     var fixed = await build({ height: 200, maxHeight: null });
-    assert.ok(fixed.body.classList.contains('fixed'));
+    assert.ok(fixed.body.classList.contains('stolon-fixed'));
     assert.equal(fixed.body.style['--stolon-list-height'], '200px');
-    assert.equal(fixed.body.classList.contains('capped'), false);
+    assert.equal(fixed.body.classList.contains('stolon-capped'), false);
 
     var grows = await build({ maxHeight: null });
-    assert.equal(grows.body.classList.contains('scrolls'), false);
+    assert.equal(grows.body.classList.contains('stolon-scrolls'), false);
 
     var capped = await build({ maxHeight: '40vh', minHeight: 120 });
     assert.equal(capped.body.style['--stolon-list-max'], '40vh');
@@ -57,9 +57,9 @@ test('height and maxHeight pass to the list, and null removes the cap', async fu
 test('setHeight switches the height later', async function () {
     var ui = await build();
     ui.list.setHeight(240);
-    assert.ok(ui.body.classList.contains('fixed'));
+    assert.ok(ui.body.classList.contains('stolon-fixed'));
     assert.equal(ui.body.style['--stolon-list-height'], '240px');
-    assert.equal(ui.body.classList.contains('capped'), false);
+    assert.equal(ui.body.classList.contains('stolon-capped'), false);
 });
 
 test('a search with no match shows the empty message in the body, and the selection survives it', async function () {
@@ -85,7 +85,7 @@ test('checking a row calls onChange, and setDisabled draws the rows again', asyn
     assert.equal(rows.length, 3);
     assert.ok(rows[2].classList.contains('stolon-check-row-disabled'));
     assert.equal(rows[0].querySelector('.stolon-check-row-input').checked, true);
-    assert.equal(ui.list.element.querySelector('.stolon-check-selectall').classList.contains('hidden'), false);
+    assert.equal(ui.list.element.querySelector('.stolon-check-selectall').classList.contains('stolon-hidden'), false);
 });
 
 test('createCheckboxList puts size small or large on data-stolon-size, and leaves it off for medium or no size', function () {

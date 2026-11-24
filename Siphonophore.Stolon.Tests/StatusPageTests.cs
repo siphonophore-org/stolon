@@ -61,7 +61,7 @@ public class StatusPageTests
     /// False: a broken template would ship.
     /// </summary>
     [Theory]
-    [InlineData(".hidden{display:none}")]
+    [InlineData(".stolon-hidden{display:none}")]
     [InlineData("{{CONTENT}}")]
     [InlineData("rel=\"icon\"")]
     [InlineData("{{TITLE}}")]

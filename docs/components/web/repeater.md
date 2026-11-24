@@ -126,11 +126,11 @@ The base for any list of rows or cards of mixed fields, built on the row editor 
 | `stolon-repeater.stolon-repeater-layout-inline` | One inline row: a cell per field on the shared tracks, then the row buttons |
 | `stolon-field-cell` | A field's cell: its label, its control, and its message under it |
 | `stolon-control-toggle` | A toggle field: the shared Checkbox a field tall, its box centered on the line of the fields beside it |
-| `stolon-control-secret.clearable` | A secret with a Clear button after its box, shown while a secret is stored |
+| `stolon-control-secret.stolon-clearable` | A secret with a Clear button after its box, shown while a secret is stored |
 | `stolon-repeater-actions` | The row buttons, the moves and the remove, at the row's end and centered on its first field |
 | `stolon-repeater.stolon-repeater-layout-card` | One card: a head with the title and the row buttons at the top right, over its fields in a grid |
-| `stolon-field-group.grid` | Fields in as many columns as fit, each under its label |
-| `stolon-repeater.stolon-repeater-layout-inline.compact` | A narrow inline repeater: each row stacks its fields full width under their labels, with the row buttons pinned top right, level with the first label |
+| `stolon-field-group.stolon-grid` | Fields in as many columns as fit, each under its label |
+| `stolon-repeater.stolon-repeater-layout-inline.stolon-compact` | A narrow inline repeater: each row stacks its fields full width under their labels, with the row buttons pinned top right, level with the first label |
 
 <!-- reference:end -->
 

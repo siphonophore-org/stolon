@@ -15,7 +15,7 @@ test('by default the timeline grows with its events and stays an ordered list of
     var t = createTimeline({ items: [{ title: 'A' }, { title: 'B' }] });
     var ol = t.element.querySelector('ol');
     assert.equal(ol.getAttribute('role'), null);
-    assert.equal(ol.classList.contains('scrolls'), false);
+    assert.equal(ol.classList.contains('stolon-scrolls'), false);
     assert.equal(ol.children.length, 2);
     ol.children.forEach(function (li) {
         assert.equal(li.tagName, 'LI');
@@ -28,14 +28,14 @@ test('by default the timeline grows with its events and stays an ordered list of
 test('height, maxHeight, and minHeight reach the ordered list, and setHeight switches them', function () {
     var t = createTimeline({ height: 'fill', minHeight: 120, items: [{ title: 'A' }] });
     var ol = t.element.querySelector('ol');
-    assert.ok(ol.classList.contains('fill'));
+    assert.ok(ol.classList.contains('stolon-fill'));
     assert.equal(ol.style['--stolon-list-min'], '120px');
     t.setHeight(200, '50vh');
-    assert.ok(ol.classList.contains('fixed'));
+    assert.ok(ol.classList.contains('stolon-fixed'));
     assert.equal(ol.style['--stolon-list-height'], '200px');
     assert.equal(ol.style['--stolon-list-max'], '50vh');
     var capped = createTimeline({ maxHeight: 320 });
-    assert.ok(capped.element.querySelector('ol').classList.contains('capped'));
+    assert.ok(capped.element.querySelector('ol').classList.contains('stolon-capped'));
 });
 
 test('an item with pre shows a mono block kept as written under its body', function () {

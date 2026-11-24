@@ -31,7 +31,7 @@ Classes: `stolon-placeholder-hint`, `stolon-hint-button`, `stolon-placeholders`,
 * `open` and `close` set the delimiters, `{` and `}` by default, so `{ open: '{{', close: '}}' }` draws and inserts `{{name}}` for a template language that uses them.
 * `mode: 'copy'` copies the pressed token to the clipboard instead of inserting it, for a field that is not beside the hint. The token turns green for a moment and a hidden live region says `copiedText`, "Copied {value}." by default. A hint in copy mode works outside an `inputContainer`.
 * `label` replaces the toggle's "Placeholders".
-* The Placeholders toggle is a text button with no chevron. It starts `collapsed` with `aria-expanded="false"` and `aria-controls` on its list. Its icon and text are secondary gray while the list is hidden and the accent while it shows, with the accent on hover and the accent focus ring.
+* The Placeholders toggle is a text button with no chevron. It starts `stolon-collapsed` with `aria-expanded="false"` and `aria-controls` on its list. Its icon and text are secondary gray while the list is hidden and the accent while it shows, with the accent on hover and the accent focus ring.
 * `bindPlaceholders(root, onInsert)` makes every hint in `root` work, once per root. A placeholder button inserts its token into the first textarea or input of its `inputContainer`, and `onInsert(field)` follows each insert.
 * Pressing a placeholder does not take focus from the field, so the insertion lands at the cursor.
 
@@ -82,7 +82,7 @@ Makes every hint inside root work: Placeholders shows or hides the list, and a p
 | `stolon-hint-button` | The hint's toggle, a text button built as small stolon-icon-text whose color shows its state: secondary gray while its list is hidden, accent while it shows and on hover |
 | `stolon-placeholders` | List of placeholder tags that a hint shows |
 | `stolon-tag-button` | A tag that is a button, such as a placeholder to put in |
-| `stolon-tag-button.copied` | A placeholder just copied in a hint in copy mode, green for a moment as a copy that worked |
+| `stolon-tag-button.stolon-copied` | A placeholder just copied in a hint in copy mode, green for a moment as a copy that worked |
 
 <!-- reference:end -->
 

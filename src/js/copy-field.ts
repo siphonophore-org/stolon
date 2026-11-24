@@ -63,7 +63,7 @@ export function createCopyField(options?: CopyFieldOptions): CopyFieldHandle {
     var copyLabel = options.copyLabel || stolonText('Copy');
 
     var wrap = !!options.wrap && !options.secret;
-    var root = make('div', 'stolon-copy-field' + (options.inline ? ' inline' : '') + (wrap ? ' wrap' : ''));
+    var root = make('div', 'stolon-copy-field' + (options.inline ? ' stolon-inline' : '') + (wrap ? ' stolon-wrap' : ''));
     applyFieldSize(root, options.size);
     var mono = options.mono === false ? '' : 'stolon-mono';
     var input = make('input', mono, { type: options.secret ? 'password' : 'text', 'aria-label': options.label || stolonText('LabelValue'), autocomplete: 'off' });
@@ -106,12 +106,12 @@ export function createCopyField(options?: CopyFieldOptions): CopyFieldHandle {
         return copyToClipboard(value).then(function (ok) {
             var text = ok ? (options!.copiedText || stolonText('Copied')) : (options!.failedText || stolonText('Stolon.CopyFailed'));
             status.textContent = text;
-            button.classList.toggle('success', ok);
+            button.classList.toggle('stolon-success', ok);
             button.title = text;
             button.children[0].textContent = ok ? 'check' : 'error_outline';
             clearTimeout(timer as ReturnType<typeof setTimeout>);
             timer = setTimeout(function () {
-                button.classList.remove('success');
+                button.classList.remove('stolon-success');
                 button.title = copyLabel;
                 button.children[0].textContent = 'content_copy';
                 status.textContent = '';

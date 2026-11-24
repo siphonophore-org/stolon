@@ -70,10 +70,10 @@ test('createList skips an item whose render returns nothing but keeps its row', 
 test('createList shows the empty text only while there are no items', function () {
     var list = build({ items: [] });
     assert.equal(list.element.querySelector('.stolon-list-empty').textContent, 'Nothing to show.');
-    assert.equal(list.element.classList.contains('empty'), true);
+    assert.equal(list.element.classList.contains('stolon-empty'), true);
     list.setItems(['one']);
     assert.equal(list.element.querySelector('.stolon-list-empty'), null);
-    assert.equal(list.element.classList.contains('empty'), false);
+    assert.equal(list.element.classList.contains('stolon-empty'), false);
 });
 
 test('createList takes its own empty and loading text', function () {
@@ -92,7 +92,7 @@ test('a ul list shows its loading line as an item and its empty sentence outside
     var list = build({ element: ul, items: [], emptyText: 'No files.', loadingText: 'Reading' });
     var empty = list.emptyElement;
     assert.equal(list.element.querySelector('.stolon-list-empty'), null);
-    assert.ok(empty.classList.contains('stolon-list-empty') && empty.classList.contains('outside'));
+    assert.ok(empty.classList.contains('stolon-list-empty') && empty.classList.contains('stolon-outside'));
     assert.equal(empty.hidden, false);
     list.setLoading(true);
     var busy = list.element.querySelector('.stolon-list-loading');
@@ -129,14 +129,14 @@ test('getItems returns a copy', function () {
 
 test('createList grows with its items by default and does not scroll inside', function () {
     var list = build();
-    assert.equal(list.element.classList.contains('rows'), true);
-    assert.equal(list.element.classList.contains('scrolls'), false);
+    assert.equal(list.element.classList.contains('stolon-rows'), true);
+    assert.equal(list.element.classList.contains('stolon-scrolls'), false);
 });
 
 test('a numeric height is a fixed height that scrolls inside', function () {
     var list = build({ height: 240 });
-    assert.equal(list.element.classList.contains('fixed'), true);
-    assert.equal(list.element.classList.contains('scrolls'), true);
+    assert.equal(list.element.classList.contains('stolon-fixed'), true);
+    assert.equal(list.element.classList.contains('stolon-scrolls'), true);
     assert.equal(list.element.style['--stolon-list-height'], '240px');
 });
 
@@ -147,9 +147,9 @@ test('a CSS length height is kept as written', function () {
 
 test('maxHeight caps a growing list and scrolls past it', function () {
     var list = build({ maxHeight: '20rem' });
-    assert.equal(list.element.classList.contains('capped'), true);
-    assert.equal(list.element.classList.contains('scrolls'), true);
-    assert.equal(list.element.classList.contains('fixed'), false);
+    assert.equal(list.element.classList.contains('stolon-capped'), true);
+    assert.equal(list.element.classList.contains('stolon-scrolls'), true);
+    assert.equal(list.element.classList.contains('stolon-fixed'), false);
     assert.equal(list.element.style['--stolon-list-max'], '20rem');
 });
 
@@ -157,8 +157,8 @@ test('fill measures the list top so it ends at the bottom of the window', functi
     var list = build({ height: 'fill', minHeight: 200, fillGap: 24 });
     list.element._rect = { top: 180, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
     frames.splice(0).forEach(function (f) { f(); });
-    assert.equal(list.element.classList.contains('fill'), true);
-    assert.equal(list.element.classList.contains('scrolls'), true);
+    assert.equal(list.element.classList.contains('stolon-fill'), true);
+    assert.equal(list.element.classList.contains('stolon-scrolls'), true);
     assert.equal(list.element.style['--stolon-list-top'], '180px');
     assert.equal(list.element.style['--stolon-list-min'], '200px');
     assert.equal(list.element.style['--stolon-list-gap'], '24px');
@@ -183,22 +183,22 @@ test('fill measures again when the window resizes', function () {
 test('setHeight switches modes and clears the old one', function () {
     var list = build({ height: 300 });
     list.setHeight('auto');
-    assert.equal(list.element.classList.contains('fixed'), false);
-    assert.equal(list.element.classList.contains('scrolls'), false);
+    assert.equal(list.element.classList.contains('stolon-fixed'), false);
+    assert.equal(list.element.classList.contains('stolon-scrolls'), false);
     assert.equal(list.element.style['--stolon-list-height'], undefined);
     list.setHeight('fill');
-    assert.equal(list.element.classList.contains('fill'), true);
+    assert.equal(list.element.classList.contains('stolon-fill'), true);
 });
 
 test('the grid layout takes a minimum column width', function () {
     var list = build({ layout: 'grid', minColumn: 180 });
-    assert.equal(list.element.classList.contains('grid'), true);
+    assert.equal(list.element.classList.contains('stolon-grid'), true);
     assert.equal(list.element.style['--stolon-list-column'], '180px');
 });
 
 test('an unknown layout falls back to rows', function () {
     var list = build({ layout: 'table' });
-    assert.equal(list.element.classList.contains('rows'), true);
+    assert.equal(list.element.classList.contains('stolon-rows'), true);
 });
 
 test('createList can take over an element a page already has', function () {
@@ -285,7 +285,7 @@ test('role keeps a list element its own meaning, and items take no listitem role
 test('emptyText null leaves the empty state to the component around the list', function () {
     var list = build({ items: [], emptyText: null });
     assert.equal(list.element.querySelector('.stolon-list-empty'), null);
-    assert.equal(list.element.classList.contains('empty'), true);
+    assert.equal(list.element.classList.contains('stolon-empty'), true);
 });
 
 test('a list that does not load more has no end marker, so its last child is its last item', function () {

@@ -1,5 +1,5 @@
 /* A path field with a Browse button beside it, a label above, and a description below */
-/* Example: <div class="stolon-folder-picker"><label class="stolon-folder-picker-label" for="p">Media Folder</label><div class="stolon-folder-picker-field"><input type="text" id="p" class="stolon-mono"><button type="button" class="raised stolon-button field">Browse</button></div></div> */
+/* Example: <div class="stolon-folder-picker"><label class="stolon-folder-picker-label" for="p">Media Folder</label><div class="stolon-folder-picker-field"><input type="text" id="p" class="stolon-mono"><button type="button" class="raised stolon-button stolon-field">Browse</button></div></div> */
 .stolon-folder-picker {
     display: flex;
     flex-direction: column;
@@ -38,7 +38,7 @@
     border-radius: var(--stolon-radius-medium);
 }
 .stolon-folder-picker-list:empty { display: none; }
-.stolon-folder-picker-list.stolon-list.plain > .stolon-list-loading {
+.stolon-folder-picker-list.stolon-list.stolon-plain > .stolon-list-loading {
     padding: var(--stolon-gap-narrow) var(--stolon-field-pad);
     text-align: center;
 }
@@ -60,7 +60,7 @@
 }
 .stolon-folder-picker-entry:hover { background: var(--stolon-wash); }
 .stolon-folder-picker-entry:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: -2px; }
-.stolon-folder-picker-entry.selected { background: var(--stolon-accent-wash); }
+.stolon-folder-picker-entry.stolon-selected { background: var(--stolon-accent-wash); }
 .stolon-folder-picker-entry .material-icons { opacity: 0.7; }
 .stolon-folder-picker-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .stolon-folder-picker-up .stolon-folder-picker-name { opacity: 0.7; }

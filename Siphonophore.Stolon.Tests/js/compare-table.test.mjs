@@ -28,9 +28,9 @@ test('it is a Data Table of a property column and the source, local, and after s
 test('a row whose values differ is marked changed, and each differing value is marked', function () {
     var t = createCompareTable({ rows: ROWS });
     var rows = all(t.element, '.stolon-data-row');
-    assert.equal(rows[0].classList.contains('changed'), false);
-    assert.equal(rows[1].classList.contains('changed'), true);
-    assert.deepEqual(all(rows[1], '.stolon-compare-value').map(function (v) { return v.classList.contains('differs'); }), [false, true, false]);
+    assert.equal(rows[0].classList.contains('stolon-changed'), false);
+    assert.equal(rows[1].classList.contains('stolon-changed'), true);
+    assert.deepEqual(all(rows[1], '.stolon-compare-value').map(function (v) { return v.classList.contains('stolon-differs'); }), [false, true, false]);
     assert.equal(all(rows[2], '.stolon-compare-value')[1].textContent, 'None');
     assert.deepEqual(t.getChanged(), ['year', 'rating']);
 });
@@ -43,7 +43,7 @@ test('Show Only Changes hides the rows that match, and a second press shows them
     toggle.click();
     assert.equal(toggle.getAttribute('aria-pressed'), 'true');
     assert.deepEqual(keys(t), ['year', 'rating']);
-    assert.ok(all(t.element, '.stolon-data-row').every(function (r) { return r.classList.contains('changed'); }));
+    assert.ok(all(t.element, '.stolon-data-row').every(function (r) { return r.classList.contains('stolon-changed'); }));
     toggle.click();
     assert.deepEqual(keys(t), ['title', 'year', 'rating']);
     assert.deepEqual(seen, [true, false]);
@@ -79,7 +79,7 @@ test('a section and a note draw one row each across every column, and only compa
     var rows = all(t.element, '.stolon-data-row');
     assert.equal(rows[0].querySelector('.stolon-compare-section-text').textContent, 'Metadata');
     assert.equal(rows[3].querySelector('.stolon-compare-note-text').textContent, 'Changed because the year differs.');
-    assert.equal(rows[0].classList.contains('changed'), false);
+    assert.equal(rows[0].classList.contains('stolon-changed'), false);
     assert.equal(all(rows[0], '.stolon-compare-value').length, 0);
     assert.deepEqual(t.getChanged(), ['year']);
 });

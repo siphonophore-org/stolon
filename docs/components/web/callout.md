@@ -27,7 +27,7 @@ Classes: `stolon-info`, `stolon-success`, `stolon-warn`, `stolon-error`, `stolon
 
 * The five callouts share one shape. Each is a 12 percent tint with a 40 percent border, mixed from the blue, green, orange, red, or gray swatch color, with a fixed color first for an engine without `color-mix()`.
 * `stolon-error-message` is a mono block for raw failure text, in the red swatch colors.
-* Toggle a callout with the `hidden` class.
+* Toggle a callout with the `stolon-hidden` class.
 
 ## Gotchas
 

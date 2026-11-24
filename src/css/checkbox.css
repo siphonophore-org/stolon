@@ -1,5 +1,5 @@
 /* One checkbox with its text beside it, the box and text centered on one line, with no row padding or hover wash. Small is the plain box most pages use */
-/* Example: <label class="stolon-check-row stolon-checkbox small"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Enabled</span></span></label> */
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-small"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Enabled</span></span></label> */
 .stolon-check-row.stolon-checkbox {
     display: inline-flex;
     align-items: center;
@@ -18,22 +18,22 @@
 .stolon-checkbox .stolon-check-sub { white-space: normal; }
 
 /* A medium checkbox, a size up: the medium button's height, the large box, and the large text */
-/* Example: <label class="stolon-check-row stolon-checkbox medium"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input"><span class="stolon-check-text"><span class="stolon-check-label">Sync ratings</span></span></label> */
-.stolon-check-row.stolon-checkbox.medium {
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-medium"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input"><span class="stolon-check-text"><span class="stolon-check-label">Sync ratings</span></span></label> */
+.stolon-check-row.stolon-checkbox.stolon-medium {
     min-height: var(--stolon-size-medium);
     font-size: var(--stolon-font-large);
 }
 /* The rule outranks the page-wide box size that every checkbox on a config page takes */
-.stolon-check-row.stolon-checkbox.medium > input.stolon-check-row-input,
-.stolon-check-row.stolon-checkbox.large > input.stolon-check-row-input {
+.stolon-check-row.stolon-checkbox.stolon-medium > input.stolon-check-row-input,
+.stolon-check-row.stolon-checkbox.stolon-large > input.stolon-check-row-input {
     width: var(--stolon-icon-large);
     height: var(--stolon-icon-large);
 }
 
 /* A large checkbox: a bordered tile that fills the room its row has, its box beside a bold label and a dimmed line,
    outlined and washed in the accent while on. Tiles in one row share it and wrap when it runs out */
-/* Example: <label class="stolon-check-row stolon-checkbox large checked"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Sync watched state</span><span class="stolon-check-sub">Played and resume points follow you.</span></span></label> */
-.stolon-check-row.stolon-checkbox.large {
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-large stolon-checked"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Sync watched state</span><span class="stolon-check-sub">Played and resume points follow you.</span></span></label> */
+.stolon-check-row.stolon-checkbox.stolon-large {
     display: flex;
     flex: 1 1 calc(var(--stolon-size-large) * 6);
     box-sizing: border-box;
@@ -45,23 +45,23 @@
     background: var(--stolon-surface);
     transition: border-color 0.15s, background-color 0.15s;
 }
-.stolon-check-row.stolon-checkbox.large:hover { border-color: var(--stolon-accent); }
-.stolon-check-row.stolon-checkbox.large.checked {
+.stolon-check-row.stolon-checkbox.stolon-large:hover { border-color: var(--stolon-accent); }
+.stolon-check-row.stolon-checkbox.stolon-large.stolon-checked {
     border-color: var(--stolon-accent);
     background: var(--stolon-accent-wash);
 }
-.stolon-checkbox.large > .stolon-check-text { flex: 1 1 auto; gap: calc(var(--stolon-gap-narrow) / 2); }
-.stolon-checkbox.large .stolon-check-label { font-size: var(--stolon-font-large); font-weight: 600; }
-.stolon-checkbox.large .stolon-check-sub { font-size: var(--stolon-font-medium); opacity: 0.7; }
+.stolon-checkbox.stolon-large > .stolon-check-text { flex: 1 1 auto; gap: calc(var(--stolon-gap-narrow) / 2); }
+.stolon-checkbox.stolon-large .stolon-check-label { font-size: var(--stolon-font-large); font-weight: 600; }
+.stolon-checkbox.stolon-large .stolon-check-sub { font-size: var(--stolon-font-medium); opacity: 0.7; }
 
 /* A checkbox a field tall, so it lines up with the text boxes and selects beside it */
-/* Example: <label class="stolon-check-row stolon-checkbox small field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" aria-label="Enabled"></label> */
-.stolon-check-row.stolon-checkbox.field { min-height: var(--stolon-field-height); }
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-small stolon-field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" aria-label="Enabled"></label> */
+.stolon-check-row.stolon-checkbox.stolon-field { min-height: var(--stolon-field-height); }
 
 /* A boxed checkbox: its box and text in a frame drawn like a text box, a field tall with the field's border, corners,
    surface, and inset, so it matches the fields beside it edge for edge */
-/* Example: <label class="stolon-check-row stolon-checkbox small field boxed"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Enabled</span></span></label> */
-.stolon-check-row.stolon-checkbox.boxed {
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-small stolon-field stolon-boxed"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Enabled</span></span></label> */
+.stolon-check-row.stolon-checkbox.stolon-boxed {
     box-sizing: border-box;
     height: var(--stolon-field-height);
     padding: 0 var(--stolon-field-pad);
@@ -70,11 +70,11 @@
     background: var(--stolon-surface);
     transition: border-color 0.15s;
 }
-.stolon-check-row.stolon-checkbox.boxed:hover { border-color: var(--stolon-accent); }
-.stolon-check-row.stolon-checkbox.boxed.disabled:hover { border-color: var(--stolon-border); }
+.stolon-check-row.stolon-checkbox.stolon-boxed:hover { border-color: var(--stolon-accent); }
+.stolon-check-row.stolon-checkbox.stolon-boxed.stolon-disabled:hover { border-color: var(--stolon-border); }
 
 /* A disabled checkbox, dimmed and taking no clicks */
-/* Example: <label class="stolon-check-row stolon-checkbox small disabled"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" disabled><span class="stolon-check-text"><span class="stolon-check-label">Locked</span></span></label> */
-.stolon-check-row.stolon-checkbox.disabled { opacity: 0.5; cursor: default; }
-.stolon-check-row.stolon-checkbox.disabled > .stolon-check-row-input { cursor: default; }
-.stolon-check-row.stolon-checkbox.large.disabled:hover { border-color: var(--stolon-border); }
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-small stolon-disabled"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" disabled><span class="stolon-check-text"><span class="stolon-check-label">Locked</span></span></label> */
+.stolon-check-row.stolon-checkbox.stolon-disabled { opacity: 0.5; cursor: default; }
+.stolon-check-row.stolon-checkbox.stolon-disabled > .stolon-check-row-input { cursor: default; }
+.stolon-check-row.stolon-checkbox.stolon-large.stolon-disabled:hover { border-color: var(--stolon-border); }

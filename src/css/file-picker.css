@@ -14,7 +14,7 @@
     cursor: pointer;
 }
 .stolon-file-zone:hover,
-.stolon-file-zone.dragover { border-color: var(--stolon-accent); background: var(--stolon-accent-wash); }
+.stolon-file-zone.stolon-dragover { border-color: var(--stolon-accent); background: var(--stolon-accent-wash); }
 .stolon-file-zone:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
 
 /* One chosen file with its name, size, and remove button */

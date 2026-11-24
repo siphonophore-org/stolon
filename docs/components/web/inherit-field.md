@@ -22,7 +22,7 @@ var language = createInheritField({
 // On save: library.Language = language.getValue().inherit ? null : language.getValue().value;
 ```
 
-Classes: `stolon-inherit`, `stolon-inherit-field`, `stolon-inherit-toggle`, and `inheriting` while it inherits. The handle is `{ element, getValue, setValue, setInherited, destroy }`, and `getValue()` returns `{ inherit, value }`, where `value` is the field's own value even while it inherits.
+Classes: `stolon-inherit`, `stolon-inherit-field`, `stolon-inherit-toggle`, and `stolon-inheriting` while it inherits. The handle is `{ element, getValue, setValue, setInherited, destroy }`, and `getValue()` returns `{ inherit, value }`, where `value` is the field's own value even while it inherits.
 
 ## States and Modifiers
 
@@ -73,8 +73,8 @@ Wraps any field with an Inherit state. While it inherits, the field shows the in
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-inherit` | A field with an Inherit and Override toggle beside it, which wraps under the field where the line is too narrow |
-| `stolon-inherit.check` | A checkbox field: its box and text a field tall and centered, on one line with the Override toggle beside it |
-| `stolon-inherit.inheriting` | The field while it inherits, dimmed and disabled with the inherited value in it |
+| `stolon-inherit.stolon-check` | A checkbox field: its box and text a field tall and centered, on one line with the Override toggle beside it |
+| `stolon-inherit.stolon-inheriting` | The field while it inherits, dimmed and disabled with the inherited value in it |
 
 <!-- reference:end -->
 

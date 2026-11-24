@@ -94,8 +94,8 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
     button.setAttribute('aria-controls', panel.id);
     var body = make('div', 'stolon-filter-groups');
     var actions = make('div', 'stolon-filter-actions');
-    var clearButton = make('button', 'raised stolon-button small secondary stolon-filter-clear', { type: 'button' }, options.clearText || stolonText('Stolon.Clear'));
-    var doneButton = make('button', 'raised stolon-button small primary stolon-filter-done', { type: 'button' }, options.doneText || stolonText('Stolon.Done'));
+    var clearButton = make('button', 'raised stolon-button stolon-small stolon-secondary stolon-filter-clear', { type: 'button' }, options.clearText || stolonText('Stolon.Clear'));
+    var doneButton = make('button', 'raised stolon-button stolon-small stolon-primary stolon-filter-done', { type: 'button' }, options.doneText || stolonText('Stolon.Done'));
     actions.appendChild(clearButton);
     actions.appendChild(doneButton);
     panel.appendChild(heading);
@@ -136,7 +136,7 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
         var n: number = count(value);
         badge.textContent = String(n);
         badge.hidden = n === 0;
-        button.classList.toggle('active', n > 0);
+        button.classList.toggle('stolon-active', n > 0);
         if (n === 0) button.setAttribute('aria-label', buttonText);
         else button.setAttribute('aria-label', buttonText + ', ' + fill(n === 1 ? (options!.countOneLabel || stolonText('Stolon.FiltersOnOne')) : (options!.countLabel || stolonText('Stolon.FiltersOnMany')), n));
     }
@@ -156,7 +156,7 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
     function render(): void {
         clear(body);
         groups.forEach(function (group: FilterPanelGroup, index: number): void {
-            var set = make('fieldset', 'stolon-filter-group' + (group.single ? ' single' : ''));
+            var set = make('fieldset', 'stolon-filter-group' + (group.single ? ' stolon-single' : ''));
             set.appendChild(make('legend', 'stolon-filter-group-name', null, group.label));
             (group.options || []).forEach(function (option: FilterPanelOption): void {
                 var input = makeCheck('stolon-filter-input', { name: panel.id + '-' + index, 'data-group': group.name }, group.single ? 'radio' : 'checkbox');
@@ -249,8 +249,8 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
             className: 'stolon-filter-dialog',
             returnFocus: button,
             buttons: [
-                { text: options!.clearText || stolonText('Stolon.Clear'), className: 'stolon-button secondary stolon-filter-clear', action: function (): void { clearAll(); } },
-                { text: options!.doneText || stolonText('Stolon.Done'), className: 'stolon-button primary stolon-filter-done', action: function (): void { finish(true, true); } }
+                { text: options!.clearText || stolonText('Stolon.Clear'), className: 'stolon-button stolon-secondary stolon-filter-clear', action: function (): void { clearAll(); } },
+                { text: options!.doneText || stolonText('Stolon.Done'), className: 'stolon-button stolon-primary stolon-filter-done', action: function (): void { finish(true, true); } }
             ],
             onClose: function (): void {
                 // A dismiss by Escape, the backdrop, or the close button drops the pending changes.

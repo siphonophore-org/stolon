@@ -32,7 +32,7 @@ Classes: `stolon-pill-group`, `stolon-pill`. The handle is `{ get, set, destroy 
 
 * `get()` returns the `data-value` of the chosen pill, or its text when it has none. It returns `null` when none is chosen.
 * `set(value)` chooses a pill without calling `onChange`. An unknown value clears the choice.
-* The chosen pill carries `aria-pressed="true"` and `selected` in step. Choosing it again does nothing, and a disabled pill cannot be chosen.
+* The chosen pill carries `aria-pressed="true"` and `stolon-selected` in step. Choosing it again does nothing, and a disabled pill cannot be chosen.
 * The markup works with no JavaScript when the page sets `aria-pressed` itself.
 * `small` and `large` on a pill take the small and large steps of the [size scale](design-tokens.md).
 
@@ -50,7 +50,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createPillGroup(groupEl: HTMLElement, options?: PillGroupOptions): PillGroupHandle</code>
 
-Wires a stolon-pill-group of buttons as a single choice, keeping aria-pressed and the selected class on the chosen pill. It reports each change to onChange.
+Wires a stolon-pill-group of buttons as a single choice, keeping aria-pressed and the stolon-selected class on the chosen pill. It reports each change to onChange.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -66,7 +66,7 @@ Wires a stolon-pill-group of buttons as a single choice, keeping aria-pressed an
 | :--- | :--- |
 | `stolon-pill-group` | A wrapping row of pills where exactly one is chosen, wired by createPillGroup. The toggle group shares the row |
 | `stolon-pill` | One pill, outlined when off and filled with the accent and white text when aria-pressed is true or it has selected |
-| `stolon-pill.small` | A pill at the small or large size of the scale |
+| `stolon-pill.stolon-small` | A pill at the small or large size of the scale |
 
 <!-- reference:end -->
 

@@ -49,7 +49,7 @@ function steps(ui) { return all(ui.s.element, '.stolon-stepper-step'); }
 
 test('the stepper marks completed, current, and upcoming steps with aria-current on the current one', function () {
     var ui = stepper({ value: 'b' });
-    assert.deepEqual(steps(ui).map(function (e) { return e.className; }), ['stolon-stepper-step completed', 'stolon-stepper-step current', 'stolon-stepper-step upcoming']);
+    assert.deepEqual(steps(ui).map(function (e) { return e.className; }), ['stolon-stepper-step stolon-completed', 'stolon-stepper-step stolon-current', 'stolon-stepper-step stolon-upcoming']);
     assert.equal(steps(ui)[1].querySelector('.stolon-stepper-control').getAttribute('aria-current'), 'step');
     assert.equal(steps(ui)[0].querySelector('.material-icons').textContent, 'check');
     assert.equal(steps(ui)[2].querySelector('.stolon-stepper-number').textContent, '3');
@@ -148,11 +148,11 @@ test('the divider has the separator role and an optional label', function () {
 test('the avatar with no picture shows the person icon on a gray circle, a size, and a title', function () {
     var a = J.createAvatar({ name: 'ada lovelace', size: 'large' });
     assert.equal(a.element.querySelector('.stolon-avatar-icon').textContent, 'person');
-    assert.ok(a.element.classList.contains('placeholder'));
+    assert.ok(a.element.classList.contains('stolon-placeholder'));
     assert.ok(a.element.classList.contains('stolon-avatar-large'));
     assert.equal(a.element.getAttribute('title'), 'ada lovelace');
     assert.equal(J.createAvatar({ name: 'ada lovelace' }).element.className, a.element.className.replace('large', 'medium'));
-    assert.equal(J.createAvatar({ name: 'x', color: 'red' }).element.classList.contains('red'), true);
+    assert.equal(J.createAvatar({ name: 'x', color: 'red' }).element.classList.contains('stolon-red'), true);
     assert.equal(J.createAvatar({}).element.querySelector('.stolon-avatar-icon').textContent, 'person');
 });
 
@@ -168,7 +168,7 @@ test('the avatar shows an image with the name as alt, and falls back to the pers
 test('the avatar status dot has a title and label from the color, and statusLabel replaces it', function () {
     var a = J.createAvatar({ name: 'A', status: 'green' });
     var dot = a.element.querySelector('.stolon-avatar-status');
-    assert.ok(dot.classList.contains('green'));
+    assert.ok(dot.classList.contains('stolon-green'));
     assert.equal(dot.title, 'Active');
     assert.equal(dot.getAttribute('aria-label'), 'Active');
     assert.equal(J.createAvatar({ name: 'A', status: 'red', statusLabel: 'Offline' }).element.querySelector('.stolon-avatar-status').title, 'Offline');
@@ -195,21 +195,21 @@ test('the user chip shows an avatar, a name, and an optional second line', funct
 test('the stat card shows the value and label with the card color, and a trend with a direction', function () {
     var s = J.createStatCard({ value: 1204, label: 'Items', color: 'blue', trend: 12, trendSuffix: '%', trendLabel: 'vs last week' });
     assert.ok(s.element.classList.contains('stolon-card'));
-    assert.ok(s.element.classList.contains('blue'));
+    assert.ok(s.element.classList.contains('stolon-blue'));
     assert.equal(s.element.querySelector('.stolon-card-count').textContent, '1204');
     assert.equal(s.element.querySelector('.stolon-card-label').textContent, 'Items');
     var trend = s.element.querySelector('.stolon-stat-trend');
-    assert.ok(trend.classList.contains('good'));
+    assert.ok(trend.classList.contains('stolon-good'));
     assert.equal(trend.querySelector('.material-icons').textContent, 'arrow_upward');
     assert.equal(trend.querySelector('.stolon-sr-only').textContent, 'Up');
     assert.equal(trend.children[2].textContent, '12% vs last week');
 });
 
 test('the stat trend is bad for a decrease, reversed with positiveIsGood false, flat at zero, and hidden with no trend', function () {
-    assert.ok(J.createStatCard({ trend: -3 }).element.querySelector('.stolon-stat-trend').classList.contains('bad'));
-    assert.ok(J.createStatCard({ trend: -3, positiveIsGood: false }).element.querySelector('.stolon-stat-trend').classList.contains('good'));
+    assert.ok(J.createStatCard({ trend: -3 }).element.querySelector('.stolon-stat-trend').classList.contains('stolon-bad'));
+    assert.ok(J.createStatCard({ trend: -3, positiveIsGood: false }).element.querySelector('.stolon-stat-trend').classList.contains('stolon-good'));
     var flat = J.createStatCard({ trend: 0 }).element.querySelector('.stolon-stat-trend');
-    assert.ok(flat.classList.contains('flat'));
+    assert.ok(flat.classList.contains('stolon-flat'));
     assert.equal(flat.querySelector('.stolon-sr-only').textContent, 'No change');
     assert.equal(J.createStatCard({ value: 1 }).element.querySelector('.stolon-stat-trend').hidden, true);
     var custom = J.createStatCard({ trend: 1, trendUpText: 'Increase' }).element.querySelector('.stolon-sr-only');
@@ -231,7 +231,7 @@ test('the progress ring is a progressbar with value attributes, and the arc leng
     assert.equal(r.element.getAttribute('aria-label'), 'Progress');
     assert.equal(r.element.getAttribute('aria-valuenow'), '40');
     assert.equal(r.element.getAttribute('aria-valuemax'), '100');
-    assert.ok(r.element.classList.contains('green'));
+    assert.ok(r.element.classList.contains('stolon-green'));
     assert.ok(r.element.classList.contains('stolon-ring-large'));
     assert.equal(r.element.querySelector('.stolon-ring-arc').getAttribute('stroke-dasharray'), '40 100');
     assert.equal(r.element.querySelector('.stolon-ring-value').textContent, '40%');
@@ -254,9 +254,9 @@ test('the timeline draws an item per event with the status class, time, title, a
         { time: '10:00', datetime: '2026-03-10T10:00', title: 'Synced', body: '12 items', status: 'green', icon: 'check' },
         { title: 'Plain' }
     ] });
-    assert.equal(t.element.querySelector('ol').className, 'stolon-timeline stolon-list plain');
+    assert.equal(t.element.querySelector('ol').className, 'stolon-timeline stolon-list stolon-plain');
     var items = t.element.querySelectorAll('.stolon-timeline-item');
-    assert.ok(items[0].classList.contains('green'));
+    assert.ok(items[0].classList.contains('stolon-green'));
     assert.equal(items[0].querySelector('time').getAttribute('datetime'), '2026-03-10T10:00');
     assert.equal(items[0].querySelector('.stolon-timeline-title').textContent, 'Synced');
     assert.equal(items[0].querySelector('.stolon-timeline-text').textContent, '12 items');
@@ -282,9 +282,9 @@ test('the status dot has an image role with a title and aria-label from the colo
     assert.equal(d.element.getAttribute('role'), 'img');
     assert.equal(d.element.title, 'Waiting');
     assert.equal(d.element.getAttribute('aria-label'), 'Waiting');
-    assert.ok(d.element.classList.contains('orange'));
+    assert.ok(d.element.classList.contains('stolon-orange'));
     d.setValue({ color: 'green', label: 'Reachable' });
     assert.deepEqual(d.getValue(), { color: 'green', label: 'Reachable' });
     assert.equal(J.createStatusDot().element.title, 'Off');
-    assert.ok(J.createStatusDot({ color: 'nope' }).element.classList.contains('gray'));
+    assert.ok(J.createStatusDot({ color: 'nope' }).element.classList.contains('stolon-gray'));
 });

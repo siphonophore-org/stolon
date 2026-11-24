@@ -57,7 +57,7 @@ test('the input is a combobox that controls a listbox, closed until it has resul
     assert.equal(ui.input.getAttribute('aria-expanded'), 'false');
     assert.equal(ui.input.getAttribute('aria-controls'), ui.dropdown.id);
     assert.equal(ui.dropdown.getAttribute('role'), 'listbox');
-    assert.ok(ui.dropdown.classList.contains('hidden'));
+    assert.ok(ui.dropdown.classList.contains('stolon-hidden'));
 });
 
 test('focus opens the listbox with an option role on every result', function () {
@@ -66,7 +66,7 @@ test('focus opens the listbox with an option role on every result', function () 
     var options = ui.dropdown.querySelectorAll('.stolon-combo-option');
     assert.equal(options.length, 3);
     assert.equal(ui.input.getAttribute('aria-expanded'), 'true');
-    assert.equal(ui.dropdown.classList.contains('hidden'), false);
+    assert.equal(ui.dropdown.classList.contains('stolon-hidden'), false);
     options.forEach(function (o) {
         assert.equal(o.getAttribute('role'), 'option');
         assert.ok(o.id);
@@ -101,7 +101,7 @@ test('Escape closes the listbox and drops the active option', function () {
     ui.input.dispatch('keydown', { key: 'ArrowDown' });
     ui.input.dispatch('keydown', { key: 'Escape' });
     assert.equal(ui.input.getAttribute('aria-expanded'), 'false');
-    assert.ok(ui.dropdown.classList.contains('hidden'));
+    assert.ok(ui.dropdown.classList.contains('stolon-hidden'));
     assert.equal(ui.input.hasAttribute('aria-activedescendant'), false);
 });
 
@@ -213,7 +213,7 @@ test('the searchable combo box and the chip select input show a trailing search 
 test('an item with an image draws a round picture in its chip, and getItems keeps it', function () {
     var ui = build({ value: [{ value: 'a', label: 'Alpha', image: 'a.png' }, { value: 'b', label: 'Beta' }] });
     var first = ui.chips.children[0];
-    assert.ok(first.classList.contains('has-thumb'));
+    assert.ok(first.classList.contains('stolon-has-thumb'));
     assert.equal(first.querySelector('.stolon-tag-thumb img').getAttribute('src'), 'a.png');
     assert.equal(ui.chips.children[1].querySelector('.stolon-tag-thumb'), null);
     assert.equal(ui.select.getItems()[0].image, 'a.png');

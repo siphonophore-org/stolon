@@ -133,7 +133,7 @@ test('showValue false leaves out the copy field', function () {
 
 test('inline draws the text with a QR button beside Copy that opens the full code in a dialog', function () {
     var qr = createQrCode({ value: 'https://example.com', layout: 'inline' });
-    assert.ok(qr.element.classList.contains('inline'));
+    assert.ok(qr.element.classList.contains('stolon-inline'));
     assert.equal(qr.element.querySelector('.stolon-qr-code-frame'), null, 'no code on the page');
     assert.equal(qr.element.querySelector('.stolon-copy-field input').value, 'https://example.com');
     var btn = qr.element.querySelector('.stolon-copy-field .stolon-qr-code-open');
@@ -152,7 +152,7 @@ test('inline shows the whole of an 84 character link, with nothing in its CSS th
     assert.equal(url.length, 84);
     var qr = createQrCode({ value: url, layout: 'inline' });
     var field = qr.element.querySelector('.stolon-copy-field');
-    assert.ok(field.classList.contains('wrap'));
+    assert.ok(field.classList.contains('stolon-wrap'));
     var text = field.querySelector('.stolon-copy-field-text');
     assert.equal(text.textContent, url);
     assert.ok(field.querySelector('.stolon-copy-button'), 'Copy stays beside the text');

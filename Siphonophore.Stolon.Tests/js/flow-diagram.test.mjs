@@ -158,15 +158,15 @@ test('lane and dot colors come from color names, and a hex sets --stolon-custom'
         { key: 'c', side: 'below', direction: 'out', items: [{ label: 'E' }] }
     ] });
     var a = lane(d, 'a');
-    assert.ok(a.classList.contains('custom'));
+    assert.ok(a.classList.contains('stolon-custom'));
     assert.equal(a.style['--stolon-custom'], '#e91e63');
     var dots = a.querySelectorAll('.stolon-flow-diagram-dot');
     assert.equal(dots.length, 2);
-    assert.ok(dots[0].classList.contains('custom'));
+    assert.ok(dots[0].classList.contains('stolon-custom'));
     assert.equal(dots[0].style['--stolon-custom'], '#00ff00');
-    assert.ok(dots[1].classList.contains('red'));
-    assert.ok(lane(d, 'b').classList.contains('blue'));
-    assert.ok(lane(d, 'c').classList.contains('gray'));
+    assert.ok(dots[1].classList.contains('stolon-red'));
+    assert.ok(lane(d, 'b').classList.contains('stolon-blue'));
+    assert.ok(lane(d, 'c').classList.contains('stolon-gray'));
     assert.equal(lane(d, 'b').querySelectorAll('.stolon-flow-diagram-dot').length, 0);
 });
 
@@ -240,10 +240,10 @@ test('destroy removes the listeners and empties the diagram', function () {
 
 test('too wide for its box it is drawn again as a stack at full size, and a wide box keeps the hub layout', function () {
     var d = createFlowDiagram(sample);
-    assert.equal(d.element.classList.contains('stacked'), false);
+    assert.equal(d.element.classList.contains('stolon-stacked'), false);
     Object.defineProperty(d.element, 'clientWidth', { value: 240, configurable: true });
     d.setValue(sample);
-    assert.equal(d.element.classList.contains('stacked'), true);
+    assert.equal(d.element.classList.contains('stolon-stacked'), true);
     var svg = d.element.querySelector('svg');
     assert.equal(svg.getAttribute('width'), '240');
     var rects = Array.from(d.element.querySelectorAll('.stolon-flow-diagram-pill'));
@@ -259,5 +259,5 @@ test('too wide for its box it is drawn again as a stack at full size, and a wide
     assert.equal(lane(d, 'push').querySelectorAll('.stolon-flow-diagram-stub[marker-end]').length, 2);
     Object.defineProperty(d.element, 'clientWidth', { value: 2000, configurable: true });
     d.setValue(sample);
-    assert.equal(d.element.classList.contains('stacked'), false);
+    assert.equal(d.element.classList.contains('stolon-stacked'), false);
 });

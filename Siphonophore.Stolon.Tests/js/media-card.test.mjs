@@ -35,7 +35,7 @@ test('the defaults draw a portrait row with a movie placeholder and no image', f
     assert.ok(card.element.classList.contains('stolon-media-card'));
     assert.ok(card.element.classList.contains('stolon-media-card-row'));
     var thumb = q(card, '.stolon-media-card-thumb');
-    assert.ok(thumb.classList.contains('portrait'));
+    assert.ok(thumb.classList.contains('stolon-portrait'));
     assert.equal(q(card, '.stolon-media-card-placeholder .material-icons').textContent, 'movie');
     assert.equal(q(card, '.stolon-media-card-placeholder').getAttribute('aria-hidden'), 'true');
     assert.equal(q(card, 'img'), null);
@@ -52,14 +52,14 @@ test('the placeholder icon follows the shape, and icon replaces it', function ()
     assert.equal(q(build({ shape: 'square' }), '.stolon-media-card-placeholder').textContent, 'album');
     assert.equal(q(build({ shape: 'round' }), '.stolon-media-card-placeholder').textContent, 'person');
     assert.equal(q(build({ shape: 'round', icon: 'queue_music' }), '.stolon-media-card-placeholder').textContent, 'queue_music');
-    assert.ok(q(build({ shape: 'oval' }), '.stolon-media-card-thumb').classList.contains('portrait'));
+    assert.ok(q(build({ shape: 'oval' }), '.stolon-media-card-thumb').classList.contains('stolon-portrait'));
 });
 
 test('the card layout draws a tile', function () {
     var card = build({ layout: 'card', shape: 'wide' });
     assert.ok(card.element.classList.contains('stolon-media-card-tile'));
     assert.equal(card.element.classList.contains('stolon-media-card-row'), false);
-    assert.ok(q(card, '.stolon-media-card-thumb').classList.contains('wide'));
+    assert.ok(q(card, '.stolon-media-card-thumb').classList.contains('stolon-wide'));
 });
 
 test('imageUrl draws a lazy image with an empty alt over the placeholder', function () {
@@ -85,7 +85,7 @@ test('an image address that arrives later through setValue keeps the other optio
     card.setValue({ imageUrl: 'blob:late' });
     assert.equal(q(card, 'img').getAttribute('src'), 'blob:late');
     assert.equal(q(card, '.stolon-media-card-name').textContent, 'Alpha');
-    assert.ok(q(card, '.stolon-media-card-thumb').classList.contains('wide'));
+    assert.ok(q(card, '.stolon-media-card-thumb').classList.contains('stolon-wide'));
     assert.equal(card.getValue().imageUrl, 'blob:late');
     assert.equal(card.getValue().title, 'Alpha');
     card.setValue(null);
@@ -129,29 +129,29 @@ test('badges draw as stolon-badge with a known color, else gray, and skip an emp
     var card = build({ badges: [{ label: 'Metadata', color: 'blue' }, { label: 'Provider', color: 'bad color"' }, { label: '' }] });
     var badges = all(card.element, '.stolon-badge');
     assert.equal(badges.length, 2);
-    assert.equal(badges[0].className, 'stolon-badge blue');
+    assert.equal(badges[0].className, 'stolon-badge stolon-blue');
     assert.equal(badges[0].textContent, 'Metadata');
-    assert.equal(badges[1].className, 'stolon-badge gray');
+    assert.equal(badges[1].className, 'stolon-badge stolon-gray');
 });
 
 test('status, meta, and metaIsError draw the side column', function () {
     var card = build({ status: { label: 'Failed', color: 'red' }, meta: 'Could not reach the server.', metaIsError: true });
     var status = q(card, '.stolon-media-card-side .stolon-media-card-status');
-    assert.equal(status.className, 'stolon-badge red stolon-media-card-status');
+    assert.equal(status.className, 'stolon-badge stolon-red stolon-media-card-status');
     assert.equal(status.textContent, 'Failed');
     var meta = q(card, '.stolon-media-card-meta');
-    assert.ok(meta.classList.contains('error'));
+    assert.ok(meta.classList.contains('stolon-error'));
     assert.equal(meta.textContent, 'Could not reach the server.');
     var plain = build({ meta: 'edited 2 minutes ago' });
-    assert.equal(q(plain, '.stolon-media-card-meta').classList.contains('error'), false);
+    assert.equal(q(plain, '.stolon-media-card-meta').classList.contains('stolon-error'), false);
     assert.equal(q(plain, '.stolon-media-card-status'), null);
-    assert.equal(q(card, '.stolon-media-card-side').classList.contains('compact'), false);
+    assert.equal(q(card, '.stolon-media-card-side').classList.contains('stolon-compact'), false);
     card.setValue({ status: null, meta: '' });
     assert.equal(q(card, '.stolon-media-card-side'), null);
     card.setValue({ actions: [{ label: 'Discard', icon: 'close', value: 'x' }] });
     assert.equal(q(card, '.stolon-media-card-side'), null);
     assert.equal(q(card, '.stolon-media-card-actions').parentNode, card.element);
-    assert.ok(card.element.classList.contains('has-actions'));
+    assert.ok(card.element.classList.contains('stolon-has-actions'));
 });
 
 test('the actions sit in the card itself, pinned apart from the side column, and the card counts them', function () {
@@ -160,7 +160,7 @@ test('the actions sit in the card itself, pinned apart from the side column, and
     assert.equal(q(card, '.stolon-media-card-actions').parentNode, card.element);
     assert.equal(card.element.style['--stolon-media-card-actions'], '1');
     card.setValue({ actions: [] });
-    assert.equal(card.element.classList.contains('has-actions'), false);
+    assert.equal(card.element.classList.contains('stolon-has-actions'), false);
 });
 
 test('the size and then the status share the first line, and the detail and error follow on their own lines', function () {
@@ -205,7 +205,7 @@ test('onClick makes the whole card a focusable button named by its title, opened
     var card = build({ title: 'Alpha', onClick: function () { opened++; } });
     assert.equal(card.element.getAttribute('role'), 'button');
     assert.equal(card.element.getAttribute('tabindex'), '0');
-    assert.ok(card.element.classList.contains('clickable'));
+    assert.ok(card.element.classList.contains('stolon-clickable'));
     assert.equal(card.element.getAttribute('aria-labelledby'), q(card, '.stolon-media-card-title').id);
     card.element.click();
     var enter = card.element.dispatch('keydown', { key: 'Enter' });
@@ -284,7 +284,7 @@ test('a compact card puts the episode first on its second line, then the user an
     card.element.clientWidth = 300;
     return new Promise(function (resolve) { setTimeout(resolve, 5); }).then(function () {
         var sub = q(card, '.stolon-media-card-sub');
-        assert.ok(card.element.classList.contains('compact'));
+        assert.ok(card.element.classList.contains('stolon-compact'));
         assert.deepEqual(Array.from(sub.children).map(function (c) { return c.className; }), ['stolon-media-card-episode', 'stolon-media-card-user', 'stolon-media-card-subtitle']);
     });
 });
@@ -296,5 +296,5 @@ test('a disabled action is greyed out in its place, so the actions keep their co
     assert.equal(btn.disabled, true);
     btn.click();
     assert.deepEqual(clicked, []);
-    assert.equal(card.element.classList.contains('has-actions'), true);
+    assert.equal(card.element.classList.contains('stolon-has-actions'), true);
 });

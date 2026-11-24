@@ -47,7 +47,7 @@ test('a copy sends the value to the clipboard, shows Copied. and calls onCopy', 
     assert.deepEqual(seen, [['abc', true]]);
     var button = field.element.querySelector('.stolon-copy-button');
     assert.equal(button.title, 'Copied');
-    assert.ok(button.classList.contains('success'));
+    assert.ok(button.classList.contains('stolon-success'));
     assert.equal(field.element.querySelector('[role="status"]').textContent, 'Copied');
 });
 
@@ -59,7 +59,7 @@ test('the feedback returns to the copy label after the delay', async function ()
         mock.timers.tick(500);
         var button = field.element.querySelector('.stolon-copy-button');
         assert.equal(button.title, 'Copy');
-        assert.equal(button.classList.contains('success'), false);
+        assert.equal(button.classList.contains('stolon-success'), false);
     } finally {
         mock.timers.reset();
     }
@@ -128,14 +128,14 @@ test('createCopyField puts size small or large on data-stolon-size, and leaves i
 });
 
 test('inline marks the field for a row, with no space below it', function () {
-    assert.equal(createCopyField({ value: 'a', inline: true }).element.className, 'stolon-copy-field inline');
+    assert.equal(createCopyField({ value: 'a', inline: true }).element.className, 'stolon-copy-field stolon-inline');
     assert.equal(createCopyField({ value: 'a' }).element.className, 'stolon-copy-field');
 });
 
 test('wrap shows the whole value as read-only text that copies and follows setValue', async function () {
     var url = 'https://jellyfin.example.com/invite/0123456789abcdef0123456789abcdef?code=ABCDEFGH';
     var field = createCopyField({ value: url, wrap: true, label: 'Invite Link' });
-    assert.equal(field.element.className, 'stolon-copy-field wrap');
+    assert.equal(field.element.className, 'stolon-copy-field stolon-wrap');
     var text = field.element.querySelector('.stolon-copy-field-text');
     assert.equal(text.textContent, url);
     assert.equal(text.getAttribute('role'), 'textbox');

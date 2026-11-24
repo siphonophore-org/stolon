@@ -41,7 +41,7 @@
 .stolon-access-schedule-fields > .stolon-access-schedule-range { grid-column: 2 / 4; }
 
 /* Sentence shown while there is no window */
-/* Example: <div class="stolon-list-empty outside stolon-access-schedule-empty">No windows. Access is allowed at any time.</div> */
+/* Example: <div class="stolon-list-empty stolon-outside stolon-access-schedule-empty">No windows. Access is allowed at any time.</div> */
 /* It is built as the list's own empty sentence, stolon-list-empty outside */
 
 @media (max-width: 600px) {

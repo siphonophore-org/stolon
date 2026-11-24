@@ -29,7 +29,7 @@ test('each kind sets its class and icon and joins a live region, where only an e
     var t = createToaster();
     [['info', 'info', 'status'], ['success', 'check_circle', 'status'], ['warn', 'warning', 'status'], ['error', 'error', 'alert']].forEach(function (k) {
         var toast = t[k[0]]('Message.');
-        assert.ok(toast.element.classList.contains(k[0]));
+        assert.ok(toast.element.classList.contains('stolon-' + k[0]));
         assert.equal(toast.element.querySelector('.material-icons').textContent, k[1]);
         assert.equal(toast.element.parentNode.getAttribute('role'), k[2]);
         assert.equal(toast.element.hasAttribute('role'), false);
@@ -40,7 +40,7 @@ test('each kind sets its class and icon and joins a live region, where only an e
 test('show takes a message, a title, and an unknown kind falls back to info', function () {
     var t = createToaster();
     var toast = t.show({ message: 'Saved.', title: 'Done', kind: 'odd' });
-    assert.ok(toast.element.classList.contains('info'));
+    assert.ok(toast.element.classList.contains('stolon-info'));
     assert.equal(toast.element.querySelector('.stolon-toast-title').textContent, 'Done');
     assert.equal(t.show('Plain.').element.querySelector('.stolon-toast-title'), null);
 });

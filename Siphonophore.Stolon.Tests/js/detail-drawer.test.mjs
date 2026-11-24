@@ -23,8 +23,8 @@ function drawers() {
 test('a drawer is a modal dialog on the shared shell, docked by its classes, sized from the dialog scale, and named by its title', function () {
     var handle = openDetailDrawer({ title: 'Movies', size: 'small' });
     var panel = handle.element.querySelector('.stolon-dialog-content');
-    assert.equal(handle.element.className, 'stolon-dialog small stolon-drawer');
-    assert.equal(panel.className, 'stolon-dialog-content stolon-drawer-content small');
+    assert.equal(handle.element.className, 'stolon-dialog stolon-small stolon-drawer');
+    assert.equal(panel.className, 'stolon-dialog-content stolon-drawer-content stolon-small');
     assert.equal(panel.getAttribute('role'), 'dialog');
     assert.equal(panel.getAttribute('aria-modal'), 'true');
     var title = panel.querySelector('.stolon-drawer-title');
@@ -49,7 +49,7 @@ test('the header shows the subtitle and the badge, and the footer is a dialog bu
     assert.equal(panel.getAttribute('aria-describedby'), subtitle.id);
     var badge = panel.querySelector('.stolon-drawer-badge');
     assert.equal(badge.textContent, 'Errored');
-    assert.ok(badge.classList.contains('red'));
+    assert.ok(badge.classList.contains('stolon-red'));
     assert.equal(handle.content.innerHTML, '<p>Body</p>');
     var buttons = panel.querySelectorAll('.stolon-drawer-footer .stolon-modal-button');
     assert.equal(buttons.length, 2);
@@ -111,7 +111,7 @@ test('a drawer with no title is named by ariaLabel, else Details', function () {
 test('detailDrawerOpener opens a drawer for the first item and swaps the next one in while it is open', function () {
     var show = detailDrawerOpener(function (row) { return { title: row.name }; }, { size: 'large' });
     var first = show({ name: 'Movies' });
-    assert.equal(first.element.classList.contains('large'), true);
+    assert.equal(first.element.classList.contains('stolon-large'), true);
     var second = show({ name: 'Shows' });
     assert.equal(second, first);
     assert.equal(drawers(), 1);

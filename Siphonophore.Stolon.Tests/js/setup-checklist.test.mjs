@@ -45,12 +45,12 @@ test('each step is a numbered collapsible section whose header badge names its s
     var all = sections(list);
     assert.equal(all.length, 4);
     assert.ok(all[0].classList.contains('stolon-collapsible-section'));
-    assert.ok(all[0].classList.contains('numbered'));
+    assert.ok(all[0].classList.contains('stolon-numbered'));
     var badges = list.element.querySelectorAll('.stolon-collapsible-header .stolon-collapsible-badge');
     assert.equal(badges[0].textContent, 'Done');
-    assert.ok(badges[0].classList.contains('green'));
+    assert.ok(badges[0].classList.contains('stolon-green'));
     assert.equal(badges[1].textContent, 'Needs attention');
-    assert.ok(badges[1].classList.contains('orange'));
+    assert.ok(badges[1].classList.contains('stolon-orange'));
     assert.equal(badges[2].textContent, 'To do');
     assert.equal(badges[3].textContent, 'Optional');
 });
@@ -68,17 +68,17 @@ test('the summary counts the done steps and draws one segment per step in its st
     assert.equal(list.element.querySelector('.stolon-setup-count').textContent, '1 of 4 done');
     var segs = segments(list);
     assert.equal(segs.length, 4);
-    assert.ok(segs[0].classList.contains('completed'));
-    assert.ok(segs[1].classList.contains('attention'));
-    assert.ok(segs[2].classList.contains('upcoming'));
-    assert.ok(segs[3].classList.contains('optional'));
+    assert.ok(segs[0].classList.contains('stolon-completed'));
+    assert.ok(segs[1].classList.contains('stolon-attention'));
+    assert.ok(segs[2].classList.contains('stolon-upcoming'));
+    assert.ok(segs[3].classList.contains('stolon-optional'));
     assert.equal(segs[1].querySelector('.stolon-stepper-control').getAttribute('aria-current'), 'step');
 });
 
 test('the next todo step shows as current in the summary, and its hidden text says To do', function () {
     var list = createSetupChecklist({ steps: [{ key: 'a', title: 'A', state: 'done' }, { key: 'b', title: 'B' }] });
     var seg = segments(list)[1];
-    assert.ok(seg.classList.contains('current'));
+    assert.ok(seg.classList.contains('stolon-current'));
     assert.match(seg.textContent, /To do/);
 });
 
@@ -132,7 +132,7 @@ test('a step action is a button that reports its key', function () {
     var list = createSetupChecklist({ steps: items });
     var button = sections(list)[1].querySelector('.stolon-collapsible-actions .stolon-button');
     assert.equal(button.textContent, 'Check Again');
-    assert.ok(button.classList.contains('primary'));
+    assert.ok(button.classList.contains('stolon-primary'));
     button.click();
     assert.deepEqual(pressed, ['domain']);
 });

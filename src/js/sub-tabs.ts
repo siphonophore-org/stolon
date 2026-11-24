@@ -100,7 +100,7 @@ export function createSubTabs(options?: SubTabsOptions): SubTabsHandle {
         tabs.forEach(function (t) {
             var active = idOf(t) === id;
             var el = tabEl(idOf(t));
-            el.classList.toggle('active', active);
+            el.classList.toggle('stolon-active', active);
             el.setAttribute('aria-selected', active ? 'true' : 'false');
             el.setAttribute('tabindex', active ? '0' : '-1');
             panelEl(idOf(t)).hidden = !active;

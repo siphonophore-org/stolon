@@ -13,7 +13,7 @@ export interface PillGroupHandle {
 }
 
 /**
- * Wires a stolon-pill-group of buttons as a single choice, keeping aria-pressed and the selected class on the chosen pill. It reports each change to onChange.
+ * Wires a stolon-pill-group of buttons as a single choice, keeping aria-pressed and the stolon-selected class on the chosen pill. It reports each change to onChange.
  *
  * @param groupEl element with the stolon-pill-group class, holding stolon-pill buttons whose value is their data-value or their text
  * @param options { onChange: function(value) [optional] }

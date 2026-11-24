@@ -20,7 +20,7 @@ shared.setStatus('serverListStatus', 'Server order saved.', false);
 shared.setStatus('serverListStatus', 'Could not save.', true, { timeout: 0 });
 ```
 
-Classes: `stolon-status-text`, with the state class `success`, `error`, `warn`, or `info` and `stolon-icon-text`, and `stolon-status-ok` or `stolon-status-bad` beside it. `shared.saveConfigWith` calls `setStatus` for you.
+Classes: `stolon-status-text`, with the state class `stolon-success`, `stolon-error`, `stolon-warn`, or `stolon-info` and `stolon-icon-text`, and `stolon-status-ok` or `stolon-status-bad` beside it. `shared.saveConfigWith` calls `setStatus` for you.
 
 ## States and Modifiers
 

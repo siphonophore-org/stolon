@@ -28,18 +28,18 @@ The template is `src/templates/status.html`, embedded as `<RootNamespace>.Templa
 * `{{BUTTON}}`: an `a.stolon-btn`, or empty when `buttonText` or `buttonHref` is null or empty. The defaults are "Back to Jellyfin" and `../web/`.
 * `{{CONTENT}}`: raw HTML that is not encoded. Pass only markup the plugin owns.
 
-Classes, all defined in the template's own `<style>` block: `stolon-status-card`, `stolon-logo`, `stolon-spinner`, `stolon-btn`, `stolon-fields`, `stolon-hint`, `stolon-field-pair`, `stolon-submit`, `stolon-note`, and `hidden`.
+Classes, all defined in the template's own `<style>` block: `stolon-status-card`, `stolon-logo`, `stolon-spinner`, `stolon-btn`, `stolon-fields`, `stolon-hint`, `stolon-field-pair`, `stolon-submit`, `stolon-note`, and `stolon-hidden`.
 
 ## States and Modifiers
 
 * The page is always dark, a `#101010` page with a `#1c1c1f` card and the Jellyfin blue accent. It is centered with a 420px maximum width and 24px page padding, so it fits 375px.
 * `stolon-fields`, `stolon-hint`, `stolon-field-pair`, `stolon-submit`, and `stolon-note` are for a form a plugin supplies through `content`. `StatusPage.Render` does not produce them.
-* The template carries its own copy of `hidden` and a `stolon-spin` animation.
+* The template carries its own copy of `stolon-hidden` and a `stolon-spin` animation.
 
 ## Gotchas
 
 * It links a relative `favicon.ico` (serve one with `PublicPage.Favicon`) and the logo `../web/favicons/touchicon.png`.
-* `CssCollisionTests` fails if any template class is also defined in the kit CSS, other than `hidden`, so the card is never restyled when both load on one page.
+* `CssCollisionTests` fails if any template class is also defined in the kit CSS, other than `stolon-hidden`, so the card is never restyled when both load on one page.
 
 ## Example
 

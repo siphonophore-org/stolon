@@ -28,7 +28,7 @@ Parts: `stolon-file-name`, `stolon-file-size`.
 
 * `getValue()` returns an array of `File` objects. In single mode a new file replaces the old one.
 * `accept` is an accept list such as `'image/*,.png'`. `maxSize` is the most bytes one file may have, and the size limit follows the size message in parentheses, such as (2 MB).
-* The zone has `role="button"` and `tabindex="0"`, and is built as `stolon-icon-text`, so its icon lines up with the first line of the text. The `dragover` modifier shows the accent.
+* The zone has `role="button"` and `tabindex="0"`, and is built as `stolon-icon-text`, so its icon lines up with the first line of the text. The `stolon-dragover` modifier shows the accent.
 * `dropText` is "Drop files here or click to select." by default. `typeText`, `sizeLimitText`, and `singleText` replace the refusal messages, and `{value}` is the file name.
 * The refusal messages show together under the zone as an error [Field Message](field-message.md).
 * `onChange(files)` runs after each change. `onError(messages)` runs with the refusal messages.

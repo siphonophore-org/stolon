@@ -1,6 +1,6 @@
 /* A List of nested rows that open and close, one row per visible node */
-/* Example: <div class="stolon-list plain stolon-tree" role="tree"><div class="stolon-tree-row stolon-list-item" role="treeitem" aria-level="1" tabindex="0"></div></div> */
-.stolon-tree.stolon-list.plain { gap: 0; }
+/* Example: <div class="stolon-list stolon-plain stolon-tree" role="tree"><div class="stolon-tree-row stolon-list-item" role="treeitem" aria-level="1" tabindex="0"></div></div> */
+.stolon-tree.stolon-list.stolon-plain { gap: 0; }
 
 /* One node: indented by its level, then its open button, its checkbox, its picture, and its text. The focused row takes an accent ring, and a checked one the shared selection */
 /* Example: <div class="stolon-tree-row" role="treeitem" aria-level="2" style="--stolon-tree-level: 1"><button class="stolon-tree-toggle"></button><input class="stolon-tree-check" type="checkbox"><span class="stolon-tree-text"></span></div> */
@@ -20,7 +20,7 @@
 .stolon-tree-row:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
 
 /* The open button, a row button whose chevron points down while closed and turns up while open */
-/* Example: <button class="stolon-tree-toggle collapsed" aria-expanded="false"><span class="material-icons stolon-collapsible-icon">expand_more</span></button> */
+/* Example: <button class="stolon-tree-toggle stolon-collapsed" aria-expanded="false"><span class="material-icons stolon-collapsible-icon">expand_more</span></button> */
 .stolon-tree-toggle,
 .stolon-tree-spacer {
     display: inline-flex;
@@ -44,16 +44,16 @@
 .stolon-tree-toggle .stolon-collapsible-icon { font-size: var(--stolon-chevron-secondary); }
 
 /* The checkbox, the thumbnail a text line tall, the icon, and the text with its dimmed secondary part */
-/* Example: <span class="stolon-thumb stolon-tree-thumb square"></span> */
+/* Example: <span class="stolon-thumb stolon-tree-thumb stolon-square"></span> */
 .stolon-tree-check { flex: 0 0 auto; margin: 0; cursor: pointer; }
 .stolon-tree-thumb {
     width: var(--stolon-size-small);
     height: var(--stolon-size-small);
     border-radius: var(--stolon-radius-small);
 }
-.stolon-tree-thumb.portrait { width: calc(var(--stolon-size-small) * 2 / 3); }
-.stolon-tree-thumb.wide { width: calc(var(--stolon-size-small) * 16 / 9); }
-.stolon-tree-thumb.round { border-radius: var(--stolon-radius-round); }
+.stolon-tree-thumb.stolon-portrait { width: calc(var(--stolon-size-small) * 2 / 3); }
+.stolon-tree-thumb.stolon-wide { width: calc(var(--stolon-size-small) * 16 / 9); }
+.stolon-tree-thumb.stolon-round { border-radius: var(--stolon-radius-round); }
 .stolon-tree-thumb .stolon-thumb-image { width: 100%; height: 100%; object-fit: cover; display: block; }
 .stolon-tree-icon { flex: 0 0 auto; font-size: var(--stolon-icon-medium); opacity: 0.8; }
 .stolon-tree-text { flex: 1; min-width: 0; overflow-wrap: anywhere; }

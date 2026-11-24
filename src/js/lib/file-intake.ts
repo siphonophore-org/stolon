@@ -30,7 +30,7 @@ export interface FileRules {
 
 /**
  * Builds a hidden file input that the trigger opens with a click, Enter, or Space, and that hands the chosen files to onFiles and then resets, so the same file can be chosen again.
- * A dropTarget takes dropped files the same way and carries the dragover class while files are over it, and files pasted while it or the trigger has focus go to onFiles too.
+ * A dropTarget takes dropped files the same way and carries the stolon-dragover class while files are over it, and files pasted while it or the trigger has focus go to onFiles too.
  *
  * @param opts { trigger, dropTarget [optional], accept [optional], multiple (default false), onFiles(files) }
  * @returns { input, destroy }.
@@ -60,11 +60,11 @@ export function bindFileInput(opts: FileInputOptions): FileInputHandle {
     }));
     var target = opts.dropTarget;
     if (target) {
-        cleanups.push(listen(target, 'dragover', function (e: DragEvent) { e.preventDefault(); target!.classList.add('dragover'); }));
-        cleanups.push(listen(target, 'dragleave', function () { target!.classList.remove('dragover'); }));
+        cleanups.push(listen(target, 'dragover', function (e: DragEvent) { e.preventDefault(); target!.classList.add('stolon-dragover'); }));
+        cleanups.push(listen(target, 'dragleave', function () { target!.classList.remove('stolon-dragover'); }));
         cleanups.push(listen(target, 'drop', function (e: DragEvent) {
             e.preventDefault();
-            target!.classList.remove('dragover');
+            target!.classList.remove('stolon-dragover');
             take(e.dataTransfer && e.dataTransfer.files);
         }));
     }

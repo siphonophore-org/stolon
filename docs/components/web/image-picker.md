@@ -30,7 +30,7 @@ Parts: `stolon-image-picker-label`, `stolon-image-picker-image`, `stolon-image-p
 
 ## States and Modifiers
 
-* `shape` is `square` (default), `portrait`, or `wide`, and sits on the root as a modifier. `filled` is on the root while an image shows.
+* `shape` is `square` (default), `portrait`, or `wide`, and sits on the root as a modifier, such as `stolon-square`. `stolon-filled` is on the root while an image shows.
 * `onChange(value)` runs with `{ name, type, size, dataUrl, base64 }` after a pick, and with `null` after Remove. `base64` is the data after the comma of `dataUrl`.
 * `getValue()` returns the picked file's data, the URL string while it shows a URL from `value` or `setValue`, or `null` while empty. `setValue(url)` does not call `onChange`.
 * `accept` is "image/*" by default. A file that does not match it, or is larger than `maxBytes`, is refused with a message under the field, and the old image stays.

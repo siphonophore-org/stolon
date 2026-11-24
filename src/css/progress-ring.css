@@ -1,5 +1,5 @@
 /* Circular progress with its percent in the middle, in three sizes and any status color */
-/* Example: <span class="stolon-ring stolon-ring-medium green" role="progressbar" aria-valuenow="40"><svg viewBox="0 0 36 36"></svg><span class="stolon-ring-value">40%</span></span> */
+/* Example: <span class="stolon-ring stolon-ring-medium stolon-green" role="progressbar" aria-valuenow="40"><svg viewBox="0 0 36 36"></svg><span class="stolon-ring-value">40%</span></span> */
 .stolon-ring {
     position: relative;
     display: inline-flex;
@@ -20,13 +20,13 @@
 }
 .stolon-ring-track { stroke: var(--stolon-wash-strong); stroke-width: 3.5; }
 .stolon-ring-arc { stroke: var(--stolon-accent); stroke-width: 3.5; stroke-linecap: round; transition: stroke-dasharray 0.3s ease; }
-.stolon-ring.green .stolon-ring-arc { stroke: var(--stolon-green-fg); }
-.stolon-ring.red .stolon-ring-arc { stroke: var(--stolon-red-fg); }
-.stolon-ring.orange .stolon-ring-arc { stroke: var(--stolon-orange-fg); }
-.stolon-ring.purple .stolon-ring-arc { stroke: var(--stolon-purple-fg); }
-.stolon-ring.blue .stolon-ring-arc { stroke: var(--stolon-blue-fg); }
-.stolon-ring.gray .stolon-ring-arc { stroke: var(--stolon-gray-fg); }
-.stolon-ring.custom .stolon-ring-arc { stroke: var(--stolon-custom-fg); }
+.stolon-ring.stolon-green .stolon-ring-arc { stroke: var(--stolon-green-fg); }
+.stolon-ring.stolon-red .stolon-ring-arc { stroke: var(--stolon-red-fg); }
+.stolon-ring.stolon-orange .stolon-ring-arc { stroke: var(--stolon-orange-fg); }
+.stolon-ring.stolon-purple .stolon-ring-arc { stroke: var(--stolon-purple-fg); }
+.stolon-ring.stolon-blue .stolon-ring-arc { stroke: var(--stolon-blue-fg); }
+.stolon-ring.stolon-gray .stolon-ring-arc { stroke: var(--stolon-gray-fg); }
+.stolon-ring.stolon-custom .stolon-ring-arc { stroke: var(--stolon-custom-fg); }
 .stolon-ring-value { position: relative; font-size: 0.85em; font-weight: 600; font-variant-numeric: tabular-nums; }
 .stolon-ring-small .stolon-ring-value { font-size: 0.9em; }
 

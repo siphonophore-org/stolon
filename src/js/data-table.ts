@@ -113,7 +113,7 @@ export type DataTableWidth = number | 'fit';
 function narrow(column: { align?: string }): boolean { return column.align === 'end' || column.align === 'center'; }
 
 // The class a heading and its cells take for the column's alignment.
-function alignClass(column: { align?: string }): string { return column.align === 'end' ? ' end' : column.align === 'center' ? ' center' : ''; }
+function alignClass(column: { align?: string }): string { return column.align === 'end' ? ' stolon-end' : column.align === 'center' ? ' stolon-center' : ''; }
 
 // A fixed width that is a plain length, so it can count toward the table's least width. A share or a range counts as the least text column.
 function isLength(width: string): boolean { return /^(-?[\d.]+(px|em|rem|ch)|calc\(.*\)|var\(.*\)|min\(.*\)|max\(.*\))$/.test(width.trim()); }
@@ -162,7 +162,7 @@ function saveWidths(storeKey: string | null, widths: Record<string, DataTableWid
  *   rows         : local rows [optional]
  *   fetch        : function(query) returning a page { Items, TotalCount } or an array, for server data [optional]
  *   rowKey       : the field or function that names a row (default 'id')
- *   rowClass     : function(row, index) returning class names for the row, such as 'selected' for a row picked elsewhere, set after every draw and refresh through the Filtered List's itemClass [optional]
+ *   rowClass     : function(row, index) returning class names for the row, such as 'stolon-selected' for a row picked elsewhere, set after every draw and refresh through the Filtered List's itemClass [optional]
  *   search       : { keys, placeholder, label } to show a search field, or false (default no search)
  *   filters      : array of { name, label, field, options: [{ value, label }] } shown as selects [optional]
  *   filterValues : the filter values that start picked, by name [optional]
@@ -242,7 +242,7 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
             el.appendChild(editCell);
             // The open editor is kept between draws, so a refresh keeps what was typed.
             if (editor && editor.key === key) {
-                el.classList.add('editing');
+                el.classList.add('stolon-editing');
                 el.appendChild(editor.element);
             }
         }
@@ -275,11 +275,11 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
         var values: Record<string, any> = {};
         spec.fields.forEach(function (f) { values[f.key] = fieldOf(row, f.key); });
         var element = make('div', 'stolon-data-editor', { role: 'cell' });
-        var group = createFieldGroup(spec.fields, values, { element: make('div', 'stolon-field-group grid') });
+        var group = createFieldGroup(spec.fields, values, { element: make('div', 'stolon-field-group stolon-grid') });
         var message = createFieldMessage();
         var buttons = make('div', 'stolon-button-row stolon-data-editor-actions');
-        var save = make('button', 'raised stolon-button primary small', { type: 'button' }, spec.saveText || stolonText('Save'));
-        var cancel = make('button', 'raised stolon-button secondary small', { type: 'button' }, spec.cancelText || stolonText('ButtonCancel'));
+        var save = make('button', 'raised stolon-button stolon-primary stolon-small', { type: 'button' }, spec.saveText || stolonText('Save'));
+        var cancel = make('button', 'raised stolon-button stolon-secondary stolon-small', { type: 'button' }, spec.cancelText || stolonText('ButtonCancel'));
         buttons.appendChild(save);
         buttons.appendChild(cancel);
         element.appendChild(group.element);
@@ -362,7 +362,7 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
     });
     var root = base.element;
     root.classList.add('stolon-data-table');
-    if (opts.selectable) root.classList.add('selectable');
+    if (opts.selectable) root.classList.add('stolon-selectable');
     // A column sized to its widest value, in characters, kept between the least text width and its limit.
     function fitTrack(column: DataTableColumn<T>): string {
         var chars = Math.max(widest[column.key] || 0, column.label.length + 3) + 1;
@@ -434,7 +434,7 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
         var cell = make('div', 'stolon-data-heading' + alignClass(column), { role: 'columnheader' });
         var text = make('span', 'stolon-data-label', null, column.label);
         var glyph = column.icon ? icon(column.icon) : null;
-        if (glyph) { glyph.classList.add('stolon-data-glyph'); cell.classList.add('has-icon'); cell.title = column.label; }
+        if (glyph) { glyph.classList.add('stolon-data-glyph'); cell.classList.add('stolon-has-icon'); cell.title = column.label; }
         if (column.sortable === false) {
             if (glyph) cell.appendChild(glyph);
             cell.appendChild(text);
@@ -482,7 +482,7 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
 
     // The handle on a heading's right edge. A drag sets the width in pixels, and a double-click or Enter fits the column to its widest value.
     function addHandle(column: DataTableColumn<T>, cell: HTMLElement): void {
-        cell.classList.add('resizable');
+        cell.classList.add('stolon-resizable');
         var handle = make('span', 'stolon-data-resize', {
             role: 'separator', tabindex: '0', 'aria-orientation': 'vertical',
             'aria-label': fillLabel(opts.resizeText || stolonText('Stolon.ResizeValue'), 'value', column.label)
@@ -494,7 +494,7 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
             if (!drag) return;
             runAll(drag.off);
             drag = null;
-            cell.classList.remove('resizing');
+            cell.classList.remove('stolon-resizing');
             saveWidths(storeKey, widths);
         }
         cleanups.push(stop);
@@ -503,7 +503,7 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
             e.preventDefault();
             e.stopPropagation();
             stop();
-            cell.classList.add('resizing');
+            cell.classList.add('stolon-resizing');
             drag = {
                 x: e.clientX || 0,
                 width: currentWidth(column.key),
@@ -560,8 +560,8 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
             if (!cell) return;
             var on = !!sort && sort.key === column.key;
             cell.setAttribute('aria-sort', on ? (sort!.dir === 'asc' ? 'ascending' : 'descending') : 'none');
-            cell.classList.toggle('sorted', on);
-            cell.classList.toggle('desc', on && sort!.dir === 'desc');
+            cell.classList.toggle('stolon-sorted', on);
+            cell.classList.toggle('stolon-desc', on && sort!.dir === 'desc');
         });
     }
 
@@ -571,7 +571,7 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
     function fit(): void {
         var ends = shown().filter(function (c) { return narrow(c) && !c.width; }).length;
         var width = root.clientWidth || 0;
-        root.classList.toggle('compact', !!width && width < ends * 100 + 240);
+        root.classList.toggle('stolon-compact', !!width && width < ends * 100 + 240);
     }
     if (typeof ResizeObserver !== 'undefined') {
         var watch = new ResizeObserver(fit);

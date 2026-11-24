@@ -29,21 +29,21 @@ test('plain numbers take the unit, and usedText takes the percent', function () 
 
 test('it turns warning past 80 percent and danger past 95 percent, and the thresholds can move', function () {
     var meter = createUsageMeter({ used: 50, total: 100 });
-    assert.equal(meter.element.classList.contains('warning'), false);
+    assert.equal(meter.element.classList.contains('stolon-warning'), false);
     meter.setValue({ used: 85 });
-    assert.ok(meter.element.classList.contains('warning'));
+    assert.ok(meter.element.classList.contains('stolon-warning'));
     meter.setValue({ used: 96 });
-    assert.ok(meter.element.classList.contains('danger'));
-    assert.equal(meter.element.classList.contains('warning'), false);
+    assert.ok(meter.element.classList.contains('stolon-danger'));
+    assert.equal(meter.element.classList.contains('stolon-warning'), false);
     var low = createUsageMeter({ used: 50, total: 100, warning: 40, danger: 60 });
-    assert.ok(low.element.classList.contains('warning'));
+    assert.ok(low.element.classList.contains('stolon-warning'));
 });
 
 test('parts draw a colored segment each and a legend, and used defaults to their sum', function () {
     var meter = createUsageMeter({ total: 100, parts: [{ label: 'Movies', value: 30 }, { label: 'Music', value: 10, color: 'orange' }] });
     var fills = all(meter.element, '.stolon-usage-meter-fill');
     assert.equal(fills.length, 2);
-    assert.ok(fills[1].classList.contains('orange'));
+    assert.ok(fills[1].classList.contains('stolon-orange'));
     assert.equal(fills[0].style.getPropertyValue('--stolon-usage-share'), '30%');
     assert.equal(meter.element.querySelector('.stolon-usage-meter-text').textContent, '40 of 100 used');
     var legend = meter.element.querySelector('.stolon-usage-meter-legend');

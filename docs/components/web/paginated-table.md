@@ -69,7 +69,7 @@ Classes: `stolon-table-wrapper`, `stolon-table-controls`, `stolon-table-search`,
 * `search` takes `{ enabled, placeholder, debounceMs }` with a default of 300 ms.
 * `selection` adds the checkbox column and the selection header with select all, the count, bulk actions, and a reload button. Select all checks or clears the loaded rows and shows an indeterminate state while only some of them are selected.
 * A selected row has `selected`, an accent wash. A re-render keeps it for every id still selected.
-* A page that builds its own `stolon-table-row` markup, outside `createPaginatedTable`, shows a picked row by setting `selected` on it, such as `row.classList.toggle('selected', picked)`.
+* A page that builds its own `stolon-table-row` markup, outside `createPaginatedTable`, shows a picked row by setting `stolon-selected` on it, such as `row.classList.toggle('stolon-selected', picked)`.
 * `load()` starts from the first page. `reload()` clears the selection, then loads. `refresh()` loads and keeps the selection. `clearSelection()` always reports to `onSelectionChange`.
 * A newer load supersedes one in flight, and the old answer is dropped.
 * A clickable row has `tabindex="0"` and answers Enter and Space when the row itself has focus. The status badge button opens the row too, and neither fires the click twice.
@@ -88,7 +88,7 @@ Classes: `stolon-table-wrapper`, `stolon-table-controls`, `stolon-table-search`,
 * The column `label` is written as `data-label` on each cell, but the table draws no header row, so nothing reads it.
 * The default labels "Select all", "Reload", "Load more", and "Load all" have no option to replace them.
 * Call `destroy()` on `viewhide`. It stops loading at the end of the list and drops a pending search. `reconnectObserver()` turns loading at the end back on.
-* `rowClass(item, index)` marks a row from its first draw, such as `selected` for a row picked elsewhere, which takes the table's selected look. It is the Filtered List's `itemClass`, so it follows every refresh. With checkbox selection on, the selection owns `selected`, so give a picked row another name.
+* `rowClass(item, index)` marks a row from its first draw, such as `stolon-selected` for a row picked elsewhere, which takes the table's selected look. It is the Filtered List's `itemClass`, so it follows every refresh. With checkbox selection on, the selection owns `stolon-selected`, so give a picked row another name.
 
 ## Reference
 
@@ -109,7 +109,7 @@ Builds a searchable, filterable, infinite scrolling table backed by an endpoint 
 | `columns` (required) | <code>TableColumn&lt;T&gt;[]</code> | [{ key, type: 'status' &#124; 'custom', render(item, value), label, className, hidden, image(item), imageShape }], where label is written on each cell as data-label, and image(item) returns the thumbnail drawn before the cell in imageShape, as an address or a function that returns an address, a Blob, or a promise of one, loaded lazily and freed when its row goes, 'portrait' (default), 'wide', 'square', or 'round' [required] |
 | `getDisplayStatus` | <code>(item: T, value: any): string</code> | function(item, value) returning the text of a status column [optional] |
 | `getStatusClass` | <code>(item: T, value: any): unknown</code> | function(item, value) returning the state class of a status column [optional] |
-| `rowClass` | <code>(item: T, index: number): unknown</code> | function(item, index) returning class names for the row, such as 'selected' for a row picked elsewhere, set after every draw and refresh through the Filtered List's itemClass [optional] |
+| `rowClass` | <code>(item: T, index: number): unknown</code> | function(item, index) returning class names for the row, such as 'stolon-selected' for a row picked elsewhere, set after every draw and refresh through the Filtered List's itemClass [optional] |
 | `selection` | <code>TableSelection&lt;T&gt;</code> | { enabled, idKey, onSelectionChange(ids) }, where idKey is a property name or a function (default 'id') |
 | `pagination` | <code>TablePagination</code> | { pageSize (default 50), loadMore }, where loadMore swaps infinite scroll for Load more and Load all buttons |
 | `filters` | <code>TableFilters &#124; TableFilters[] &#124; null</code> | { name, label, options: [{ value, label, id, hidden }], buildParams(value), onChange(value), initialValue, allValue, allLabel }, an array of them for several selects, or null for none. name is the query parameter (default 'filter' for the first, then 'filter2' and on), and label the select's aria-label |
@@ -154,10 +154,10 @@ Builds a searchable, filterable, infinite scrolling table backed by an endpoint 
 | `stolon-table-loading` | Dims the rows while the first page loads, with the search and filters still usable |
 | `stolon-table-status-btn` | A status badge from the bag's statusBadge inside a bare button that opens the row |
 | `stolon-table-header-spacer` | Flexible gap that pushes the controls after it to the end of the header |
-| `stolon-table-reload-btn.spinning` | The reload row button, whose icon turns while the table reloads |
+| `stolon-table-reload-btn.stolon-spinning` | The reload row button, whose icon turns while the table reloads |
 | `stolon-table-body` | The rows, a list of bordered rows |
 | `stolon-table-row` | Single table row |
-| `stolon-list.rows` | A row inside a list, where the list draws the dividers |
+| `stolon-list.stolon-rows` | A row inside a list, where the list draws the dividers |
 | `stolon-table-cell` | Single cell within a row |
 | `stolon-table-cell.stolon-table-cell-checkbox` | Narrow cell for a row checkbox |
 | `stolon-table-cell.stolon-table-cell-status` | Fixed width cell that right aligns a status badge |

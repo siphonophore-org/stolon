@@ -24,7 +24,7 @@ var gather = createRelativeTime({ countdown: true, ring: true, start: status.Gat
 createDataTable({ columns: [{ key: 'name', label: 'Server' }, { key: 'seen', label: 'Last Seen', render: renderRelative('seen') }], rows: servers });
 ```
 
-Classes: `stolon-relative-time`, with `countdown` and `done` modifiers, and the part `stolon-relative-time-text`. The handle is `{ element, getValue, setValue, destroy }`.
+Classes: `stolon-relative-time`, with `stolon-countdown` and `stolon-done` modifiers, and the part `stolon-relative-time-text`. The handle is `{ element, getValue, setValue, destroy }`.
 
 ## States and Modifiers
 
@@ -93,7 +93,7 @@ A render function for a Data Table column or a Filtered List that draws a live r
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-relative-time` | A live time, such as "3 minutes ago", with its full date as the title, in even width digits |
-| `stolon-relative-time.countdown` | A countdown, a clock of the time left with an optional small ring that fills as the wait passes |
+| `stolon-relative-time.stolon-countdown` | A countdown, a clock of the time left with an optional small ring that fills as the wait passes |
 
 <!-- reference:end -->
 

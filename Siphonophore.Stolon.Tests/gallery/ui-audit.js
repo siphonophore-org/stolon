@@ -27,7 +27,7 @@
                 if (r.width < 1 || r.height < 1) return;
                 if (el.closest('svg')) return;
                 if (r.right > box.right + 1 || r.left < box.left - 1) {
-                    var clip = el.closest('[style*="overflow"], .stolon-data-grid, .stolon-list, .stolon-subtabs, .stolon-static-table-scroll, .stolon-log, .scrolls');
+                    var clip = el.closest('[style*="overflow"], .stolon-data-grid, .stolon-list, .stolon-subtabs, .stolon-static-table-scroll, .stolon-log, .stolon-scrolls');
                     if (!clip) out.push([title, 'outside its section', name(el)]);
                 }
             });

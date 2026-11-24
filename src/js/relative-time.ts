@@ -124,7 +124,7 @@ export function createRelativeTime(options?: RelativeTimeOptions): RelativeTimeH
     var moment: Date | null = null;
     var begin: Date | null = null;
     var done = false;
-    var root = make('span', 'stolon-relative-time' + (opts.countdown ? ' countdown' : ''));
+    var root = make('span', 'stolon-relative-time' + (opts.countdown ? ' stolon-countdown' : ''));
     var timeEl = make('time', 'stolon-relative-time-text');
     var ring: ProgressRingHandle | null = null;
     if (opts.countdown && opts.ring) {
@@ -150,14 +150,14 @@ export function createRelativeTime(options?: RelativeTimeOptions): RelativeTimeH
         }
         if (diff <= 0) {
             timeEl.textContent = opts.doneText || stolonText('Stolon.Now');
-            root.classList.add('done');
+            root.classList.add('stolon-done');
             if (!done) {
                 done = true;
                 if (opts.onDone) opts.onDone();
             }
             return 60 * MINUTE;
         }
-        root.classList.remove('done');
+        root.classList.remove('stolon-done');
         timeEl.textContent = countdownText(diff);
         return (diff % SECOND) || SECOND;
     }

@@ -100,7 +100,7 @@ The CSS has no browser test, so rules that a plugin depends on are pinned in C#.
 | File | Pins |
 | :--- | :--- |
 | `CssFallbackTests.cs` | Every `color-mix()` has a plain fallback, a mix of a variable sits in an `@supports` block, and the form rules avoid `:is()`. |
-| `CssCollisionTests.cs` | No class is defined by both `status.html` and the kit CSS, other than `hidden`. |
+| `CssCollisionTests.cs` | No class is defined by both `status.html` and the kit CSS, other than `stolon-hidden`. |
 | `SelectChevronTests.cs` | A dropdown shows exactly one chevron. |
 | `CssRules.cs` | The small CSS reader the tests share. Extend it when a new test needs more of the syntax. |
 

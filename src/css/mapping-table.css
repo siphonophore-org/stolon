@@ -30,14 +30,14 @@
 
 
 /* A table with extra columns: a toggle first, a cell per extra field, and a remove button last. A row switched off dims its source and target */
-/* Example: <table class="stolon-static-table stolon-mapping-table-grid extended"><tr class="stolon-mapping-table-row off"><td class="stolon-mapping-table-toggle"></td><th class="stolon-mapping-table-source"></th><td class="stolon-mapping-table-target"></td><td class="stolon-mapping-table-extra"></td><td class="stolon-mapping-table-remove"></td></tr></table> */
-.stolon-mapping-table-grid.extended thead th { width: auto; }
+/* Example: <table class="stolon-static-table stolon-mapping-table-grid stolon-extended"><tr class="stolon-mapping-table-row stolon-off"><td class="stolon-mapping-table-toggle"></td><th class="stolon-mapping-table-source"></th><td class="stolon-mapping-table-target"></td><td class="stolon-mapping-table-extra"></td><td class="stolon-mapping-table-remove"></td></tr></table> */
+.stolon-mapping-table-grid.stolon-extended thead th { width: auto; }
 .stolon-mapping-table-grid .stolon-mapping-table-toggle,
 .stolon-mapping-table-grid .stolon-mapping-table-remove { width: 1%; white-space: nowrap; }
 .stolon-mapping-table-grid .stolon-mapping-table-extra .stolon-field-cell-label { display: none; }
-.stolon-mapping-table-row.off > .stolon-mapping-table-source,
-.stolon-mapping-table-row.off > .stolon-mapping-table-target,
-.stolon-mapping-table-row.off > .stolon-mapping-table-extra { opacity: 0.55; }
+.stolon-mapping-table-row.stolon-off > .stolon-mapping-table-source,
+.stolon-mapping-table-row.stolon-off > .stolon-mapping-table-target,
+.stolon-mapping-table-row.stolon-off > .stolon-mapping-table-extra { opacity: 0.55; }
 
 @media (max-width: 600px) {
     .stolon-mapping-table-grid thead { display: none; }

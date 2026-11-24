@@ -60,7 +60,7 @@ function combo(src) {
         ui.input.dispatch('keydown', { key: 'Escape' });
         src.pending[0].cb([{ value: 'a', label: 'Alpha' }]);
         assert.equal(ui.input.getAttribute('aria-expanded'), 'false');
-        assert.equal(ui.dropdown.classList.contains('hidden'), true);
+        assert.equal(ui.dropdown.classList.contains('stolon-hidden'), true);
     });
 
     test(name + ': an answer that arrives after the input lost focus does not reopen the dropdown', function () {

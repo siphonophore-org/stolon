@@ -1,5 +1,5 @@
 /* A frame that shows a rendered image over a dark, light, or checkered background, with the background choice above it and a status line under it */
-/* Example: <div class="stolon-preview-frame"><div class="stolon-pill-group stolon-preview-frame-backgrounds"></div><button class="stolon-preview-frame-stage dark" aria-label="Zoom Preview"><span class="stolon-thumb stolon-preview-frame-thumb"></span></button><div class="stolon-preview-frame-status stolon-icon-text small" role="status"></div></div> */
+/* Example: <div class="stolon-preview-frame"><div class="stolon-pill-group stolon-preview-frame-backgrounds"></div><button class="stolon-preview-frame-stage stolon-dark" aria-label="Zoom Preview"><span class="stolon-thumb stolon-preview-frame-thumb"></span></button><div class="stolon-preview-frame-status stolon-icon-text stolon-small" role="status"></div></div> */
 .stolon-preview-frame {
     display: flex;
     flex-direction: column;
@@ -12,7 +12,7 @@
 .stolon-preview-frame-status > .stolon-loading[hidden] { display: none; }
 
 /* The stage the image sits on, a button that opens the zoom, as wide as its column and a fixed height, the image contained inside it */
-/* Example: <button class="stolon-preview-frame-stage checker"><span class="stolon-thumb stolon-preview-frame-thumb"><img class="stolon-thumb-image stolon-preview-frame-image" alt="Preview"></span></button> */
+/* Example: <button class="stolon-preview-frame-stage stolon-checker"><span class="stolon-thumb stolon-preview-frame-thumb"><img class="stolon-thumb-image stolon-preview-frame-image" alt="Preview"></span></button> */
 .stolon-preview-frame-stage {
     position: relative;
     display: block;
@@ -32,16 +32,16 @@ div.stolon-preview-frame-stage,
 .stolon-preview-frame-stage:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
 .stolon-preview-frame-thumb { width: 100%; height: 100%; background: transparent; }
 .stolon-preview-frame-thumb .stolon-thumb-image { object-fit: contain; }
-.stolon-preview-frame.busy .stolon-preview-frame-thumb { opacity: 0.5; }
+.stolon-preview-frame.stolon-busy .stolon-preview-frame-thumb { opacity: 0.5; }
 
 /* The three backgrounds: dark and light from the theme's text and surface, and a checkerboard of the wash for transparency */
-/* Example: <button class="stolon-preview-frame-stage light"></button> */
-.stolon-preview-frame-stage.dark,
-.stolon-preview-frame-zoom.dark { background: var(--stolon-surface); }
-.stolon-preview-frame-stage.light,
-.stolon-preview-frame-zoom.light { background: var(--stolon-fg); color: var(--stolon-surface); }
-.stolon-preview-frame-stage.checker,
-.stolon-preview-frame-zoom.checker {
+/* Example: <button class="stolon-preview-frame-stage stolon-light"></button> */
+.stolon-preview-frame-stage.stolon-dark,
+.stolon-preview-frame-zoom.stolon-dark { background: var(--stolon-surface); }
+.stolon-preview-frame-stage.stolon-light,
+.stolon-preview-frame-zoom.stolon-light { background: var(--stolon-fg); color: var(--stolon-surface); }
+.stolon-preview-frame-stage.stolon-checker,
+.stolon-preview-frame-zoom.stolon-checker {
     background-color: var(--stolon-surface);
     background-image:
         linear-gradient(45deg, var(--stolon-wash-strong) 25%, transparent 25%, transparent 75%, var(--stolon-wash-strong) 75%),
@@ -51,11 +51,11 @@ div.stolon-preview-frame-stage,
 }
 
 /* The image larger in the zoom dialog, on the same background, never wider than the dialog */
-/* Example: <div class="stolon-preview-frame-zoom dark"><img class="stolon-preview-frame-zoom-image" alt="Preview"></div> */
+/* Example: <div class="stolon-preview-frame-zoom stolon-dark"><img class="stolon-preview-frame-zoom-image" alt="Preview"></div> */
 .stolon-preview-frame-zoom { padding: var(--stolon-pad-medium); border-radius: var(--stolon-radius-medium); text-align: center; }
 .stolon-preview-frame-zoom-image { display: inline-block; max-width: 100%; max-height: 70vh; object-fit: contain; }
 
 /* The picture's box takes no fill of its own, so the stage's chosen background shows behind a placeholder too, as one frame */
-/* Example: <div class="stolon-preview-frame-stage dark"><span class="stolon-thumb stolon-preview-frame-thumb"></span></div> */
+/* Example: <div class="stolon-preview-frame-stage stolon-dark"><span class="stolon-thumb stolon-preview-frame-thumb"></span></div> */
 .stolon-preview-frame-stage > .stolon-preview-frame-thumb,
 .stolon-preview-frame-stage > .stolon-preview-frame-thumb .stolon-thumb-placeholder { background: transparent; }

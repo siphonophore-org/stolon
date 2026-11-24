@@ -64,8 +64,8 @@ export function placeholderHint(placeholders?: Placeholder[] | null, options?: P
     options = options || {};
     var id = nextId('placeholders');
     var copy = options.mode === 'copy';
-    return '<div class="stolon-placeholder-hint' + (copy ? ' copy' : '') + '"' + (copy ? ' data-stolon-copied="' + escapeHtml(options.copiedText || stolonText('Stolon.CopiedValue')) + '"' : '') + '>'
-        + '<button type="button" class="stolon-hint-button stolon-icon-text small collapsed" data-stolon-hint aria-expanded="false" aria-controls="' + id + '">'
+    return '<div class="stolon-placeholder-hint' + (copy ? ' stolon-copy' : '') + '"' + (copy ? ' data-stolon-copied="' + escapeHtml(options.copiedText || stolonText('Stolon.CopiedValue')) + '"' : '') + '>'
+        + '<button type="button" class="stolon-hint-button stolon-icon-text stolon-small stolon-collapsed" data-stolon-hint aria-expanded="false" aria-controls="' + id + '">'
         + '<span class="material-icons" aria-hidden="true">help_outline</span><span>' + escapeHtml(options.label || stolonText('Stolon.Placeholders')) + '</span>'
         + '</button>'
         + '<div class="stolon-placeholders" id="' + id + '" hidden><span class="stolon-tags">' + (placeholders || []).map(function (p) {
@@ -105,7 +105,7 @@ export function bindPlaceholders(root: HTMLElement | null, onInsert?: (field: Pl
         }
         var token = chip!.getAttribute('data-stolon-token') || placeholderToken(chip!.getAttribute('data-stolon-placeholder'));
         // A hint in copy mode needs no field, so it works outside an inputContainer too.
-        if (hintRoot && hintRoot.classList.contains('copy')) {
+        if (hintRoot && hintRoot.classList.contains('stolon-copy')) {
             copyPlaceholder(chip as HTMLElement, hintRoot, token);
             return;
         }
@@ -121,10 +121,10 @@ function copyPlaceholder(chip: HTMLElement, hintRoot: Element, token: string): P
     return copyToClipboard(token).then(function (ok: boolean) {
         if (!ok) return false;
         var status = hintRoot.querySelector<HTMLElement>('[role="status"]');
-        chip.classList.add('copied');
+        chip.classList.add('stolon-copied');
         if (status) status.textContent = fill(hintRoot.getAttribute('data-stolon-copied') || stolonText('Stolon.CopiedValue'), token);
         setTimeout(function () {
-            chip.classList.remove('copied');
+            chip.classList.remove('stolon-copied');
             if (status) status.textContent = '';
         }, 1500);
         return true;

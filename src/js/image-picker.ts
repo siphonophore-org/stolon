@@ -109,7 +109,7 @@ export function createImagePicker(options?: ImagePickerOptions): ImagePickerHand
     var shape = options.shape && SHAPES.indexOf(options.shape) !== -1 ? options.shape : 'square';
     var accept = options.accept || 'image/*';
 
-    var root = make('div', 'stolon-image-picker ' + shape, { role: 'group' });
+    var root = make('div', 'stolon-image-picker stolon-' + shape, { role: 'group' });
     if (options.label) {
         var label = make('div', 'stolon-image-picker-label', null, options.label);
         label.id = nextId('image-label');
@@ -140,12 +140,12 @@ export function createImagePicker(options?: ImagePickerOptions): ImagePickerHand
             applyColor(fallbackEl, next.color, 'blue');
             frame.appendChild(fallbackEl);
         }
-        root.classList.toggle('has-fallback', !!(fallbackEl || fallbackUrl));
+        root.classList.toggle('stolon-has-fallback', !!(fallbackEl || fallbackUrl));
     }
     placeFallback(options.fallback);
     var actions = make('div', 'stolon-image-picker-actions');
-    var choose = make('button', 'raised stolon-button small stolon-image-picker-choose', { type: 'button' });
-    var remove = make('button', 'raised stolon-button small secondary stolon-image-picker-remove', { type: 'button' }, options.removeText || stolonText('ButtonRemove'));
+    var choose = make('button', 'raised stolon-button stolon-small stolon-image-picker-choose', { type: 'button' });
+    var remove = make('button', 'raised stolon-button stolon-small stolon-secondary stolon-image-picker-remove', { type: 'button' }, options.removeText || stolonText('ButtonRemove'));
     var intake = bindFileInput({ trigger: choose, dropTarget: frame, accept: accept, onFiles: function (files: File[]) { take(files[0]); } });
     var input = intake.input;
     actions.appendChild(choose);
@@ -217,7 +217,7 @@ export function createImagePicker(options?: ImagePickerOptions): ImagePickerHand
     function render(): void {
         var url = shownUrl();
         var src = url || fallbackUrl;
-        root.classList.toggle('filled', !!url);
+        root.classList.toggle('stolon-filled', !!url);
         if (fallbackEl) fallbackEl.hidden = !!url;
         if (src !== (image.getAttribute('src') || '')) thumb.setSrc(src);
         image.setAttribute('alt', value && typeof value !== 'string' ? value.name : (options!.label || ''));

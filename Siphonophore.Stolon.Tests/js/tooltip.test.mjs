@@ -124,15 +124,15 @@ test('a click toggles the help bubble, Escape and an outside click close it', fu
     dom.document.body.appendChild(hint.element);
     var button = hint.element.querySelector('.stolon-help-button');
     button.click();
-    assert.ok(hint.element.classList.contains('open'));
+    assert.ok(hint.element.classList.contains('stolon-open'));
     button.dispatch('keydown', { key: 'Escape' });
-    assert.equal(hint.element.classList.contains('open'), false);
+    assert.equal(hint.element.classList.contains('stolon-open'), false);
     button.click();
     dom.document.dispatch('click', { target: dom.document.body });
-    assert.equal(hint.element.classList.contains('open'), false);
+    assert.equal(hint.element.classList.contains('stolon-open'), false);
     button.click();
     button.click();
-    assert.equal(hint.element.classList.contains('open'), false);
+    assert.equal(hint.element.classList.contains('stolon-open'), false);
 });
 
 test('destroy of the help hint drops the document listener', function () {

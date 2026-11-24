@@ -18,7 +18,7 @@
 .stolon-combo-dropdown[hidden] { display: none; }
 
 /* One option row that tints in the accent on hover or when active */
-/* Example: <div class="stolon-combo-option active">value</div> */
+/* Example: <div class="stolon-combo-option stolon-active">value</div> */
 .stolon-combo-option {
     padding: calc(var(--stolon-gap-narrow) / 2) var(--stolon-pad-small);
     cursor: pointer;
@@ -26,7 +26,7 @@
     line-height: var(--stolon-line-medium);
 }
 .stolon-combo-option:hover,
-.stolon-combo-option.active {
+.stolon-combo-option.stolon-active {
     background: var(--stolon-wash);
     color: var(--stolon-accent);
 }

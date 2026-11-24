@@ -167,7 +167,7 @@ export function buildRepeater(options: RepeaterOptions, parts: RepeaterParts | n
         root.appendChild(head);
     }
     var body = make('div', 'stolon-repeater-rows' + (p.rowsClass ? ' ' + p.rowsClass : ''));
-    var addButton = make('button', 'raised stolon-button small stolon-repeater-add' + (p.addClass ? ' ' + p.addClass : ''), { type: 'button' }, opts.addText || stolonText('Add'));
+    var addButton = make('button', 'raised stolon-button stolon-small stolon-repeater-add' + (p.addClass ? ' ' + p.addClass : ''), { type: 'button' }, opts.addText || stolonText('Add'));
     var set = createRowSet<RepeaterItem, RepeaterRow>({
         body: body,
         build: buildRow,
@@ -217,7 +217,7 @@ export function buildRepeater(options: RepeaterOptions, parts: RepeaterParts | n
             cardHead.appendChild(title);
             cardHead.appendChild(actions);
             el.appendChild(cardHead);
-            holder = make('div', 'stolon-field-group grid');
+            holder = make('div', 'stolon-field-group stolon-grid');
             el.appendChild(holder);
         }
         var remove = make('button', 'stolon-row-btn' + (p.removeClass ? ' ' + p.removeClass : ' stolon-repeater-remove'), { type: 'button' });
@@ -323,7 +323,7 @@ export function buildRepeater(options: RepeaterOptions, parts: RepeaterParts | n
         var needed = fields.reduce(function (sum, f) { return sum + (f.type === 'toggle' ? 48 : 160); }, 0) + 80;
         var fit = function (): void {
             var width = root.clientWidth || 0;
-            root.classList.toggle('compact', !!width && width < needed);
+            root.classList.toggle('stolon-compact', !!width && width < needed);
         };
         if (typeof ResizeObserver !== 'undefined') {
             var watch = new ResizeObserver(fit);

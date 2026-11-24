@@ -60,7 +60,7 @@ test('bindChecks selects from row boxes, marks rows, skips disabled boxes, and s
     boxes[0].checked = true;
     boxes[0].dispatch('change', { bubbles: true });
     assert.deepEqual(selection.getIds(), ['1']);
-    assert.ok(boxes[0].parentNode.classList.contains('selected'));
+    assert.ok(boxes[0].parentNode.classList.contains('stolon-selected'));
     assert.equal(all3.indeterminate, true);
     all3.checked = true;
     all3.dispatch('change');
@@ -74,11 +74,11 @@ test('bindChecks selects from row boxes, marks rows, skips disabled boxes, and s
 test('buildCard draws a colored count card that a stat card and count cards share', function () {
     var card = buildCard({ tag: 'button', count: 4, label: 'Synced', color: 'green', className: 'x', attrs: { type: 'button' } });
     assert.equal(card.element.tagName, 'BUTTON');
-    assert.equal(card.element.className, 'stolon-card x green');
+    assert.equal(card.element.className, 'stolon-card x stolon-green');
     assert.equal(card.count.textContent, '4');
     assert.equal(card.label.textContent, 'Synced');
     var hex = buildCard({ count: 1, color: '#123456' });
-    assert.ok(hex.element.classList.contains('custom'));
+    assert.ok(hex.element.classList.contains('stolon-custom'));
     var stat = createStatCard({ value: 2, label: 'Items' });
     assert.equal(stat.element.children[0].className, 'stolon-card-count');
 });
@@ -103,8 +103,8 @@ test('the message core gives each state one icon and builds the dismiss button e
     assert.ok(btn.classList.contains('stolon-row-btn') && btn.classList.contains('stolon-toast-close'));
     assert.equal(btn.getAttribute('aria-label'), 'Dismiss');
     var banner = createBanner({ kind: 'warn', text: 'Back up first.' });
-    assert.ok(banner.element.classList.contains('dismissible'));
-    assert.equal(createBanner({ dismissible: false }).element.classList.contains('dismissible'), false);
+    assert.ok(banner.element.classList.contains('stolon-dismissible'));
+    assert.equal(createBanner({ dismissible: false }).element.classList.contains('stolon-dismissible'), false);
 });
 
 test('a row media card narrower than its wide layout draws one compact text column', function () {
@@ -115,7 +115,7 @@ test('a row media card narrower than its wide layout draws one compact text colu
     Object.defineProperty(card.element, 'clientWidth', { value: 360, configurable: true });
     watch.cb([]);
     var root = card.element;
-    assert.ok(root.classList.contains('compact'));
+    assert.ok(root.classList.contains('stolon-compact'));
     assert.equal(root.querySelector('.stolon-media-card-suffix'), null);
     var sub = root.querySelector('.stolon-media-card-sub');
     assert.deepEqual(Array.from(sub.children).map(function (c) { return c.className; }), ['stolon-media-card-episode', 'stolon-media-card-user', 'stolon-media-card-subtitle']);
@@ -125,7 +125,7 @@ test('a row media card narrower than its wide layout draws one compact text colu
     assert.equal(root.querySelector('.stolon-media-card-actions').parentNode, root);
     Object.defineProperty(card.element, 'clientWidth', { value: 900, configurable: true });
     watch.cb([]);
-    assert.equal(root.classList.contains('compact'), false);
+    assert.equal(root.classList.contains('stolon-compact'), false);
     assert.ok(root.querySelector('.stolon-media-card-side'));
     delete globalThis.ResizeObserver;
 });

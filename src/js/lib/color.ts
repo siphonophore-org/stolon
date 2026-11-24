@@ -32,16 +32,17 @@ export function textOn(hex: string): string {
 }
 
 /**
- * The class a color option adds: the name for a status color, custom for a hex code, and the fallback for anything else.
+ * The class a color option adds: stolon- and the name for a status color, stolon-custom for a hex code, and stolon- and the fallback for anything else.
  *
  * @param color the color option, a status color name or a hex code
  * @param fallback the class for a missing or unknown color [optional]
  * @returns the class, or '' with no fallback
  */
 export function colorClass(color: unknown, fallback?: string): string {
-    if (typeof color === 'string' && COLOR_NAMES.indexOf(color) !== -1) return color;
-    if (isHexColor(color)) return 'custom';
-    return fallback || '';
+    if (typeof color === 'string' && COLOR_NAMES.indexOf(color) !== -1) return 'stolon-' + color;
+    if (isHexColor(color)) return 'stolon-custom';
+    if (!fallback) return '';
+    return fallback.indexOf('stolon-') === 0 ? fallback : 'stolon-' + fallback;
 }
 
 /**
@@ -66,10 +67,10 @@ export function colorStyle(color: unknown): string {
  * @returns the class it added, or ''
  */
 export function applyColor(el: HTMLElement, color: unknown, fallback?: string): string {
-    COLOR_NAMES.concat('custom').forEach(function (name) { el.classList.remove(name); });
+    COLOR_NAMES.concat('custom').forEach(function (name) { el.classList.remove('stolon-' + name); });
     var cls = colorClass(color, fallback);
     if (cls) el.classList.add(cls);
-    if (cls === 'custom') {
+    if (cls === 'stolon-custom') {
         var hex = (color as string).trim();
         el.style.setProperty('--stolon-custom', hex);
         el.style.setProperty('--stolon-custom-on', textOn(hex));

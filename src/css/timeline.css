@@ -1,5 +1,5 @@
 /* Vertical list of events joined by a line, each with a colored marker */
-/* Example: <ol class="stolon-timeline"><li class="stolon-timeline-item green"><span class="stolon-timeline-marker"></span><div class="stolon-timeline-body"><div class="stolon-timeline-title">Synced</div></div></li></ol> */
+/* Example: <ol class="stolon-timeline"><li class="stolon-timeline-item stolon-green"><span class="stolon-timeline-marker"></span><div class="stolon-timeline-body"><div class="stolon-timeline-title">Synced</div></div></li></ol> */
 .stolon-timeline {
     list-style: none;
     margin: 0;
@@ -36,15 +36,15 @@
     color: var(--stolon-on-warning);
 }
 .stolon-timeline-marker .material-icons { font-size: var(--stolon-icon-small); }
-.stolon-timeline-item.green .stolon-timeline-marker { background: var(--stolon-green-fg); color: var(--stolon-on-warning); }
-.stolon-timeline-item.red .stolon-timeline-marker { background: var(--stolon-red-fg); }
-.stolon-timeline-item.orange .stolon-timeline-marker { background: var(--stolon-orange-fg); color: var(--stolon-on-warning); }
-.stolon-timeline-item.purple .stolon-timeline-marker { background: var(--stolon-purple-fg); }
-.stolon-timeline-item.blue .stolon-timeline-marker { background: var(--stolon-blue-fg); }
-.stolon-timeline-item.yellow .stolon-timeline-marker { background: var(--stolon-yellow-fg); color: var(--stolon-on-warning); }
-.stolon-timeline-item.pink .stolon-timeline-marker { background: var(--stolon-pink-fg); }
-.stolon-timeline-item.teal .stolon-timeline-marker { background: var(--stolon-teal-fg); }
-.stolon-timeline-item.custom .stolon-timeline-marker { background: var(--stolon-custom-fg); color: var(--stolon-custom-on, var(--stolon-on-accent)); }
+.stolon-timeline-item.stolon-green .stolon-timeline-marker { background: var(--stolon-green-fg); color: var(--stolon-on-warning); }
+.stolon-timeline-item.stolon-red .stolon-timeline-marker { background: var(--stolon-red-fg); }
+.stolon-timeline-item.stolon-orange .stolon-timeline-marker { background: var(--stolon-orange-fg); color: var(--stolon-on-warning); }
+.stolon-timeline-item.stolon-purple .stolon-timeline-marker { background: var(--stolon-purple-fg); }
+.stolon-timeline-item.stolon-blue .stolon-timeline-marker { background: var(--stolon-blue-fg); }
+.stolon-timeline-item.stolon-yellow .stolon-timeline-marker { background: var(--stolon-yellow-fg); color: var(--stolon-on-warning); }
+.stolon-timeline-item.stolon-pink .stolon-timeline-marker { background: var(--stolon-pink-fg); }
+.stolon-timeline-item.stolon-teal .stolon-timeline-marker { background: var(--stolon-teal-fg); }
+.stolon-timeline-item.stolon-custom .stolon-timeline-marker { background: var(--stolon-custom-fg); color: var(--stolon-custom-on, var(--stolon-on-accent)); }
 .stolon-timeline-body { min-width: 0; overflow-wrap: anywhere; }
 .stolon-timeline-time { display: block; font-size: 0.8em; opacity: 0.7; }
 .stolon-timeline-title { font-weight: 600; }

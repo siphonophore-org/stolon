@@ -12,7 +12,7 @@ beforeEach(function () {
 
 function group(selectedIndex) {
     var pills = ['Daily', 'Weekly', 'Monthly'].map(function (label, i) {
-        var p = dom.el('button', { type: 'button', class: 'stolon-pill' + (i === selectedIndex ? ' selected' : ''), 'data-value': label.toLowerCase() });
+        var p = dom.el('button', { type: 'button', class: 'stolon-pill' + (i === selectedIndex ? ' stolon-selected' : ''), 'data-value': label.toLowerCase() });
         p.textContent = label;
         return p;
     });
@@ -39,9 +39,9 @@ test('a click chooses the pill, moves the selected state, and calls onChange onc
     g.pills[2].click();
     assert.equal(handle.get(), 'monthly');
     assert.equal(g.pills[2].getAttribute('aria-pressed'), 'true');
-    assert.ok(g.pills[2].classList.contains('selected'));
+    assert.ok(g.pills[2].classList.contains('stolon-selected'));
     assert.equal(g.pills[0].getAttribute('aria-pressed'), 'false');
-    assert.equal(g.pills[0].classList.contains('selected'), false);
+    assert.equal(g.pills[0].classList.contains('stolon-selected'), false);
     g.pills[2].click();
     assert.deepEqual(seen, ['monthly']);
 });

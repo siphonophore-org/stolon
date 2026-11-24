@@ -54,7 +54,7 @@ export function balanceRows(container: HTMLElement, options?: BalanceOptions): B
 
     function tiles(): HTMLElement[] {
         return Array.prototype.filter.call(container.children, function (el: HTMLElement) {
-            if (el.hidden || el.classList.contains('hidden')) return false;
+            if (el.hidden || el.classList.contains('stolon-hidden')) return false;
             if (typeof getComputedStyle === 'function' && getComputedStyle(el).display === 'none') return false;
             return !(opts.skip && el.matches && el.matches(opts.skip));
         }) as HTMLElement[];

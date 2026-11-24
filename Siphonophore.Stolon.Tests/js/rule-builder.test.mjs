@@ -65,7 +65,7 @@ test('warn shows a warning row under the rules, and setWarning sets one', functi
     assert.equal(shown(warning), false);
     ui.b.setWarning('Check the year.');
     assert.equal(shown(warning), true);
-    assert.ok(warning.classList.contains('warn'));
+    assert.ok(warning.classList.contains('stolon-warn'));
     ui.b.setWarning('');
     assert.equal(shown(warning), false);
 });

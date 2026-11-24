@@ -16,7 +16,7 @@ export function createChangeTracker(this: Shared, opts?: ChangeTrackerOptions): 
     // The indicator announces itself politely when it appears.
     if (indicator && !indicator.getAttribute('role')) indicator.setAttribute('role', 'status');
     function setVisible(dirty: boolean) {
-        if (indicator) indicator.classList.toggle('visible', dirty);
+        if (indicator) indicator.classList.toggle('stolon-visible', dirty);
     }
     // The last text of the indicator, so the dot before it stays.
     function labelNode(): ChildNode | null {
@@ -47,9 +47,9 @@ export function createChangeTracker(this: Shared, opts?: ChangeTrackerOptions): 
                 if (flashOriginal === null) flashOriginal = readLabel();
                 writeLabel(savedText);
             }
-            indicator.classList.add('visible', 'save-success');
+            indicator.classList.add('stolon-visible', 'stolon-save-success');
             flashTimer = setTimeout(function () {
-                indicator!.classList.remove('visible', 'save-success');
+                indicator!.classList.remove('stolon-visible', 'stolon-save-success');
                 if (flashOriginal !== null) { writeLabel(flashOriginal); flashOriginal = null; }
                 flashTimer = null;
             }, 1500);

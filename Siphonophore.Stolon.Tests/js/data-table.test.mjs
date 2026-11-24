@@ -98,11 +98,11 @@ test('an editable row opens into fields with Save and Cancel, and stays open wit
     assert.equal(again.querySelector('input').value, 'Bobby');
     name.value = '';
     name.dispatch('input');
-    again.querySelector('.stolon-button.primary').click();
+    again.querySelector('.stolon-button.stolon-primary').click();
     assert.equal(saved.length, 0, 'an invalid field stops the save');
     name.value = 'Bobby';
     name.dispatch('input');
-    again.querySelector('.stolon-button.primary').click();
+    again.querySelector('.stolon-button.stolon-primary').click();
     await new Promise(function (r) { setTimeout(r, 0); });
     assert.deepEqual(saved, [[2, { name: 'Bobby', count: 10 }]]);
     assert.equal(table.getEditing(), null);
@@ -114,11 +114,11 @@ test('Cancel and Escape close the editor without saving, and a failed save keeps
     var table = createDataTable({ columns: COLUMNS, rows: ROWS, editable: { fields: [{ key: 'name', label: 'Name' }], onSave: function () { return Promise.reject(new Error('no')); } } });
     dom.document.body.appendChild(table.element);
     table.edit(1);
-    table.element.querySelector('.stolon-data-editor .stolon-button.secondary').click();
+    table.element.querySelector('.stolon-data-editor .stolon-button.stolon-secondary').click();
     assert.equal(table.getEditing(), null);
     table.edit(1);
     var editor = table.element.querySelector('.stolon-data-editor');
-    editor.querySelector('.stolon-button.primary').click();
+    editor.querySelector('.stolon-button.stolon-primary').click();
     await new Promise(function (r) { setTimeout(r, 0); });
     assert.equal(table.getEditing(), '1');
     assert.equal(editor.children[1].querySelector('.stolon-field-message-text').textContent, 'Could not save.');
@@ -146,8 +146,8 @@ test('a hidden column hides its heading and cells and drops its track, and setCo
 
 test('rowClass marks a data table row from its first draw and on every redraw', function () {
     var picked = 2;
-    var table = createDataTable({ columns: COLUMNS, rows: ROWS, rowClass: function (row) { return row.id === picked ? 'selected' : ''; } });
-    var marked = function () { return Array.from(table.element.querySelectorAll('.stolon-data-row')).filter(function (r) { return r.classList.contains('selected'); }).map(function (r) { return r.getAttribute('data-key'); }); };
+    var table = createDataTable({ columns: COLUMNS, rows: ROWS, rowClass: function (row) { return row.id === picked ? 'stolon-selected' : ''; } });
+    var marked = function () { return Array.from(table.element.querySelectorAll('.stolon-data-row')).filter(function (r) { return r.classList.contains('stolon-selected'); }).map(function (r) { return r.getAttribute('data-key'); }); };
     assert.deepEqual(marked(), ['2']);
     picked = 1;
     table.setRows(ROWS.slice());

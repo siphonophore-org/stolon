@@ -201,7 +201,7 @@ test('a row switched off is left out of getValue and comes back when switched on
     toggle.checked = false;
     toggle.dispatch('change');
     assert.deepEqual(ui.table.getValue(), {});
-    assert.ok(rows(ui)[0].classList.contains('off'));
+    assert.ok(rows(ui)[0].classList.contains('stolon-off'));
     assert.equal(ui.table.getDetails().a.enabled, false);
     toggle.checked = true;
     toggle.dispatch('change');

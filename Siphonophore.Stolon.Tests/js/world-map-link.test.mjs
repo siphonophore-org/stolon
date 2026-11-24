@@ -43,10 +43,10 @@ test('a row picked in the table highlights its country, and clearing the row cle
     var fr = s.table.element.querySelector('.stolon-data-row[data-key="FR"]');
     fr.click();
     assert.equal(s.map.getSelected(), 'FR');
-    assert.equal(country(s.map, 'FR').classList.contains('selected'), true);
+    assert.equal(country(s.map, 'FR').classList.contains('stolon-selected'), true);
     s.table.element.querySelector('.stolon-data-row[data-key="FR"]').click();
     assert.equal(s.map.getSelected(), null);
-    assert.equal(country(s.map, 'FR').classList.contains('selected'), false);
+    assert.equal(country(s.map, 'FR').classList.contains('stolon-selected'), false);
     assert.equal(shown(s.table).length, 3);
 });
 

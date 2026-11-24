@@ -48,7 +48,7 @@ function makeTable(options, apiRequest) {
 }
 
 function rows(t) { return all(t.body, '.stolon-table-row'); }
-function selected(t) { return rows(t).map(function (r) { return r.classList.contains('selected'); }); }
+function selected(t) { return rows(t).map(function (r) { return r.classList.contains('stolon-selected'); }); }
 function box(t, i) { return rows(t)[i].querySelector('.stolon-table-row-checkbox'); }
 
 test('checking a row checkbox adds selected to its row and unchecking removes it', async function () {
@@ -142,7 +142,7 @@ test('a column with image draws a thumbnail of its shape before the cell', async
     var cell = rows(t)[0].querySelector('.stolon-table-cell');
     assert.ok(cell.classList.contains('stolon-table-cell-with-thumb'));
     var thumb = cell.children[0];
-    assert.ok(thumb.classList.contains('stolon-thumb') && thumb.classList.contains('stolon-table-thumb') && thumb.classList.contains('round'));
+    assert.ok(thumb.classList.contains('stolon-thumb') && thumb.classList.contains('stolon-table-thumb') && thumb.classList.contains('stolon-round'));
     assert.equal(thumb.querySelector('.stolon-thumb-image').getAttribute('src'), '/img/a');
 });
 
@@ -266,7 +266,7 @@ test('loadMore mode shows Load More and Load All as secondary buttons, and Load 
     });
     var more = t.container.querySelector('.stolon-table-load-more');
     var actions = t.container.querySelector('.stolon-table-footer-actions');
-    assert.ok(more.classList.contains('stolon-button') && more.classList.contains('secondary'));
+    assert.ok(more.classList.contains('stolon-button') && more.classList.contains('stolon-secondary'));
     assert.equal(observers.length, 0);
     await t.table.load();
     assert.equal(actions.hidden, false);
@@ -288,10 +288,10 @@ test('the reload button is a row button that reloads and then calls onReload', a
     assert.ok(btn.classList.contains('stolon-row-btn'));
     assert.equal(btn.getAttribute('aria-label'), 'Reload');
     btn.click();
-    assert.ok(btn.classList.contains('spinning'));
+    assert.ok(btn.classList.contains('stolon-spinning'));
     await tick();
     await tick();
-    assert.equal(btn.classList.contains('spinning'), false);
+    assert.equal(btn.classList.contains('stolon-spinning'), false);
     assert.equal(reloaded, 1);
 });
 
@@ -399,7 +399,7 @@ test('a column image that returns an empty value keeps only the placeholder', as
 
 test('rowClass marks a row from its first draw, cleans the names, and follows a refresh', async function () {
     var picked = 'b';
-    var t = makeTable({ rowClass: function (item) { return item.id === picked ? 'selected bad"><x' : null; } }, answerWith(['a', 'b']));
+    var t = makeTable({ rowClass: function (item) { return item.id === picked ? 'stolon-selected bad"><x' : null; } }, answerWith(['a', 'b']));
     await t.table.load();
     assert.deepEqual(selected(t), [false, true]);
     assert.ok(rows(t)[1].className.indexOf('"') === -1 && rows(t)[1].className.indexOf('<') === -1, 'class names from data are cleaned');
@@ -449,10 +449,10 @@ test('the reload button ends the selection header, reloads from the first page, 
     assert.equal(kids[kids.length - 1], btn);
     assert.ok(kids[kids.length - 2].classList.contains('stolon-table-header-spacer'));
     btn.click();
-    assert.ok(btn.classList.contains('spinning'));
+    assert.ok(btn.classList.contains('stolon-spinning'));
     await tick();
     await tick();
     assert.equal(reloaded, 1);
-    assert.equal(btn.classList.contains('spinning'), false);
+    assert.equal(btn.classList.contains('stolon-spinning'), false);
     assert.deepEqual(t.table.getSelectedIds(), []);
 });

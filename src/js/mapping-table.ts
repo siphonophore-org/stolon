@@ -129,13 +129,13 @@ export function createMappingTable(options?: MappingTableOptions): MappingTableH
     headRow.appendChild(make('th', '', { scope: 'col' }, options.targetHeader || stolonText('Stolon.Target')));
     extraFields.forEach(function (f) { headRow.appendChild(make('th', 'stolon-mapping-table-extra', { scope: 'col' }, f.label)); });
     if (options.removable) headRow.appendChild(make('td', 'stolon-mapping-table-remove'));
-    if (options.toggle || extraFields.length || options.removable) table.classList.add('extended');
+    if (options.toggle || extraFields.length || options.removable) table.classList.add('stolon-extended');
     thead.appendChild(headRow);
     var tbody = make('tbody');
     table.appendChild(thead);
     table.appendChild(tbody);
     scroll.appendChild(table);
-    var empty = make('div', 'stolon-list-empty outside stolon-mapping-table-empty', null, options.emptyText || stolonText('Stolon.NothingToMap'));
+    var empty = make('div', 'stolon-list-empty stolon-outside stolon-mapping-table-empty', null, options.emptyText || stolonText('Stolon.NothingToMap'));
     root.appendChild(scroll);
     root.appendChild(empty);
 
@@ -216,10 +216,10 @@ export function createMappingTable(options?: MappingTableOptions): MappingTableH
             var toggle: FieldControl | null = null;
             if (options!.toggle) {
                 var on = isOn(r.value);
-                tr.classList.toggle('off', !on);
+                tr.classList.toggle('stolon-off', !on);
                 toggle = buildControl({ key: 'enabled', label: '', type: 'toggle' }, on, function () {
                     detailOf(r.value).enabled = toggle!.getValue() === true;
-                    tr.classList.toggle('off', !isOn(r.value));
+                    tr.classList.toggle('stolon-off', !isOn(r.value));
                     reflect();
                     changed();
                 }, fill(options!.enabledLabel || stolonText('Stolon.EnableValue'), r.label));

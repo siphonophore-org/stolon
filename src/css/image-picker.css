@@ -1,5 +1,5 @@
 /* An image frame in a square, portrait, or wide shape beside its Select Image and Remove buttons */
-/* Example: <div class="stolon-image-picker square" role="group"><div class="stolon-image-picker-body"><div class="stolon-image-picker-frame"></div><div class="stolon-image-picker-actions"></div></div></div> */
+/* Example: <div class="stolon-image-picker stolon-square" role="group"><div class="stolon-image-picker-body"><div class="stolon-image-picker-frame"></div><div class="stolon-image-picker-actions"></div></div></div> */
 .stolon-image-picker {
     display: flex;
     flex-direction: column;
@@ -30,8 +30,8 @@
     border: 1px solid var(--stolon-border);
     border-radius: var(--stolon-radius-large);
 }
-.stolon-image-picker.portrait .stolon-image-picker-frame { width: 120px; height: 180px; }
-.stolon-image-picker.wide .stolon-image-picker-frame { width: 256px; height: 144px; }
+.stolon-image-picker.stolon-portrait .stolon-image-picker-frame { width: 120px; height: 180px; }
+.stolon-image-picker.stolon-wide .stolon-image-picker-frame { width: 256px; height: 144px; }
 /* The frame's placeholder stacks its icon over the empty text, a little stronger than other thumbs */
 .stolon-image-picker .stolon-image-picker-placeholder {
     flex-direction: column;
@@ -44,11 +44,11 @@
 .stolon-image-picker-empty { font-size: 0.85em; }
 
 @media (max-width: 600px) {
-    .stolon-image-picker.wide .stolon-image-picker-frame { width: 100%; height: auto; padding-top: 56.25%; }
+    .stolon-image-picker.stolon-wide .stolon-image-picker-frame { width: 100%; height: auto; padding-top: 56.25%; }
 }
 
 /* The picture an empty picker shows in place of its placeholder: initials or an icon on a status color over the surface, filling the frame */
-/* Example: <span class="stolon-thumb stolon-image-picker-frame"><span class="stolon-image-picker-fallback blue" aria-hidden="true">AL</span></span> */
+/* Example: <span class="stolon-thumb stolon-image-picker-frame"><span class="stolon-image-picker-fallback stolon-blue" aria-hidden="true">AL</span></span> */
 .stolon-image-picker-fallback {
     --stolon-image-picker-fallback-bg: var(--stolon-blue-bg);
     position: absolute;
@@ -68,12 +68,12 @@
 }
 .stolon-image-picker-fallback[hidden] { display: none; }
 .stolon-image-picker-fallback .material-icons { font-size: calc(var(--stolon-size-large) * 1.4); }
-.stolon-image-picker-fallback.green { --stolon-image-picker-fallback-bg: var(--stolon-green-bg); color: var(--stolon-green-fg); }
-.stolon-image-picker-fallback.red { --stolon-image-picker-fallback-bg: var(--stolon-red-bg); color: var(--stolon-red-fg); }
-.stolon-image-picker-fallback.orange { --stolon-image-picker-fallback-bg: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
-.stolon-image-picker-fallback.purple { --stolon-image-picker-fallback-bg: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
-.stolon-image-picker-fallback.gray { --stolon-image-picker-fallback-bg: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
-.stolon-image-picker-fallback.yellow { --stolon-image-picker-fallback-bg: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
-.stolon-image-picker-fallback.pink { --stolon-image-picker-fallback-bg: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
-.stolon-image-picker-fallback.teal { --stolon-image-picker-fallback-bg: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
-.stolon-image-picker-fallback.custom { --stolon-image-picker-fallback-bg: var(--stolon-custom); color: var(--stolon-custom-on); }
+.stolon-image-picker-fallback.stolon-green { --stolon-image-picker-fallback-bg: var(--stolon-green-bg); color: var(--stolon-green-fg); }
+.stolon-image-picker-fallback.stolon-red { --stolon-image-picker-fallback-bg: var(--stolon-red-bg); color: var(--stolon-red-fg); }
+.stolon-image-picker-fallback.stolon-orange { --stolon-image-picker-fallback-bg: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
+.stolon-image-picker-fallback.stolon-purple { --stolon-image-picker-fallback-bg: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
+.stolon-image-picker-fallback.stolon-gray { --stolon-image-picker-fallback-bg: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
+.stolon-image-picker-fallback.stolon-yellow { --stolon-image-picker-fallback-bg: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
+.stolon-image-picker-fallback.stolon-pink { --stolon-image-picker-fallback-bg: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
+.stolon-image-picker-fallback.stolon-teal { --stolon-image-picker-fallback-bg: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
+.stolon-image-picker-fallback.stolon-custom { --stolon-image-picker-fallback-bg: var(--stolon-custom); color: var(--stolon-custom-on); }

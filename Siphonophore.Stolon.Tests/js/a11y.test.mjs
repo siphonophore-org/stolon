@@ -85,10 +85,10 @@ test('white on green, orange, yellow, and gray falls below 3 to 1, and the dark 
 });
 
 test('the stepper check, the pill, and the light timeline markers use the dark token', function () {
-    assert.match(css('stepper.css'), /\.completed \.stolon-stepper-number \{[^}]*color: var\(--stolon-on-warning\)/);
+    assert.match(css('stepper.css'), /\.stolon-completed \.stolon-stepper-number \{[^}]*color: var\(--stolon-on-warning\)/);
     assert.match(css('tags.css'), /\.stolon-tag\.stolon-tag-pill \{[^}]*color: var\(--stolon-on-warning\)/);
     ['green', 'orange', 'yellow'].forEach(function (c) {
-        assert.match(css('timeline.css'), new RegExp('\\.' + c + ' \\.stolon-timeline-marker \\{[^}]*color: var\\(--stolon-on-warning\\)'));
+        assert.match(css('timeline.css'), new RegExp('\\.stolon-' + c + ' \\.stolon-timeline-marker \\{[^}]*color: var\\(--stolon-on-warning\\)'));
     });
     assert.match(css('timeline.css'), /\.stolon-timeline-marker \{[^}]*color: var\(--stolon-on-warning\)/);
 });
@@ -169,8 +169,8 @@ test('a toaster with its own parent stays there while a dialog is open', functio
 
 test('the toast kind lookup ignores inherited names such as constructor and __proto__', function () {
     var t = createToaster({ timeout: 0 });
-    assert.ok(t.show({ message: 'a', kind: 'constructor' }).element.classList.contains('info'));
-    assert.ok(t.show({ message: 'b', kind: '__proto__' }).element.classList.contains('info'));
+    assert.ok(t.show({ message: 'a', kind: 'constructor' }).element.classList.contains('stolon-info'));
+    assert.ok(t.show({ message: 'b', kind: '__proto__' }).element.classList.contains('stolon-info'));
 });
 
 test('a field message keeps one live region element, never hidden, and only its text changes', function () {

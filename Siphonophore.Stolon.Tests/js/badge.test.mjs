@@ -34,52 +34,52 @@ test('every BADGE_STATES name has a state color, and badge.css tints its state c
     BADGE_STATES.names.forEach(function (name) {
         var color = BADGE_STATES.stateColors[name];
         assert.ok(BADGE_STATES.colors.indexOf(color) >= 0, name);
-        var line = css.split('\n').filter(function (l) { return l.indexOf('.stolon-badge.' + color + ',') === 0 || l.indexOf('.stolon-badge.' + color + ' {') === 0; })[0];
+        var line = css.split('\n').filter(function (l) { return l.indexOf('.stolon-badge.stolon-' + color + ',') === 0 || l.indexOf('.stolon-badge.stolon-' + color + ' {') === 0; })[0];
         assert.ok(line, color);
-        assert.ok(line.indexOf('.stolon-table-status-badge.' + name + ',') >= 0 || line.indexOf('.stolon-table-status-badge.' + name + ' {') >= 0, name + ' is ' + color);
+        assert.ok(line.indexOf('.stolon-table-status-badge.stolon-' + name + ',') >= 0 || line.indexOf('.stolon-table-status-badge.stolon-' + name + ' {') >= 0, name + ' is ' + color);
     });
     assert.equal(Object.keys(BADGE_STATES.stateColors).length, BADGE_STATES.names.length);
 });
 
 test('makeBadge builds a stolon-badge with its color, size, and own classes, and a hex code as custom', function () {
     var plain = makeBadge('Active', 'green');
-    assert.equal(plain.className, 'stolon-badge green');
+    assert.equal(plain.className, 'stolon-badge stolon-green');
     assert.equal(plain.textContent, 'Active');
-    assert.equal(makeBadge('Failed', 'Failed', 'large', 'stolon-x').className, 'stolon-badge red large stolon-x');
-    assert.equal(makeBadge('Small', 'blue', 'small').className, 'stolon-badge blue');
+    assert.equal(makeBadge('Failed', 'Failed', 'large', 'stolon-x').className, 'stolon-badge stolon-red stolon-large stolon-x');
+    assert.equal(makeBadge('Small', 'blue', 'small').className, 'stolon-badge stolon-blue');
     var hex = makeBadge('VIP', '#e91e63');
-    assert.equal(hex.className, 'stolon-badge custom');
+    assert.equal(hex.className, 'stolon-badge stolon-custom');
     assert.equal(hex.style['--stolon-custom'], '#e91e63');
     assert.equal(hex.style['--stolon-custom-on'], '#000');
     assert.equal(makeBadge('Odd', 'nope').className, 'stolon-badge');
 });
 
 test('badgeHtml draws the same badge as markup, escaping the label and the classes', function () {
-    assert.equal(badgeHtml('<b>', 'purple'), '<span class="stolon-badge purple">&lt;b&gt;</span>');
-    assert.equal(badgeHtml('VIP', '#e91e63', 'medium'), '<span class="stolon-badge custom medium" style="--stolon-custom: #e91e63; --stolon-custom-on: #000">VIP</span>');
+    assert.equal(badgeHtml('<b>', 'purple'), '<span class="stolon-badge stolon-purple">&lt;b&gt;</span>');
+    assert.equal(badgeHtml('VIP', '#e91e63', 'medium'), '<span class="stolon-badge stolon-custom stolon-medium" style="--stolon-custom: #e91e63; --stolon-custom-on: #000">VIP</span>');
     assert.equal(badgeHtml('x', '', null, 'a"b c'), '<span class="stolon-badge ab c">x</span>');
 });
 
 test('classBadgeHtml reads the color and size from a class string and keeps the other classes', function () {
-    assert.equal(classBadgeHtml('Synced', 'green medium'), '<span class="stolon-badge green medium">Synced</span>');
+    assert.equal(classBadgeHtml('Synced', 'green medium'), '<span class="stolon-badge stolon-green stolon-medium">Synced</span>');
     assert.equal(classBadgeHtml('Mine', 'my-thing'), '<span class="stolon-badge my-thing">Mine</span>');
-    assert.equal(classBadgeHtml('VIP', '#e91e63'), '<span class="stolon-badge custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #000">VIP</span>');
+    assert.equal(classBadgeHtml('VIP', '#e91e63'), '<span class="stolon-badge stolon-custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #000">VIP</span>');
     assert.equal(classBadgeHtml('None', null), '<span class="stolon-badge">None</span>');
 });
 
 test('the bag badge keeps its markup, and statusBadge colors a state while keeping its status classes', function () {
     var shared = createShared(dom.el('div'), 'p');
-    assert.equal(shared.badge('green', 'Active'), '<span class="stolon-badge green">Active</span>');
-    assert.equal(shared.badge('#e91e63', 'VIP'), '<span class="stolon-badge custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #000">VIP</span>');
-    assert.equal(shared.statusBadge('Queued', 'Queued'), '<span class="stolon-badge orange stolon-table-status-badge Queued">Queued</span>');
+    assert.equal(shared.badge('green', 'Active'), '<span class="stolon-badge stolon-green">Active</span>');
+    assert.equal(shared.badge('#e91e63', 'VIP'), '<span class="stolon-badge stolon-custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #000">VIP</span>');
+    assert.equal(shared.statusBadge('Queued', 'Queued'), '<span class="stolon-badge stolon-orange stolon-table-status-badge stolon-Queued">Queued</span>');
     assert.equal(shared.statusBadge('Odd', 'Odd'), '<span class="stolon-badge stolon-table-status-badge Odd">Odd</span>');
-    assert.equal(shared.statusBadge('<i>', 'Pending-Deletion x"y'), '<span class="stolon-badge stolon-table-status-badge Pending-Deletion xy">&lt;i&gt;</span>');
+    assert.equal(shared.statusBadge('<i>', 'Pending-Deletion x"y'), '<span class="stolon-badge stolon-table-status-badge stolon-Pending-Deletion xy">&lt;i&gt;</span>');
 });
 
 test('statusDotHtml draws the status dot, named by its label or its color meaning', function () {
-    assert.equal(statusDotHtml('green'), '<span class="stolon-dot green" role="img" title="Active" aria-label="Active"></span>');
-    assert.equal(statusDotHtml('nope', '<x>'), '<span class="stolon-dot gray" role="img" title="&lt;x&gt;" aria-label="&lt;x&gt;"></span>');
-    assert.match(statusDotHtml('#e91e63'), /class="stolon-dot custom" role="img" title="Note" aria-label="Note" style="--stolon-custom: #e91e63/);
+    assert.equal(statusDotHtml('green'), '<span class="stolon-dot stolon-green" role="img" title="Active" aria-label="Active"></span>');
+    assert.equal(statusDotHtml('nope', '<x>'), '<span class="stolon-dot stolon-gray" role="img" title="&lt;x&gt;" aria-label="&lt;x&gt;"></span>');
+    assert.match(statusDotHtml('#e91e63'), /class="stolon-dot stolon-custom" role="img" title="Note" aria-label="Note" style="--stolon-custom: #e91e63/);
 });
 
 test('a card draws its dot as the status dot, its badges as badges, and the collapsible chevron', function () {
@@ -95,12 +95,12 @@ test('a card draws its dot as the status dot, its badges as badges, and the coll
     });
     cards.render();
     var html = all(listEl, '.stolon-card-item').map(function (c) { return c.innerHTML; });
-    assert.match(html[0], /<span class="stolon-dot green" role="img" title="Active" aria-label="Active"><\/span>/);
-    assert.match(html[1], /<span class="stolon-dot red" role="img" title="Down" aria-label="Down"><\/span>/);
-    assert.match(html[2], /<span class="stolon-dot orange" role="img" title="Checking" aria-label="Checking"><\/span>/);
-    assert.match(html[3], /<span class="stolon-dot gray" role="img"/);
-    assert.match(html[0], /<span class="stolon-badge blue">Mode<\/span>/);
-    assert.match(html[1], /<span class="stolon-badge gray">Mode<\/span>/);
+    assert.match(html[0], /<span class="stolon-dot stolon-green" role="img" title="Active" aria-label="Active"><\/span>/);
+    assert.match(html[1], /<span class="stolon-dot stolon-red" role="img" title="Down" aria-label="Down"><\/span>/);
+    assert.match(html[2], /<span class="stolon-dot stolon-orange" role="img" title="Checking" aria-label="Checking"><\/span>/);
+    assert.match(html[3], /<span class="stolon-dot stolon-gray" role="img"/);
+    assert.match(html[0], /<span class="stolon-badge stolon-blue">Mode<\/span>/);
+    assert.match(html[1], /<span class="stolon-badge stolon-gray">Mode<\/span>/);
     assert.match(html[0], /<span class="stolon-collapsible-icon stolon-card-item-chevron material-icons" aria-hidden="true">expand_more<\/span>/);
     assert.doesNotMatch(html[0], /stolon-card-item-dot/);
 });
@@ -109,17 +109,17 @@ test('setCollapsed sets the header class and aria-expanded, and the content clas
     var header = dom.el('button');
     var content = dom.el('div');
     setCollapsed(header, content, true);
-    assert.ok(header.classList.contains('collapsed'));
+    assert.ok(header.classList.contains('stolon-collapsed'));
     assert.equal(header.getAttribute('aria-expanded'), 'false');
-    assert.ok(content.classList.contains('collapsed'));
+    assert.ok(content.classList.contains('stolon-collapsed'));
     setCollapsed(header, content, false);
-    assert.equal(header.classList.contains('collapsed'), false);
+    assert.equal(header.classList.contains('stolon-collapsed'), false);
     assert.equal(header.getAttribute('aria-expanded'), 'true');
-    assert.equal(content.classList.contains('collapsed'), false);
+    assert.equal(content.classList.contains('stolon-collapsed'), false);
     var list = dom.el('div', { hidden: true });
     setCollapsed(header, list, false, true);
     assert.equal(list.hidden, false);
-    assert.equal(list.classList.contains('collapsed'), false);
+    assert.equal(list.classList.contains('stolon-collapsed'), false);
     setCollapsed(header, null, true);
     assert.equal(header.getAttribute('aria-expanded'), 'false');
 });
@@ -127,7 +127,7 @@ test('setCollapsed sets the header class and aria-expanded, and the content clas
 test('the placeholder hint is a collapsed toggle that controls its list and carries no chevron', function () {
     var html = placeholderHint([['title', 'The title']]);
     var id = html.match(/aria-controls="([^"]+)"/)[1];
-    assert.match(html, /class="stolon-hint-button stolon-icon-text small collapsed" data-stolon-hint aria-expanded="false"/);
+    assert.match(html, /class="stolon-hint-button stolon-icon-text stolon-small stolon-collapsed" data-stolon-hint aria-expanded="false"/);
     assert.match(html, new RegExp('class="stolon-placeholders" id="' + id + '" hidden'));
     assert.match(html, /<span>Placeholders<\/span><\/button>/);
     assert.doesNotMatch(html, /stolon-collapsible-icon|expand_more/);
@@ -136,16 +136,16 @@ test('the placeholder hint is a collapsed toggle that controls its list and carr
 
 test('bindPlaceholders opens and closes the list through the shared collapsible toggle', function () {
     var list = dom.el('div', { class: 'stolon-placeholders', hidden: true });
-    var hint = dom.el('button', { type: 'button', class: 'stolon-hint-button collapsed', 'data-stolon-hint': '', 'aria-expanded': 'false' });
+    var hint = dom.el('button', { type: 'button', class: 'stolon-hint-button stolon-collapsed', 'data-stolon-hint': '', 'aria-expanded': 'false' });
     var rootEl = dom.el('div', {}, [dom.el('div', { class: 'inputContainer' }, [dom.el('input'), hint, list])]);
     dom.document.body.appendChild(rootEl);
     bindPlaceholders(rootEl);
     hint.click();
     assert.equal(list.hidden, false);
-    assert.equal(hint.classList.contains('collapsed'), false);
+    assert.equal(hint.classList.contains('stolon-collapsed'), false);
     hint.click();
     assert.equal(list.hidden, true);
-    assert.ok(hint.classList.contains('collapsed'));
+    assert.ok(hint.classList.contains('stolon-collapsed'));
 });
 
 test('the dialog close button is a row button built by iconButton', function () {
@@ -174,20 +174,20 @@ test('pollTaskProgress draws a progress bar along a medium button, also on a bar
     var handle = pollTaskProgress(btn, 'k', 'Sync');
     var bar = btn.querySelector('.stolon-btn-progress');
     assert.ok(bar.classList.contains('stolon-progress-bar'));
-    assert.ok(bar.classList.contains('btn-progress'));
+    assert.ok(bar.classList.contains('stolon-btn-progress'));
     assert.ok(btn.classList.contains('stolon-btn-progress-host'));
     handle.cancel();
 
-    var own = dom.el('div', { class: 'btn-progress' });
+    var own = dom.el('div', { class: 'stolon-btn-progress' });
     var held = dom.el('button', {}, [dom.el('span'), own]);
     dom.document.body.appendChild(held);
     handle = pollTaskProgress(held, 'k', 'Sync');
     assert.ok(own.classList.contains('stolon-progress-bar'));
     assert.ok(own.classList.contains('stolon-btn-progress'));
-    assert.equal(all(held, '.btn-progress').length, 1);
+    assert.equal(all(held, '.stolon-btn-progress').length, 1);
     handle.cancel();
 
-    var small = dom.el('button', { class: 'small' }, [dom.el('span')]);
+    var small = dom.el('button', { class: 'stolon-small' }, [dom.el('span')]);
     var wrap = dom.el('div', {}, [small]);
     dom.document.body.appendChild(wrap);
     handle = pollTaskProgress(small, 'k', 'Sync');

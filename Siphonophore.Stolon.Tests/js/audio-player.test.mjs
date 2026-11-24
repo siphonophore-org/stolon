@@ -39,7 +39,7 @@ test('the button plays and pauses, and its icon and name follow', function () {
     assert.equal(audio.paused, false);
     assert.equal(button.getAttribute('aria-label'), 'Pause');
     assert.equal(button.querySelector('.material-icons').textContent, 'pause');
-    assert.ok(player.element.classList.contains('playing'));
+    assert.ok(player.element.classList.contains('stolon-playing'));
     button.click();
     assert.equal(audio.paused, true);
     assert.equal(button.getAttribute('aria-label'), 'Play');
@@ -79,12 +79,12 @@ test('a source that cannot load shows the error in the title line, and its X but
     assert.match(title.textContent, /Could not load the audio/);
     assert.equal(title.hidden, false);
     assert.equal(player.element.querySelector('.stolon-field-message'), null, 'no line is added under the player');
-    assert.ok(player.element.classList.contains('failed'));
+    assert.ok(player.element.classList.contains('stolon-failed'));
     assert.equal(button.querySelector('.material-icons').textContent, 'close');
     assert.equal(button.getAttribute('aria-label'), 'Reset');
     assert.equal(button.disabled, false);
     button.click();
-    assert.ok(!player.element.classList.contains('failed'), 'the X resets the player');
+    assert.ok(!player.element.classList.contains('stolon-failed'), 'the X resets the player');
     assert.equal(button.querySelector('.material-icons').textContent, 'play_arrow');
     assert.equal(button.getAttribute('aria-label'), 'Play');
 });

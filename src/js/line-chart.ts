@@ -34,7 +34,7 @@ export interface LineChartHandle extends ChartHandle {
 export function createLineChart(options?: LineChartOptions): LineChartHandle {
     var opts = options || {};
     var chart = buildChart(Object.assign({ valueLabels: false }, opts), {
-        className: 'stolon-line-chart' + (opts.dots === false ? ' quiet' : ''),
+        className: 'stolon-line-chart' + (opts.dots === false ? ' stolon-quiet' : ''),
         points: true,
         draw: function (frame: ChartFrame): void {
             var zero = Math.min(Math.max(frame.y(0), frame.top), frame.bottom);

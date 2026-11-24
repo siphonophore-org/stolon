@@ -49,8 +49,8 @@ function messageText(ui) { return ui.q('.stolon-field-message-text').textContent
 
 test('an empty picker shows the placeholder, the default texts, and a square frame', function () {
     var ui = build();
-    assert.equal(ui.picker.element.classList.contains('square'), true);
-    assert.equal(ui.picker.element.classList.contains('filled'), false);
+    assert.equal(ui.picker.element.classList.contains('stolon-square'), true);
+    assert.equal(ui.picker.element.classList.contains('stolon-filled'), false);
     assert.equal(ui.picker.element.getAttribute('role'), 'group');
     assert.equal(ui.image.hidden, true);
     assert.equal(ui.q('.stolon-image-picker-placeholder').hidden, false);
@@ -65,9 +65,9 @@ test('an empty picker shows the placeholder, the default texts, and a square fra
 });
 
 test('shape takes portrait and wide, and an unknown shape falls back to square', function () {
-    assert.equal(build({ shape: 'portrait' }).picker.element.classList.contains('portrait'), true);
-    assert.equal(build({ shape: 'wide' }).picker.element.classList.contains('wide'), true);
-    assert.equal(build({ shape: 'round' }).picker.element.classList.contains('square'), true);
+    assert.equal(build({ shape: 'portrait' }).picker.element.classList.contains('stolon-portrait'), true);
+    assert.equal(build({ shape: 'wide' }).picker.element.classList.contains('stolon-wide'), true);
+    assert.equal(build({ shape: 'round' }).picker.element.classList.contains('stolon-square'), true);
 });
 
 test('label and description name and describe the group', function () {
@@ -89,7 +89,7 @@ test('value shows a URL at first, with Replace and Remove, and getValue returns 
     assert.equal(ui.q('.stolon-image-picker-placeholder').hidden, true);
     assert.equal(ui.choose.textContent, 'Replace');
     assert.equal(ui.remove.hidden, false);
-    assert.equal(ui.picker.element.classList.contains('filled'), true);
+    assert.equal(ui.picker.element.classList.contains('stolon-filled'), true);
     assert.equal(ui.picker.getValue(), '/Items/1/Images/Primary');
 });
 
@@ -131,7 +131,7 @@ test('a file that is not an image is refused with the default message under the 
     pick(ui, file('notes.txt', 'text/plain'));
     assert.equal(readers.length, 0);
     assert.equal(messageText(ui), 'This file is not an image.');
-    assert.equal(ui.q('.stolon-field-message').classList.contains('error'), true);
+    assert.equal(ui.q('.stolon-field-message').classList.contains('stolon-error'), true);
     assert.equal(ui.choose.getAttribute('aria-describedby'), ui.q('.stolon-field-message').id);
     assert.equal(ui.changes.length, 0);
 });
@@ -253,13 +253,13 @@ test('a fallback fills the empty frame with initials or an icon on a color, and 
     var ui = build({ fallback: { text: 'Ada Lovelace', color: 'purple' } });
     var fb = ui.q('.stolon-image-picker-fallback');
     assert.equal(fb.textContent, 'AL');
-    assert.ok(fb.classList.contains('purple'));
+    assert.ok(fb.classList.contains('stolon-purple'));
     assert.equal(fb.hidden, false);
     ui.picker.setValue('logo.png');
     assert.equal(fb.hidden, true);
     var icon = build({ fallback: { icon: 'dns' } }).q('.stolon-image-picker-fallback');
     assert.equal(icon.textContent, 'dns');
-    assert.ok(icon.classList.contains('blue'));
+    assert.ok(icon.classList.contains('stolon-blue'));
     assert.equal(build({}).q('.stolon-image-picker-fallback'), null);
 });
 
@@ -297,11 +297,11 @@ test('removable false never shows Remove, and a URL fallback shows in the empty 
     ui.picker.setValue(null);
     assert.equal(ui.image.getAttribute('src'), 'logo.png');
     assert.equal(ui.picker.getValue(), null);
-    assert.equal(ui.picker.element.classList.contains('filled'), false);
-    assert.equal(ui.picker.element.classList.contains('has-fallback'), true);
+    assert.equal(ui.picker.element.classList.contains('stolon-filled'), false);
+    assert.equal(ui.picker.element.classList.contains('stolon-has-fallback'), true);
     assert.equal(ui.picker.fallbackDataUrl(), 'logo.png');
     ui.picker.setFallback('logo-2.png');
     assert.equal(ui.image.getAttribute('src'), 'logo-2.png');
     ui.picker.setFallback(null);
-    assert.equal(ui.picker.element.classList.contains('has-fallback'), false);
+    assert.equal(ui.picker.element.classList.contains('stolon-has-fallback'), false);
 });

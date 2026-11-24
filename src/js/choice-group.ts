@@ -12,7 +12,7 @@ export interface ChoiceGroupHandle {
 }
 
 /**
- * Wires a group of stolon-choice radio cards, keeping the selected class in step with the checked input for browsers without :has(). It reports each change to onChange.
+ * Wires a group of stolon-choice radio cards, keeping the stolon-selected class in step with the checked input for browsers without :has(). It reports each change to onChange.
  *
  * @param groupEl element with the stolon-choice-group class
  * @param options { onChange: function(value) [optional] }
@@ -25,7 +25,7 @@ export function createChoiceGroup(groupEl: HTMLElement, options?: ChoiceGroupOpt
     function reflect(): void {
         groupEl.querySelectorAll('.stolon-choice').forEach(function (choice) {
             var input = choice.querySelector<HTMLInputElement>('input');
-            choice.classList.toggle('selected', !!(input && input.checked));
+            choice.classList.toggle('stolon-selected', !!(input && input.checked));
         });
     }
 

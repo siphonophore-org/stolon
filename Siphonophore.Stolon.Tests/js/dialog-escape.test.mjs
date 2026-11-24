@@ -36,9 +36,9 @@ test('Escape inside an open overflow menu closes the menu only, and a second Esc
 test('Escape inside an open help hint closes the bubble only', function () {
     var hint = createHelpHint({ text: 'Explains.' });
     around(hint.element, function () { hint.element.querySelector('button').click(); hint.element.querySelector('button').focus(); });
-    assert.equal(hint.element.classList.contains('open'), true);
+    assert.equal(hint.element.classList.contains('stolon-open'), true);
     dom.document.key('Escape');
-    assert.equal(hint.element.classList.contains('open'), false);
+    assert.equal(hint.element.classList.contains('stolon-open'), false);
     assert.equal(open(), true);
     dom.document.key('Escape');
     assert.equal(open(), false);
@@ -169,7 +169,7 @@ test('confirmDialog buttons default to Cancel and Confirm, are replaceable, and 
     var custom = dom.document.querySelectorAll('.stolon-modal-button');
     assert.equal(custom[0].textContent, 'Keep');
     assert.equal(custom[1].textContent, 'Remove');
-    assert.ok(custom[1].classList.contains('stolon-button') && custom[1].classList.contains('destructive'));
+    assert.ok(custom[1].classList.contains('stolon-button') && custom[1].classList.contains('stolon-destructive'));
     custom[1].click();
     assert.equal(await q, true);
 });

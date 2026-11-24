@@ -1,5 +1,5 @@
 /* Vertical list of record cards in priority order, each with a head row and a body the open card shows */
-/* Example: <div class="stolon-card-list"><div class="stolon-card-item selected"><div class="stolon-card-item-head">...</div><div class="stolon-card-item-body">...</div></div></div> */
+/* Example: <div class="stolon-card-list"><div class="stolon-card-item stolon-selected"><div class="stolon-card-item-head">...</div><div class="stolon-card-item-body">...</div></div></div> */
 .stolon-card-list {
     display: flex;
     flex-direction: column;
@@ -7,18 +7,18 @@
 }
 
 /* One record card. selected marks the open one, collapsed folds it, disabled dims its text, dragging fades it */
-/* Example: <div class="stolon-card-item selected"></div> */
+/* Example: <div class="stolon-card-item stolon-selected"></div> */
 .stolon-card-item {
     background: var(--stolon-surface);
     border: 1px solid var(--stolon-border);
     border-radius: var(--stolon-radius-large);
     transition: border-color 0.15s, background 0.15s;
 }
-.stolon-card-item.selected { border-color: var(--stolon-accent); }
-.stolon-card-item.dragging { opacity: 0.4; }
-.stolon-card-item.drop-before { box-shadow: 0 -3px 0 0 var(--stolon-accent); }
-.stolon-card-item.drop-after { box-shadow: 0 3px 0 0 var(--stolon-accent); }
-.stolon-card-item.disabled .stolon-card-item-main { opacity: 0.55; }
+.stolon-card-item.stolon-selected { border-color: var(--stolon-accent); }
+.stolon-card-item.stolon-dragging { opacity: 0.4; }
+.stolon-card-item.stolon-drop-before { box-shadow: 0 -3px 0 0 var(--stolon-accent); }
+.stolon-card-item.stolon-drop-after { box-shadow: 0 3px 0 0 var(--stolon-accent); }
+.stolon-card-item.stolon-disabled .stolon-card-item-main { opacity: 0.55; }
 
 /* Clickable head row: grip, number, main text, arrows, and the collapsible chevron, which turns by its aria-expanded. Tinted when the card is open */
 /* Example: <div class="stolon-card-item-head" draggable="true" role="button" tabindex="0"></div> */
@@ -32,8 +32,8 @@
     border-radius: var(--stolon-radius-large);
 }
 .stolon-card-item-head:hover { background: var(--stolon-wash); }
-.stolon-card-item.selected > .stolon-card-item-head { background: var(--stolon-accent-wash); border-radius: var(--stolon-radius-large) var(--stolon-radius-large) 0 0; }
-.stolon-card-item.selected.collapsed > .stolon-card-item-head { border-radius: var(--stolon-radius-large); }
+.stolon-card-item.stolon-selected > .stolon-card-item-head { background: var(--stolon-accent-wash); border-radius: var(--stolon-radius-large) var(--stolon-radius-large) 0 0; }
+.stolon-card-item.stolon-selected.stolon-collapsed > .stolon-card-item-head { border-radius: var(--stolon-radius-large); }
 
 /* Drag handle icon at the left of the head */
 /* Example: <span class="stolon-card-item-grip material-icons">drag_indicator</span> */
@@ -60,7 +60,7 @@
     background: color-mix(in srgb, currentColor 8%, transparent);
     border: 1px solid var(--stolon-border);
 }
-.stolon-card-item.selected .stolon-card-item-num {
+.stolon-card-item.stolon-selected .stolon-card-item-num {
     background: var(--stolon-accent);
     border-color: var(--stolon-accent);
     color: var(--stolon-on-accent);
@@ -84,7 +84,7 @@
     gap: var(--stolon-gap-narrow);
 }
 /* The title's name ends in an ellipsis, and its badges wrap under it when the head is too narrow, so nothing runs under the buttons */
-/* Example: <div class="stolon-card-item-title"><span class="stolon-dot green"></span><span>Living room</span><span class="stolon-badge purple">Both</span></div> */
+/* Example: <div class="stolon-card-item-title"><span class="stolon-dot stolon-green"></span><span>Living room</span><span class="stolon-badge stolon-purple">Both</span></div> */
 .stolon-card-item-title { flex-wrap: wrap; row-gap: calc(var(--stolon-gap-narrow) / 2); }
 .stolon-card-item-title > span:not(.stolon-dot):not(.stolon-badge) {
     flex: 0 1 auto;
@@ -137,11 +137,11 @@
     border-top: 1px solid var(--stolon-line);
     border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
 }
-.stolon-card-item.collapsed .stolon-card-item-body,
-.stolon-card-item:not(.selected) .stolon-card-item-body { display: none; }
+.stolon-card-item.stolon-collapsed .stolon-card-item-body,
+.stolon-card-item:not(.stolon-selected) .stolon-card-item-body { display: none; }
 
 /* Action row under the list, for an Add button */
-/* Example: <div class="stolon-card-list-actions"><button class="stolon-button primary">Add</button></div> */
+/* Example: <div class="stolon-card-list-actions"><button class="stolon-button stolon-primary">Add</button></div> */
 .stolon-card-list-actions {
     margin: var(--stolon-gap-wide) 0 var(--stolon-gap-wide);
 }

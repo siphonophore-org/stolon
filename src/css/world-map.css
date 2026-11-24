@@ -7,7 +7,7 @@
 }
 
 /* The layer toggles: on is filled with the layer's color and shows a check, off is an outline with an empty dot */
-/* Example: <button class="raised stolon-button small stolon-world-layer" aria-pressed="true" style="--stolon-layer: var(--stolon-green-fg)"><span class="material-icons">check</span><span class="stolon-world-layer-dot"></span><span>People</span></button> */
+/* Example: <button class="raised stolon-button stolon-small stolon-world-layer" aria-pressed="true" style="--stolon-layer: var(--stolon-green-fg)"><span class="material-icons">check</span><span class="stolon-world-layer-dot"></span><span>People</span></button> */
 .stolon-world-layers {
     display: flex;
     flex-wrap: wrap;
@@ -38,7 +38,7 @@
 .stolon-world-layer[aria-pressed="true"] > .stolon-world-layer-dot { display: none; }
 
 /* The map itself, which scales to its width, with uncounted countries in a faint wash */
-/* Example: <div class="stolon-world-frame"><svg viewBox="0 0 1000 394"><path class="stolon-world-country counted selected"></path></svg></div> */
+/* Example: <div class="stolon-world-frame"><svg viewBox="0 0 1000 394"><path class="stolon-world-country stolon-counted stolon-selected"></path></svg></div> */
 .stolon-world-frame {
     position: relative;
 }
@@ -53,14 +53,14 @@
     stroke-width: 0.5;
     transition: fill-opacity 0.2s;
 }
-.stolon-world-country.counted {
+.stolon-world-country.stolon-counted {
     fill: var(--stolon-world-fill, var(--stolon-accent));
     cursor: pointer;
 }
-.stolon-world-country.counted:hover { stroke: currentColor; stroke-width: 1; }
+.stolon-world-country.stolon-counted:hover { stroke: currentColor; stroke-width: 1; }
 .stolon-world-country:focus { outline: none; }
-.stolon-world-country.counted:focus-visible { stroke: var(--stolon-accent); stroke-width: 1.5; }
-.stolon-world-country.selected {
+.stolon-world-country.stolon-counted:focus-visible { stroke: var(--stolon-accent); stroke-width: 1.5; }
+.stolon-world-country.stolon-selected {
     stroke: currentColor;
     stroke-width: 1.8;
     fill-opacity: 1 !important;

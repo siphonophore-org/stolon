@@ -54,17 +54,17 @@ test('createChoiceGroup marks the checked choice, reports changes, and sets by v
     var seen = [];
     g.inputs[1].checked = true;
     var handle = createChoiceGroup(g.group, { onChange: function (v) { seen.push(v); } });
-    assert.deepEqual(g.choices.map(function (c) { return c.classList.contains('selected'); }), [false, true]);
+    assert.deepEqual(g.choices.map(function (c) { return c.classList.contains('stolon-selected'); }), [false, true]);
     assert.equal(handle.get(), 'b');
     g.inputs[0].checked = true;
     g.inputs[1].checked = false;
     g.inputs[0].dispatch('change');
     assert.deepEqual(seen, ['a']);
-    assert.equal(g.choices[0].classList.contains('selected'), true);
-    assert.equal(g.choices[1].classList.contains('selected'), false);
+    assert.equal(g.choices[0].classList.contains('stolon-selected'), true);
+    assert.equal(g.choices[1].classList.contains('stolon-selected'), false);
     handle.set('b');
     assert.equal(handle.get(), 'b');
-    assert.equal(g.choices[1].classList.contains('selected'), true);
+    assert.equal(g.choices[1].classList.contains('stolon-selected'), true);
     assert.equal(seen.length, 1);
     handle.destroy();
     g.inputs[0].checked = true;
@@ -105,13 +105,13 @@ test('bindSecretField wires the clear button once, and clearing posts an empty v
     input.addEventListener('input', function () { inputs++; });
     bindSecretField(input, true, { clearButton: clear });
     bindSecretField(input, true, { clearButton: clear });
-    assert.equal(clear.classList.contains('hidden'), false);
+    assert.equal(clear.classList.contains('stolon-hidden'), false);
     clear.click();
     assert.equal(inputs, 1);
     assert.equal(readSecretField(input), '');
-    assert.equal(clear.classList.contains('hidden'), true);
+    assert.equal(clear.classList.contains('stolon-hidden'), true);
     bindSecretField(input, false, { clearButton: clear });
-    assert.equal(clear.classList.contains('hidden'), true);
+    assert.equal(clear.classList.contains('stolon-hidden'), true);
     bindSecretField(input, true, { clearButton: clear });
     assert.equal(readSecretField(input), SECRET_KEPT);
     clearSecretField(input);
@@ -292,7 +292,7 @@ test('copyWithFeedback takes replacement labels and a duration, and works with n
 
 test('bindComboAria wires the roles, opens and closes, and activates an option', function () {
     var input = dom.el('input', { type: 'text' });
-    var dropdown = dom.el('div', { class: 'stolon-combo-dropdown hidden' });
+    var dropdown = dom.el('div', { class: 'stolon-combo-dropdown stolon-hidden' });
     var aria = bindComboAria(input, dropdown);
     assert.equal(input.getAttribute('role'), 'combobox');
     assert.equal(input.getAttribute('aria-controls'), dropdown.id);
@@ -305,7 +305,7 @@ test('bindComboAria wires the roles, opens and closes, and activates an option',
     aria.option(b, 1);
     aria.setOpen(true);
     assert.equal(input.getAttribute('aria-expanded'), 'true');
-    assert.equal(dropdown.classList.contains('hidden'), false);
+    assert.equal(dropdown.classList.contains('stolon-hidden'), false);
     aria.activate(1);
     assert.equal(input.getAttribute('aria-activedescendant'), b.id);
     assert.equal(b.getAttribute('aria-selected'), 'true');
@@ -314,7 +314,7 @@ test('bindComboAria wires the roles, opens and closes, and activates an option',
     assert.equal(input.hasAttribute('aria-activedescendant'), false);
     aria.setOpen(false);
     assert.equal(input.getAttribute('aria-expanded'), 'false');
-    assert.equal(dropdown.classList.contains('hidden'), true);
+    assert.equal(dropdown.classList.contains('stolon-hidden'), true);
 });
 
 test('createUserSelector puts size small or large on data-stolon-size, and leaves it off for medium or no size', function () {

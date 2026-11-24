@@ -226,8 +226,8 @@ test('a banner draws its actions as buttons under the text, and setActions repla
     var banner = createBanner({ text: 'Settings changed.', actions: [{ text: 'Apply', primary: true, onClick: function (b) { clicked.push(b.textContent); } }, { text: 'Later' }] });
     var buttons = banner.element.querySelectorAll('.stolon-banner-actions button');
     assert.equal(buttons.length, 2);
-    assert.equal(buttons[0].className, 'raised stolon-button small primary');
-    assert.equal(buttons[1].className, 'raised stolon-button small secondary');
+    assert.equal(buttons[0].className, 'raised stolon-button stolon-small stolon-primary');
+    assert.equal(buttons[1].className, 'raised stolon-button stolon-small stolon-secondary');
     buttons[0].click();
     assert.deepEqual(clicked, ['Apply']);
     banner.setActions(null);

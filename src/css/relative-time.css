@@ -8,8 +8,8 @@
 .stolon-relative-time-text[title] { cursor: help; }
 
 /* A countdown, a clock of the time left with an optional small ring that fills as the wait passes */
-/* Example: <span class="stolon-relative-time countdown"><span class="stolon-ring stolon-ring-small stolon-ring-pie" role="progressbar"></span><time class="stolon-relative-time-text">4:05</time></span> */
-.stolon-relative-time.countdown .stolon-relative-time-text { display: inline-block; min-width: 2.5em; }
+/* Example: <span class="stolon-relative-time stolon-countdown"><span class="stolon-ring stolon-ring-small stolon-ring-pie" role="progressbar"></span><time class="stolon-relative-time-text">4:05</time></span> */
+.stolon-relative-time.stolon-countdown .stolon-relative-time-text { display: inline-block; min-width: 2.5em; }
 /* The ring sits on the text's line, centered on its letters, so the countdown lines up with the words around it */
 .stolon-relative-time > .stolon-ring { vertical-align: -0.2em; margin-right: var(--stolon-gap-narrow); }
-.stolon-relative-time.countdown.done .stolon-relative-time-text { color: var(--stolon-green-fg); }
+.stolon-relative-time.stolon-countdown.stolon-done .stolon-relative-time-text { color: var(--stolon-green-fg); }

@@ -7,7 +7,7 @@
 }
 
 /* Rounded card showing a large count over a label, tinted by status */
-/* Example: <div class="stolon-card blue"><span class="stolon-card-count">5</span><span class="stolon-card-label">Users</span></div> */
+/* Example: <div class="stolon-card stolon-blue"><span class="stolon-card-count">5</span><span class="stolon-card-label">Users</span></div> */
 .stolon-card {
     flex: 1;
     min-width: 90px;
@@ -34,23 +34,23 @@
     opacity: 0.9;
 }
 /* Status color modifiers for a card, each tinting the fill, text, and border */
-/* Example: <div class="stolon-card orange"><span class="stolon-card-count">2</span><span class="stolon-card-label">Queued</span></div> */
-.stolon-card.green { background: var(--stolon-green-bg); color: var(--stolon-green-fg); border-color: var(--stolon-green-fg); }
-.stolon-card.red { background: var(--stolon-red-bg); color: var(--stolon-red-fg); border-color: var(--stolon-red-fg); }
-.stolon-card.orange { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); border-color: var(--stolon-orange-fg); }
-.stolon-card.purple { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); border-color: var(--stolon-purple-fg); }
-.stolon-card.blue { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); border-color: var(--stolon-blue-fg); }
-.stolon-card.gray { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); border-color: var(--stolon-gray-fg); }
-.stolon-card.yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); border-color: var(--stolon-yellow-fg); }
-.stolon-card.pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); border-color: var(--stolon-pink-fg); }
-.stolon-card.teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); border-color: var(--stolon-teal-fg); }
-.stolon-card.custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); border-color: var(--stolon-custom-fg); }
+/* Example: <div class="stolon-card stolon-orange"><span class="stolon-card-count">2</span><span class="stolon-card-label">Queued</span></div> */
+.stolon-card.stolon-green { background: var(--stolon-green-bg); color: var(--stolon-green-fg); border-color: var(--stolon-green-fg); }
+.stolon-card.stolon-red { background: var(--stolon-red-bg); color: var(--stolon-red-fg); border-color: var(--stolon-red-fg); }
+.stolon-card.stolon-orange { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); border-color: var(--stolon-orange-fg); }
+.stolon-card.stolon-purple { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); border-color: var(--stolon-purple-fg); }
+.stolon-card.stolon-blue { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); border-color: var(--stolon-blue-fg); }
+.stolon-card.stolon-gray { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); border-color: var(--stolon-gray-fg); }
+.stolon-card.stolon-yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); border-color: var(--stolon-yellow-fg); }
+.stolon-card.stolon-pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); border-color: var(--stolon-pink-fg); }
+.stolon-card.stolon-teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); border-color: var(--stolon-teal-fg); }
+.stolon-card.stolon-custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); border-color: var(--stolon-custom-fg); }
 
 /* A tighter row of small count cards, for many counts in little room, such as on a phone */
-/* Example: <div class="stolon-cards compact"><div class="stolon-card green"></div></div> */
-.stolon-cards.compact { gap: var(--stolon-gap-narrow); --stolon-balance-min: 72px; }
-.stolon-cards.compact .stolon-card { min-width: 0; padding: var(--stolon-pad-small) calc(var(--stolon-gap-narrow) * 3 / 4); }
-.stolon-cards.compact .stolon-card-label { font-size: 0.78em; line-height: 1.25; }
+/* Example: <div class="stolon-cards stolon-compact"><div class="stolon-card stolon-green"></div></div> */
+.stolon-cards.stolon-compact { gap: var(--stolon-gap-narrow); --stolon-balance-min: 72px; }
+.stolon-cards.stolon-compact .stolon-card { min-width: 0; padding: var(--stolon-pad-small) calc(var(--stolon-gap-narrow) * 3 / 4); }
+.stolon-cards.stolon-compact .stolon-card-label { font-size: 0.78em; line-height: 1.25; }
 
 @media (max-width: 768px) {
     .stolon-cards { gap: var(--stolon-gap-narrow); }

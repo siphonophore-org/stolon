@@ -20,7 +20,7 @@ function hintMarkup(copy, token, name) {
     var chip = dom.el('button', { type: 'button', class: 'stolon-tag stolon-tag-button', 'data-stolon-placeholder': name, 'data-stolon-token': token });
     var status = dom.el('span', { class: 'stolon-sr-only', role: 'status' });
     var list = dom.el('div', { class: 'stolon-placeholders', hidden: true }, [dom.el('span', { class: 'stolon-tags' }, [chip]), status]);
-    var hint = dom.el('div', copy ? { class: 'stolon-placeholder-hint copy', 'data-stolon-copied': 'Copied {value}.' } : { class: 'stolon-placeholder-hint' }, [list]);
+    var hint = dom.el('div', copy ? { class: 'stolon-placeholder-hint stolon-copy', 'data-stolon-copied': 'Copied {value}.' } : { class: 'stolon-placeholder-hint' }, [list]);
     var root = dom.el('div', {}, [dom.el('div', { class: 'inputContainer' }, [field, hint])]);
     dom.document.body.appendChild(root);
     return { root: root, field: field, chip: chip, status: status };
@@ -49,7 +49,7 @@ test('custom delimiters draw and carry the token, escaped', function () {
 
 test('copy mode marks the hint, carries the copied message, and adds a live region', function () {
     var html = placeholderHint([['a', '']], { mode: 'copy', label: 'Tokens', copiedText: 'Took {value}.' });
-    assert.match(html, /<div class="stolon-placeholder-hint copy" data-stolon-copied="Took \{value\}\.">/);
+    assert.match(html, /<div class="stolon-placeholder-hint stolon-copy" data-stolon-copied="Took \{value\}\.">/);
     assert.match(html, /<span>Tokens<\/span>/);
     assert.match(html, /<span class="stolon-sr-only" role="status"><\/span>/);
 });
@@ -74,7 +74,7 @@ test('a placeholder in copy mode copies its token, leaves the field alone, and a
     assert.deepEqual(calls, ['{{item.name}}']);
     assert.equal(ui.field.value, 'echo');
     assert.deepEqual(inserted, []);
-    assert.ok(ui.chip.classList.contains('copied'));
+    assert.ok(ui.chip.classList.contains('stolon-copied'));
     assert.equal(ui.status.textContent, 'Copied {{item.name}}.');
 });
 

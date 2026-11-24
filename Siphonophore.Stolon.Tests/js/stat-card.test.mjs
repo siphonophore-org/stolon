@@ -17,7 +17,7 @@ function parts(card) {
 test('a stat card keeps the value over the label with no layout, and draws no detail line', function () {
     var s = createStatCard({ value: 4, label: 'Servers' });
     assert.deepEqual(parts(s).slice(0, 2), ['stolon-card-count', 'stolon-card-label']);
-    assert.equal(s.element.classList.contains('label-top'), false);
+    assert.equal(s.element.classList.contains('stolon-label-top'), false);
     assert.equal(all(s.element, '.stolon-stat-detail').length, 0);
 });
 
@@ -38,24 +38,24 @@ test('detail lines sit after the value and label and before the trend', function
 
 test('label-top puts the label first, then the value, then the details, and setValue can switch back', function () {
     var s = createStatCard({ value: 'Paused until 14:00', label: 'Peer', layout: 'label-top', detail: 'Sends nothing' });
-    assert.ok(s.element.classList.contains('label-top'));
+    assert.ok(s.element.classList.contains('stolon-label-top'));
     assert.deepEqual(parts(s).slice(0, 3), ['stolon-card-label', 'stolon-card-count', 'stolon-stat-detail']);
     s.setValue({ layout: 'value-top' });
-    assert.equal(s.element.classList.contains('label-top'), false);
+    assert.equal(s.element.classList.contains('stolon-label-top'), false);
     assert.deepEqual(parts(s).slice(0, 3), ['stolon-card-count', 'stolon-card-label', 'stolon-stat-detail']);
 });
 
 test('valueColor colors the value text by a status name or a hex code through the color core, and clears when removed', function () {
     var s = createStatCard({ value: 'Paused until 14:00', valueColor: 'orange' });
     var value = s.element.querySelector('.stolon-card-count');
-    assert.ok(value.classList.contains('orange'));
-    assert.equal(s.element.classList.contains('orange'), false);
+    assert.ok(value.classList.contains('stolon-orange'));
+    assert.equal(s.element.classList.contains('stolon-orange'), false);
     s.setValue({ valueColor: '#e91e63' });
-    assert.ok(value.classList.contains('custom'));
-    assert.equal(value.classList.contains('orange'), false);
+    assert.ok(value.classList.contains('stolon-custom'));
+    assert.equal(value.classList.contains('stolon-orange'), false);
     assert.equal(value.style.getPropertyValue('--stolon-custom'), '#e91e63');
     s.setValue({ valueColor: undefined });
-    assert.equal(value.classList.contains('custom'), false);
+    assert.equal(value.classList.contains('stolon-custom'), false);
     assert.equal(value.style.getPropertyValue('--stolon-custom'), '');
 });
 
@@ -73,11 +73,11 @@ test('setValue replaces the detail lines and getValue returns the new fields as 
 });
 
 test('a value with letters marks the card as text, and a number, a count with separators, or a clock time does not', function () {
-    assert.ok(createStatCard({ value: 'Delivered 3m ago' }).element.classList.contains('text'));
+    assert.ok(createStatCard({ value: 'Delivered 3m ago' }).element.classList.contains('stolon-text'));
     [1204, '1,204', '12.5%', '14:00', '-3', undefined].forEach(function (value) {
-        assert.equal(createStatCard({ value: value }).element.classList.contains('text'), false, String(value));
+        assert.equal(createStatCard({ value: value }).element.classList.contains('stolon-text'), false, String(value));
     });
     var s = createStatCard({ value: 4 });
     s.setValue({ value: 'Never' });
-    assert.ok(s.element.classList.contains('text'));
+    assert.ok(s.element.classList.contains('stolon-text'));
 });

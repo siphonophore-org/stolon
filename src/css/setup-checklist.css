@@ -8,7 +8,7 @@
 }
 
 /* The progress summary, its count above a bar of one segment per step that opens the step it stands for */
-/* Example: <div class="stolon-setup-summary"><div class="stolon-setup-count">3 of 6 done</div><nav class="stolon-stepper segments"></nav></div> */
+/* Example: <div class="stolon-setup-summary"><div class="stolon-setup-count">3 of 6 done</div><nav class="stolon-stepper stolon-segments"></nav></div> */
 .stolon-setup-summary {
     display: flex;
     flex-direction: column;
@@ -17,5 +17,5 @@
 .stolon-setup-count { font-weight: 600; }
 
 /* The numbered run of steps, counted from one in each checklist */
-/* Example: <div class="stolon-setup-steps"><div class="stolon-collapsible-section numbered stolon-setup-step"></div></div> */
+/* Example: <div class="stolon-setup-steps"><div class="stolon-collapsible-section stolon-numbered stolon-setup-step"></div></div> */
 .stolon-setup-steps { counter-reset: stolon-collapsible-step; }

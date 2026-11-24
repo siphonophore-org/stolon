@@ -1,5 +1,5 @@
 /* A List with a search, filters, a sort, and a summary line above it, the base a Data Table is built on */
-/* Example: <div class="stolon-filtered-list"><div class="stolon-filtered-toolbar"></div><div class="stolon-filtered-summary">Showing 4 of 12.</div><div class="stolon-list rows"></div></div> */
+/* Example: <div class="stolon-filtered-list"><div class="stolon-filtered-toolbar"></div><div class="stolon-filtered-summary">Showing 4 of 12.</div><div class="stolon-list stolon-rows"></div></div> */
 .stolon-filtered-list {
     display: flex;
     flex-wrap: wrap;
@@ -18,9 +18,9 @@
 .stolon-dialog .stolon-filtered-list > .stolon-filtered-pills,
 .stolon-filtered-list > .stolon-filtered-pills { margin-right: calc(var(--stolon-gap-wide) - var(--stolon-gap-narrow)) !important; }
 /* A thin line between two pill rows that share a line, centered in the wide space, and none once they wrap */
-/* Example: <div class="stolon-pill-group stolon-filtered-pills">…</div><div class="stolon-pill-group stolon-filtered-pills beside">…</div> */
-.stolon-filtered-list > .stolon-filtered-pills.beside { position: relative; }
-.stolon-filtered-list > .stolon-filtered-pills.beside::before {
+/* Example: <div class="stolon-pill-group stolon-filtered-pills">…</div><div class="stolon-pill-group stolon-filtered-pills stolon-beside">…</div> */
+.stolon-filtered-list > .stolon-filtered-pills.stolon-beside { position: relative; }
+.stolon-filtered-list > .stolon-filtered-pills.stolon-beside::before {
     content: '';
     position: absolute;
     top: 15%;
@@ -48,7 +48,7 @@
 .stolon-filtered-sort { flex: 0 1 auto; width: auto; min-width: calc(var(--stolon-size-large) * 3.5); }
 
 /* Count cards that each turn a choice on and off: on is full strength, off is dimmed, and with none on every choice shows */
-/* Example: <div class="stolon-cards stolon-filtered-cards"><button class="stolon-card stolon-filtered-card green" aria-pressed="true"><span class="stolon-card-count">4</span><span class="stolon-card-label">Synced</span></button></div> */
+/* Example: <div class="stolon-cards stolon-filtered-cards"><button class="stolon-card stolon-filtered-card stolon-green" aria-pressed="true"><span class="stolon-card-count">4</span><span class="stolon-card-label">Synced</span></button></div> */
 .stolon-filtered-card {
     font: inherit;
     color: inherit;
@@ -56,12 +56,12 @@
     transition: opacity 0.2s, box-shadow 0.2s;
 }
 .stolon-filtered-card[aria-pressed="true"] { box-shadow: inset 0 0 0 1px currentColor; }
-.stolon-filtered-cards.picking .stolon-filtered-card[aria-pressed="false"] { opacity: 0.45; }
+.stolon-filtered-cards.stolon-picking .stolon-filtered-card[aria-pressed="false"] { opacity: 0.45; }
 .stolon-filtered-card:hover { box-shadow: inset 0 0 0 1px currentColor; }
 .stolon-filtered-card:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
 
 /* A row of pills, one per choice and an All pill, each with its count */
-/* Example: <div class="stolon-pill-group stolon-filtered-pills"><button class="stolon-pill small" aria-pressed="true">All</button><button class="stolon-pill small"><span>Movies</span><span class="stolon-filtered-pill-count">12</span></button></div> */
+/* Example: <div class="stolon-pill-group stolon-filtered-pills"><button class="stolon-pill stolon-small" aria-pressed="true">All</button><button class="stolon-pill stolon-small"><span>Movies</span><span class="stolon-filtered-pill-count">12</span></button></div> */
 .stolon-filtered-pill-count {
     margin-left: var(--stolon-gap-narrow);
     opacity: 0.7;
@@ -70,34 +70,34 @@
 .stolon-filtered-pill-count:empty { display: none; }
 
 /* A button beside the search or on the bar of selected items, hidden while its visible test says no */
-/* Example: <button class="raised stolon-button secondary field stolon-filtered-action" data-action="retry"><span class="material-icons" aria-hidden="true">refresh</span><span>Retry Errors</span></button> */
+/* Example: <button class="raised stolon-button stolon-secondary stolon-field stolon-filtered-action" data-action="retry"><span class="material-icons" aria-hidden="true">refresh</span><span>Retry Errors</span></button> */
 .stolon-filtered-action[hidden] { display: none !important; }
 
 /* The bar over a list with multiple selection: the select all, the count of selected items, and the bulk actions, washed while it carries actions */
-/* Example: <div class="stolon-filtered-selectbar actions"><label class="stolon-check-row stolon-filtered-selectall"><input type="checkbox" class="stolon-check-row-input"><span class="stolon-check-label">Select all</span></label><span class="stolon-filtered-selected">2 selected</span><div class="stolon-filtered-bulk"></div></div> */
+/* Example: <div class="stolon-filtered-selectbar stolon-actions"><label class="stolon-check-row stolon-filtered-selectall"><input type="checkbox" class="stolon-check-row-input"><span class="stolon-check-label">Select all</span></label><span class="stolon-filtered-selected">2 selected</span><div class="stolon-filtered-bulk"></div></div> */
 .stolon-filtered-selectbar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--stolon-gap-narrow);
 }
-.stolon-filtered-selectbar.actions {
+.stolon-filtered-selectbar.stolon-actions {
     padding: var(--stolon-gap-narrow);
     background: var(--stolon-wash);
     border-radius: var(--stolon-radius-small);
 }
-.stolon-filtered-selectbar.actions.active { background: var(--stolon-accent-wash); }
+.stolon-filtered-selectbar.stolon-actions.stolon-active { background: var(--stolon-accent-wash); }
 /* The select all box lines up with the row checkboxes under it, which sit at the row padding inside the list's border */
 /* Example: <div class="stolon-filtered-selectbar"><label class="stolon-check-row stolon-filtered-selectall"><input type="checkbox" class="stolon-check-row-input"></label></div> */
 .stolon-filtered-selectbar,
-.stolon-filtered-selectbar.actions { padding-left: calc(var(--stolon-pad-medium) + 1px - var(--stolon-gap-narrow)); }
+.stolon-filtered-selectbar.stolon-actions { padding-left: calc(var(--stolon-pad-medium) + 1px - var(--stolon-gap-narrow)); }
 .stolon-filtered-selectall { flex: 0 0 auto; user-select: none; }
 .stolon-filtered-selected { opacity: 0.7; font-variant-numeric: tabular-nums; }
 .stolon-filtered-bulk { display: flex; flex-wrap: wrap; gap: var(--stolon-gap-narrow); }
 /* The reload row button at the end of the selection bar, whose icon turns while onReload runs */
-/* Example: <button class="stolon-row-btn stolon-filtered-reload spinning" title="Reload"><span class="material-icons" aria-hidden="true">refresh</span></button> */
+/* Example: <button class="stolon-row-btn stolon-filtered-reload stolon-spinning" title="Reload"><span class="material-icons" aria-hidden="true">refresh</span></button> */
 .stolon-filtered-selectbar > .stolon-filtered-reload { margin-left: auto; }
-.stolon-filtered-reload.spinning .material-icons { animation: stolon-spin 0.8s linear infinite; }
+.stolon-filtered-reload.stolon-spinning .material-icons { animation: stolon-spin 0.8s linear infinite; }
 
 /* An item that a checkbox leads, when the item's render did not place the checkbox itself. The checkbox sits on the row's center line, where a media card centers its artwork too */
 /* Example: <div class="stolon-filtered-checked"><input type="checkbox" class="stolon-check-row-input stolon-filtered-check"><span class="stolon-filtered-checked-text">Alien</span></div> */
@@ -110,7 +110,7 @@
     min-width: 0;
     padding-left: calc(var(--stolon-filtered-check-left) + var(--stolon-icon-medium) + var(--stolon-gap-narrow));
 }
-.stolon-list.rows .stolon-filtered-checked { --stolon-filtered-check-left: var(--stolon-pad-medium); }
+.stolon-list.stolon-rows .stolon-filtered-checked { --stolon-filtered-check-left: var(--stolon-pad-medium); }
 .stolon-filtered-checked > input[type="checkbox"].stolon-check-row-input.stolon-filtered-check {
     position: absolute;
     left: var(--stolon-filtered-check-left);

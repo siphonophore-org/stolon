@@ -25,7 +25,7 @@ const show = base.detailDrawerOpener((row) => ({
     buttons: [
         { text: 'Previous', action: () => show(stepTo(row, -1)) },
         { text: 'Next', action: () => show(stepTo(row, 1)) },
-        { text: 'Done', className: 'stolon-button primary' }
+        { text: 'Done', className: 'stolon-button stolon-primary' }
     ]
 }), { size: 'small' });
 const table = base.createDataTable({

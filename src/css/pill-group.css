@@ -8,7 +8,7 @@
 }
 
 /* One pill, outlined when off and filled with the accent and white text when aria-pressed is true or it has selected */
-/* Example: <button type="button" class="stolon-pill selected" aria-pressed="true">Daily</button> */
+/* Example: <button type="button" class="stolon-pill stolon-selected" aria-pressed="true">Daily</button> */
 .stolon-pill {
     box-sizing: border-box;
     height: var(--stolon-size-medium);
@@ -24,9 +24,9 @@
 }
 
 /* A pill at the small or large size of the scale */
-/* Example: <button type="button" class="stolon-pill small">Daily</button> */
-.stolon-pill.small { height: var(--stolon-size-small); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-small); }
-.stolon-pill.large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
+/* Example: <button type="button" class="stolon-pill stolon-small">Daily</button> */
+.stolon-pill.stolon-small { height: var(--stolon-size-small); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-small); }
+.stolon-pill.stolon-large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
 /* The hover, focus, and disabled look that pills and toggles share */
 .stolon-pill:hover,
 .stolon-toggle:hover { border-color: var(--stolon-accent); }
@@ -35,7 +35,7 @@
 .stolon-pill:disabled,
 .stolon-toggle:disabled { opacity: 0.5; cursor: default; }
 .stolon-pill[aria-pressed="true"],
-.stolon-pill.selected {
+.stolon-pill.stolon-selected {
     background: var(--stolon-accent);
     border-color: var(--stolon-accent);
     color: var(--stolon-on-accent);

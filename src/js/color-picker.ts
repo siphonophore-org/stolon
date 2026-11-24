@@ -63,7 +63,7 @@ export function createColorPicker(options?: ColorPickerOptions): ColorPickerHand
     var color: Rgba = readColor(options.value) || { r: 0, g: 0, b: 0, a: 1 };
     if (!alpha) color.a = 1;
 
-    var root = make('div', 'stolon-color-picker' + (alpha ? ' alpha' : '') + (alpha && options.opacityOnly ? ' opacity-only' : ''));
+    var root = make('div', 'stolon-color-picker' + (alpha ? ' stolon-alpha' : '') + (alpha && options.opacityOnly ? ' stolon-opacity-only' : ''));
     applyFieldSize(root, options.size);
     var box = make('div', 'stolon-color-picker-box');
     var swatch = make('span', 'stolon-color-swatch');
@@ -196,8 +196,8 @@ export function createColorPicker(options?: ColorPickerOptions): ColorPickerHand
             draw();
         },
         getRgba: function () { return { r: color.r, g: color.g, b: color.b, a: color.a }; },
-        isValid: function () { return (root.classList.contains('opacity-only') || hexCheck.isValid()) && (!opacity || opacityCheck.isValid()); },
-        setOpacityOnly: function (on: boolean) { root.classList.toggle('opacity-only', !!on && !!opacity); },
+        isValid: function () { return (root.classList.contains('stolon-opacity-only') || hexCheck.isValid()) && (!opacity || opacityCheck.isValid()); },
+        setOpacityOnly: function (on: boolean) { root.classList.toggle('stolon-opacity-only', !!on && !!opacity); },
         setSize: function (size?: 'small' | 'medium' | 'large') { applyFieldSize(root, size); },
         destroy: function () {
             runAll(cleanups);

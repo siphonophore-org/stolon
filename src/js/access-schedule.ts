@@ -141,7 +141,7 @@ export function createAccessSchedule(options?: AccessScheduleOptions): AccessSch
     head.appendChild(make('span', '', null, startLabel));
     head.appendChild(make('span', '', null, endLabel));
     var body = make('div', 'stolon-access-schedule-rows');
-    var addButton = make('button', 'raised stolon-button small stolon-access-schedule-add', { type: 'button' }, options.addText || stolonText('Stolon.AddWindow'));
+    var addButton = make('button', 'raised stolon-button stolon-small stolon-access-schedule-add', { type: 'button' }, options.addText || stolonText('Stolon.AddWindow'));
     var set = createRowSet<AccessScheduleSource, AccessScheduleRow>({
         body: body,
         build: buildRow,
@@ -195,7 +195,7 @@ export function createAccessSchedule(options?: AccessScheduleOptions): AccessSch
     // Checks the row's times through the validation core, shows its message, and returns whether the row is valid.
     function check(row: AccessScheduleRow): boolean {
         var ok = row.range.isValid();
-        row.element.classList.toggle('error', !ok);
+        row.element.classList.toggle('stolon-error', !ok);
         return ok;
     }
 

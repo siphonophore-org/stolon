@@ -69,7 +69,7 @@ var table = createDataTable({
 ## Gotchas
 
 * A cell's text is clipped with an ellipsis. Put long text in a column with more width.
-* `rowClass(row, index)` marks a row from its first draw, such as `selected` for a row picked elsewhere, which takes the table's selected look. It is the Filtered List's `itemClass`, so it follows every `setRows` and refresh. With `selectable` on, the selection owns `selected`, so give a picked row another name.
+* `rowClass(row, index)` marks a row from its first draw, such as `stolon-selected` for a row picked elsewhere, which takes the table's selected look. It is the Filtered List's `itemClass`, so it follows every `setRows` and refresh. With `selectable` on, the selection owns `stolon-selected`, so give a picked row another name.
 
 ## Reference
 
@@ -118,13 +118,13 @@ A sortable, filterable table: a Filtered List whose items are rows, framed by a 
 | `stolon-data-table` | A sortable, filterable table, a Filtered List whose rows sit in a grid under a header of column headings |
 | `stolon-filtered-list.stolon-data-table` | A table spans its toolbar and its grid across its frame, where the Filtered List alone would center them |
 | `stolon-data-grid` | The header row and each body row share the column tracks, so headings and cells line up |
-| `stolon-data-heading.center` | A narrow centered column, such as a checkbox, its heading centered over its cells |
+| `stolon-data-heading.stolon-center` | A narrow centered column, such as a checkbox, its heading centered over its cells |
 | `stolon-data-sort` | A sortable heading, a button whose arrow shows only while the column is sorted, and turns over when descending |
 | `stolon-data-glyph` | A narrow table: number columns shrink, and a heading with an icon shows the icon in place of its label |
-| `stolon-data-heading.resizable` | A resizable heading, with a handle on its right edge that drags the column wider or narrower |
+| `stolon-data-heading.stolon-resizable` | A resizable heading, with a handle on its right edge that drags the column wider or narrower |
 | `stolon-data-row` | A body row at least a field tall, with a hover wash, and the accent wash with a leading bar while selected |
 | `stolon-data-cell.stolon-data-edit-cell` | The edit button's column, one row button wide |
-| `stolon-data-row.editing` | An open row's editor under its cells, spanning every column: its fields in a grid, a message, and Save and Cancel |
+| `stolon-data-row.stolon-editing` | An open row's editor under its cells, spanning every column: its fields in a grid, a message, and Save and Cancel |
 
 <!-- reference:end -->
 

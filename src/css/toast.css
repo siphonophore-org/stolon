@@ -21,7 +21,7 @@
 .stolon-toaster-top-start .stolon-toaster-live { flex-direction: column-reverse; }
 
 /* One message on the stolon-float surface, built as stolon-icon-text with an icon, text, and a dismiss button, bordered in the color of its kind */
-/* Example: <div class="stolon-toast stolon-float stolon-icon-text success"><span class="material-icons" aria-hidden="true">check_circle</span><div class="stolon-toast-body"><div class="stolon-toast-message">Saved.</div></div></div> */
+/* Example: <div class="stolon-toast stolon-float stolon-icon-text stolon-success"><span class="material-icons" aria-hidden="true">check_circle</span><div class="stolon-toast-body"><div class="stolon-toast-message">Saved.</div></div></div> */
 .stolon-toast {
     position: relative;
     padding: var(--stolon-pad-small) calc(var(--stolon-pad-small) + var(--stolon-size-small) + var(--stolon-gap-narrow)) var(--stolon-pad-small) var(--stolon-pad-medium);
@@ -29,10 +29,10 @@
     margin-top: var(--stolon-gap-narrow);
 }
 .stolon-toast.stolon-float { border-left-width: calc(var(--stolon-gap-narrow) / 2); }
-.stolon-toast.info { border-left-color: var(--stolon-blue-fg); }
-.stolon-toast.success { border-left-color: var(--stolon-green-fg); }
-.stolon-toast.warn { border-left-color: var(--stolon-orange-fg); }
-.stolon-toast.error { border-left-color: var(--stolon-red-fg); }
+.stolon-toast.stolon-info { border-left-color: var(--stolon-blue-fg); }
+.stolon-toast.stolon-success { border-left-color: var(--stolon-green-fg); }
+.stolon-toast.stolon-warn { border-left-color: var(--stolon-orange-fg); }
+.stolon-toast.stolon-error { border-left-color: var(--stolon-red-fg); }
 .stolon-toast-body { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .stolon-toast-title { font-weight: 600; }
 /* The dismiss button, pinned to the toast's top right corner and inset by its padding */

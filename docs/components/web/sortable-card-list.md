@@ -15,11 +15,11 @@ Records as cards in priority order. Each card has a numbered head with a status 
 ```html
 <div id="serverList" class="stolon-card-list"></div>
 <div class="stolon-card-list-actions">
-    <button is="emby-button" type="button" id="btnAddServer" class="raised stolon-button primary">
+    <button is="emby-button" type="button" id="btnAddServer" class="raised stolon-button stolon-primary">
         <span class="material-icons" aria-hidden="true">add</span><span>Add Server</span>
     </button>
 </div>
-<div id="serverEditorHolder" class="hidden"><div id="serverEditor"></div></div>
+<div id="serverEditorHolder" class="stolon-hidden"><div id="serverEditor"></div></div>
 ```
 
 ```js

@@ -61,7 +61,7 @@ test('page numbers show the first, the last, and a window with gaps, and the cur
     var ui = build({ total: 300, pageSize: 10, page: 15, windowSize: 3 });
     assert.deepEqual(numbers(ui), ['1', '14', '15', '16', '30']);
     assert.equal(ui.pager.element.querySelectorAll('.stolon-pager-gap').length, 2);
-    var current = ui.pager.element.querySelector('.stolon-pager-number.active');
+    var current = ui.pager.element.querySelector('.stolon-pager-number.stolon-active');
     assert.equal(current.textContent, '15');
     assert.equal(current.getAttribute('aria-current'), 'page');
     assert.equal(current.getAttribute('aria-label'), 'Page 15');
@@ -132,7 +132,7 @@ test('a click on Next, Previous, or a page number keeps focus on the same contro
     var three = all(ui.pager.element, '.stolon-pager-number').filter(function (b) { return b.textContent === '3'; })[0];
     three.focus();
     three.click();
-    assert.equal(dom.document.activeElement, ui.pager.element.querySelector('.stolon-pager-number.active'));
+    assert.equal(dom.document.activeElement, ui.pager.element.querySelector('.stolon-pager-number.stolon-active'));
     assert.equal(dom.document.activeElement.textContent, '3');
 });
 
@@ -142,7 +142,7 @@ test('focus moves to the current page when the control it was on is now disabled
     next.focus();
     next.click();
     assert.equal(ui.pager.element.querySelector('.stolon-pager-next').disabled, true);
-    assert.equal(dom.document.activeElement, ui.pager.element.querySelector('.stolon-pager-number.active'));
+    assert.equal(dom.document.activeElement, ui.pager.element.querySelector('.stolon-pager-number.stolon-active'));
 });
 
 test('createPagination puts size small or large on data-stolon-size, and leaves it off for medium or no size', function () {

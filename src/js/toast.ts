@@ -76,7 +76,7 @@ export function createToaster(options?: ToasterOptions): ToasterHandle {
     function host(): void {
         if (options!.parent) return;
         var dialogs: HTMLElement[] = Array.prototype.filter.call(document.querySelectorAll<HTMLElement>('.stolon-dialog'), function (d: HTMLElement): boolean {
-            return !d.classList.contains('hidden') && !d.hidden && d.getClientRects().length > 0;
+            return !d.classList.contains('stolon-hidden') && !d.hidden && d.getClientRects().length > 0;
         });
         var wanted: HTMLElement = dialogs.length ? dialogs[dialogs.length - 1] : document.body;
         if (root.parentNode !== wanted) wanted.appendChild(root);
@@ -86,7 +86,7 @@ export function createToaster(options?: ToasterOptions): ToasterHandle {
         spec = typeof spec === 'string' ? { message: spec } : (spec || {});
         var kind: ToastKind = has(KINDS, spec.kind as ToastKind) ? spec.kind as ToastKind : 'info';
         var wait: number = spec.timeout !== undefined ? spec.timeout : (options!.timeout !== undefined ? options!.timeout : (kind === 'error' ? 0 : 5000));
-        var el = make('div', 'stolon-toast stolon-float stolon-icon-text ' + kind);
+        var el = make('div', 'stolon-toast stolon-float stolon-icon-text stolon-' + kind);
         el.appendChild(icon(KINDS[kind]));
         var body = make('div', 'stolon-toast-body');
         if (spec.title) body.appendChild(make('div', 'stolon-toast-title', null, spec.title));

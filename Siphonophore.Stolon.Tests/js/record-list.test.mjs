@@ -75,7 +75,7 @@ test('an empty list shows its empty sentence', function () {
 test('a tag takes a status color or a hex code', function () {
     var list = createRecordList({ items: [{ id: 1, title: 'Ada', tags: [{ label: 'Invited', color: 'green' }, { label: 'Reset', color: '#ff8800' }, { label: 'Plain' }] }] });
     var tags = all(list.element, '.stolon-tag');
-    assert.equal(tags[0].classList.contains('green'), true);
-    assert.equal(tags[1].classList.contains('custom'), true);
+    assert.equal(tags[0].classList.contains('stolon-green'), true);
+    assert.equal(tags[1].classList.contains('stolon-custom'), true);
     assert.equal(tags[2].className, 'stolon-tag');
 });

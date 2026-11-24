@@ -89,7 +89,7 @@ test('a countdown ticks each second, fills its ring, and calls onDone once at ze
     assert.equal(Math.round(Number(t.element.querySelector('.stolon-ring').getAttribute('aria-valuenow'))), 33);
     advance(2000);
     assert.equal(time.textContent, 'Now');
-    assert.ok(t.element.classList.contains('done'));
+    assert.ok(t.element.classList.contains('stolon-done'));
     advance(5000);
     assert.equal(done, 1);
     t.destroy();

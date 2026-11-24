@@ -6,6 +6,7 @@ import type { UserSelectorOptions, UserSelectorHandle } from './user-selector.js
 import { createUserMultiSelector } from './user-multi-selector.js';
 import type { UserMultiSelectorOptions, UserMultiSelectorHandle } from './user-multi-selector.js';
 import { classNames } from './lib/class-names.js';
+import { BADGE_STATES } from './badge.js';
 import { insertAtCursor, placeholderHint, bindPlaceholders } from './placeholder-hint.js';
 import { bindSecretField, clearSecretField, readSecretField } from './secret-field.js';
 import { initCollapsibles } from './collapsible-section.js';
@@ -61,8 +62,8 @@ export function createShared(view: HTMLElement, pluginId: string, apiPrefix?: st
         setVisible: function (id: string | Element, visible: boolean): void {
             var el = typeof id === 'string' ? view.querySelector('#' + id) : id;
             if (el) {
-                if (visible) el.classList.remove('hidden');
-                else el.classList.add('hidden');
+                if (visible) el.classList.remove('stolon-hidden');
+                else el.classList.add('stolon-hidden');
             }
         },
 
@@ -149,7 +150,10 @@ export function createShared(view: HTMLElement, pluginId: string, apiPrefix?: st
         },
 
         statusBadge: function (text: string, stateClass: string): string {
-            return badgeHtml(text, stateClass, null, 'stolon-table-status-badge ' + classNames(stateClass));
+            var states = classNames(stateClass).split(' ').map(function (token) {
+                return Object.prototype.hasOwnProperty.call(BADGE_STATES.stateColors, token) ? 'stolon-' + token : token;
+            });
+            return badgeHtml(text, stateClass, null, 'stolon-table-status-badge ' + states.join(' '));
         },
 
         emptySection: function (message: string, opts?: { inline?: boolean }): string {

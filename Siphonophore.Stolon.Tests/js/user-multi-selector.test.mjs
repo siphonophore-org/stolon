@@ -32,20 +32,20 @@ test('the rows stay labels directly in the list, with no list role, so the marku
 
 test('by default the list grows with its rows and does not scroll inside', async function () {
     var ui = await build();
-    assert.equal(ui.list.classList.contains('scrolls'), false);
-    assert.equal(ui.list.classList.contains('capped'), false);
-    assert.equal(ui.list.classList.contains('fixed'), false);
+    assert.equal(ui.list.classList.contains('stolon-scrolls'), false);
+    assert.equal(ui.list.classList.contains('stolon-capped'), false);
+    assert.equal(ui.list.classList.contains('stolon-fixed'), false);
 });
 
 test('height, maxHeight, and minHeight pass to the list, and setHeight switches later', async function () {
     var ui = await build({ maxHeight: 300, minHeight: 100 });
-    assert.ok(ui.list.classList.contains('capped'));
+    assert.ok(ui.list.classList.contains('stolon-capped'));
     assert.equal(ui.list.style['--stolon-list-max'], '300px');
     assert.equal(ui.list.style['--stolon-list-min'], '100px');
     ui.picker.setHeight('12rem');
-    assert.ok(ui.list.classList.contains('fixed'));
+    assert.ok(ui.list.classList.contains('stolon-fixed'));
     assert.equal(ui.list.style['--stolon-list-height'], '12rem');
-    assert.equal(ui.list.classList.contains('capped'), false);
+    assert.equal(ui.list.classList.contains('stolon-capped'), false);
     ui.picker.destroy();
 });
 

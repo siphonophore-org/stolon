@@ -13,9 +13,9 @@ import type { TaskProgressHandle, ScheduledTaskInfo } from './types.js';
  */
 export function pollTaskProgress(btn: HTMLButtonElement, taskKey: string, label: string, onComplete?: () => void): TaskProgressHandle {
     var btnSpan = btn.querySelector('span');
-    var small = btn.classList.contains('small');
+    var small = btn.classList.contains('stolon-small');
     var pie: ProgressRingHandle | null = null;
-    var progressBar = small ? null : btn.querySelector<HTMLElement>('.btn-progress');
+    var progressBar = small ? null : btn.querySelector<HTMLElement>('.stolon-btn-progress');
     if (small) {
         pie = createProgressRing({ pie: true, label: label });
         pie.element.classList.add('stolon-btn-progress-pie');
@@ -26,7 +26,7 @@ export function pollTaskProgress(btn: HTMLButtonElement, taskKey: string, label:
             btn.appendChild(progressBar);
         }
         // A bar the plugin's markup already holds takes the same classes, so it draws as the progress bar.
-        progressBar.classList.add('btn-progress', 'stolon-progress-bar', 'stolon-btn-progress');
+        progressBar.classList.add('stolon-progress-bar', 'stolon-btn-progress');
         btn.classList.add('stolon-btn-progress-host');
     }
     btn.disabled = true;

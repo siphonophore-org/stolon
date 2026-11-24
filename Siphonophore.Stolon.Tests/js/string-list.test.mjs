@@ -151,8 +151,8 @@ test('by default the rows keep their markup and grow with the page', function ()
     var items = ui.list.element.querySelector('.stolon-string-items');
     assert.equal(items.tagName, 'UL');
     assert.ok(items.classList.contains('stolon-list'));
-    assert.ok(items.classList.contains('plain'));
-    assert.equal(items.classList.contains('scrolls'), false);
+    assert.ok(items.classList.contains('stolon-plain'));
+    assert.equal(items.classList.contains('stolon-scrolls'), false);
     assert.equal(items.getAttribute('role'), null);
     assert.equal(items.children[0].className, 'stolon-string-item stolon-item-row stolon-list-item');
     assert.equal(items.children[0].getAttribute('role'), null);
@@ -162,12 +162,12 @@ test('by default the rows keep their markup and grow with the page', function ()
 test('height and maxHeight go to the list, and setHeight changes them', function () {
     var ui = build({ maxHeight: 200 });
     var items = ui.list.element.querySelector('.stolon-string-items');
-    assert.ok(items.classList.contains('capped'));
+    assert.ok(items.classList.contains('stolon-capped'));
     assert.equal(items.style['--stolon-list-max'], '200px');
     ui.list.setHeight('40vh');
-    assert.ok(items.classList.contains('fixed'));
+    assert.ok(items.classList.contains('stolon-fixed'));
     assert.equal(items.style['--stolon-list-height'], '40vh');
-    assert.equal(items.classList.contains('capped'), false);
+    assert.equal(items.classList.contains('stolon-capped'), false);
     var fixed = build({ height: 300 });
     assert.equal(fixed.list.element.querySelector('.stolon-string-items').style['--stolon-list-height'], '300px');
 });

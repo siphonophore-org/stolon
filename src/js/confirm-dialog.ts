@@ -71,10 +71,10 @@ export function confirmDialog(message: string, opts?: ConfirmDialogOptions): Pro
             size: 'small',
             body: body,
             buttons: [
-                { text: opts!.cancelText || stolonText('ButtonCancel'), className: 'stolon-button secondary', action: function (close): void { close(false); } },
+                { text: opts!.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close): void { close(false); } },
                 {
                     text: opts!.confirmText || stolonText('Stolon.Confirm'),
-                    className: opts!.destructive ? 'stolon-button destructive' : 'stolon-button primary',
+                    className: opts!.destructive ? 'stolon-button stolon-destructive' : 'stolon-button stolon-primary',
                     action: function (close): void { if (!input || typedMatches(input.value, wanted)) close(true); }
                 }
             ],

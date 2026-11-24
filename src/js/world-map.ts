@@ -89,7 +89,7 @@ export function createWorldMap(options: WorldMapOptions): WorldMapHandle {
     var root = make('div', 'stolon-world-map');
     var header = make('div', 'stolon-world-layers', { role: 'group', 'aria-label': stolonText('Stolon.Layers') });
     layers.forEach(function (layer) {
-        var button = make('button', 'raised stolon-button small stolon-world-layer', { type: 'button', 'data-value': layer.key, 'aria-pressed': active.indexOf(layer.key) !== -1 ? 'true' : 'false' });
+        var button = make('button', 'raised stolon-button stolon-small stolon-world-layer', { type: 'button', 'data-value': layer.key, 'aria-pressed': active.indexOf(layer.key) !== -1 ? 'true' : 'false' });
         button.style.setProperty('--stolon-layer', layerColor(layer.color));
         button.appendChild(icon('check'));
         button.appendChild(make('span', 'stolon-world-layer-dot', { 'aria-hidden': 'true' }));
@@ -155,8 +155,8 @@ export function createWorldMap(options: WorldMapOptions): WorldMapHandle {
             var path = paths[code];
             var total = all[code] || 0;
             var name = WORLD[code].name;
-            path.classList.toggle('counted', total > 0);
-            path.classList.toggle('selected', code === selected);
+            path.classList.toggle('stolon-counted', total > 0);
+            path.classList.toggle('stolon-selected', code === selected);
             if (total > 0) {
                 // A log scale, so one busy country does not wash out the rest.
                 var level = max > 0 ? 0.25 + 0.75 * Math.log(1 + total) / Math.log(1 + max) : 0;

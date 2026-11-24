@@ -176,14 +176,14 @@ export function createPieChart(options?: PieChartOptions): PieChartHandle {
 
     function paintSelection(): void {
         // The legend and the slices draw inside buildChart, before the chart's root is returned.
-        if (chart) chart.element.classList.toggle('has-selection', selected >= 0);
+        if (chart) chart.element.classList.toggle('stolon-has-selection', selected >= 0);
         marks.forEach(function (el) {
             var on = parseInt(el.getAttribute('data-label') || '-1', 10) === selected;
-            el.setAttribute('class', (el.getAttribute('class') || '').replace(/\s*\bselected\b/g, '') + (on ? ' selected' : ''));
+            el.setAttribute('class', (el.getAttribute('class') || '').replace(/(?:^|\s+)stolon-selected(?=\s|$)/g, '') + (on ? ' stolon-selected' : ''));
             el.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
         keys.forEach(function (key, i) {
-            key.classList.toggle('selected', i === selected);
+            key.classList.toggle('stolon-selected', i === selected);
             key.setAttribute('aria-pressed', i === selected ? 'true' : 'false');
         });
     }
@@ -264,7 +264,7 @@ export function createPieChart(options?: PieChartOptions): PieChartHandle {
 
     var first = data();
     chart = buildChart({ label: opts.label, labels: first.labels, series: first.series, unit: opts.unit, format: opts.format, emptyText: opts.emptyText }, {
-        className: 'stolon-pie-chart' + (opts.donut ? ' donut' : '') + (opts.size === 'small' || opts.size === 'large' ? ' ' + opts.size : ''),
+        className: 'stolon-pie-chart' + (opts.donut ? ' stolon-donut' : '') + (opts.size === 'small' || opts.size === 'large' ? ' stolon-' + opts.size : ''),
         radial: true,
         emptyText: stolonText('Stolon.NothingToShow'),
         draw: draw,
@@ -279,7 +279,7 @@ export function createPieChart(options?: PieChartOptions): PieChartHandle {
     // The legend sits beside the pie while the chart is wide enough for both, and under it when it is not.
     function fit(): void {
         var width = root.clientWidth || 0;
-        root.classList.toggle('compact', !!width && width < COMPACT_WIDTH);
+        root.classList.toggle('stolon-compact', !!width && width < COMPACT_WIDTH);
     }
     if (typeof ResizeObserver !== 'undefined') {
         var watch = new ResizeObserver(fit);

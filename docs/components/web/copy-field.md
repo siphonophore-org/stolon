@@ -74,8 +74,8 @@ A read-only value with a copy button beside it that shows its result. A secret v
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-copy-field` | Read-only value with a copy button beside it, and an optional eye inside a secret's box |
-| `stolon-copy-field.wrap` | A wrapped copy field: the whole value as read-only text over as many lines as it needs, broken anywhere, with the buttons level with its first line |
-| `stolon-copy-field.inline` | An inline copy field, in a row or a table cell, with none of a form field's space below it |
+| `stolon-copy-field.stolon-wrap` | A wrapped copy field: the whole value as read-only text over as many lines as it needs, broken anywhere, with the buttons level with its first line |
+| `stolon-copy-field.stolon-inline` | An inline copy field, in a row or a table cell, with none of a form field's space below it |
 
 <!-- reference:end -->
 

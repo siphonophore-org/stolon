@@ -63,8 +63,8 @@ test('a Discord preview draws the post from its data, with the embed color, fiel
     assert.match(html, /stolon-notify-preview-discord-name">Media &lt;Bot&gt;</);
     assert.match(html, /aria-hidden="true">M</);
     assert.doesNotMatch(html, /javascript:/);
-    assert.match(html, /class="stolon-notify-preview-discord-embed custom" style="--stolon-custom: #f44336"/);
-    assert.match(html, /stolon-notify-preview-discord-title linked">Approved: Dune</);
+    assert.match(html, /class="stolon-notify-preview-discord-embed stolon-custom" style="--stolon-custom: #f44336"/);
+    assert.match(html, /stolon-notify-preview-discord-title stolon-linked">Approved: Dune</);
     assert.match(html, /Dune \(2021\) was <strong>approved<\/strong>\. <span class="stolon-notify-preview-discord-link">sign in<\/span>/);
     assert.equal((html.match(/data-span="4"/g) || []).length, 3);
     assert.equal((html.match(/data-span="12"/g) || []).length, 1);

@@ -1,5 +1,5 @@
 /* In-page tab list over its panels, which scrolls sideways when the tabs do not fit */
-/* Example: <div class="stolon-subtabs"><div class="stolon-subtab-list" role="tablist"><button type="button" class="stolon-subtab active" role="tab" aria-selected="true">General</button></div><div class="stolon-subtab-panels"></div></div> */
+/* Example: <div class="stolon-subtabs"><div class="stolon-subtab-list" role="tablist"><button type="button" class="stolon-subtab stolon-active" role="tab" aria-selected="true">General</button></div><div class="stolon-subtab-panels"></div></div> */
 .stolon-subtabs { display: flex; flex-direction: column; gap: var(--stolon-gap-wide); }
 .stolon-subtab-list {
     display: flex;
@@ -9,7 +9,7 @@
 }
 
 /* One tab, underlined in the accent when active */
-/* Example: <button type="button" class="stolon-subtab active" role="tab" aria-selected="true">General</button> */
+/* Example: <button type="button" class="stolon-subtab stolon-active" role="tab" aria-selected="true">General</button> */
 .stolon-subtab {
     flex: 0 0 auto;
     padding: var(--stolon-pad-small) var(--stolon-pad-medium);
@@ -22,7 +22,7 @@
     cursor: pointer;
 }
 .stolon-subtab:hover { opacity: 1; }
-.stolon-subtab.active { opacity: 1; border-bottom-color: var(--stolon-accent); }
+.stolon-subtab.stolon-active { opacity: 1; border-bottom-color: var(--stolon-accent); }
 .stolon-subtab:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: -2px; }
 .stolon-subtab:disabled { opacity: 0.4; cursor: default; }
 

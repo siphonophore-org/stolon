@@ -72,7 +72,7 @@ Parts: `stolon-media-card-slot`, `stolon-media-card-thumb`, `stolon-media-card-p
 * Inside a `rows` list a row drops its own border and corners, so the list draws the frame. Inside a `grid` list a tile is as tall as the tallest in its row.
 * A row holds its artwork in one slot, as wide as a wide thumbnail and as tall as a portrait one, centered on the row, so every title in a list starts at the same place and every thumbnail shares one center line. Portrait, square, and round share one width from the size scale, a portrait is that width at 2:3, and a wide one fills the slot at 16:9.
 * The status column of a row puts the size, dimmed, and then the status badge on its first line, with the detail, the error, and the meta line under it.
-* A row narrower than 520 pixels, measured by its own width, turns `compact`: a smaller slot and one text column of the title on up to two lines, one second line of the episode, the user, and the subtitle with a dot before each part after the first, one chip row of the badges, the status, its detail, and the size, and the error on its own line.
+* A row narrower than 520 pixels, measured by its own width, turns `stolon-compact`: a smaller slot and one text column of the title on up to two lines, one second line of the episode, the user, and the subtitle with a dot before each part after the first, one chip row of the badges, the status, its detail, and the size, and the error on its own line.
 * An image stays invisible until it loads and hides when it fails, so the browser's broken image mark never shows over the placeholder.
 * In a [Filtered List](filtered-list.md) with selection, the checkbox sits at the row's padding, centered on the row, with the narrow gap before the slot.
 
@@ -147,14 +147,14 @@ One media item with its artwork, as a list row with the artwork at the start or 
 | `stolon-media-card-side` | Column at the end of a row with the status badge, the meta line, and the action buttons, compact when it holds only buttons |
 | `stolon-media-card-side-line` | The first line of the status column, the size dimmed and then the badge, kept on one line |
 | `stolon-media-card-actions` | The action buttons, such as a remove X, pinned to the card's top right corner and inset by its padding, so they line up with the title |
-| `stolon-media-card.has-actions` | A card with pinned actions leaves room for them, so its title, status, and lines never run under them |
+| `stolon-media-card.stolon-has-actions` | A card with pinned actions leaves room for them, so its title, status, and lines never run under them |
 | `stolon-media-card-size` | The size beside the status, in even width digits |
 | `stolon-media-card-detail` | The status's detail line, and an error line in the error color that ends in an ellipsis with its full text as the tooltip |
 | `stolon-media-card-meta` | Short faded line beside the status, in the error color with error |
-| `stolon-list.rows` | A media row inside a bordered list, where the list draws the frame and the dividers |
+| `stolon-list.stolon-rows` | A media row inside a bordered list, where the list draws the frame and the dividers |
 | `stolon-filtered-checked` | A media row that a list's checkbox leads, where the checkbox takes the row's leading padding and the narrow gap sits between it and the artwork |
-| `stolon-list.grid` | A media tile inside a grid list, as tall as the tallest tile in its row |
-| `stolon-media-card-row.compact` | A row card narrower than its wide layout, which the card sets from its own width: a smaller artwork slot, and one text column of the title, one second line, one chip row, and an error line |
+| `stolon-list.stolon-grid` | A media tile inside a grid list, as tall as the tallest tile in its row |
+| `stolon-media-card-row.stolon-compact` | A row card narrower than its wide layout, which the card sets from its own width: a smaller artwork slot, and one text column of the title, one second line, one chip row, and an error line |
 | `stolon-media-card-chips` | A compact card's one chip row: the badges and the status, then the status's detail, which ends in an ellipsis to keep the row on one line, then the size |
 
 <!-- reference:end -->

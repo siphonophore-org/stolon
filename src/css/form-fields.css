@@ -265,7 +265,7 @@
 /* Every single line field at one height, medium unless the field or something around it is small or large.
    The height is fixed, so the field has no padding above or below its text. Jellyfin's select style adds some, which would
    leave less room than the text needs and clip letters such as y and g. */
-/* Example: <input is="emby-input" type="text" class="small"> */
+/* Example: <input is="emby-input" type="text" class="stolon-small"> */
 .pluginConfigurationPage input[type="text"],
 .stolon-dialog input[type="text"],
 .pluginConfigurationPage input[type="number"],
@@ -301,17 +301,17 @@
 /* A field, or everything inside a component, at the small or large size of the scale */
 /* Example: <div class="stolon-search" data-stolon-size="small"></div> */
 [data-stolon-size="small"],
-input.small,
-select.small,
-textarea.small {
+input.stolon-small,
+select.stolon-small,
+textarea.stolon-small {
     --stolon-field-height: var(--stolon-size-small);
     --stolon-field-font: var(--stolon-font-small);
     --stolon-field-pad: var(--stolon-pad-small);
 }
 [data-stolon-size="large"],
-input.large,
-select.large,
-textarea.large {
+input.stolon-large,
+select.stolon-large,
+textarea.stolon-large {
     --stolon-field-height: var(--stolon-size-large);
     --stolon-field-font: var(--stolon-font-large);
     --stolon-field-pad: var(--stolon-pad-large);

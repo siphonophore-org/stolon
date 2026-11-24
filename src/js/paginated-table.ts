@@ -123,7 +123,7 @@ type TableConfig<T> = Omit<TableOptions<T>, 'pagination' | 'search' | 'emptyStat
  * @param options {
  *   containerId   : id of the element the table renders into [required]
  *   endpoint      : path that takes skip, take, search, and filter parameters [required]
- *   rowClass      : function(item, index) returning class names for the row, such as 'selected' for a row picked elsewhere, set after every draw and refresh through the Filtered List's itemClass [optional]
+ *   rowClass      : function(item, index) returning class names for the row, such as 'stolon-selected' for a row picked elsewhere, set after every draw and refresh through the Filtered List's itemClass [optional]
  *   columns       : [{ key, type: 'status' | 'custom', render(item, value), label, className, hidden, image(item), imageShape }], where label is written on each cell as data-label, and image(item) returns the thumbnail drawn before the cell in imageShape, as an address or a function that returns an address, a Blob, or a promise of one, loaded lazily and freed when its row goes, 'portrait' (default), 'wide', 'square', or 'round' [required]
  *   getDisplayStatus : function(item, value) returning the text of a status column [optional]
  *   getStatusClass   : function(item, value) returning the state class of a status column [optional]
@@ -185,8 +185,8 @@ export function createPaginatedTable<T = any>(view: ParentNode, shared: Shared, 
     if (loadMoreMode) {
         footerActions = make('span', 'stolon-table-footer-actions');
         footerActions.hidden = true;
-        loadMoreBtn = make('button', 'raised stolon-button secondary small stolon-table-load-more', { type: 'button' }, stolonText('Stolon.LoadMore'));
-        loadAllBtn = make('button', 'raised stolon-button secondary small stolon-table-load-all', { type: 'button' }, stolonText('Stolon.LoadAll'));
+        loadMoreBtn = make('button', 'raised stolon-button stolon-secondary stolon-small stolon-table-load-more', { type: 'button' }, stolonText('Stolon.LoadMore'));
+        loadAllBtn = make('button', 'raised stolon-button stolon-secondary stolon-small stolon-table-load-all', { type: 'button' }, stolonText('Stolon.LoadAll'));
         footerActions.appendChild(loadMoreBtn);
         footerActions.appendChild(loadAllBtn);
         footer.appendChild(footerActions);
@@ -212,7 +212,7 @@ export function createPaginatedTable<T = any>(view: ParentNode, shared: Shared, 
         }
         if (col.image) {
             var shape: ThumbShape = col.imageShape || 'portrait';
-            var thumb = buildThumb({ src: col.image(item), icon: SHAPE_ICONS[shape], className: 'stolon-table-thumb ' + shape, lazy: true, whenVisible: true });
+            var thumb = buildThumb({ src: col.image(item), icon: SHAPE_ICONS[shape], className: 'stolon-table-thumb stolon-' + shape, lazy: true, whenVisible: true });
             cell.insertBefore(thumb.element, cell.firstChild);
             frees.push(thumb.destroy);
         }

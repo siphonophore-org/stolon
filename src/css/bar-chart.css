@@ -28,18 +28,18 @@
 .stolon-chart-value { font-weight: 600; }
 
 /* One series of marks in its status color, or a hex color through --stolon-custom, the accent when it names none */
-/* Example: <g class="stolon-chart-series green"><rect class="stolon-chart-mark"></rect></g> */
+/* Example: <g class="stolon-chart-series stolon-green"><rect class="stolon-chart-mark"></rect></g> */
 .stolon-chart-series { --stolon-chart-color: var(--stolon-accent); color: var(--stolon-chart-color); }
-.stolon-chart-series.green { --stolon-chart-color: var(--stolon-green-fg); }
-.stolon-chart-series.red { --stolon-chart-color: var(--stolon-red-fg); }
-.stolon-chart-series.orange { --stolon-chart-color: var(--stolon-orange-fg); }
-.stolon-chart-series.purple { --stolon-chart-color: var(--stolon-purple-fg); }
-.stolon-chart-series.blue { --stolon-chart-color: var(--stolon-blue-fg); }
-.stolon-chart-series.gray { --stolon-chart-color: var(--stolon-gray-fg); }
-.stolon-chart-series.yellow { --stolon-chart-color: var(--stolon-yellow-fg); }
-.stolon-chart-series.pink { --stolon-chart-color: var(--stolon-pink-fg); }
-.stolon-chart-series.teal { --stolon-chart-color: var(--stolon-teal-fg); }
-.stolon-chart-series.custom { --stolon-chart-color: var(--stolon-custom); }
+.stolon-chart-series.stolon-green { --stolon-chart-color: var(--stolon-green-fg); }
+.stolon-chart-series.stolon-red { --stolon-chart-color: var(--stolon-red-fg); }
+.stolon-chart-series.stolon-orange { --stolon-chart-color: var(--stolon-orange-fg); }
+.stolon-chart-series.stolon-purple { --stolon-chart-color: var(--stolon-purple-fg); }
+.stolon-chart-series.stolon-blue { --stolon-chart-color: var(--stolon-blue-fg); }
+.stolon-chart-series.stolon-gray { --stolon-chart-color: var(--stolon-gray-fg); }
+.stolon-chart-series.stolon-yellow { --stolon-chart-color: var(--stolon-yellow-fg); }
+.stolon-chart-series.stolon-pink { --stolon-chart-color: var(--stolon-pink-fg); }
+.stolon-chart-series.stolon-teal { --stolon-chart-color: var(--stolon-teal-fg); }
+.stolon-chart-series.stolon-custom { --stolon-chart-color: var(--stolon-custom); }
 .stolon-chart-series rect.stolon-chart-mark { fill: var(--stolon-chart-color); }
 .stolon-chart-series .stolon-chart-value { fill: var(--stolon-fg); }
 
@@ -64,7 +64,7 @@
 }
 
 /* The legend under a chart with several series: a swatch and a name per series, wrapping as a row */
-/* Example: <div class="stolon-chart-legend"><span class="stolon-chart-key"><span class="stolon-chart-swatch blue"></span><span>Movies</span></span></div> */
+/* Example: <div class="stolon-chart-legend"><span class="stolon-chart-key"><span class="stolon-chart-swatch stolon-blue"></span><span>Movies</span></span></div> */
 .stolon-chart-legend {
     display: flex;
     flex-wrap: wrap;
@@ -75,7 +75,7 @@
 .stolon-chart-key { display: inline-flex; align-items: center; gap: var(--stolon-gap-narrow); min-width: 0; }
 
 /* A small square in a series color, in the legend and the tooltip */
-/* Example: <span class="stolon-chart-swatch green"></span> */
+/* Example: <span class="stolon-chart-swatch stolon-green"></span> */
 .stolon-chart-swatch {
     flex: 0 0 auto;
     width: calc(var(--stolon-gap-narrow) * 1.25);
@@ -83,16 +83,16 @@
     border-radius: calc(var(--stolon-radius-small) / 2);
     background: var(--stolon-accent);
 }
-.stolon-chart-swatch.green { background: var(--stolon-green-fg); }
-.stolon-chart-swatch.red { background: var(--stolon-red-fg); }
-.stolon-chart-swatch.orange { background: var(--stolon-orange-fg); }
-.stolon-chart-swatch.purple { background: var(--stolon-purple-fg); }
-.stolon-chart-swatch.blue { background: var(--stolon-blue-fg); }
-.stolon-chart-swatch.gray { background: var(--stolon-gray-fg); }
-.stolon-chart-swatch.yellow { background: var(--stolon-yellow-fg); }
-.stolon-chart-swatch.pink { background: var(--stolon-pink-fg); }
-.stolon-chart-swatch.teal { background: var(--stolon-teal-fg); }
-.stolon-chart-swatch.custom { background: var(--stolon-custom); }
+.stolon-chart-swatch.stolon-green { background: var(--stolon-green-fg); }
+.stolon-chart-swatch.stolon-red { background: var(--stolon-red-fg); }
+.stolon-chart-swatch.stolon-orange { background: var(--stolon-orange-fg); }
+.stolon-chart-swatch.stolon-purple { background: var(--stolon-purple-fg); }
+.stolon-chart-swatch.stolon-blue { background: var(--stolon-blue-fg); }
+.stolon-chart-swatch.stolon-gray { background: var(--stolon-gray-fg); }
+.stolon-chart-swatch.stolon-yellow { background: var(--stolon-yellow-fg); }
+.stolon-chart-swatch.stolon-pink { background: var(--stolon-pink-fg); }
+.stolon-chart-swatch.stolon-teal { background: var(--stolon-teal-fg); }
+.stolon-chart-swatch.stolon-custom { background: var(--stolon-custom); }
 
 /* The tooltip of a mark, on the shared tooltip surface: the label over the value */
 /* Example: <div class="stolon-tooltip stolon-chart-tip stolon-float" role="tooltip"><div class="stolon-chart-tip-label">Mon</div><div class="stolon-chart-tip-value"><strong>42</strong></div></div> */

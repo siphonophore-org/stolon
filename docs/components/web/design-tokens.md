@@ -64,7 +64,7 @@ Each status color is a palette color.
 | `--stolon-pink-bg`, `--stolon-pink-fg` | An extra tint for a badge or card |
 | `--stolon-teal-bg`, `--stolon-teal-fg` | An extra tint for a badge or card |
 
-The `-fg` token is the solid color and the `-bg` token is a 20 percent tint. Each color also has `-soft`, a 12 percent tint for a callout or a row, and `-edge`, a 40 percent tint for the border of that tint. The `custom` class makes the same pair, `--stolon-custom-bg` and `--stolon-custom-fg`, from a hex code in `--stolon-custom`, which `applyColor` sets. Yellow, pink, and teal are extra tints for badges, cards, avatars, and timeline markers. They carry no status meaning.
+The `-fg` token is the solid color and the `-bg` token is a 20 percent tint. Each color also has `-soft`, a 12 percent tint for a callout or a row, and `-edge`, a 40 percent tint for the border of that tint. The `stolon-custom` class makes the same pair, `--stolon-custom-bg` and `--stolon-custom-fg`, from a hex code in `--stolon-custom`, which `applyColor` sets. Yellow, pink, and teal are extra tints for badges, cards, avatars, and timeline markers. They carry no status meaning.
 
 ## Discord Colors
 
@@ -114,11 +114,11 @@ Every colored component takes a `color` option that is a status color name or a 
 import { applyColor, colorClass, colorStyle } from './configurationpage?name=myplugin_stolon.js';
 
 applyColor(el, '#e91e63');
-var html = '<span class="stolon-badge ' + colorClass(color, 'gray') + '"' + colorStyle(color) + '>Ready</span>';
+var html = '<span class="stolon-badge ' + colorClass(color, 'stolon-gray') + '"' + colorStyle(color) + '>Ready</span>';
 ```
 
 * `COLOR_NAMES` lists the nine status color names.
-* `applyColor(el, color, fallback)` swaps in the class for a color. For a hex code it adds `custom` and sets `--stolon-custom` and `--stolon-custom-on`.
+* `applyColor(el, color, fallback)` swaps in the class for a color. For a hex code it adds `stolon-custom` and sets `--stolon-custom` and `--stolon-custom-on`.
 * `colorClass(color, fallback)` returns that class, and `colorStyle(color)` returns the matching `style` attribute for markup built as text.
 * `isHexColor(color)` says whether a value is a hex code, and `textOn(hex)` returns black or white text for a fill.
 * `parseColor(text)` reads a hex code or `rgb()` text, `toHexColor(rgba, alpha)` writes one back, and `resolveColor(color, scope)` also reads a status color name through its token.
@@ -127,6 +127,18 @@ var html = '<span class="stolon-badge ' + colorClass(color, 'gray') + '"' + colo
 ## Light and Dark
 
 The kit has no theme switch of its own. Accent, surface, and text follow the web client's palette variables, and lines and washes are shares of the text color. The palette and the dialog backdrop are fixed colors, and every tint is mixed from the palette. The standalone [Status Page](status-page.md) is always dark. The toggle in the corner of the example below switches the preview between light and dark.
+
+## Reference
+
+Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this section.
+
+<!-- reference:start -->
+
+| Class | What it looks like |
+| :--- | :--- |
+| `stolon-custom` | A custom color from a hex code, which applyColor sets as --stolon-custom with --stolon-custom-on for text on its fill |
+
+<!-- reference:end -->
 
 ## Example
 

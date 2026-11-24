@@ -1,5 +1,5 @@
 /* A line chart on the shared chart core: a line per series with a dot on each point, and an optional shaded area under it */
-/* Example: <figure class="stolon-chart stolon-line-chart"><div class="stolon-chart-plot"><svg><g class="stolon-chart-series blue"><path class="stolon-chart-line"></path><circle class="stolon-chart-dot stolon-chart-mark"></circle></g></svg></div></figure> */
+/* Example: <figure class="stolon-chart stolon-line-chart"><div class="stolon-chart-plot"><svg><g class="stolon-chart-series stolon-blue"><path class="stolon-chart-line"></path><circle class="stolon-chart-dot stolon-chart-mark"></circle></g></svg></div></figure> */
 .stolon-chart-line {
     fill: none;
     stroke: var(--stolon-chart-color);
@@ -12,6 +12,6 @@
 .stolon-chart-dot:hover { fill: var(--stolon-chart-color); }
 
 /* A quiet line chart, whose dots show only under the pointer */
-/* Example: <figure class="stolon-chart stolon-line-chart quiet"></figure> */
-.stolon-line-chart.quiet .stolon-chart-dot { opacity: 0; }
-.stolon-line-chart.quiet .stolon-chart-dot:hover { opacity: 1; }
+/* Example: <figure class="stolon-chart stolon-line-chart stolon-quiet"></figure> */
+.stolon-line-chart.stolon-quiet .stolon-chart-dot { opacity: 0; }
+.stolon-line-chart.stolon-quiet .stolon-chart-dot:hover { opacity: 1; }

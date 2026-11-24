@@ -49,7 +49,7 @@ const list = base.createFilteredList({
     actions: [{ id: 'retry', label: 'Retry Errors', icon: 'refresh', onClick: () => setState(all.filter((i) => i.state === 'Errored').map((i) => i.id), 'Queued'), visible: () => all.some((i) => i.state === 'Errored') }],
     limit: 200,
     limitText: 'Showing the latest {shown} of {total}. Filter by state or server to see more.',
-    onOpen: (item) => base.openDialog({ title: item.name, body: '<p>' + base.escapeHtml(item.type + ', ' + item.state + ', ' + (detailOf(item) || 'no detail')) + '</p>', buttons: [{ text: 'Done', className: 'stolon-button primary' }] }),
+    onOpen: (item) => base.openDialog({ title: item.name, body: '<p>' + base.escapeHtml(item.type + ', ' + item.state + ', ' + (detailOf(item) || 'no detail')) + '</p>', buttons: [{ text: 'Done', className: 'stolon-button stolon-primary' }] }),
     height: 420
 });
 // The servers arrive after the first load, so the pills fill in late.

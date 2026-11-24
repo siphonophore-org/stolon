@@ -17,7 +17,7 @@ test('setDirty shows the pending line with the warning icon, and clearing it rem
     assert.deepEqual(line(bar), { text: '', icon: '' });
     bar.setDirty(true);
     assert.deepEqual(line(bar), { text: 'Unsaved changes.', icon: 'warning' });
-    assert.equal(bar.status.classList.contains('warn'), true);
+    assert.equal(bar.status.classList.contains('stolon-warn'), true);
     bar.setDirty(false);
     assert.equal(bar.getState(), '');
     assert.deepEqual(line(bar), { text: '', icon: '' });

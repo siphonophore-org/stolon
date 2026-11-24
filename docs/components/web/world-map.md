@@ -29,7 +29,7 @@ var table = createDataTable({ columns: columns, rows: rows, rowKey: 'country', s
 linkWorldMap(map, table, 'country');
 ```
 
-Classes: `stolon-world-map`, `stolon-world-layers`, `stolon-world-layer`, `stolon-world-layer-dot`, `stolon-world-frame`, and `stolon-world-country` with the `counted` and `selected` modifiers. The handle is `{ element, setCounts, getActive, setActive, select, getSelected, onSelect, totals, countryName, destroy }`.
+Classes: `stolon-world-map`, `stolon-world-layers`, `stolon-world-layer`, `stolon-world-layer-dot`, `stolon-world-frame`, and `stolon-world-country` with the `stolon-counted` and `stolon-selected` modifiers. The handle is `{ element, setCounts, getActive, setActive, select, getSelected, onSelect, totals, countryName, destroy }`.
 
 ## States and Modifiers
 

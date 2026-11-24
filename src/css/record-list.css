@@ -1,14 +1,14 @@
 /* A List of boxed record rows a gap apart */
-/* Example: <div class="stolon-list plain stolon-record-list" role="list"><div class="stolon-list-item" role="listitem"><div class="stolon-item-row stolon-record-list-row"></div></div></div> */
-.stolon-record-list.stolon-list.plain { gap: var(--stolon-gap-narrow); }
+/* Example: <div class="stolon-list stolon-plain stolon-record-list" role="list"><div class="stolon-list-item" role="listitem"><div class="stolon-item-row stolon-record-list-row"></div></div></div> */
+.stolon-record-list.stolon-list.stolon-plain { gap: var(--stolon-gap-narrow); }
 
 /* One record row: its title and secondary line, its tags under them, and a chevron or an aside control at its end. A row that opens takes the shared hover and focus ring */
-/* Example: <div class="stolon-item-row stolon-record-list-row openable" tabindex="0"><div class="stolon-record-list-body"><span class="stolon-item-row-text stolon-item-row-parts"></span><div class="stolon-tags stolon-record-list-tags"></div></div><button class="stolon-row-btn stolon-record-list-open"></button></div> */
+/* Example: <div class="stolon-item-row stolon-record-list-row stolon-openable" tabindex="0"><div class="stolon-record-list-body"><span class="stolon-item-row-text stolon-item-row-parts"></span><div class="stolon-tags stolon-record-list-tags"></div></div><button class="stolon-row-btn stolon-record-list-open"></button></div> */
 .stolon-record-list-row { padding-top: var(--stolon-pad-small); padding-bottom: var(--stolon-pad-small); }
-.stolon-record-list-row.openable { cursor: pointer; }
-.stolon-record-list-row.openable:hover { background: var(--stolon-wash); }
-.stolon-record-list-row.openable:focus { outline: none; }
-.stolon-record-list-row.openable:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
+.stolon-record-list-row.stolon-openable { cursor: pointer; }
+.stolon-record-list-row.stolon-openable:hover { background: var(--stolon-wash); }
+.stolon-record-list-row.stolon-openable:focus { outline: none; }
+.stolon-record-list-row.stolon-openable:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
 .stolon-record-list-body {
     flex: 1;
     display: flex;
@@ -23,6 +23,6 @@
 .stolon-record-list-tags .stolon-tag .material-icons { font-size: var(--stolon-icon-small); opacity: 0.8; }
 
 /* The chevron at the end of a row that opens, and the aside control that takes its place */
-/* Example: <div class="stolon-record-list-aside"><button class="raised stolon-button small">Unblock</button></div> */
+/* Example: <div class="stolon-record-list-aside"><button class="raised stolon-button stolon-small">Unblock</button></div> */
 .stolon-record-list-open .material-icons { font-size: var(--stolon-chevron-secondary); }
 .stolon-record-list-aside { flex: 0 0 auto; display: flex; align-items: center; }

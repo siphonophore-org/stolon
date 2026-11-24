@@ -13,8 +13,8 @@ A short status label in a status color. There are two badges. `stolon-badge` tak
 ## Usage
 
 ```html
-<span class="stolon-badge green">Active</span>
-<span class="stolon-table-status-badge Queued">Queued</span>
+<span class="stolon-badge stolon-green">Active</span>
+<span class="stolon-table-status-badge stolon-Queued">Queued</span>
 ```
 
 ```js
@@ -30,7 +30,7 @@ Classes: `stolon-badge`, `stolon-table-status-badge`.
 * State names for `stolon-table-status-badge`: Active, Synced, Downloaded, Completed, and Enabled are green. Disabled, Errored, Error, Deleting, Pending-Deletion, and Failed are red. Expired, Queued, and Paused are orange. Locked, Running, Downloading, Pending, and Pending-Download are purple. Admin, Imported, and Pending-Replacement are blue. Ignored, Group, Skipped, and Unknown are gray.
 * `BADGE_STATES` is `{ names, colors, stateColors }`, the one source of truth for mapping a status code to a badge. `stateColors` gives the color each state name draws in.
 * `shared.badge(cls, label)` escapes the label. A color name or hex code in `cls` colors it, `medium` or `large` sizes it, and any other word stays as a class reduced to letters, digits, `_`, and `-`.
-* `shared.statusBadge(text, stateClass)` draws a `stolon-badge` in the color `stateColors` gives the state, or in the color itself when `stateClass` is a color name or a hex code, and keeps `stolon-table-status-badge` and the state name as classes, such as `<span class="stolon-badge orange stolon-table-status-badge Queued">`.
+* `shared.statusBadge(text, stateClass)` draws a `stolon-badge` in the color `stateColors` gives the state, or in the color itself when `stateClass` is a color name or a hex code, and keeps `stolon-table-status-badge` and the state name as classes, such as `<span class="stolon-badge stolon-orange stolon-table-status-badge stolon-Queued">`.
 * Every badge Stolon draws, in the bag, the [Media Card](media-card.md), and the [Sortable Card List](sortable-card-list.md), comes from one badge maker, so they look the same.
 * A plugin may set the class on an existing element, such as `el.className = 'stolon-table-status-badge ' + status`.
 * The swatches are the same in light and dark themes.
@@ -56,7 +56,7 @@ The state names a badge knows, in names, the color modifiers that stolon-badge t
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-badge` | Pill that shows a short status label in a status color |
-| `stolon-badge.medium` | A badge at the medium or large size of the scale |
+| `stolon-badge.stolon-medium` | A badge at the medium or large size of the scale |
 
 <!-- reference:end -->
 

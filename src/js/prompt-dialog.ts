@@ -102,8 +102,8 @@ export function promptDialog(fields: PromptDialogField[], opts?: PromptDialogOpt
             size: 'small',
             body: form,
             buttons: [
-                { text: opts.cancelText || stolonText('ButtonCancel'), className: 'stolon-button secondary', action: function (close): void { close(null); } },
-                { text: opts.submitText || stolonText('Stolon.Done'), className: 'stolon-button primary', action: function (close): void { submit(close); } }
+                { text: opts.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close): void { close(null); } },
+                { text: opts.submitText || stolonText('Stolon.Done'), className: 'stolon-button stolon-primary', action: function (close): void { submit(close); } }
             ],
             onClose: function (value: Record<string, string> | null): void {
                 checks.forEach(function (c) { c.destroy(); });

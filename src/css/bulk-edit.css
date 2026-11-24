@@ -53,5 +53,5 @@
 }
 
 /* A button in an editor line lines up with the fields beside it */
-/* Example: <div class="stolon-edit-line"><div class="stolon-field"><input type="text"></div><button class="stolon-button primary field">Apply</button></div> */
+/* Example: <div class="stolon-edit-line"><div class="stolon-field"><input type="text"></div><button class="stolon-button stolon-primary stolon-field">Apply</button></div> */
 .stolon-edit-line > .stolon-button { align-self: flex-end; }

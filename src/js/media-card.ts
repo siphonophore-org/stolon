@@ -145,7 +145,7 @@ export function createMediaCard(options?: MediaCardOptions): MediaCardHandle {
         var thumb = buildThumb({
             src: state.image || state.imageUrl || cardImageUrl(state),
             icon: state.icon || SHAPE_ICONS[shape],
-            className: 'stolon-media-card-thumb ' + shape,
+            className: 'stolon-media-card-thumb stolon-' + shape,
             imageClass: 'stolon-media-card-image',
             placeholderClass: 'stolon-media-card-placeholder',
             lazy: true
@@ -209,7 +209,7 @@ export function createMediaCard(options?: MediaCardOptions): MediaCardHandle {
         }
         if (state.detail) side.appendChild(make('span', 'stolon-media-card-detail', null, state.detail));
         if (state.error) side.appendChild(make('span', 'stolon-media-card-error', { title: state.error }, state.error));
-        if (state.meta) side.appendChild(make('span', 'stolon-media-card-meta' + (state.metaIsError ? ' error' : ''), null, state.meta));
+        if (state.meta) side.appendChild(make('span', 'stolon-media-card-meta' + (state.metaIsError ? ' stolon-error' : ''), null, state.meta));
         return side;
     }
 
@@ -240,7 +240,7 @@ export function createMediaCard(options?: MediaCardOptions): MediaCardHandle {
         clear(root);
         var shape: MediaShape = SHAPES.indexOf(state.shape as MediaShape) !== -1 ? state.shape as MediaShape : 'portrait';
         var layout = state.layout === 'card' ? 'tile' : 'row';
-        root.className = 'stolon-media-card stolon-media-card-' + layout + (clickable() ? ' clickable' : '') + ((state.actions || []).length ? ' has-actions' : '') + (compact && layout === 'row' ? ' compact' : '');
+        root.className = 'stolon-media-card stolon-media-card-' + layout + (clickable() ? ' stolon-clickable' : '') + ((state.actions || []).length ? ' stolon-has-actions' : '') + (compact && layout === 'row' ? ' stolon-compact' : '');
         if (state.href) root.setAttribute('role', 'link');
         else if (clickable()) root.setAttribute('role', 'button');
         else root.removeAttribute('role');

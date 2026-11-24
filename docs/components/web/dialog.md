@@ -40,13 +40,13 @@ The markup `openDialog` builds, which `bindDialog` also expects:
         <h2 class="stolon-modal-title" id="stolon-dialog-title-1">Session Log</h2>
         <div class="stolon-modal-body"></div>
         <div class="stolon-modal-button-row">
-            <button type="button" class="raised stolon-modal-button stolon-button secondary">Close</button>
+            <button type="button" class="raised stolon-modal-button stolon-button stolon-secondary">Close</button>
         </div>
     </div>
 </div>
 ```
 
-Classes: `stolon-dialog`, `stolon-dialog-content`, with the size modifiers `small`, `medium`, and `large`, `stolon-dialog-close` on a [Row Button](row-button.md), `stolon-modal-title`, `stolon-modal-body`, `stolon-modal-field`, `stolon-modal-field-label`, `stolon-modal-button-row`, `stolon-modal-button`.
+Classes: `stolon-dialog`, `stolon-dialog-content`, with the size modifiers `stolon-small`, `stolon-medium`, and `stolon-large`, `stolon-dialog-close` on a [Row Button](row-button.md), `stolon-modal-title`, `stolon-modal-body`, `stolon-modal-field`, `stolon-modal-field-label`, `stolon-modal-button-row`, `stolon-modal-button`.
 
 ## States and Modifiers
 
@@ -115,8 +115,8 @@ Opens a modal that closes on backdrop click, Escape, and the corner close button
 | :--- | :--- |
 | `stolon-dialog` | Full screen dimmed overlay that centers its panel |
 | `stolon-dialog-content` | Centered, scrollable modal panel, 60% of the window wide at the medium size, whose padding every part inside it is set by |
-| `stolon-dialog-content.small` | A small panel, 40% of the window wide, for a short prompt or confirmation |
-| `stolon-dialog-content.large` | A large panel, 80% of the window wide, for an editor, with its buttons pinned at the bottom and the whole screen on a phone. A drawer's footer shares the pinned row |
+| `stolon-dialog-content.stolon-small` | A small panel, 40% of the window wide, for a short prompt or confirmation |
+| `stolon-dialog-content.stolon-large` | A large panel, 80% of the window wide, for an editor, with its buttons pinned at the bottom and the whole screen on a phone. A drawer's footer shares the pinned row |
 | `stolon-dialog-close` | The corner close button, a row button pinned to the top right corner of the panel and inset by the panel's padding, level with the title |
 | `stolon-modal-title` | Modal heading |
 | `stolon-modal-body` | Modal body region between header and footer |

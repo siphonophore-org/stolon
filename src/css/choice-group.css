@@ -1,5 +1,5 @@
 /* Grid of equal radio cards, three across and one per row on a phone */
-/* Example: <div class="stolon-choice-group" role="radiogroup"><label class="stolon-choice selected">...</label></div> */
+/* Example: <div class="stolon-choice-group" role="radiogroup"><label class="stolon-choice stolon-selected">...</label></div> */
 .stolon-choice-group {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -22,7 +22,7 @@
 }
 .stolon-choice:hover { background: var(--stolon-wash); }
 /* Two rules rather than one list, since an engine without :has() drops the whole rule and would lose .selected too. */
-.stolon-choice.selected {
+.stolon-choice.stolon-selected {
     border-color: var(--stolon-accent);
     background: var(--stolon-accent-wash);
 }

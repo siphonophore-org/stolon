@@ -10,33 +10,33 @@
             <input is="emby-input" type="text" id="txtName" value="Living room" />
         </div>
         <div class="stolon-collapsible-actions">
-            <button is="emby-button" type="button" class="raised stolon-button primary small"><span>Save</span></button>
+            <button is="emby-button" type="button" class="raised stolon-button stolon-primary stolon-small"><span>Save</span></button>
         </div>
     </div>
 </div>
 <div class="stolon-collapsible-section">
-    <button type="button" class="stolon-collapsible-header collapsed" aria-expanded="false" data-target="advancedBody">
+    <button type="button" class="stolon-collapsible-header stolon-collapsed" aria-expanded="false" data-target="advancedBody">
         <span class="stolon-collapsible-title">Advanced</span>
         <span class="stolon-collapsible-icon"></span>
     </button>
-    <div id="advancedBody" class="stolon-collapsible-content collapsed">
+    <div id="advancedBody" class="stolon-collapsible-content stolon-collapsed">
         <p>Hidden until the header is pressed.</p>
     </div>
 </div>
 <p class="fieldDescription">Numbered sections, for a form in ordered steps.</p>
-<div class="stolon-collapsible-section numbered">
+<div class="stolon-collapsible-section stolon-numbered">
     <button type="button" class="stolon-collapsible-header" aria-expanded="true" data-target="stepConnection">
         <span class="stolon-collapsible-title">Connection</span>
         <span class="stolon-collapsible-icon"></span>
     </button>
     <div id="stepConnection" class="stolon-collapsible-content"><p>Fields for the first step.</p></div>
 </div>
-<div class="stolon-collapsible-section numbered">
-    <button type="button" class="stolon-collapsible-header collapsed" aria-expanded="false" data-target="stepLibraries">
+<div class="stolon-collapsible-section stolon-numbered">
+    <button type="button" class="stolon-collapsible-header stolon-collapsed" aria-expanded="false" data-target="stepLibraries">
         <span class="stolon-collapsible-title">Libraries</span>
         <span class="stolon-collapsible-icon"></span>
     </button>
-    <div id="stepLibraries" class="stolon-collapsible-content collapsed"><p>Fields for the second step.</p></div>
+    <div id="stepLibraries" class="stolon-collapsible-content stolon-collapsed"><p>Fields for the second step.</p></div>
 </div>
 <p class="fieldDescription">A badge or a status dot in the header.</p>
 <div id="badged"></div>
@@ -53,7 +53,7 @@ badged.appendChild(base.createCollapsibleSection({ title: 'Certificate', badge: 
 badged.appendChild(base.createCollapsibleSection({ title: 'Relay', badge: { label: 'Connected', color: 'green', dot: true }, content: '<p>The relay is connected.</p>', collapsed: true }).element);
 function route(from, to) {
     const line = document.createElement('span');
-    line.className = 'stolon-icon-text small';
+    line.className = 'stolon-icon-text stolon-small';
     line.appendChild(document.createTextNode(from));
     const arrow = document.createElement('span');
     arrow.className = 'material-icons';
@@ -65,7 +65,7 @@ function route(from, to) {
 }
 function badge(label, color) {
     const el = document.createElement('span');
-    el.className = 'stolon-badge ' + color;
+    el.className = 'stolon-badge stolon-' + color;
     el.textContent = label;
     return el;
 }
@@ -75,7 +75,7 @@ panels.appendChild(base.createCollapsibleSection({ title: 'A Very Long Library N
 const test = document.createElement('button');
 test.setAttribute('is', 'emby-button');
 test.type = 'button';
-test.className = 'raised stolon-button small';
+test.className = 'raised stolon-button stolon-small';
 test.textContent = 'Test';
 test.addEventListener('click', function () { test.textContent = 'Tested'; });
 document.getElementById('asided').appendChild(base.createCollapsibleSection({ title: 'Relay', icon: 'hub', subtitle: 'relay.example.com', aside: test, collapsed: true, content: '<p>The relay settings.</p>' }).element);

@@ -33,7 +33,7 @@ container.appendChild(createDefinitionList({
 }).element);
 ```
 
-Classes: `stolon-defs`, `stolon-defs-row`, `stolon-defs-missing`, `columns`, `compact`, `has-arrow`. The handle is `{ element, getValue, setValue, setItems, setHeight, destroy }`.
+Classes: `stolon-defs`, `stolon-defs-row`, `stolon-defs-missing`, `stolon-columns`, `stolon-compact`, `stolon-has-arrow`. The handle is `{ element, getValue, setValue, setItems, setHeight, destroy }`.
 
 Parts: `stolon-defs-label`, `stolon-defs-value`, `stolon-defs-meta`, `stolon-defs-note`, `stolon-defs-arrow`.
 
@@ -45,7 +45,7 @@ Parts: `stolon-defs-label`, `stolon-defs-value`, `stolon-defs-meta`, `stolon-def
 * The list is a `dl`. In the rows layout every row shares one label column, as wide as the longest label up to 40% of the list. A longer label wraps, and an unbroken one such as `JF_COMMUNITY_RATING` breaks anywhere, so a label never runs over its value. An engine without `subgrid` gives the labels a column of at least 120px and 30% of the row, and they wrap the same way.
 * A row is one column at 600px and below, with its label over its value.
 * `layout: 'columns'` sets each label small, uppercase, and dimmed over its value, with `columns`, in [balanced rows](balanced-rows.md) at least 200px wide on the wash. The List lays it out as a grid. `layout: 'rows'`, the default, keeps each label beside its value.
-* In the columns layout, `arrow: true` draws an `arrow_forward` after every item but the last, and `arrow: true` on an item draws one after that item, with `has-arrow` on its row. When two columns no longer fit the list's own width it takes `compact`, the columns stack, and each arrow turns down.
+* In the columns layout, `arrow: true` draws an `arrow_forward` after every item but the last, and `arrow: true` on an item draws one after that item, with `stolon-has-arrow` on its row. When two columns no longer fit the list's own width it takes `stolon-compact`, the columns stack, and each arrow turns down.
 * The rows are a [List](list.md), so `height`, `maxHeight`, `minHeight`, and `setHeight` work as they do there. `height` is `'auto'` by default, so the list grows with its rows.
 
 ## Reference
@@ -89,7 +89,7 @@ A read-only list of label and value pairs. The label sits beside its value and s
 | `stolon-defs-label` | The dimmed label every label and value list shares, a definition list's and a record card's |
 | `stolon-defs-meta` | Dimmed lines under a value, a meta line such as a size and a note, in the value's column |
 | `stolon-defs-value` | A value drawn as a badge, a link, or mono text, which wrap beside each other |
-| `stolon-defs.columns` | The columns layout, each small uppercase label over its value, in balanced columns on the wash |
+| `stolon-defs.stolon-columns` | The columns layout, each small uppercase label over its value, in balanced columns on the wash |
 
 <!-- reference:end -->
 

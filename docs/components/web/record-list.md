@@ -66,7 +66,7 @@ A List of static rows, each a title, a secondary line, tags with an icon and an 
 
 | Class | What it looks like |
 | :--- | :--- |
-| `stolon-record-list.stolon-list.plain` | A List of boxed record rows a gap apart |
+| `stolon-record-list.stolon-list.stolon-plain` | A List of boxed record rows a gap apart |
 | `stolon-record-list-row` | One record row: its title and secondary line, its tags under them, and a chevron or an aside control at its end. A row that opens takes the shared hover and focus ring |
 | `stolon-record-list-tags` | The row's tags, each an icon and a label, which wrap under the text |
 | `stolon-record-list-open` | The chevron at the end of a row that opens, and the aside control that takes its place |

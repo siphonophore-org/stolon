@@ -56,7 +56,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Term | Meaning | In Code | Not |
 | :--- | :--- | :--- | :--- |
 | Prefix | The `stolon-` that starts every class and variable Stolon ships, and the `Stolon` that starts a C# type, MSBuild property, item, or target whose plain name could match a plugin's | `stolon-`, `--stolon-`, `StolonHttp`, `StolonTranslations` | Namespace, scope, `Jpk` |
-| Modifier | A state class on a component, such as `.active` or `.collapsed` | | Variant, flag |
+| Modifier | A state class on a component, such as `.stolon-active` or `.stolon-collapsed` | | Variant, flag |
 | Part | A piece inside a component, named `stolon-name-part` | `stolon-card-count` | Child, element |
 | Jellyfin selector | A selector that styles Jellyfin's own markup and stays unprefixed | `sectionTitle`, `emby-*` | Override, hack |
 
@@ -72,7 +72,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Named color | One of the nine colors every colored component takes by name, green, red, orange, purple, blue, gray, yellow, pink, and teal, each with a text token and a tint token | `COLOR_NAMES`, `--stolon-green-fg`, `--stolon-green-bg` | Palette color, swatch |
 | Status color | One of the six named colors with a status meaning, green, red, orange, purple, blue, or gray | `--stolon-green-bg`, `--stolon-green-fg` | Severity |
 | Category color | Yellow, pink, or teal, the three named colors with no status meaning, a tint for categories | `--stolon-yellow-fg`, `--stolon-pink-fg`, `--stolon-teal-fg` | Status color, accent |
-| Custom color | A hex code given in place of a named color, set on the element by the color core with the text color that reads on it | `--stolon-custom`, `--stolon-custom-on`, `.custom` | Raw color, inline color |
+| Custom color | A hex code given in place of a named color, set on the element by the color core with the text color that reads on it | `--stolon-custom`, `--stolon-custom-on`, `.stolon-custom` | Raw color, inline color |
 | Accent | The theme's primary color | `--stolon-accent` | Brand color, primary |
 | Surface | The background of a panel or dialog | `--stolon-surface` | Panel color |
 | Fallback | A plain rule kept for an engine that cannot read `color-mix()` or `:is()` | | Polyfill, hack |

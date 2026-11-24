@@ -14,7 +14,7 @@ function wipe(el: Element): void {
     clear(el);
     delete (el as HTMLElement).dataset.stolonStatus;
     el.classList.remove('stolon-status-ok', 'stolon-status-bad', 'stolon-icon-text');
-    STATES.forEach(function (s) { el.classList.remove(s); });
+    STATES.forEach(function (s) { el.classList.remove('stolon-' + s); });
 }
 
 /**
@@ -39,7 +39,7 @@ export function setStatus(view: ParentNode, elementId: string | Element, message
     }
     wipe(el);
     if (message) {
-        el.classList.add('stolon-icon-text', state, state === 'error' || state === 'warn' ? 'stolon-status-bad' : 'stolon-status-ok');
+        el.classList.add('stolon-icon-text', 'stolon-' + state, state === 'error' || state === 'warn' ? 'stolon-status-bad' : 'stolon-status-ok');
         (el as HTMLElement).dataset.stolonStatus = message;
         el.appendChild(icon(MESSAGE_ICONS[state]));
         el.appendChild(make('span', 'stolon-status-message', null, message));

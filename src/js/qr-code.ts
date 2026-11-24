@@ -120,15 +120,15 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
     var timer: ReturnType<typeof setTimeout> | null = null;
 
     var inline = opts.layout === 'inline';
-    var root = make('div', 'stolon-qr-code' + (inline ? ' inline' : ''));
+    var root = make('div', 'stolon-qr-code' + (inline ? ' stolon-inline' : ''));
     var dialog: DialogHandle | null = null;
     var frame = make('div', 'stolon-qr-code-frame', { role: 'img' });
     var actions = make('div', 'stolon-button-row stolon-qr-code-actions');
-    var copyBtn = make('button', 'raised stolon-button secondary fill stolon-qr-code-copy', { type: 'button' });
+    var copyBtn = make('button', 'raised stolon-button stolon-secondary stolon-fill stolon-qr-code-copy', { type: 'button' });
     copyBtn.appendChild(icon('content_copy'));
     var copyLabel = make('span', null, null, opts.copyImageText || stolonText('Stolon.CopyImage'));
     copyBtn.appendChild(copyLabel);
-    var downloadBtn = make('button', 'raised stolon-button secondary fill stolon-qr-code-download', { type: 'button' });
+    var downloadBtn = make('button', 'raised stolon-button stolon-secondary stolon-fill stolon-qr-code-download', { type: 'button' });
     downloadBtn.appendChild(icon('download'));
     downloadBtn.appendChild(make('span', null, null, opts.downloadText || stolonText('Download')));
     var status = make('span', 'stolon-sr-only', { role: 'status', id: nextId('qr') });
@@ -161,7 +161,7 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
     }
     var fit = function (): void {
         var width = root.clientWidth || 0;
-        root.classList.toggle('compact', !inline && !!width && width < 480);
+        root.classList.toggle('stolon-compact', !inline && !!width && width < 480);
     };
     if (!inline && typeof ResizeObserver !== 'undefined') {
         var watch = new ResizeObserver(fit);
@@ -220,11 +220,11 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
         var text = ok ? (opts.copiedText || stolonText('Copied')) : (opts.copyFailedText || stolonText('Stolon.CopyFailed'));
         status.textContent = text;
         copyLabel.textContent = text;
-        copyBtn.classList.toggle('success', ok);
+        copyBtn.classList.toggle('stolon-success', ok);
         if (timer !== null) clearTimeout(timer);
         timer = setTimeout(function () {
             copyLabel.textContent = opts.copyImageText || stolonText('Stolon.CopyImage');
-            copyBtn.classList.remove('success');
+            copyBtn.classList.remove('stolon-success');
             status.textContent = '';
         }, opts.feedbackMs || 1500);
     }
@@ -244,7 +244,7 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
             value: value, label: opts.label, showValue: false, fileName: opts.fileName, copyImageText: opts.copyImageText,
             downloadText: opts.downloadText, copiedText: opts.copiedText, copyFailedText: opts.copyFailedText, feedbackMs: opts.feedbackMs
         });
-        full.element.classList.add('compact', 'stolon-qr-code-dialog');
+        full.element.classList.add('stolon-compact', 'stolon-qr-code-dialog');
         dialog = openDialog({
             title: opts.dialogTitle || stolonText('Stolon.QrCode'),
             body: full.element,

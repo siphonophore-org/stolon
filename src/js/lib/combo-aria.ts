@@ -30,7 +30,7 @@ export function bindComboAria(input: HTMLInputElement, dropdown: HTMLElement): C
         },
         // Shows or hides the dropdown and drops the active option with it.
         setOpen: function (open: boolean): void {
-            dropdown.classList.toggle('hidden', !open);
+            dropdown.classList.toggle('stolon-hidden', !open);
             input.setAttribute('aria-expanded', open ? 'true' : 'false');
             claimEscape(input, open);
             if (!open) input.removeAttribute('aria-activedescendant');
@@ -39,7 +39,7 @@ export function bindComboAria(input: HTMLInputElement, dropdown: HTMLElement): C
         activate: function (index: number): void {
             var options = dropdown.querySelectorAll<HTMLElement>('.stolon-combo-option');
             options.forEach(function (o, i) {
-                o.classList.toggle('active', i === index);
+                o.classList.toggle('stolon-active', i === index);
                 o.setAttribute('aria-selected', i === index ? 'true' : 'false');
             });
             if (index >= 0 && options[index]) input.setAttribute('aria-activedescendant', options[index].id);

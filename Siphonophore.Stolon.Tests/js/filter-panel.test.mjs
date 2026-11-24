@@ -46,7 +46,7 @@ test('the button shows the default text and no count, and the panel starts close
     assert.equal(ui.button.getAttribute('aria-haspopup'), 'dialog');
     assert.equal(ui.button.getAttribute('aria-expanded'), 'false');
     assert.equal(badge(ui).hidden, true);
-    assert.equal(ui.button.classList.contains('active'), false);
+    assert.equal(ui.button.classList.contains('stolon-active'), false);
     assert.equal(panel(), null);
     assert.equal(ui.filter.isOpen(), false);
     assert.deepEqual(ui.filter.getValue(), { status: [], kind: [] });
@@ -57,7 +57,7 @@ test('the count badge and the aria-label count the filters on, with the right pl
     assert.equal(badge(ui).textContent, '3');
     assert.equal(badge(ui).hidden, false);
     assert.equal(badge(ui).getAttribute('aria-hidden'), 'true');
-    assert.ok(ui.button.classList.contains('active'));
+    assert.ok(ui.button.classList.contains('stolon-active'));
     assert.equal(ui.button.getAttribute('aria-label'), 'Filter, 3 filters on');
     ui.filter.setValue({ status: ['paused'] });
     assert.equal(ui.button.getAttribute('aria-label'), 'Filter, 1 filter on');
@@ -90,7 +90,7 @@ test('the popover shows default titles, a heading per group, checkboxes, and rad
     assert.deepEqual(all(p, '.stolon-filter-group-name').map(function (l) { return l.textContent; }), ['Status', 'Kind']);
     assert.deepEqual(inputs().map(function (i) { return i.getAttribute('type'); }), ['checkbox', 'checkbox', 'checkbox', 'radio', 'radio']);
     assert.equal(input('kind', 'movie').getAttribute('name'), input('kind', 'show').getAttribute('name'));
-    assert.ok(all(p, '.stolon-filter-group')[1].classList.contains('single'));
+    assert.ok(all(p, '.stolon-filter-group')[1].classList.contains('stolon-single'));
     assert.deepEqual(all(p, '.stolon-check-label').map(function (l) { return l.textContent; }), ['Active', 'Paused', 'Failed', 'Movies', 'Shows']);
 });
 

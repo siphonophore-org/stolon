@@ -74,7 +74,7 @@ export function createOverflowMenu(options?: OverflowMenuOptions): OverflowMenuH
     function render(): void {
         clear(list);
         items.forEach(function (item: OverflowMenuItem): void {
-            var el = make('button', 'stolon-menu-item stolon-icon-text' + (item.destructive ? ' destructive' : ''), { type: 'button', role: 'menuitem', tabindex: '-1' });
+            var el = make('button', 'stolon-menu-item stolon-icon-text' + (item.destructive ? ' stolon-destructive' : ''), { type: 'button', role: 'menuitem', tabindex: '-1' });
             if (item.icon) el.appendChild(icon(item.icon));
             el.appendChild(make('span', 'stolon-menu-label', null, item.label));
             if (item.disabled) {

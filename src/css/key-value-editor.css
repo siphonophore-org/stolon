@@ -11,5 +11,5 @@
 .stolon-kv-rows { min-width: 0; }
 
 /* Sentence shown while there is no row */
-/* Example: <div class="stolon-list-empty outside stolon-kv-empty">No headers.</div> */
+/* Example: <div class="stolon-list-empty stolon-outside stolon-kv-empty">No headers.</div> */
 /* It is built as the list's own empty sentence, stolon-list-empty outside */

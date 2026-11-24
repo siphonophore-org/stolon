@@ -22,14 +22,15 @@ Every rule below is a rule, not a suggestion. Where a rule names a token, the va
 | :--- | :--- | :--- |
 | CSS class | `stolon-` and the component's name, in kebab case | `stolon-list`, `stolon-button` |
 | Part of a component | `stolon-name-part` | `stolon-card-count` |
-| State, variant, or size | A plain modifier class | `.selected`, `.primary`, `.small` |
+| State, variant, or size | A modifier, `stolon-` and its name | `.stolon-selected`, `.stolon-primary`, `.stolon-small` |
 | CSS variable | `--stolon-name` | `--stolon-gap-wide` |
 | JS export | camelCase | `createChoiceGroup` |
 | C# type | PascalCase in `Siphonophore.Stolon` | `StatusPage` |
 
 * Name a component after what it is, never after where one plugin uses it.
-* A plain modifier never takes a class Jellyfin's dashboard CSS styles on its own, such as `card`, `listItem`, or `hide`. Jellyfin's `.card` sets paint containment, which traps a fixed popup. Prefix such a modifier with the component, as `stolon-repeater-layout-card` is. `CssCollisionTests` pins the list.
-* Every class and variable Stolon ships starts with `stolon-`, with no exceptions. A selector that styles Jellyfin's own markup keeps Jellyfin's name: `sectionTitle`, `sectionTitleContainer`, `hidden`, `fieldDescription`, `material-icons`, `inputContainer`, `checkboxContainer`, `selectContainer`, and `emby-*`. Add to this list before you add one.
+* The kit never selects a bare class Jellyfin's dashboard CSS styles on its own, such as `card`, `listItem`, or `hide`. Jellyfin's `.card` sets paint containment, which traps a fixed popup. The `stolon-` prefix keeps every Stolon class clear of them, and `CssCollisionTests` pins the list.
+* Every class and variable Stolon owns starts with `stolon-`, modifiers included, such as `stolon-compact`, `stolon-green`, and `stolon-Active`. A modifier built from an option keeps the option's value and adds the prefix to the class, so `size: 'large'` gives `stolon-large`.
+* Only two kinds of class have no prefix. Jellyfin's own classes keep Jellyfin's name, such as `raised`, `button-submit`, `sectionTitle`, `sectionTitleContainer`, `fieldDescription`, `material-icons`, `inputContainer`, `checkboxContainer`, `selectContainer`, and `emby-*`. A class a plugin passes in, through `className`, `rowClass`, `itemClass`, `emptyClass`, `contentClass`, `overlayClass`, or `cellClass`, stays exactly as the plugin gave it.
 * One file per component, named after its docs page: `src/js/<name>.ts` and `src/css/<name>.css`. Shared cores go in `src/js/lib/` and have no CSS file of their own. Their shared CSS lives in the file of the component that owns the concept, or in `utility-classes.css` when no one component owns it, such as `stolon-float` and `stolon-icon-text`.
 * `index.ts` lists every public export by name. A template lives in `src/templates`, one HTML file per template. A C# helper lives in `src/`, one file per helper.
 * Never add a numeric prefix to a file. Order never matters, and the bundler emits `design-tokens.css` first.
@@ -62,14 +63,14 @@ The values live only in `design-tokens.css`. This table is for reading, and a ru
 * **A size is a modifier.** `stolon-button small`, `stolon-badge medium`, `stolon-tag large`. Buttons, pills, and fields default to medium. Badges and tags default to small.
 * **A field changes size with `small` or `large` on the field, or `data-stolon-size` on any ancestor.** Everything inside a sized component follows it.
 * **Never write a height, padding, text size, or icon size as a number.** Take it from the scale, or from a calc of scale tokens.
-* **Things on one line are one height.** A button beside a field takes the `field` modifier and matches the field at every size. Never put a small button beside a medium field.
+* **Things on one line are one height.** A button beside a field takes the `stolon-field` modifier and matches the field at every size. Never put a small button beside a medium field.
 * **A row is at least a field tall.** A boxed row of text uses `stolon-item-row`, so a list of entries lines up with the input that adds to it.
 * **A row icon button is one fixed square** from the scale, built with `iconButton()`. Up and down arrows sit side by side.
 * **A dismiss X sits in the top right corner.** On a card, row, banner, or toast, the remove or close button is pinned to the top right, inset by the component's own padding, level with the first line. Status and detail lines leave room for it and never run under it.
 * **A glyph is sized to its text.** The remove mark on a tag, the icon in a button, and the dot in a pill scale with the size of the control they sit in.
 * **A glyph inside a shape is inset.** An icon in a circle or square leaves a clear margin of the shape's color on every side, and is centered in it.
 * **A picture grows with its text.** An avatar beside two lines of text spans both lines.
-* **A checkbox takes the scale too.** Small is the plain box and text most settings use. Medium is a size up. Large is a tile that fills its row. A small or medium checkbox in a row of fields stands a field tall with `field`, or sits in a field's frame with `boxed`.
+* **A checkbox takes the scale too.** Small is the plain box and text most settings use. Medium is a size up. Large is a tile that fills its row. A small or medium checkbox in a row of fields stands a field tall with `stolon-field`, or sits in a field's frame with `stolon-boxed`.
 * **A larger picture is a multiple of the scale,** such as `calc(var(--stolon-size-large) * 6)` for a QR code, so it still lines up with the controls around it.
 
 ## Type
@@ -201,8 +202,8 @@ Color carries meaning in Stolon, so it is never decoration. Every color a reader
 
 Every option that takes a color takes a named color or a hex code, with three, four, six, or eight digits. Anything else falls back to the component's default.
 
-* **`colorClass(color, fallback)`** gives the class: the name for a named color, `custom` for a hex code, and the fallback otherwise.
-* **`applyColor(element, color, fallback)`** swaps the element's color class and, for a hex code, sets `--stolon-custom` and `--stolon-custom-on`. Every component's `.custom` rule reads those two.
+* **`colorClass(color, fallback)`** gives the class: `stolon-` and the name for a named color, `stolon-custom` for a hex code, and `stolon-` and the fallback otherwise.
+* **`applyColor(element, color, fallback)`** swaps the element's color class and, for a hex code, sets `--stolon-custom` and `--stolon-custom-on`. Every component's `.stolon-custom` rule reads those two.
 * **`colorStyle(color)`** gives the same two properties as a `style` attribute, for markup built as text.
 * **`textOn(hex)`** picks black or white text for a fill by its luminance, so text on a custom fill always passes 4.5 to 1.
 * **A custom tint is the hex at 20%,** through `color-mix()`, and falls back to gray's tint in an older engine.
@@ -300,7 +301,7 @@ Icons come from the Material Icons font that Jellyfin's dashboard loads, drawn t
 * **A floating panel closes on Escape and on an outside click,** and Escape returns focus to the control that opened it. It never clips inside a scrolling parent, flips above near the bottom, and stays on screen.
 * **A selection can be cleared the way it was made.** A second click on the selected row, country, or pill clears it.
 * **Motion respects the user.** Skeletons stop pulsing and spinners slow under `prefers-reduced-motion: reduce`.
-* **States are modifiers or attributes,** never a class per state. The `[hidden]` attribute always hides.
+* **States are `stolon-` modifiers or attributes,** never a class per state. The `[hidden]` attribute always hides.
 * **No inline style in what a component builds,** except a custom property a token reads, such as a custom color.
 * **`!important` only where an `emby-*` rule must be beaten.**
 

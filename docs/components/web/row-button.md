@@ -40,8 +40,8 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-row-btn` | Low emphasis icon button for table and list rows, with save, success, and dirty states |
-| `stolon-row-btn.destructive` | A row button that destroys data, red on hover, as the destructive button variant |
-| `stolon-row-btn.move` | Up or down row button that moves its row, with a secondary chevron |
+| `stolon-row-btn.stolon-destructive` | A row button that destroys data, red on hover, as the destructive button variant |
+| `stolon-row-btn.stolon-move` | Up or down row button that moves its row, with a secondary chevron |
 | `stolon-row-arrows` | Up and down row buttons side by side at the end of a row |
 
 <!-- reference:end -->

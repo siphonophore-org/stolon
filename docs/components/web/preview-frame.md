@@ -22,13 +22,13 @@ view.querySelector('#previewHost').appendChild(frame.element);
 view.addEventListener('input', function () { frame.update(); });
 ```
 
-Classes: `stolon-preview-frame`, with the `busy` modifier, and the parts `stolon-preview-frame-backgrounds`, `stolon-preview-frame-stage`, `stolon-preview-frame-image`, `stolon-preview-frame-status`, and `stolon-preview-frame-zoom`. The handle is `{ element, getValue, setValue, update, refresh, destroy }`.
+Classes: `stolon-preview-frame`, with the `stolon-busy` modifier, and the parts `stolon-preview-frame-backgrounds`, `stolon-preview-frame-stage`, `stolon-preview-frame-image`, `stolon-preview-frame-status`, and `stolon-preview-frame-zoom`. The handle is `{ element, getValue, setValue, update, refresh, destroy }`.
 
 ## States and Modifiers
 
 * `render` returns an address, a Blob, or a canvas, or a promise of one. A Blob shows through an object URL the frame frees.
 * `update()` renders once its inputs stop changing for `delay` (300 milliseconds), and `refresh()` renders at once. A render that finishes after a newer one starts is dropped.
-* `busy` is on the root while it renders, with the status line "Rendering…" (`renderingText`). An empty result shows "No preview." (`emptyText`), and a failure shows "Could not render the preview." (`errorText`).
+* `stolon-busy` is on the root while it renders, with the status line "Rendering…" (`renderingText`). An empty result shows "No preview." (`emptyText`), and a failure shows "Could not render the preview." (`errorText`).
 * `background` is `dark` (default), `light`, or `checker`, chosen from the pills, whose labels `darkText`, `lightText`, and `checkerText` replace. `getValue` and `setValue` read and set it. `backgrounds: false` hides the choice. The dark and light backgrounds are the theme's surface and text colors.
 * The stage is a button named "Zoom" (`zoomText`) and the label, which opens a large dialog titled by the label. `label` is the image's alt text, "Preview" by default. `zoom: false` makes it a plain frame.
 
@@ -81,7 +81,7 @@ A frame that shows an image made by an async render, such as a generated poster,
 | :--- | :--- |
 | `stolon-preview-frame` | A frame that shows a rendered image over a dark, light, or checkered background, with the background choice above it and a status line under it |
 | `stolon-preview-frame-stage` | The stage the image sits on, a button that opens the zoom, as wide as its column and a fixed height, the image contained inside it |
-| `stolon-preview-frame-stage.dark` | The three backgrounds: dark and light from the theme's text and surface, and a checkerboard of the wash for transparency |
+| `stolon-preview-frame-stage.stolon-dark` | The three backgrounds: dark and light from the theme's text and surface, and a checkerboard of the wash for transparency |
 | `stolon-preview-frame-zoom` | The image larger in the zoom dialog, on the same background, never wider than the dialog |
 
 <!-- reference:end -->

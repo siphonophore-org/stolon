@@ -107,7 +107,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
     var holder: HTMLDivElement | null = null;
     if (options.editor) {
         holder = document.createElement('div');
-        holder.className = 'hidden';
+        holder.className = 'stolon-hidden';
         listEl.parentNode!.insertBefore(holder, listEl.nextSibling);
     }
 
@@ -117,7 +117,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
 
     function placeEditor(): void {
         if (!options.editor) return;
-        var body = listEl.querySelector<HTMLElement>('.stolon-card-item.selected > .stolon-card-item-body');
+        var body = listEl.querySelector<HTMLElement>('.stolon-card-item.stolon-selected > .stolon-card-item-body');
         if (body) body.appendChild(options.editor);
         else parkEditor();
     }
@@ -127,7 +127,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         var spec: CardSpec = options.render(item, index) || {};
         var isSelected = index === selected;
         var card = document.createElement('div');
-        card.className = 'stolon-card-item' + (isSelected ? ' selected' : '') + (isSelected && collapsed ? ' collapsed' : '') + (spec.disabled ? ' disabled' : '');
+        card.className = 'stolon-card-item' + (isSelected ? ' stolon-selected' : '') + (isSelected && collapsed ? ' stolon-collapsed' : '') + (spec.disabled ? ' stolon-disabled' : '');
         card.setAttribute('data-index', String(index));
         var dot = spec.dot || 'none';
         var badges = (spec.badges || []).map(function (b) { return classBadgeHtml(b.label, b.cls || 'gray'); }).join('');
@@ -233,7 +233,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
     }
 
     function clearDropMarks(): void {
-        listEl.querySelectorAll<HTMLElement>('.stolon-card-item').forEach(function (c) { c.classList.remove('drop-before', 'drop-after'); });
+        listEl.querySelectorAll<HTMLElement>('.stolon-card-item').forEach(function (c) { c.classList.remove('stolon-drop-before', 'stolon-drop-after'); });
     }
 
     function onDragStart(e: CardTargetEvent<DragEvent>): void {
@@ -241,7 +241,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         if (!head) return;
         var card = head.parentNode as HTMLElement;
         dragIndex = parseInt(card.getAttribute('data-index')!, 10);
-        card.classList.add('dragging');
+        card.classList.add('stolon-dragging');
         e.dataTransfer!.effectAllowed = 'move';
         try { e.dataTransfer!.setData('text/plain', String(dragIndex)); } catch (err) { /* older WebKit */ }
     }
@@ -254,7 +254,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         e.dataTransfer!.dropEffect = 'move';
         var rect = card.getBoundingClientRect();
         clearDropMarks();
-        card.classList.add((e.clientY - rect.top) > rect.height / 2 ? 'drop-after' : 'drop-before');
+        card.classList.add((e.clientY - rect.top) > rect.height / 2 ? 'stolon-drop-after' : 'stolon-drop-before');
     }
 
     // Moves the dragged card to the marked position.
@@ -263,7 +263,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         if (!card || dragIndex < 0) return;
         e.preventDefault();
         var target = parseInt(card.getAttribute('data-index')!, 10);
-        if (card.classList.contains('drop-after')) target += 1;
+        if (card.classList.contains('stolon-drop-after')) target += 1;
         if (target > dragIndex) target -= 1;
         var from = dragIndex;
         dragIndex = -1;
@@ -273,7 +273,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
     function onDragEnd(): void {
         dragIndex = -1;
         clearDropMarks();
-        listEl.querySelectorAll<HTMLElement>('.stolon-card-item.dragging').forEach(function (c) { c.classList.remove('dragging'); });
+        listEl.querySelectorAll<HTMLElement>('.stolon-card-item.stolon-dragging').forEach(function (c) { c.classList.remove('stolon-dragging'); });
     }
 
     listEl.addEventListener('click', onClick as EventListener);

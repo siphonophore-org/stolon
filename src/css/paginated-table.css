@@ -3,7 +3,7 @@
 .stolon-table-loading .stolon-table-body { opacity: 0.6; pointer-events: none; }
 
 /* A status badge from the bag's statusBadge inside a bare button that opens the row */
-/* Example: <button type="button" class="stolon-table-status-btn"><span class="stolon-table-status-badge Active">Active</span></button> */
+/* Example: <button type="button" class="stolon-table-status-btn"><span class="stolon-table-status-badge stolon-Active">Active</span></button> */
 .stolon-table-status-btn {
     padding: 0;
     border: none;
@@ -19,11 +19,11 @@
 .stolon-table-header-spacer { flex: 1; }
 
 /* The reload row button, whose icon turns while the table reloads */
-/* Example: <button class="stolon-row-btn stolon-table-reload-btn spinning" title="Reload"><span class="material-icons" aria-hidden="true">refresh</span></button> */
-.stolon-table-reload-btn.spinning .material-icons { animation: stolon-spin 0.8s linear infinite; }
+/* Example: <button class="stolon-row-btn stolon-table-reload-btn stolon-spinning" title="Reload"><span class="material-icons" aria-hidden="true">refresh</span></button> */
+.stolon-table-reload-btn.stolon-spinning .material-icons { animation: stolon-spin 0.8s linear infinite; }
 
 /* The rows, a list of bordered rows */
-/* Example: <div class="stolon-table-body stolon-list rows" role="list"><div class="stolon-table-row stolon-list-item" role="listitem"></div></div> */
+/* Example: <div class="stolon-table-body stolon-list stolon-rows" role="list"><div class="stolon-table-row stolon-list-item" role="listitem"></div></div> */
 .stolon-table-body { min-width: 0; }
 
 /* Single table row */
@@ -38,8 +38,8 @@
 .stolon-table-row:last-child { border-bottom: none; }
 
 /* A row inside a list, where the list draws the dividers */
-/* Example: <div class="stolon-list rows"><div class="stolon-table-row stolon-list-item"></div></div> */
-.stolon-list.rows > .stolon-table-row { border-bottom: none; }
+/* Example: <div class="stolon-list stolon-rows"><div class="stolon-table-row stolon-list-item"></div></div> */
+.stolon-list.stolon-rows > .stolon-table-row { border-bottom: none; }
 
 
 /* Single cell within a row */
@@ -100,24 +100,24 @@
 .stolon-table-item-count { opacity: 0.7; }
 
 /* The Load More and Load All buttons, shown in the footer while more rows remain */
-/* Example: <span class="stolon-table-footer-actions"><button class="raised stolon-button secondary small stolon-table-load-more">Load More</button><button class="raised stolon-button secondary small stolon-table-load-all">Load All</button></span> */
+/* Example: <span class="stolon-table-footer-actions"><button class="raised stolon-button stolon-secondary stolon-small stolon-table-load-more">Load More</button><button class="raised stolon-button stolon-secondary stolon-small stolon-table-load-all">Load All</button></span> */
 .stolon-table-footer-actions { display: flex; gap: var(--stolon-gap-narrow); }
 .stolon-table-footer-actions[hidden] { display: none; }
 
 /* Cell that lines a thumbnail up beside its text */
-/* Example: <div class="stolon-table-cell stolon-table-cell-with-thumb"><span class="stolon-thumb stolon-table-thumb portrait"></span></div> */
+/* Example: <div class="stolon-table-cell stolon-table-cell-with-thumb"><span class="stolon-thumb stolon-table-thumb stolon-portrait"></span></div> */
 .stolon-table-cell.stolon-table-cell-with-thumb { display: flex; align-items: center; gap: var(--stolon-gap-narrow); }
 
 /* A row thumbnail, a stolon-thumb frame in the column's imageShape, portrait by default */
-/* Example: <span class="stolon-thumb stolon-table-thumb portrait"><span class="stolon-thumb-placeholder"><span class="material-icons">movie</span></span><img class="stolon-thumb-image" alt="" src="poster.jpg"></span> */
+/* Example: <span class="stolon-thumb stolon-table-thumb stolon-portrait"><span class="stolon-thumb-placeholder"><span class="material-icons">movie</span></span><img class="stolon-thumb-image" alt="" src="poster.jpg"></span> */
 .stolon-table-thumb {
     width: var(--stolon-size-large);
     height: calc(var(--stolon-size-large) * 1.5);
     border-radius: var(--stolon-radius-small);
 }
-.stolon-table-thumb.wide { width: calc(var(--stolon-size-large) * 8 / 3); }
-.stolon-table-thumb.square { width: calc(var(--stolon-size-large) * 1.5); }
-.stolon-table-thumb.round { width: calc(var(--stolon-size-medium) * 1.5); height: calc(var(--stolon-size-medium) * 1.5); border-radius: var(--stolon-radius-round); }
+.stolon-table-thumb.stolon-wide { width: calc(var(--stolon-size-large) * 8 / 3); }
+.stolon-table-thumb.stolon-square { width: calc(var(--stolon-size-large) * 1.5); }
+.stolon-table-thumb.stolon-round { width: calc(var(--stolon-size-medium) * 1.5); height: calc(var(--stolon-size-medium) * 1.5); border-radius: var(--stolon-radius-round); }
 
 @media (max-width: 768px) {
     /* A fixed width, so every row's columns line up whatever its badge says. */

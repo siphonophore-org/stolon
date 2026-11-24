@@ -113,13 +113,13 @@
     --stolon-discord-brand: #5865f2;
 }
 /* A custom color from a hex code, which applyColor sets as --stolon-custom with --stolon-custom-on for text on its fill */
-/* Example: <span class="stolon-badge custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #fff">VIP</span> */
-.custom {
+/* Example: <span class="stolon-badge stolon-custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #fff">VIP</span> */
+.stolon-custom {
     --stolon-custom-fg: var(--stolon-custom, #9198a1);
     --stolon-custom-bg: rgba(145, 152, 161, 0.2);
 }
 @supports (color: color-mix(in srgb, red, blue)) {
-    .custom { --stolon-custom-bg: color-mix(in srgb, var(--stolon-custom, #9198a1) 20%, transparent); }
+    .stolon-custom { --stolon-custom-bg: color-mix(in srgb, var(--stolon-custom, #9198a1) 20%, transparent); }
 }
 
 /* A token holding color-mix() fails where it is used, not where it is parsed, so each starts plain and upgrades here. */

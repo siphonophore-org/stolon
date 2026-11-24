@@ -1,5 +1,5 @@
 /* Filter button with a leading icon, its text, and a round accent badge counting the filters on */
-/* Example: <button type="button" class="raised stolon-button stolon-filter-button active" aria-haspopup="dialog"><span class="material-icons" aria-hidden="true">filter_list</span><span class="stolon-filter-text">Filter</span><span class="stolon-filter-count" aria-hidden="true">3</span></button> */
+/* Example: <button type="button" class="raised stolon-button stolon-filter-button stolon-active" aria-haspopup="dialog"><span class="material-icons" aria-hidden="true">filter_list</span><span class="stolon-filter-text">Filter</span><span class="stolon-filter-count" aria-hidden="true">3</span></button> */
 .stolon-filter-button {
     gap: var(--stolon-gap-narrow);
 }
@@ -82,7 +82,7 @@
 }
 
 /* Row of the Clear and Done buttons at the end of the floating panel */
-/* Example: <div class="stolon-filter-actions"><button type="button" class="raised stolon-button small secondary stolon-filter-clear">Clear</button><button type="button" class="raised stolon-button small primary stolon-filter-done">Done</button></div> */
+/* Example: <div class="stolon-filter-actions"><button type="button" class="raised stolon-button stolon-small stolon-secondary stolon-filter-clear">Clear</button><button type="button" class="raised stolon-button stolon-small stolon-primary stolon-filter-done">Done</button></div> */
 .stolon-filter-actions {
     display: flex;
     justify-content: flex-end;

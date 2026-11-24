@@ -34,7 +34,7 @@ Parts: `stolon-filter-text`, `stolon-filter-title`, `stolon-filter-group-name`, 
 ## States and Modifiers
 
 * The value maps each group name to an array of picked values. `getValue` lists every group, with an empty array for a group with none. A value that names no group or option is dropped, and a `single` group keeps at most one.
-* The badge shows the count of picked values and hides at zero. The button takes `active` while any filter is on, and its `aria-label` reads "Filter, 3 filters on".
+* The badge shows the count of picked values and hides at zero. The button takes `stolon-active` while any filter is on, and its `aria-label` reads "Filter, 3 filters on".
 * The defaults are "Filter" (`buttonText`), "Filters" (`title`), "Clear" (`clearText`), "Done" (`doneText`), "{value} filters on" (`countLabel`), and "{value} filter on" (`countOneLabel`).
 * `applyOnChange` (default true) applies and reports each change at once. With false, changes apply on Done, and Escape, an outside click, or leaving the panel drops them.
 * The panel is a popover under the button, or above it when there is no room. On a screen under 600px wide, or with `asDialog: true`, it opens as a [Dialog](dialog.md) with the Clear and Done buttons in its footer.

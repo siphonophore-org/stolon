@@ -48,8 +48,8 @@ test('by default the cards keep their markup and grow with the page', function (
     ui.cards.render();
     assert.ok(ui.listEl.classList.contains('stolon-card-list'));
     assert.ok(ui.listEl.classList.contains('stolon-list'));
-    assert.ok(ui.listEl.classList.contains('plain'));
-    assert.equal(ui.listEl.classList.contains('scrolls'), false);
+    assert.ok(ui.listEl.classList.contains('stolon-plain'));
+    assert.equal(ui.listEl.classList.contains('stolon-scrolls'), false);
     assert.equal(ui.listEl.getAttribute('role'), null);
     var first = cardsOf(ui)[0];
     assert.equal(first.className, 'stolon-card-item stolon-list-item');
@@ -63,7 +63,7 @@ test('an arrow moves a card, keeps the open card on its record, and calls onMove
     head(cardsOf(ui)[0], 1).querySelector('[data-move]').click();
     assert.deepEqual(titles(ui), ['b', 'a', 'c']);
     assert.equal(ui.cards.getSelected(), 1);
-    assert.ok(cardsOf(ui)[1].classList.contains('selected'));
+    assert.ok(cardsOf(ui)[1].classList.contains('stolon-selected'));
     assert.deepEqual(ui.moves, [[0, 1]]);
 });
 
@@ -72,10 +72,10 @@ test('dragging a card onto the lower half of another drops it after that card', 
     ui.cards.render();
     var grip = head(cardsOf(ui)[0]);
     grip.dispatch('dragstart', { dataTransfer: { setData: function () {} } });
-    assert.ok(cardsOf(ui)[0].classList.contains('dragging'));
+    assert.ok(cardsOf(ui)[0].classList.contains('stolon-dragging'));
     var target = cardsOf(ui)[2];
     target.dispatch('dragover', { clientY: 115, dataTransfer: {} });
-    assert.ok(target.classList.contains('drop-after'));
+    assert.ok(target.classList.contains('stolon-drop-after'));
     target.dispatch('drop', {});
     assert.deepEqual(titles(ui), ['b', 'c', 'a']);
     assert.deepEqual(ui.moves, [[0, 2]]);
@@ -87,7 +87,7 @@ test('dragging a card onto the upper half of another drops it before that card',
     head(cardsOf(ui)[2]).dispatch('dragstart', { dataTransfer: { setData: function () {} } });
     var target = cardsOf(ui)[0];
     target.dispatch('dragover', { clientY: 102, dataTransfer: {} });
-    assert.ok(target.classList.contains('drop-before'));
+    assert.ok(target.classList.contains('stolon-drop-before'));
     target.dispatch('drop', {});
     assert.deepEqual(titles(ui), ['c', 'a', 'b']);
     assert.deepEqual(ui.moves, [[2, 0]]);
@@ -97,11 +97,11 @@ test('height and maxHeight go to the list, and setHeight changes them before or 
     var ui = build({ maxHeight: 400 });
     ui.cards.setHeight(300);
     ui.cards.render();
-    assert.ok(ui.listEl.classList.contains('fixed'));
+    assert.ok(ui.listEl.classList.contains('stolon-fixed'));
     assert.equal(ui.listEl.style['--stolon-list-height'], '300px');
-    assert.equal(ui.listEl.classList.contains('capped'), false);
+    assert.equal(ui.listEl.classList.contains('stolon-capped'), false);
     ui.cards.setHeight('auto', '50vh');
-    assert.ok(ui.listEl.classList.contains('capped'));
+    assert.ok(ui.listEl.classList.contains('stolon-capped'));
     assert.equal(ui.listEl.style['--stolon-list-max'], '50vh');
     var capped = build({ maxHeight: 400 });
     capped.cards.render();

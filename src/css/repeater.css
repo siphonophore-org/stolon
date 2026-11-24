@@ -1,5 +1,5 @@
 /* A list of rows or cards of mixed fields, with an Add button under them */
-/* Example: <div class="stolon-repeater stolon-repeater-layout-inline"><div class="stolon-repeater-head"><span>Name</span></div><div class="stolon-repeater-rows stolon-list plain"></div><button class="raised stolon-button small stolon-repeater-add">Add</button></div> */
+/* Example: <div class="stolon-repeater stolon-repeater-layout-inline"><div class="stolon-repeater-head"><span>Name</span></div><div class="stolon-repeater-rows stolon-list stolon-plain"></div><button class="raised stolon-button stolon-small stolon-repeater-add">Add</button></div> */
 .stolon-repeater {
     display: flex;
     flex-direction: column;
@@ -21,7 +21,7 @@
 }
 
 /* The rows, a gap apart */
-/* Example: <div class="stolon-repeater-rows stolon-list plain"><div class="stolon-repeater-row stolon-list-item"></div></div> */
+/* Example: <div class="stolon-repeater-rows stolon-list stolon-plain"><div class="stolon-repeater-row stolon-list-item"></div></div> */
 .stolon-repeater-rows {
     display: flex;
     flex-direction: column;
@@ -46,7 +46,7 @@
     min-width: 0;
 }
 .stolon-field-cell-label { font-size: var(--stolon-font-small); opacity: 0.7; }
-.stolon-repeater.stolon-repeater-layout-inline:not(.compact) .stolon-field-cell-label { display: none; }
+.stolon-repeater.stolon-repeater-layout-inline:not(.stolon-compact) .stolon-field-cell-label { display: none; }
 .stolon-control { min-width: 0; }
 /* A component in a field's control is part of the field, so it takes none of the page's field spacing */
 .pluginConfigurationPage .stolon-control > [class],
@@ -56,13 +56,13 @@
 .stolon-control > .stolon-adorned { width: 100%; min-width: 0; box-sizing: border-box; }
 
 /* A toggle field: the shared Checkbox a field tall, its box centered on the line of the fields beside it */
-/* Example: <div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" aria-label="Enabled" checked></label></div> */
+/* Example: <div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" aria-label="Enabled" checked></label></div> */
 .stolon-control-toggle { display: flex; align-items: center; }
 
 /* A secret with a Clear button after its box, shown while a secret is stored */
-/* Example: <div class="stolon-control stolon-control-secret clearable"><input type="password"><button class="stolon-row-btn stolon-control-clear" aria-label="Clear Token"><span class="material-icons">backspace</span></button></div> */
-.stolon-control-secret.clearable { display: flex; align-items: center; gap: calc(var(--stolon-gap-narrow) / 2); }
-.stolon-control-secret.clearable > input { flex: 1 1 auto; }
+/* Example: <div class="stolon-control stolon-control-secret stolon-clearable"><input type="password"><button class="stolon-row-btn stolon-control-clear" aria-label="Clear Token"><span class="material-icons">backspace</span></button></div> */
+.stolon-control-secret.stolon-clearable { display: flex; align-items: center; gap: calc(var(--stolon-gap-narrow) / 2); }
+.stolon-control-secret.stolon-clearable > input { flex: 1 1 auto; }
 
 /* The row buttons, the moves and the remove, at the row's end and centered on its first field */
 /* Example: <div class="stolon-repeater-actions"><button class="stolon-row-btn stolon-repeater-remove"></button></div> */
@@ -74,7 +74,7 @@
 }
 
 /* One card: a head with the title and the row buttons at the top right, over its fields in a grid */
-/* Example: <div class="stolon-repeater-card stolon-list-item"><div class="stolon-repeater-card-head"><span class="stolon-repeater-card-title">Server 1</span><div class="stolon-repeater-actions"></div></div><div class="stolon-field-group grid"></div></div> */
+/* Example: <div class="stolon-repeater-card stolon-list-item"><div class="stolon-repeater-card-head"><span class="stolon-repeater-card-title">Server 1</span><div class="stolon-repeater-actions"></div></div><div class="stolon-field-group stolon-grid"></div></div> */
 .stolon-repeater.stolon-repeater-layout-card .stolon-repeater-rows > .stolon-list-item {
     display: flex;
     flex-direction: column;
@@ -101,8 +101,8 @@
 .stolon-repeater-card-head > .stolon-repeater-actions { min-height: 0; }
 
 /* Fields in as many columns as fit, each under its label */
-/* Example: <div class="stolon-field-group grid"><div class="stolon-field-cell"></div></div> */
-.stolon-field-group.grid {
+/* Example: <div class="stolon-field-group stolon-grid"><div class="stolon-field-cell"></div></div> */
+.stolon-field-group.stolon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(calc(var(--stolon-size-large) * 5), 1fr));
     gap: var(--stolon-gap-narrow) var(--stolon-gap-wide);
@@ -110,40 +110,40 @@
 }
 
 /* A narrow inline repeater: each row stacks its fields full width under their labels, with the row buttons pinned top right, level with the first label */
-/* Example: <div class="stolon-repeater stolon-repeater-layout-inline compact"></div> */
-.stolon-repeater.stolon-repeater-layout-inline.compact > .stolon-repeater-head { display: none; }
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-repeater-rows > .stolon-list-item {
+/* Example: <div class="stolon-repeater stolon-repeater-layout-inline stolon-compact"></div> */
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact > .stolon-repeater-head { display: none; }
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-repeater-rows > .stolon-list-item {
     position: relative;
     grid-template-columns: minmax(0, 1fr);
     padding-bottom: var(--stolon-gap-narrow);
     border-bottom: 1px solid var(--stolon-border);
 }
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-repeater-rows > .stolon-list-item > .stolon-field-cell { grid-column: 1; }
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-repeater-rows > .stolon-list-item > .stolon-repeater-actions {
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-repeater-rows > .stolon-list-item > .stolon-field-cell { grid-column: 1; }
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-repeater-rows > .stolon-list-item > .stolon-repeater-actions {
     position: absolute;
     top: 0;
     right: 0;
 }
 /* A toggle in a stacked row reads as a checkbox: its box, then its label beside it as the box's text, then its message */
-/* Example: <div class="stolon-field-cell toggle"><label class="stolon-field-cell-label">Enabled</label><div class="stolon-control stolon-control-toggle"></div><div class="stolon-field-message"></div></div> */
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-field-cell.toggle {
+/* Example: <div class="stolon-field-cell stolon-toggle"><label class="stolon-field-cell-label">Enabled</label><div class="stolon-control stolon-control-toggle"></div><div class="stolon-field-message"></div></div> */
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     column-gap: var(--stolon-gap-narrow);
 }
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-field-cell.toggle > .stolon-control { grid-row: 1; grid-column: 1; }
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-field-cell.toggle > .stolon-field-cell-label {
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle > .stolon-control { grid-row: 1; grid-column: 1; }
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle > .stolon-field-cell-label {
     grid-row: 1;
     grid-column: 2;
     font-size: var(--stolon-field-font);
     opacity: 1;
     cursor: pointer;
 }
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-field-cell.toggle > .stolon-field-message { grid-column: 1 / -1; }
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle > .stolon-field-message { grid-column: 1 / -1; }
 
 /* The first label leaves room for the buttons beside it, so it never runs under them */
-.stolon-repeater.stolon-repeater-layout-inline.compact .stolon-repeater-rows > .stolon-list-item > .stolon-field-cell:first-of-type > .stolon-field-cell-label {
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-repeater-rows > .stolon-list-item > .stolon-field-cell:first-of-type > .stolon-field-cell-label {
     min-height: var(--stolon-size-small);
     display: flex;
     align-items: center;

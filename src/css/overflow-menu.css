@@ -16,7 +16,7 @@
 }
 
 /* One action row built as stolon-icon-text, which tints on hover and focus, and shows red as destructive */
-/* Example: <button type="button" class="stolon-menu-item stolon-icon-text destructive" role="menuitem"><span class="material-icons" aria-hidden="true">delete</span><span>Remove</span></button> */
+/* Example: <button type="button" class="stolon-menu-item stolon-icon-text stolon-destructive" role="menuitem"><span class="material-icons" aria-hidden="true">delete</span><span>Remove</span></button> */
 .stolon-menu-item {
     width: 100%;
     padding: var(--stolon-gap-narrow) var(--stolon-pad-small);
@@ -31,5 +31,5 @@
 .stolon-menu-item:hover,
 .stolon-menu-item:focus { background: var(--stolon-wash); outline: none; }
 .stolon-menu-item:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: -2px; }
-.stolon-menu-item.destructive { color: var(--stolon-error); }
+.stolon-menu-item.stolon-destructive { color: var(--stolon-error); }
 .stolon-menu-item:disabled { opacity: 0.5; cursor: default; background: transparent; }

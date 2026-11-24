@@ -39,10 +39,10 @@ test('with no label the box is named by ariaLabel, and field stands it a field t
     var cb = createCheckbox({ ariaLabel: 'Enabled', field: true });
     assert.equal(cb.input.getAttribute('aria-label'), 'Enabled');
     assert.equal(cb.element.querySelector('.stolon-check-label'), null);
-    assert.ok(cb.element.classList.contains('field'));
+    assert.ok(cb.element.classList.contains('stolon-field'));
     var boxed = createCheckbox({ label: 'Enabled', boxed: true });
-    assert.ok(boxed.element.classList.contains('boxed') && boxed.element.classList.contains('field'), 'boxed is field tall in a text box frame');
-    assert.ok(!createCheckbox({ label: 'A', size: 'large', boxed: true }).element.classList.contains('boxed'), 'a tile has its own frame');
+    assert.ok(boxed.element.classList.contains('stolon-boxed') && boxed.element.classList.contains('stolon-field'), 'boxed is field tall in a text box frame');
+    assert.ok(!createCheckbox({ label: 'A', size: 'large', boxed: true }).element.classList.contains('stolon-boxed'), 'a tile has its own frame');
     cb.setLabel('Enabled');
     assert.equal(cb.element.querySelector('.stolon-check-label').textContent, 'Enabled');
     assert.equal(cb.input.getAttribute('aria-label'), null);
@@ -56,25 +56,25 @@ test('partly on clears on a change, and disabled dims it and stops the box', fun
     assert.equal(cb.input.indeterminate, false);
     cb.setDisabled(true);
     assert.equal(cb.input.disabled, true);
-    assert.ok(cb.element.classList.contains('disabled'));
+    assert.ok(cb.element.classList.contains('stolon-disabled'));
     cb.setDisabled(false);
-    assert.ok(!cb.element.classList.contains('disabled'));
+    assert.ok(!cb.element.classList.contains('stolon-disabled'));
     cb.destroy();
 });
 
 test('small is the default size, medium and large are on request, and a large tile carries its state and description', function () {
-    assert.ok(createCheckbox({ label: 'A' }).element.classList.contains('small'));
-    assert.ok(createCheckbox({ label: 'A', size: 'medium' }).element.classList.contains('medium'));
+    assert.ok(createCheckbox({ label: 'A' }).element.classList.contains('stolon-small'));
+    assert.ok(createCheckbox({ label: 'A', size: 'medium' }).element.classList.contains('stolon-medium'));
     var tile = createCheckbox({ label: 'Sync watched', description: 'Played and resume points.', size: 'large', field: true });
-    assert.ok(tile.element.classList.contains('large'));
-    assert.ok(!tile.element.classList.contains('field'), 'a tile is never field tall');
+    assert.ok(tile.element.classList.contains('stolon-large'));
+    assert.ok(!tile.element.classList.contains('stolon-field'), 'a tile is never field tall');
     assert.equal(tile.element.querySelector('.stolon-check-sub').textContent, 'Played and resume points.');
-    assert.ok(!tile.element.classList.contains('checked'));
+    assert.ok(!tile.element.classList.contains('stolon-checked'));
     tile.input.checked = true;
     tile.input.dispatch('change');
-    assert.ok(tile.element.classList.contains('checked'));
+    assert.ok(tile.element.classList.contains('stolon-checked'));
     tile.setValue(false);
-    assert.ok(!tile.element.classList.contains('checked'));
+    assert.ok(!tile.element.classList.contains('stolon-checked'));
     tile.setDescription('');
     assert.equal(tile.element.querySelector('.stolon-check-sub').hidden, true);
 });

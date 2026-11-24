@@ -99,13 +99,13 @@ export function createUsageMeter(options?: UsageMeterOptions): UsageMeterHandle 
         bar.setAttribute('aria-valuetext', line);
         // The bar warns by its share of the total, so a nearly full disk turns orange, then red.
         var level = share >= danger ? 'danger' : (share >= warning ? 'warning' : '');
-        root.classList.toggle('warning', level === 'warning');
-        root.classList.toggle('danger', level === 'danger');
+        root.classList.toggle('stolon-warning', level === 'warning');
+        root.classList.toggle('stolon-danger', level === 'danger');
         clear(bar);
         clear(legend);
         legend.hidden = parts.length < 2;
         if (!parts.length) {
-            var fill = make('div', 'stolon-progress-bar stolon-usage-meter-fill whole');
+            var fill = make('div', 'stolon-progress-bar stolon-usage-meter-fill stolon-whole');
             fill.style.setProperty('--stolon-usage-share', share + '%');
             bar.appendChild(fill);
             return;

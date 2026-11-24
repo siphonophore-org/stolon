@@ -17,15 +17,15 @@ function flush() { return new Promise(function (resolve) { setImmediate(resolve)
 test('an image stays pending until it loads, and hides when it fails, so the broken image mark never shows', function () {
     var thumb = buildThumb({ src: 'a.jpg' });
     var img = thumb.image;
-    assert.ok(img.classList.contains('pending'));
+    assert.ok(img.classList.contains('stolon-pending'));
     img.dispatch('load');
-    assert.equal(img.classList.contains('pending'), false);
+    assert.equal(img.classList.contains('stolon-pending'), false);
     assert.equal(thumb.placeholder.hidden, true);
     thumb.setSrc('b.jpg');
-    assert.ok(img.classList.contains('pending'));
+    assert.ok(img.classList.contains('stolon-pending'));
     img.dispatch('error');
     assert.equal(img.hidden, true);
-    assert.equal(img.classList.contains('pending'), false);
+    assert.equal(img.classList.contains('stolon-pending'), false);
     assert.equal(thumb.placeholder.hidden, false);
 });
 
@@ -83,10 +83,10 @@ test('resolveThumbSource answers at once for an address, and hasThumbSource tell
 
 test('an avatar takes a function image and shows the person icon until it arrives', async function () {
     var avatar = createAvatar({ name: 'Ada', image: function () { return Promise.resolve('ada.png'); } });
-    assert.ok(avatar.element.classList.contains('placeholder'));
+    assert.ok(avatar.element.classList.contains('stolon-placeholder'));
     await flush();
     assert.equal(avatar.element.querySelector('img').getAttribute('src'), 'ada.png');
-    assert.equal(avatar.element.classList.contains('placeholder'), false);
+    assert.equal(avatar.element.classList.contains('stolon-placeholder'), false);
 });
 
 test('a media card takes a function image, which wins over imageUrl', async function () {

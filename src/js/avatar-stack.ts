@@ -38,7 +38,7 @@ export function createAvatarStack(options?: AvatarStackOptions): AvatarStackHand
     var users: AvatarOptions[] = [];
     var avatars: AvatarHandle[] = [];
     var size = opts.size === 'medium' || opts.size === 'large' ? opts.size : 'small';
-    var root = make('div', 'stolon-avatar-stack ' + size, { role: 'img' });
+    var root = make('div', 'stolon-avatar-stack stolon-' + size, { role: 'img' });
 
     function draw(): void {
         avatars.forEach(function (a) { a.destroy(); });

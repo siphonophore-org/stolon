@@ -111,9 +111,9 @@ function html(parent, markup) {
     const s = section('Buttons');
     const r = row(s);
     r.innerHTML =
-        '<button class="raised stolon-button primary">Submit</button>' +
-        '<button class="raised stolon-button destructive">Delete</button>' +
-        '<button class="raised stolon-button secondary">Secondary</button>' +
+        '<button class="raised stolon-button stolon-primary">Submit</button>' +
+        '<button class="raised stolon-button stolon-destructive">Delete</button>' +
+        '<button class="raised stolon-button stolon-secondary">Secondary</button>' +
 
         '<button class="stolon-button"><span class="material-icons">add</span><span>Icon button</span></button>';
     const custom = document.createElement('button');
@@ -124,12 +124,12 @@ function html(parent, markup) {
     base.applyColor(light, '#ffd54f');
     r.appendChild(custom); r.appendChild(light);
     s.insertAdjacentHTML('beforeend', '<p class="g-note">The three sizes, each on its own line, since buttons on one line share a size.</p>');
-    html(s, '<div class="g-row"><button class="raised stolon-button primary small">Small</button></div>');
-    html(s, '<div class="g-row"><button class="raised stolon-button primary">Medium</button></div>');
-    html(s, '<div class="g-row"><button class="raised stolon-button primary large">Large</button></div>');
+    html(s, '<div class="g-row"><button class="raised stolon-button stolon-primary stolon-small">Small</button></div>');
+    html(s, '<div class="g-row"><button class="raised stolon-button stolon-primary">Medium</button></div>');
+    html(s, '<div class="g-row"><button class="raised stolon-button stolon-primary stolon-large">Large</button></div>');
     s.insertAdjacentHTML('beforeend', '<p class="g-note">fill spans the width on a medium or large button. In a stolon-button-row, fill buttons share it a wide space apart.</p>');
-    html(s, '<button class="raised stolon-button primary fill">Save</button>');
-    html(s, '<div class="stolon-button-row" style="margin-top:var(--stolon-gap-wide)"><button class="raised stolon-button secondary fill">Cancel</button><button class="raised stolon-button primary fill">Save</button></div>');
+    html(s, '<button class="raised stolon-button stolon-primary stolon-fill">Save</button>');
+    html(s, '<div class="stolon-button-row" style="margin-top:var(--stolon-gap-wide)"><button class="raised stolon-button stolon-secondary stolon-fill">Cancel</button><button class="raised stolon-button stolon-primary stolon-fill">Save</button></div>');
 })();
 
 (function () {
@@ -148,8 +148,8 @@ function html(parent, markup) {
     line.id = 'demoStatus';
     line.className = 'stolon-status-text';
     const r = row(s);
-    const ok = document.createElement('button'); ok.className = 'raised stolon-button small'; ok.textContent = 'Show success';
-    const bad = document.createElement('button'); bad.className = 'raised stolon-button small'; bad.textContent = 'Show error';
+    const ok = document.createElement('button'); ok.className = 'raised stolon-button stolon-small'; ok.textContent = 'Show success';
+    const bad = document.createElement('button'); bad.className = 'raised stolon-button stolon-small'; bad.textContent = 'Show error';
     ok.onclick = () => shared.setStatus('demoStatus', 'Saved successfully.', false, { timeout: 0 });
     bad.onclick = () => shared.setStatus('demoStatus', 'Something went wrong.', true, { timeout: 0 });
     r.appendChild(ok); r.appendChild(bad); r.appendChild(line);
@@ -232,10 +232,10 @@ function html(parent, markup) {
           '<div id="colA" class="stolon-collapsible-content"><p style="opacity:.7;margin:0">Expanded content lives here.</p></div>' +
         '</div>' +
         '<div class="stolon-collapsible-section">' +
-          '<button type="button" class="stolon-collapsible-header collapsed" data-target="colB">' +
+          '<button type="button" class="stolon-collapsible-header stolon-collapsed" data-target="colB">' +
             '<span class="stolon-collapsible-title">Starts collapsed</span>' +
             '<span class="stolon-collapsible-icon"></span></button>' +
-          '<div id="colB" class="stolon-collapsible-content collapsed"><p style="opacity:.7;margin:0">Hidden until toggled.</p></div>' +
+          '<div id="colB" class="stolon-collapsible-content stolon-collapsed"><p style="opacity:.7;margin:0">Hidden until toggled.</p></div>' +
         '</div>');
     shared.initCollapsibles();
 })();
@@ -246,7 +246,7 @@ function html(parent, markup) {
     s.appendChild(list);
     const editor = document.createElement('div');
     editor.innerHTML = '<div class="inputContainer"><label>Name</label><input is="emby-input" type="text" value="Edited in place"></div>' +
-        '<div class="stolon-collapsible-actions"><button class="stolon-button primary small">Save</button></div>';
+        '<div class="stolon-collapsible-actions"><button class="stolon-button stolon-primary stolon-small">Save</button></div>';
     const records = [
         { name: 'Living room', url: 'http://living:8096', mode: 'Both', dot: 'ok' },
         { name: 'Cabin', url: 'http://cabin:8096', mode: 'Scan', dot: 'bad' },
@@ -260,7 +260,7 @@ function html(parent, markup) {
         onMove: (from, to) => shared.setStatus('cardListStatus', 'Moved ' + (from + 1) + ' to ' + (to + 1), true)
     });
     cards.setSelected(0);
-    html(s, '<div class="stolon-card-list-actions"><button class="stolon-button primary"><span class="material-icons">add</span><span>Add</span></button></div>' +
+    html(s, '<div class="stolon-card-list-actions"><button class="stolon-button stolon-primary"><span class="material-icons">add</span><span>Add</span></button></div>' +
         '<span id="cardListStatus" class="stolon-status-text"></span>');
 })();
 
@@ -277,17 +277,17 @@ function html(parent, markup) {
 (function () {
     const s = section('Numbered collapsible sections');
     s.insertAdjacentHTML('beforeend',
-        '<div class="stolon-collapsible-section numbered">' +
+        '<div class="stolon-collapsible-section stolon-numbered">' +
           '<button type="button" class="stolon-collapsible-header" data-target="stepA">' +
             '<span class="stolon-collapsible-title">Connection</span>' +
             '<span class="stolon-collapsible-icon"></span></button>' +
           '<div id="stepA" class="stolon-collapsible-content"><p style="opacity:.7;margin:0">Fields for the first step.</p></div>' +
         '</div>' +
-        '<div class="stolon-collapsible-section numbered">' +
-          '<button type="button" class="stolon-collapsible-header collapsed" data-target="stepB">' +
+        '<div class="stolon-collapsible-section stolon-numbered">' +
+          '<button type="button" class="stolon-collapsible-header stolon-collapsed" data-target="stepB">' +
             '<span class="stolon-collapsible-title">Libraries</span>' +
             '<span class="stolon-collapsible-icon"></span></button>' +
-          '<div id="stepB" class="stolon-collapsible-content collapsed"><p style="opacity:.7;margin:0">Fields for the second step.</p></div>' +
+          '<div id="stepB" class="stolon-collapsible-content stolon-collapsed"><p style="opacity:.7;margin:0">Fields for the second step.</p></div>' +
         '</div>');
     shared.initCollapsibles();
 })();
@@ -382,24 +382,24 @@ function html(parent, markup) {
 (function () {
     const s = section('Dialogs');
     const r = row(s);
-    const b1 = document.createElement('button'); b1.className = 'raised stolon-button primary'; b1.textContent = 'openDialog';
+    const b1 = document.createElement('button'); b1.className = 'raised stolon-button stolon-primary'; b1.textContent = 'openDialog';
     b1.onclick = () => base.openDialog({
         title: 'A modal dialog',
         body: '<p style="opacity:.8">Backdrop click, the close button, and Escape all close it. Focus is trapped inside.</p>',
         buttons: [
-            { text: 'Close', className: 'stolon-button secondary', action: (close) => close() },
-            { text: 'Primary', className: 'stolon-button primary', action: (close) => close() }
+            { text: 'Close', className: 'stolon-button stolon-secondary', action: (close) => close() },
+            { text: 'Primary', className: 'stolon-button stolon-primary', action: (close) => close() }
         ]
     });
-    const b2 = document.createElement('button'); b2.className = 'raised stolon-button destructive'; b2.textContent = 'confirmDialog';
+    const b2 = document.createElement('button'); b2.className = 'raised stolon-button stolon-destructive'; b2.textContent = 'confirmDialog';
     b2.onclick = () => base.confirmDialog('Delete this record? This cannot be undone.', { title: 'Delete record', destructive: true, confirmText: 'Delete' })
         .then(ok => shared.setStatus('dialogStatus', 'confirm resolved: ' + ok, !ok, { timeout: 0 }));
-    const b3 = document.createElement('button'); b3.className = 'raised stolon-button secondary'; b3.textContent = 'promptDialog';
+    const b3 = document.createElement('button'); b3.className = 'raised stolon-button stolon-secondary'; b3.textContent = 'promptDialog';
     b3.onclick = () => base.promptDialog(
         [{ name: 'label', label: 'Label', value: 'My record' }, { name: 'ttl', label: 'TTL (seconds)', type: 'number', value: '300' }],
         { title: 'New record', submitText: 'Create' })
         .then(vals => shared.setStatus('dialogStatus', vals ? ('prompt: ' + JSON.stringify(vals)) : 'prompt cancelled', !vals, { timeout: 0 }));
-    const b4 = document.createElement('button'); b4.className = 'raised stolon-button secondary'; b4.id = 'demoEditor'; b4.textContent = 'openEditorDialog';
+    const b4 = document.createElement('button'); b4.className = 'raised stolon-button stolon-secondary'; b4.id = 'demoEditor'; b4.textContent = 'openEditorDialog';
     b4.onclick = () => {
         const body = document.createElement('div');
         body.innerHTML = '<div class="inputContainer"><label>Name</label><input type="text" id="demoEditorName" value="Living room"></div>' +
@@ -412,16 +412,16 @@ function html(parent, markup) {
             onClose: (value) => shared.setStatus('dialogStatus', 'editor closed: ' + (value || 'dismissed'), false, { timeout: 0 })
         });
     };
-    const b5 = document.createElement('button'); b5.className = 'raised stolon-button secondary'; b5.id = 'demoWide'; b5.textContent = 'openDialog wide';
+    const b5 = document.createElement('button'); b5.className = 'raised stolon-button stolon-secondary'; b5.id = 'demoWide'; b5.textContent = 'openDialog wide';
     b5.onclick = () => {
         let more = '';
         for (let i = 1; i <= 12; i++) more += '<div class="inputContainer"><label>Field ' + i + '</label><input type="text" value="Value ' + i + '"></div>';
         base.openDialog({
             title: 'A Wide Dialog', size: 'large', body: more,
             buttons: [
-                { text: 'Delete', className: 'stolon-button destructive', action: (close) => close() },
-                { text: 'Cancel', className: 'stolon-button secondary', action: (close) => close() },
-                { text: 'Done', className: 'stolon-button primary', action: (close) => close() }
+                { text: 'Delete', className: 'stolon-button stolon-destructive', action: (close) => close() },
+                { text: 'Cancel', className: 'stolon-button stolon-secondary', action: (close) => close() },
+                { text: 'Done', className: 'stolon-button stolon-primary', action: (close) => close() }
             ]
         });
     };
@@ -433,13 +433,13 @@ function html(parent, markup) {
 (function () {
     const s = section('Dialog in page markup');
     s.insertAdjacentHTML('beforeend',
-        '<div id="demoStaticDialog" class="stolon-dialog hidden">' +
-          '<div class="stolon-dialog-content small">' +
+        '<div id="demoStaticDialog" class="stolon-dialog stolon-hidden">' +
+          '<div class="stolon-dialog-content stolon-small">' +
             '<button type="button" class="stolon-row-btn stolon-dialog-close" title="Close" aria-label="Close"><span class="material-icons" aria-hidden="true">close</span></button>' +
             '<h2 class="stolon-modal-title">Session log</h2>' +
             '<div class="stolon-modal-body"><p style="opacity:.8">This markup was in the page already. Backdrop, the close button, and Escape close it.</p>' +
             '<input id="demoStaticInput" class="stolon-edit-input" placeholder="Focus starts here" /></div>' +
-            '<div class="stolon-modal-button-row"><button type="button" id="demoStaticDone" class="raised stolon-modal-button stolon-button primary">Done</button></div>' +
+            '<div class="stolon-modal-button-row"><button type="button" id="demoStaticDone" class="raised stolon-modal-button stolon-button stolon-primary">Done</button></div>' +
           '</div>' +
         '</div>');
     const st = document.createElement('span'); st.id = 'staticDialogStatus'; st.className = 'stolon-status-text';
@@ -449,7 +449,7 @@ function html(parent, markup) {
     });
     view.querySelector('#demoStaticDone').addEventListener('click', () => dialog.close('done'));
     const r = row(s);
-    const b = document.createElement('button'); b.className = 'raised stolon-button primary'; b.id = 'demoStaticOpen'; b.textContent = 'Open';
+    const b = document.createElement('button'); b.className = 'raised stolon-button stolon-primary'; b.id = 'demoStaticOpen'; b.textContent = 'Open';
     b.onclick = () => dialog.open();
     r.appendChild(b); r.appendChild(st);
 })();
@@ -465,8 +465,8 @@ function html(parent, markup) {
     shared.bindSecretField('demoSecretKnown', false);
     document.getElementById('demoSecretKnown').value = 'typed-value';
     const r = row(s);
-    const read = document.createElement('button'); read.className = 'raised stolon-button small'; read.id = 'demoSecretRead'; read.textContent = 'Read';
-    const clear = document.createElement('button'); clear.className = 'raised stolon-button secondary small'; clear.id = 'demoSecretClear'; clear.textContent = 'Clear stored';
+    const read = document.createElement('button'); read.className = 'raised stolon-button stolon-small'; read.id = 'demoSecretRead'; read.textContent = 'Read';
+    const clear = document.createElement('button'); clear.className = 'raised stolon-button stolon-secondary stolon-small'; clear.id = 'demoSecretClear'; clear.textContent = 'Clear stored';
     const out = document.createElement('span'); out.id = 'demoSecretOut'; out.className = 'stolon-mono';
     read.onclick = () => { out.textContent = JSON.stringify(shared.readSecretField('demoSecret')); };
     clear.onclick = () => shared.clearSecretField('demoSecret');
@@ -476,7 +476,7 @@ function html(parent, markup) {
 (function () {
     const s = section('Copy');
     const r = row(s);
-    const b = document.createElement('button'); b.className = 'raised stolon-button small'; b.id = 'demoCopy';
+    const b = document.createElement('button'); b.className = 'raised stolon-button stolon-small'; b.id = 'demoCopy';
     b.innerHTML = '<span class="material-icons">content_copy</span><span>Copy link</span>';
     b.onclick = () => shared.copyWithFeedback(b, 'https://example.test/invite/abc');
     r.appendChild(b);
@@ -494,7 +494,7 @@ function html(parent, markup) {
     const tracker = shared.createChangeTracker({ serialize: () => input.value, indicatorId: 'demoUnsaved', savedText: 'Saved' });
     input.addEventListener('input', () => tracker.check());
     const r = row(s);
-    const save = document.createElement('button'); save.className = 'raised stolon-button small'; save.textContent = 'Save (flash)';
+    const save = document.createElement('button'); save.className = 'raised stolon-button stolon-small'; save.textContent = 'Save (flash)';
     save.onclick = () => tracker.flashSaved();
     r.appendChild(save);
 })();
@@ -505,8 +505,8 @@ function html(parent, markup) {
     let n = 0;
     const poller = shared.createPoller(() => { n++; count.textContent = n + ' ticks'; }, 1000);
     const r = row(s);
-    const start = document.createElement('button'); start.className = 'raised stolon-button small'; start.textContent = 'Start';
-    const stop = document.createElement('button'); stop.className = 'raised stolon-button secondary small'; stop.textContent = 'Stop';
+    const start = document.createElement('button'); start.className = 'raised stolon-button stolon-small'; start.textContent = 'Start';
+    const stop = document.createElement('button'); stop.className = 'raised stolon-button stolon-secondary stolon-small'; stop.textContent = 'Stop';
     start.onclick = () => poller.start();
     stop.onclick = () => poller.stop();
     r.appendChild(start); r.appendChild(stop); r.appendChild(count);
@@ -520,7 +520,7 @@ function html(parent, markup) {
           '<div class="stolon-edit-line">' +
             '<div class="stolon-field"><label>Artist</label><input type="text" placeholder="Set artist" /></div>' +
             '<div class="stolon-field"><label>Album</label><input type="text" placeholder="Set album" /></div>' +
-            '<button class="raised stolon-button primary field g-push">Apply</button>' +
+            '<button class="raised stolon-button stolon-primary stolon-field g-push">Apply</button>' +
           '</div>' +
         '</div>');
 })();
@@ -573,7 +573,7 @@ function html(parent, markup) {
             '<div class="stolon-asset-item"><img class="stolon-asset-thumb" alt="" src="' + G.rect(48, 48, D.COLORS[i], 'A') + '">' +
             '<div class="stolon-asset-info"><div class="stolon-asset-name">' + n + '</div><div class="stolon-asset-ref">assets/' + n + '</div></div>' +
             '<div class="stolon-asset-actions"><button type="button" class="stolon-row-btn" title="Copy" aria-label="Copy"><span class="material-icons">content_copy</span></button>' +
-            '<button type="button" class="stolon-row-btn destructive" title="Delete" aria-label="Delete"><span class="material-icons">delete</span></button></div></div>').join('') +
+            '<button type="button" class="stolon-row-btn stolon-destructive" title="Delete" aria-label="Delete"><span class="material-icons">delete</span></button></div></div>').join('') +
         '</div>');
 })();
 
@@ -581,11 +581,11 @@ function html(parent, markup) {
     const s = section('Progress bar');
     html(s, '<div class="stolon-progress"><div class="stolon-progress-bar" style="width: 40%"></div></div>');
     const r = row(s); r.style.marginTop = '14px';
-    r.innerHTML = '<button type="button" class="raised stolon-button primary stolon-btn-progress-host"><span>Run</span><div class="stolon-progress-bar stolon-btn-progress" style="width: 55%"></div></button>' +
-        '<button type="button" class="raised stolon-button destructive stolon-btn-progress-host"><span>Delete</span><div class="stolon-progress-bar stolon-btn-progress" style="width: 55%"></div></button>' +
-        '<button type="button" class="raised stolon-button secondary stolon-btn-progress-host"><span>Scan</span><div class="stolon-progress-bar stolon-btn-progress" style="width: 55%"></div></button>';
+    r.innerHTML = '<button type="button" class="raised stolon-button stolon-primary stolon-btn-progress-host"><span>Run</span><div class="stolon-progress-bar stolon-btn-progress" style="width: 55%"></div></button>' +
+        '<button type="button" class="raised stolon-button stolon-destructive stolon-btn-progress-host"><span>Delete</span><div class="stolon-progress-bar stolon-btn-progress" style="width: 55%"></div></button>' +
+        '<button type="button" class="raised stolon-button stolon-secondary stolon-btn-progress-host"><span>Scan</span><div class="stolon-progress-bar stolon-btn-progress" style="width: 55%"></div></button>';
     const small = row(s); small.style.marginTop = 'var(--stolon-gap-narrow)';
-    small.innerHTML = '<span style="display:inline-flex;align-items:center"><button type="button" class="raised stolon-button primary small"><span>Refresh</span></button></span>';
+    small.innerHTML = '<span style="display:inline-flex;align-items:center"><button type="button" class="raised stolon-button stolon-primary stolon-small"><span>Refresh</span></button></span>';
     var pie = base.createProgressRing({ pie: true, value: 55, label: 'Refresh' });
     pie.element.classList.add('stolon-btn-progress-pie');
     small.lastChild.appendChild(pie.element);
@@ -595,7 +595,7 @@ function html(parent, markup) {
 (function () {
     const s = section('Check grid');
     html(s, '<div class="stolon-check-grid">' + ['Poster', 'Backdrop', 'Logo', 'Banner', 'Thumb', 'Disc'].map((n) =>
-        '<label class="emby-checkbox-label"><input type="checkbox" is="emby-checkbox"' + (n === 'Poster' ? ' checked' : '') + '><span class="checkboxLabel">' + n + '</span></label>').join('') + '</div>');
+        '<label class="emby-checkbox-label"><input type="checkbox" is="emby-checkbox"' + (n === 'Poster' ? ' stolon-checked' : '') + '><span class="checkboxLabel">' + n + '</span></label>').join('') + '</div>');
 })();
 
 (function () {
@@ -606,8 +606,8 @@ function html(parent, markup) {
         '<div class="stolon-indent"><div class="inputContainer"><label>Indented field</label><input type="text" value="Under a toggle"></div></div>' +
         '</div></div>');
     html(s, '<div class="stolon-reset-group">' +
-        '<div class="stolon-reset-row"><div class="stolon-reset-info"><div>Reset sync state</div><div class="fieldDescription">Clears the sync history.</div></div><button type="button" class="raised stolon-button secondary">Reset</button></div>' +
-        '<div class="stolon-reset-row stolon-reset-row-nuclear"><div class="stolon-reset-info"><div>Reset everything</div><div class="fieldDescription">Clears every setting.</div></div><button type="button" class="raised stolon-button destructive">Reset</button></div></div>');
+        '<div class="stolon-reset-row"><div class="stolon-reset-info"><div>Reset sync state</div><div class="fieldDescription">Clears the sync history.</div></div><button type="button" class="raised stolon-button stolon-secondary">Reset</button></div>' +
+        '<div class="stolon-reset-row stolon-reset-row-nuclear"><div class="stolon-reset-info"><div>Reset everything</div><div class="fieldDescription">Clears every setting.</div></div><button type="button" class="raised stolon-button stolon-destructive">Reset</button></div></div>');
 })();
 
 (function () {
@@ -619,10 +619,10 @@ function html(parent, markup) {
 
 (function () {
     const s = section('Compact cards in balanced rows');
-    const cards = (extra) => '<div class="stolon-cards compact"' + (extra ? ' style="' + extra + '"' : '') + '>' +
+    const cards = (extra) => '<div class="stolon-cards stolon-compact"' + (extra ? ' style="' + extra + '"' : '') + '>' +
         ['green', 'red', 'orange', 'purple', 'blue', 'gray', 'pink', 'teal'].map((c, i) =>
-            '<div class="stolon-card ' + c + '"><span class="stolon-card-count">' + (i + 1) + '</span><span class="stolon-card-label">' + c + '</span></div>').join('') +
-        '<div class="stolon-card hidden"></div></div>';
+            '<div class="stolon-card stolon-' + c + '"><span class="stolon-card-count">' + (i + 1) + '</span><span class="stolon-card-label">' + c + '</span></div>').join('') +
+        '<div class="stolon-card stolon-hidden"></div></div>';
     html(s, cards(''));
     s.insertAdjacentHTML('beforeend', '<p class="g-note">Eight cards in as many columns as fit, in even rows. The hidden ninth takes no place.</p>');
     html(s, cards('--stolon-balance-max: 4'));
@@ -691,7 +691,7 @@ function html(parent, markup) {
     html(r, '<span id="menuStatus" class="stolon-status-text"></span>');
     const tipped = base.setTooltip(document.createElement('button'), 'Shown on hover and focus.');
     tipped.type = 'button';
-    tipped.className = 'raised stolon-button small';
+    tipped.className = 'raised stolon-button stolon-small';
     tipped.textContent = 'Hover or focus me';
     r.appendChild(tipped);
     base.bindTooltips(s);
@@ -704,21 +704,21 @@ function html(parent, markup) {
     body.appendChild(base.createHelpHint({ text: 'A longer explanation that has to stay on the screen at 375 pixels wide, even from the right edge of a panel.' }).element);
     body.appendChild(base.createOverflowMenu({ items: [{ label: 'Edit', value: 'edit' }, { label: 'Remove', value: 'remove', destructive: true }] }).element);
     const tip = base.setTooltip(document.createElement('button'), 'Tooltip inside a panel.');
-    tip.type = 'button'; tip.className = 'raised stolon-button small'; tip.textContent = 'Tip';
+    tip.type = 'button'; tip.className = 'raised stolon-button stolon-small'; tip.textContent = 'Tip';
     body.appendChild(tip);
     const inDialog = document.createElement('button');
-    inDialog.type = 'button'; inDialog.id = 'demoPopupDialog'; inDialog.className = 'raised stolon-button secondary'; inDialog.textContent = 'Popups in a dialog';
+    inDialog.type = 'button'; inDialog.id = 'demoPopupDialog'; inDialog.className = 'raised stolon-button stolon-secondary'; inDialog.textContent = 'Popups in a dialog';
     inDialog.onclick = () => {
         const wrap = document.createElement('div');
         wrap.className = 'g-row';
         wrap.appendChild(base.createOverflowMenu({ items: [{ label: 'Edit', value: 'edit' }, { label: 'Remove', value: 'remove', destructive: true }] }).element);
         wrap.appendChild(base.createHelpHint({ text: 'Escape closes this bubble first, then the dialog.' }).element);
         const t = base.setTooltip(document.createElement('button'), 'Tooltip above the dialog.');
-        t.type = 'button'; t.className = 'raised stolon-button small'; t.textContent = 'Tip';
+        t.type = 'button'; t.className = 'raised stolon-button stolon-small'; t.textContent = 'Tip';
         wrap.appendChild(t);
         wrap.appendChild(base.createSearchField({ placeholder: 'alice' }).element);
         base.bindTooltips(wrap);
-        base.openDialog({ title: 'Popups', body: wrap, buttons: [{ text: 'Done', className: 'stolon-button primary' }] });
+        base.openDialog({ title: 'Popups', body: wrap, buttons: [{ text: 'Done', className: 'stolon-button stolon-primary' }] });
     };
     s.appendChild(inDialog);
 })();
@@ -750,7 +750,7 @@ function html(parent, markup) {
     ['error', 'warn', 'success', 'info', ''].forEach((state) => {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'raised stolon-button small';
+        b.className = 'raised stolon-button stolon-small';
         b.textContent = state || 'clear';
         b.addEventListener('click', () => msg.set(state, 'This is a ' + (state || 'cleared') + ' message.'));
         r.appendChild(b);
@@ -800,7 +800,7 @@ function html(parent, markup) {
     [['info', 'Heads up.'], ['success', 'Saved.'], ['warn', 'Disk is almost full.'], ['error', 'Could not connect.']].forEach(([k, m]) => {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'raised stolon-button small';
+        b.className = 'raised stolon-button stolon-small';
         b.textContent = k;
         b.addEventListener('click', () => toaster[k](m));
         r.appendChild(b);
@@ -837,7 +837,7 @@ function html(parent, markup) {
     r.style.marginTop = '10px';
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'raised stolon-button small';
+    b.className = 'raised stolon-button stolon-small';
     b.textContent = 'Append Lines';
     let n = 0;
     b.addEventListener('click', () => { for (let i = 0; i < 5; i++) log.append({ text: 'Line ' + (++n), level: i === 4 ? 'warn' : 'info' }); });
@@ -858,7 +858,7 @@ function html(parent, markup) {
     [['Back', () => stepper.previous()], ['Next', () => stepper.next()]].forEach(([t, f]) => {
         const b = document.createElement('button');
         b.type = 'button';
-        b.className = 'raised stolon-button small';
+        b.className = 'raised stolon-button stolon-small';
         b.textContent = t;
         b.addEventListener('click', f);
         r.appendChild(b);
@@ -1168,7 +1168,7 @@ function html(parent, markup) {
         actions: [{ id: 'retry', label: 'Retry Errors', icon: 'refresh', onClick: () => setState(all.filter((i) => i.state === 'Errored').map((i) => i.id), 'Queued'), visible: () => all.some((i) => i.state === 'Errored') }],
         limit: 200,
         limitText: 'Showing the latest {shown} of {total}. Filter by state or server to see more.',
-        onOpen: (item) => base.openDialog({ title: item.name, body: '<p>' + base.escapeHtml(item.type + ', ' + item.state + ', ' + (detailOf(item) || 'no detail')) + '</p>', buttons: [{ text: 'Done', className: 'stolon-button primary' }] }),
+        onOpen: (item) => base.openDialog({ title: item.name, body: '<p>' + base.escapeHtml(item.type + ', ' + item.state + ', ' + (detailOf(item) || 'no detail')) + '</p>', buttons: [{ text: 'Done', className: 'stolon-button stolon-primary' }] }),
         height: 420
     });
     // The servers arrive after the first load, as Server Sync's peer pills do.

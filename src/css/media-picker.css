@@ -1,5 +1,5 @@
 /* Library search over a list of picked media rows, built by createMediaPicker */
-/* Example: <div class="stolon-media-picker"><div class="stolon-combo"><div class="stolon-search"></div><div class="stolon-combo-dropdown" hidden></div></div><div class="stolon-media-picker-items stolon-list rows" role="list"></div><div class="stolon-list-empty outside stolon-media-picker-empty">No items selected.</div></div> */
+/* Example: <div class="stolon-media-picker"><div class="stolon-combo"><div class="stolon-search"></div><div class="stolon-combo-dropdown" hidden></div></div><div class="stolon-media-picker-items stolon-list stolon-rows" role="list"></div><div class="stolon-list-empty stolon-outside stolon-media-picker-empty">No items selected.</div></div> */
 .stolon-media-picker {
     display: flex;
     flex-direction: column;
@@ -24,9 +24,9 @@
     color: inherit;
 }
 .stolon-media-picker-option .stolon-media-card-thumb { width: calc(var(--stolon-size-large) * 2 / 3); height: var(--stolon-size-large); }
-.stolon-media-picker-option .stolon-media-card-thumb.wide { width: calc(var(--stolon-size-medium) * 16 / 9); height: var(--stolon-size-medium); }
-.stolon-media-picker-option .stolon-media-card-thumb.square,
-.stolon-media-picker-option .stolon-media-card-thumb.round { width: var(--stolon-size-medium); height: var(--stolon-size-medium); }
+.stolon-media-picker-option .stolon-media-card-thumb.stolon-wide { width: calc(var(--stolon-size-medium) * 16 / 9); height: var(--stolon-size-medium); }
+.stolon-media-picker-option .stolon-media-card-thumb.stolon-square,
+.stolon-media-picker-option .stolon-media-card-thumb.stolon-round { width: var(--stolon-size-medium); height: var(--stolon-size-medium); }
 
 @media (max-width: 600px) {
     .stolon-media-picker-option .stolon-media-card-row .stolon-media-card-suffix { display: inline; font-size: inherit; }

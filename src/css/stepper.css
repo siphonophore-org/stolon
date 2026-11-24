@@ -1,5 +1,5 @@
 /* Row of steps for a flow of stages, which becomes a column on a narrow screen */
-/* Example: <nav class="stolon-stepper" aria-label="Progress"><ol class="stolon-stepper-list"><li class="stolon-stepper-step current"><div class="stolon-stepper-control"><span class="stolon-stepper-number">1</span><span class="stolon-stepper-text"><span class="stolon-stepper-label">Connect</span></span></div></li></ol></nav> */
+/* Example: <nav class="stolon-stepper" aria-label="Progress"><ol class="stolon-stepper-list"><li class="stolon-stepper-step stolon-current"><div class="stolon-stepper-control"><span class="stolon-stepper-number">1</span><span class="stolon-stepper-text"><span class="stolon-stepper-label">Connect</span></span></div></li></ol></nav> */
 .stolon-stepper-list {
     list-style: none;
     margin: 0;
@@ -16,8 +16,8 @@
     width: calc(100% - 28px);
     border-top: 2px solid var(--stolon-border);
 }
-.stolon-stepper-step.completed + .stolon-stepper-step::before,
-.stolon-stepper-step.completed + .stolon-stepper-step.current::before { border-top-color: var(--stolon-accent); }
+.stolon-stepper-step.stolon-completed + .stolon-stepper-step::before,
+.stolon-stepper-step.stolon-completed + .stolon-stepper-step.stolon-current::before { border-top-color: var(--stolon-accent); }
 
 /* One step, as a div or as a button when it can be chosen */
 /* Example: <button type="button" class="stolon-stepper-control"><span class="stolon-stepper-number">1</span></button> */
@@ -56,13 +56,13 @@ button.stolon-stepper-control:focus-visible { outline: 2px solid var(--stolon-ac
     font-weight: 600;
 }
 .stolon-stepper-number .material-icons { font-size: var(--stolon-icon-small); }
-.stolon-stepper-step.current .stolon-stepper-number { background: var(--stolon-accent); border-color: var(--stolon-accent); color: var(--stolon-on-accent); }
-.stolon-stepper-step.completed .stolon-stepper-number { background: var(--stolon-green-fg); border-color: var(--stolon-green-fg); color: var(--stolon-on-warning); }
-.stolon-stepper-step.attention .stolon-stepper-number { background: var(--stolon-warning); border-color: var(--stolon-warning); color: var(--stolon-on-warning); }
-.stolon-stepper-step.optional .stolon-stepper-number { border-style: dashed; }
+.stolon-stepper-step.stolon-current .stolon-stepper-number { background: var(--stolon-accent); border-color: var(--stolon-accent); color: var(--stolon-on-accent); }
+.stolon-stepper-step.stolon-completed .stolon-stepper-number { background: var(--stolon-green-fg); border-color: var(--stolon-green-fg); color: var(--stolon-on-warning); }
+.stolon-stepper-step.stolon-attention .stolon-stepper-number { background: var(--stolon-warning); border-color: var(--stolon-warning); color: var(--stolon-on-warning); }
+.stolon-stepper-step.stolon-optional .stolon-stepper-number { border-style: dashed; }
 .stolon-stepper-text { display: flex; flex-direction: column; min-width: 0; }
 .stolon-stepper-label { font-weight: 600; overflow-wrap: anywhere; }
-.stolon-stepper-step.upcoming .stolon-stepper-label { opacity: 0.65; font-weight: normal; }
+.stolon-stepper-step.stolon-upcoming .stolon-stepper-label { opacity: 0.65; font-weight: normal; }
 .stolon-stepper-description { font-size: 0.85em; opacity: 0.7; }
 
 @media (max-width: 600px) {
@@ -79,16 +79,16 @@ button.stolon-stepper-control:focus-visible { outline: 2px solid var(--stolon-ac
         border-top: 0;
         border-left: 2px solid var(--stolon-border);
     }
-    .stolon-stepper-step.completed + .stolon-stepper-step::before { border-left-color: var(--stolon-accent); }
+    .stolon-stepper-step.stolon-completed + .stolon-stepper-step::before { border-left-color: var(--stolon-accent); }
 }
 
 /* A stepper drawn as a bar of one segment per step, in each step's color, for a summary of progress. Its labels are tooltips and hidden text */
-/* Example: <nav class="stolon-stepper segments"><ol class="stolon-stepper-list"><li class="stolon-stepper-step completed"><button type="button" class="stolon-stepper-control" title="Connect"><span class="stolon-stepper-segment"></span></button></li></ol></nav> */
-.stolon-stepper.segments .stolon-stepper-list,
-.stolon-stepper.segments .stolon-stepper-control { flex-direction: row; }
-.stolon-stepper.segments .stolon-stepper-list { gap: calc(var(--stolon-gap-narrow) / 2); }
-.stolon-stepper.segments .stolon-stepper-step::before { content: none; }
-.stolon-stepper.segments .stolon-stepper-control {
+/* Example: <nav class="stolon-stepper stolon-segments"><ol class="stolon-stepper-list"><li class="stolon-stepper-step stolon-completed"><button type="button" class="stolon-stepper-control" title="Connect"><span class="stolon-stepper-segment"></span></button></li></ol></nav> */
+.stolon-stepper.stolon-segments .stolon-stepper-list,
+.stolon-stepper.stolon-segments .stolon-stepper-control { flex-direction: row; }
+.stolon-stepper.stolon-segments .stolon-stepper-list { gap: calc(var(--stolon-gap-narrow) / 2); }
+.stolon-stepper.stolon-segments .stolon-stepper-step::before { content: none; }
+.stolon-stepper.stolon-segments .stolon-stepper-control {
     align-items: center;
     height: var(--stolon-size-small);
     padding: 0;
@@ -99,7 +99,7 @@ button.stolon-stepper-control:focus-visible { outline: 2px solid var(--stolon-ac
     border-radius: var(--stolon-radius-round);
     background: var(--stolon-wash-strong);
 }
-.stolon-stepper-step.completed .stolon-stepper-segment { background: var(--stolon-green-fg); }
-.stolon-stepper-step.attention .stolon-stepper-segment { background: var(--stolon-warning); }
-.stolon-stepper-step.current .stolon-stepper-segment { background: var(--stolon-accent); }
+.stolon-stepper-step.stolon-completed .stolon-stepper-segment { background: var(--stolon-green-fg); }
+.stolon-stepper-step.stolon-attention .stolon-stepper-segment { background: var(--stolon-warning); }
+.stolon-stepper-step.stolon-current .stolon-stepper-segment { background: var(--stolon-accent); }
 button.stolon-stepper-control:hover .stolon-stepper-segment { opacity: 0.8; }

@@ -55,7 +55,7 @@ test('the open state turns the chevron the same way in every component', functio
     var collapsible = readFileSync(join(root, 'src/css/collapsible-section.css'), 'utf8');
     var card = readFileSync(join(root, 'src/js/sortable-card-list.ts'), 'utf8');
     assert.match(collapsible, /\.stolon-collapsible-icon \{[^}]*transform: rotate\(180deg\)/);
-    assert.match(collapsible, /\.collapsed \.stolon-collapsible-icon,\s*\[aria-expanded="false"\] > \.stolon-collapsible-icon \{\s*transform: none;/);
+    assert.match(collapsible, /\.stolon-collapsed \.stolon-collapsible-icon,\s*\[aria-expanded="false"\] > \.stolon-collapsible-icon \{\s*transform: none;/);
     assert.match(card, /class="stolon-collapsible-icon stolon-card-item-chevron material-icons"/);
 });
 
@@ -63,7 +63,7 @@ test('every chevron takes one of the two chevron sizes', function () {
     var rules = [
         ['src/css/collapsible-section.css', /\.stolon-collapsible-icon \{[^}]*font-size: var\(--stolon-chevron-primary\)/],
         ['src/css/form-fields.css', /background-size: calc\(var\(--stolon-chevron-primary\) \/ 4\)/],
-        ['src/css/row-button.css', /\.stolon-row-btn\.move \.material-icons \{ font-size: var\(--stolon-chevron-secondary\)/],
+        ['src/css/row-button.css', /\.stolon-row-btn\.stolon-move \.material-icons \{ font-size: var\(--stolon-chevron-secondary\)/],
         ['src/css/breadcrumbs.css', /\.stolon-breadcrumb > \.material-icons \{ font-size: var\(--stolon-chevron-secondary\)/]
     ];
     rules.forEach(function (rule) {

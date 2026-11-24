@@ -67,7 +67,7 @@ export function createDefinitionList(options?: DefinitionListOptions): Definitio
     var items: DefinitionItem[] = [];
     var columns = options.layout === 'columns';
     var cleanups: Array<() => void> = [];
-    var root = make('dl', 'stolon-defs' + (columns ? ' columns' : ''));
+    var root = make('dl', 'stolon-defs' + (columns ? ' stolon-columns' : ''));
 
     // Draws a value that is a node or a DefinitionValue into its cell.
     function rich(dd: HTMLElement, value: DefinitionValue): void {
@@ -105,7 +105,7 @@ export function createDefinitionList(options?: DefinitionListOptions): Definitio
             var arrow = icon('arrow_forward');
             arrow.classList.add('stolon-defs-arrow');
             el.appendChild(arrow);
-            el.classList.add('has-arrow');
+            el.classList.add('stolon-has-arrow');
         }
         return el;
     }
@@ -121,7 +121,7 @@ export function createDefinitionList(options?: DefinitionListOptions): Definitio
         var width = root.clientWidth || 0;
         var style = typeof getComputedStyle === 'function' ? getComputedStyle(root) : null;
         var gap = parseFloat((style && (style.columnGap || style.gap)) || '') || 16;
-        root.classList.toggle('compact', columns && !!width && width < 2 * MIN_COLUMN + gap);
+        root.classList.toggle('stolon-compact', columns && !!width && width < 2 * MIN_COLUMN + gap);
     }
 
     var rows = createList<DefinitionItem>({

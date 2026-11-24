@@ -124,7 +124,7 @@ A table that pairs each source with one target picked from a select, such as rem
 | `stolon-mapping-table` | Static table that pairs each source row with a target select, with a sentence in place of the table while there is no source |
 | `stolon-mapping-table-grid` | Source cell with its name and an optional dimmed description under it |
 | `stolon-mapping-table-target` | Target cell whose select fills it |
-| `stolon-mapping-table-grid.extended` | A table with extra columns: a toggle first, a cell per extra field, and a remove button last. A row switched off dims its source and target |
+| `stolon-mapping-table-grid.stolon-extended` | A table with extra columns: a toggle first, a cell per extra field, and a remove button last. A row switched off dims its source and target |
 
 <!-- reference:end -->
 

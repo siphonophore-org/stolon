@@ -172,7 +172,7 @@ export function buildControl(field: FieldSpec, value: unknown, change: () => voi
     var clearButton: HTMLButtonElement | null = null;
     if (type === 'secret' && field.clearable) {
         clearButton = iconButton('stolon-row-btn stolon-control-clear', 'backspace', fillLabel(field.clearText || stolonText('Stolon.ClearValue'), 'value', label));
-        holder.classList.add('clearable');
+        holder.classList.add('stolon-clearable');
         holder.appendChild(clearButton);
     }
 
@@ -337,7 +337,7 @@ export function createFieldGroup(fields: FieldSpec[], item: Record<string, any> 
             if (opts.onChange) opts.onChange(field.key);
         }, opts.name ? opts.name(field) : field.label);
         var extra = opts.cellClass && has(opts.cellClass, field.key) ? ' ' + opts.cellClass[field.key] : '';
-        var element = make('div', 'stolon-field-cell' + (field.type === 'toggle' ? ' toggle' : '') + extra, { 'data-key': field.key });
+        var element = make('div', 'stolon-field-cell' + (field.type === 'toggle' ? ' stolon-toggle' : '') + extra, { 'data-key': field.key });
         var label = make('label', 'stolon-field-cell-label', null, field.label);
         if (control.input) {
             if (!control.input.id) control.input.id = nextId('field');
@@ -408,7 +408,7 @@ export function createFieldGroup(fields: FieldSpec[], item: Record<string, any> 
         if (offKeys[cell.field.key]) {
             if (cell.binding) cell.binding.clear();
             else cell.message.set('', '');
-            cell.element.classList.remove('invalid');
+            cell.element.classList.remove('stolon-invalid');
             return true;
         }
         var shown = !!(opts.eager || cell.touched);
@@ -421,7 +421,7 @@ export function createFieldGroup(fields: FieldSpec[], item: Record<string, any> 
             ok = !problem;
             cell.message.set(problem && shown ? 'error' : '', problem);
         }
-        cell.element.classList.toggle('invalid', !ok && shown);
+        cell.element.classList.toggle('stolon-invalid', !ok && shown);
         return ok;
     }
 
@@ -459,7 +459,7 @@ export function createFieldGroup(fields: FieldSpec[], item: Record<string, any> 
             if (cell) bind(cell);
         },
         firstInvalid: function () {
-            var bad = cells.filter(function (c) { return c.element.classList.contains('invalid'); })[0];
+            var bad = cells.filter(function (c) { return c.element.classList.contains('stolon-invalid'); })[0];
             return bad ? bad.control.input : null;
         },
         focus: function () {

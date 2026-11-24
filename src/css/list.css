@@ -1,5 +1,5 @@
 /* A column of items, bordered rows by default, that may scroll inside a fixed or filling height */
-/* Example: <div class="stolon-list rows" role="list"><div class="stolon-list-item" role="listitem">Item</div></div> */
+/* Example: <div class="stolon-list stolon-rows" role="list"><div class="stolon-list-item" role="listitem">Item</div></div> */
 .stolon-list {
     display: flex;
     flex-direction: column;
@@ -9,42 +9,42 @@
 .stolon-list[hidden] { display: none; }
 
 /* Rows drawn as one bordered block with a divider between items */
-/* Example: <div class="stolon-list rows">...</div> */
-.stolon-list.rows {
+/* Example: <div class="stolon-list stolon-rows">...</div> */
+.stolon-list.stolon-rows {
     border: 1px solid var(--stolon-border);
     border-radius: var(--stolon-radius-large);
 }
 
-.stolon-list.rows > .stolon-list-item + .stolon-list-item { border-top: 1px solid var(--stolon-border); }
+.stolon-list.stolon-rows > .stolon-list-item + .stolon-list-item { border-top: 1px solid var(--stolon-border); }
 
 /* Tiles in as many columns as fit, each at least --stolon-list-column wide */
-/* Example: <div class="stolon-list grid">...</div> */
-.stolon-list.grid {
+/* Example: <div class="stolon-list stolon-grid">...</div> */
+.stolon-list.stolon-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--stolon-list-column, 140px), 1fr));
     gap: var(--stolon-gap-wide);
     align-content: start;
 }
 
-.stolon-list.grid > .stolon-list-empty,
-.stolon-list.grid > .stolon-list-loading,
-.stolon-list.grid > .stolon-list-sentinel { grid-column: 1 / -1; }
+.stolon-list.stolon-grid > .stolon-list-empty,
+.stolon-list.stolon-grid > .stolon-list-loading,
+.stolon-list.stolon-grid > .stolon-list-sentinel { grid-column: 1 / -1; }
 
 /* A list that scrolls inside itself rather than growing the page */
-/* Example: <div class="stolon-list rows scrolls fixed">...</div> */
-.stolon-list.scrolls {
+/* Example: <div class="stolon-list stolon-rows stolon-scrolls stolon-fixed">...</div> */
+.stolon-list.stolon-scrolls {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
 }
 
-.stolon-list.fixed { height: var(--stolon-list-height, 320px); }
+.stolon-list.stolon-fixed { height: var(--stolon-list-height, 320px); }
 
-.stolon-list.capped { max-height: var(--stolon-list-max, 320px); }
+.stolon-list.stolon-capped { max-height: var(--stolon-list-max, 320px); }
 
 /* A list that reaches from its top to the bottom of the window, and flexes inside a bounded column */
-/* Example: <div class="stolon-list rows scrolls fill">...</div> */
-.stolon-list.fill {
+/* Example: <div class="stolon-list stolon-rows stolon-scrolls stolon-fill">...</div> */
+.stolon-list.stolon-fill {
     flex: 1 1 auto;
     height: 320px;
     height: calc(100vh - var(--stolon-list-top, 0px) - var(--stolon-list-gap, 16px));
@@ -52,37 +52,37 @@
 }
 
 @supports (height: 100dvh) {
-    .stolon-list.fill { height: calc(100dvh - var(--stolon-list-top, 0px) - var(--stolon-list-gap, 16px)); }
+    .stolon-list.stolon-fill { height: calc(100dvh - var(--stolon-list-top, 0px) - var(--stolon-list-gap, 16px)); }
 }
 
 .stolon-list-item { min-width: 0; }
 
 /* An item that opens or is picked by a click, with the shared row hover, and an accent ring for a keyboard user */
-/* Example: <div class="stolon-list rows"><div class="stolon-list-item openable" tabindex="0">Item</div></div> */
-.stolon-list-item.openable,
+/* Example: <div class="stolon-list stolon-rows"><div class="stolon-list-item stolon-openable" tabindex="0">Item</div></div> */
+.stolon-list-item.stolon-openable,
 .stolon-list-item[aria-selected] { cursor: pointer; }
-.stolon-list-item.openable:hover,
+.stolon-list-item.stolon-openable:hover,
 .stolon-list-item[aria-selected]:hover,
 .stolon-table-row:hover { background: var(--stolon-wash); }
-.stolon-list-item.openable:focus,
+.stolon-list-item.stolon-openable:focus,
 .stolon-list-item[aria-selected]:focus { outline: none; }
-.stolon-list-item.openable:focus-visible,
+.stolon-list-item.stolon-openable:focus-visible,
 .stolon-list-item[aria-selected]:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
 
 /* A selected item or row, in the accent wash with a leading accent bar, the one selection look every list shares. An open record card keeps the accent on its outline and head only, so its body stays on the plain surface */
-/* Example: <div class="stolon-list rows"><div class="stolon-list-item selected">Item</div></div> */
-.stolon-list-item.selected:not(.stolon-card-item),
-.stolon-table-row.selected,
-.stolon-data-row.selected {
+/* Example: <div class="stolon-list stolon-rows"><div class="stolon-list-item stolon-selected">Item</div></div> */
+.stolon-list-item.stolon-selected:not(.stolon-card-item),
+.stolon-table-row.stolon-selected,
+.stolon-data-row.stolon-selected {
     background: var(--stolon-accent-wash) !important;
     box-shadow: inset 3px 0 0 var(--stolon-accent);
 }
 
 /* A text item, padded the way a component in a row pads itself */
-/* Example: <div class="stolon-list-item text">Item</div> */
-.stolon-list-item.text { padding: var(--stolon-pad-small) var(--stolon-pad-medium); }
+/* Example: <div class="stolon-list-item stolon-text">Item</div> */
+.stolon-list-item.stolon-text { padding: var(--stolon-pad-small) var(--stolon-pad-medium); }
 
-.stolon-list.plain > .stolon-list-item.text { padding: calc(var(--stolon-gap-narrow) / 2) 0; }
+.stolon-list.stolon-plain > .stolon-list-item.stolon-text { padding: calc(var(--stolon-gap-narrow) / 2) 0; }
 
 /* The sentence a list shows while it holds no items */
 /* Example: <div class="stolon-list-empty">Nothing to show.</div> */
@@ -99,12 +99,12 @@
 .stolon-empty-inline,
 .stolon-empty { opacity: 0.7; }
 
-.stolon-list.plain > .stolon-list-empty,
-.stolon-list.plain > .stolon-list-loading { padding: var(--stolon-gap-narrow) 0; text-align: left; }
+.stolon-list.stolon-plain > .stolon-list-empty,
+.stolon-list.stolon-plain > .stolon-list-loading { padding: var(--stolon-gap-narrow) 0; text-align: left; }
 
 /* The empty sentence of a ul or ol list, which sits after the list rather than in it */
-/* Example: <ul class="stolon-list"></ul><div class="stolon-list-empty outside">Nothing added yet.</div> */
-.stolon-list-empty.outside { padding: 0; text-align: left; font-size: 0.9em; }
+/* Example: <ul class="stolon-list"></ul><div class="stolon-list-empty stolon-outside">Nothing added yet.</div> */
+.stolon-list-empty.stolon-outside { padding: 0; text-align: left; font-size: 0.9em; }
 
 .stolon-list-sentinel { height: 1px; flex: 0 0 auto; }
 

@@ -10,11 +10,11 @@ namespace Siphonophore.Stolon.Tests;
 /// <summary>Verifies that the kit CSS shares no class with the status template, or with a bare class Jellyfin's dashboard styles on every page.</summary>
 public class CssCollisionTests
 {
-    // The hidden class is shared on purpose and is the same rule in both, so it never conflicts.
-    private static readonly HashSet<string> Allowed = new(StringComparer.Ordinal) { "hidden" };
+    // The stolon-hidden class is shared on purpose and is the same rule in both, so it never conflicts.
+    private static readonly HashSet<string> Allowed = new(StringComparer.Ordinal) { "stolon-hidden" };
 
     /// <summary>
-    /// No class defined by the status template is also defined by the kit CSS, other than hidden.
+    /// No class defined by the status template is also defined by the kit CSS, other than stolon-hidden.
     /// True: a page that links the kit CSS beside a status card keeps the card's look.
     /// False: the kit rules would restyle the card.
     /// </summary>

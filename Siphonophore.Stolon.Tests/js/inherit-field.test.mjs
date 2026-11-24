@@ -25,7 +25,7 @@ test('while inheriting, the field shows the inherited value, dimmed and disabled
     dom.document.body.appendChild(host);
     var ui = createInheritField({ field: field, inheritedValue: 'fr', value: { inherit: true, value: 'en' } });
     assert.equal(host.children[0], ui.element);
-    assert.ok(ui.element.classList.contains('inheriting'));
+    assert.ok(ui.element.classList.contains('stolon-inheriting'));
     assert.equal(field.disabled, true);
     assert.equal(field.value, 'fr');
     assert.equal(pills(ui)[0].textContent, 'Inherit (French)');

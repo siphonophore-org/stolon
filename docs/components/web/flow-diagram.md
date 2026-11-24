@@ -31,7 +31,7 @@ Parts: `stolon-flow-diagram-arrow`, `stolon-flow-diagram-hub`, `stolon-flow-diag
 
 ## States and Modifiers
 
-* It is drawn at its own size when it fits its box, never shrunk. When it does not fit, it is drawn again as a stack at full size, with the `stacked` modifier. The hub sits on top and each lane is a list under it, each on its own upright line, so no line crosses another and every label stays readable. It switches back as the box widens.
+* It is drawn at its own size when it fits its box, never shrunk. When it does not fit, it is drawn again as a stack at full size, with the `stolon-stacked` modifier. The hub sits on top and each lane is a list under it, each on its own upright line, so no line crosses another and every label stays readable. It switches back as the box widens.
 * A lane is `{ key, side, direction, color, label, items }`. `side` is `'left'`, `'right'`, or `'below'`, and each side draws its first lane only. An empty lane is not drawn, and with no lanes the hub stands alone.
 * `direction` sets the arrows. `'in'` points at the hub, `'out'` points at each pill, and `'both'` does both.
 * `color` is a status color name or a hex code, gray by default, and colors the lane's lines and arrows. A hex code sets `--stolon-custom` on the lane, as `applyColor` does.

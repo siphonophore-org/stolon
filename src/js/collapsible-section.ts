@@ -12,24 +12,24 @@ export interface CollapsibleBadge {
 }
 
 /**
- * Opens or closes one collapsible, the toggle every collapsible in Stolon shares. The header gets the collapsed class and
- * aria-expanded, and the content gets the collapsed class, or the hidden attribute with byHidden.
+ * Opens or closes one collapsible, the toggle every collapsible in Stolon shares. The header gets the stolon-collapsed class and
+ * aria-expanded, and the content gets the stolon-collapsed class, or the hidden attribute with byHidden.
  * Internal to the web components.
  *
  * @param header the control that toggles the content
  * @param content the element it shows and hides [optional]
  * @param collapsed true to close it
- * @param byHidden hide the content with the hidden attribute rather than the collapsed class [optional]
+ * @param byHidden hide the content with the hidden attribute rather than the stolon-collapsed class [optional]
  */
 export function setCollapsed(header: Element, content: HTMLElement | null, collapsed: boolean, byHidden?: boolean): void {
-    header.classList.toggle('collapsed', collapsed);
+    header.classList.toggle('stolon-collapsed', collapsed);
     header.setAttribute('aria-expanded', String(!collapsed));
     var bar = header.parentNode as HTMLElement | null;
     // A header with an aside sits in a bar that holds the chevron, so the bar turns it.
-    if (bar && bar.classList && bar.classList.contains('stolon-collapsible-bar')) bar.classList.toggle('collapsed', collapsed);
+    if (bar && bar.classList && bar.classList.contains('stolon-collapsible-bar')) bar.classList.toggle('stolon-collapsed', collapsed);
     if (!content) return;
     if (byHidden) content.hidden = collapsed;
-    else content.classList.toggle('collapsed', collapsed);
+    else content.classList.toggle('stolon-collapsed', collapsed);
 }
 
 // The first child of an element that carries a class.
@@ -65,7 +65,7 @@ export function initCollapsibles(view: ParentNode): void {
         if (header.dataset.stolonBound) return;
         // A fixed panel's header is a plain heading with nothing to toggle.
         var owner = header.parentNode as HTMLElement | null;
-        if (owner && owner.classList && owner.classList.contains('fixed')) return;
+        if (owner && owner.classList && owner.classList.contains('stolon-fixed')) return;
         header.dataset.stolonBound = '1';
         var bar = owner && owner.classList && owner.classList.contains('stolon-collapsible-bar') ? owner : null;
         if (bar) bindBar(bar, header);
@@ -76,11 +76,11 @@ export function initCollapsibles(view: ParentNode): void {
             icon.setAttribute('aria-hidden', 'true');
         }
         if (header.dataset.target) header.setAttribute('aria-controls', header.dataset.target);
-        header.setAttribute('aria-expanded', String(!header.classList.contains('collapsed')));
+        header.setAttribute('aria-expanded', String(!header.classList.contains('stolon-collapsed')));
         header.addEventListener('click', function () {
             var content = view.querySelector<HTMLElement>('#' + header.dataset.target);
             if (!content) return;
-            setCollapsed(header, content, !header.classList.contains('collapsed'));
+            setCollapsed(header, content, !header.classList.contains('stolon-collapsed'));
         });
     });
 }
@@ -160,7 +160,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
     options = options || {};
     var cleanups: Array<() => void> = [];
     var fixed = options.collapsible === false;
-    var root = make('div', 'stolon-collapsible-section' + (options.numbered ? ' numbered' : '') + (fixed ? ' fixed stolon-panel' : '') + (options.className ? ' ' + options.className : ''));
+    var root = make('div', 'stolon-collapsible-section' + (options.numbered ? ' stolon-numbered' : '') + (fixed ? ' stolon-fixed stolon-panel' : '') + (options.className ? ' ' + options.className : ''));
     var body = make('div', 'stolon-collapsible-content');
     body.id = nextId('collapsible');
     var header = (fixed ? make('div', 'stolon-collapsible-header') : make('button', 'stolon-collapsible-header', { type: 'button', 'aria-controls': body.id })) as HTMLButtonElement;
@@ -213,7 +213,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
     // A narrow section moves its aside under the title, chosen by its own width since older engines have no container queries.
     function measure(): void {
         var width = root.clientWidth || 0;
-        root.classList.toggle('compact', !!width && width < COMPACT_WIDTH);
+        root.classList.toggle('stolon-compact', !!width && width < COMPACT_WIDTH);
     }
 
     function watch(): void {
@@ -242,7 +242,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
                 header.insertBefore(aside, heading!.nextSibling);
             } else {
                 // A button cannot hold a control, so a collapsible header with an aside sits in a bar beside it, which holds the chevron.
-                bar = make('div', 'stolon-collapsible-bar' + (header.classList.contains('collapsed') ? ' collapsed' : ''));
+                bar = make('div', 'stolon-collapsible-bar' + (header.classList.contains('stolon-collapsed') ? ' stolon-collapsed' : ''));
                 root.insertBefore(bar, header);
                 bar.appendChild(header);
                 bar.appendChild(aside);
@@ -262,7 +262,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
         tile.appendChild(icon(options.icon));
         if (options.iconColor) applyColor(tile, options.iconColor);
         header.insertBefore(tile, heading);
-        root.classList.add('has-tile');
+        root.classList.add('stolon-has-tile');
     }
     if (fixed) ensureHeading();
     setSubtitle(options.subtitle);
@@ -271,7 +271,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
     if (!fixed) {
         setCollapsed(header, body, !!options.collapsed);
         cleanups.push(listen(header, 'click', function (): void {
-            var open: boolean = header.classList.contains('collapsed');
+            var open: boolean = header.classList.contains('stolon-collapsed');
             setCollapsed(header, body, !open);
             if (options!.onToggle) options!.onToggle(open);
         }));
@@ -281,7 +281,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
         element: root,
         header: header,
         content: body,
-        getValue: function (): boolean { return !header.classList.contains('collapsed'); },
+        getValue: function (): boolean { return !header.classList.contains('stolon-collapsed'); },
         setValue: function (open: boolean): void { if (!fixed) setCollapsed(header, body, !open); },
         setTitle: function (text: string): void {
             title.textContent = text || '';

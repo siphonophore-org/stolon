@@ -15,15 +15,15 @@ Buttons are Jellyfin's `emby-button` with the `raised` class and the `stolon-but
 ## Usage
 
 ```html
-<button is="emby-button" type="button" class="raised stolon-button primary"><span>Save</span></button>
-<button is="emby-button" type="button" class="raised stolon-button destructive small"><span>Delete</span></button>
-<button is="emby-button" type="button" class="raised stolon-button secondary"><span>Cancel</span></button>
-<button is="emby-button" type="button" class="raised stolon-button primary">
+<button is="emby-button" type="button" class="raised stolon-button stolon-primary"><span>Save</span></button>
+<button is="emby-button" type="button" class="raised stolon-button stolon-destructive stolon-small"><span>Delete</span></button>
+<button is="emby-button" type="button" class="raised stolon-button stolon-secondary"><span>Cancel</span></button>
+<button is="emby-button" type="button" class="raised stolon-button stolon-primary">
     <span class="material-icons" aria-hidden="true">add</span><span>Add Server</span>
 </button>
 ```
 
-Classes: `stolon-button` with `primary`, `secondary`, `destructive`, or `custom`, and `small`, `large`, `fill`, or `field`. `stolon-button-row` holds a row of them.
+Classes: `stolon-button` with `stolon-primary`, `stolon-secondary`, `stolon-destructive`, or `stolon-custom`, and `stolon-small`, `stolon-large`, `stolon-fill`, or `stolon-field`. `stolon-button-row` holds a row of them.
 
 ## States and Modifiers
 
@@ -50,13 +50,13 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-button` | A button on Jellyfin's raised button, medium unless small or large, muted like secondary unless it names a variant, with any icon beside its label |
-| `stolon-button.primary` | The accent filled button for the main action |
-| `stolon-button.secondary` | The muted button for a lower emphasis action |
-| `stolon-button.destructive` | The red filled button for an action that destroys data |
-| `stolon-button.custom` | A button filled with a custom color from a hex code, with black or white text, whichever reads better |
-| `stolon-button.fill` | A medium or large button that spans the width it has. A small button keeps its own width |
+| `stolon-button.stolon-primary` | The accent filled button for the main action |
+| `stolon-button.stolon-secondary` | The muted button for a lower emphasis action |
+| `stolon-button.stolon-destructive` | The red filled button for an action that destroys data |
+| `stolon-button.stolon-custom` | A button filled with a custom color from a hex code, with black or white text, whichever reads better |
+| `stolon-button.stolon-fill` | A medium or large button that spans the width it has. A small button keeps its own width |
 | `stolon-button-row` | A row of buttons a wide space apart, where fill buttons share the width evenly |
-| `stolon-button.field` | A button on the same line as a field, which takes the field's height, padding, and text size, so the two line up at any size |
+| `stolon-button.stolon-field` | A button on the same line as a field, which takes the field's height, padding, and text size, so the two line up at any size |
 
 <!-- reference:end -->
 

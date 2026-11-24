@@ -93,8 +93,8 @@ test('value draws a media row per item with a Remove button, and drops repeats',
     assert.equal(ui.empty.hidden, true);
     var rows = all(ui.list, '.stolon-media-card');
     assert.ok(rows[0].classList.contains('stolon-media-card-row'));
-    assert.ok(rows[0].querySelector('.stolon-media-card-thumb').classList.contains('portrait'));
-    assert.ok(rows[1].querySelector('.stolon-media-card-thumb').classList.contains('wide'));
+    assert.ok(rows[0].querySelector('.stolon-media-card-thumb').classList.contains('stolon-portrait'));
+    assert.ok(rows[1].querySelector('.stolon-media-card-thumb').classList.contains('stolon-wide'));
     assert.equal(rows[0].querySelector('.stolon-media-card-suffix').textContent, '2010');
     assert.equal(rows[0].querySelector('.stolon-media-card-subtitle').textContent, 'Movie');
     assert.equal(rows[0].querySelector('.stolon-media-card-action').getAttribute('aria-label'), 'Remove Alpha Movie');
@@ -136,7 +136,7 @@ test('typing searches and opens the listbox with a media row per result', async 
     var opts = options(ui);
     assert.equal(opts.length, 3);
     assert.equal(open(ui), true);
-    assert.equal(ui.dropdown.classList.contains('hidden'), false);
+    assert.equal(ui.dropdown.classList.contains('stolon-hidden'), false);
     opts.forEach(function (o) { assert.equal(o.getAttribute('role'), 'option'); assert.ok(o.id); });
     assert.deepEqual(names(ui.dropdown), ['Alpha Movie', 'Alpha Series', 'Alpha Episode']);
     assert.equal(opts[0].querySelector('.stolon-media-card-action'), null);
@@ -201,7 +201,7 @@ test('Escape closes the results and keeps the text, and the next Escape clears i
     var first = ui.input.dispatch('keydown', { key: 'Escape' });
     assert.equal(first.defaultPrevented, true);
     assert.equal(open(ui), false);
-    assert.ok(ui.dropdown.classList.contains('hidden'));
+    assert.ok(ui.dropdown.classList.contains('stolon-hidden'));
     assert.equal(ui.input.hasAttribute('aria-activedescendant'), false);
     assert.equal(ui.input.value, 'alpha');
     assert.equal(ui.input.getAttribute('data-stolon-escape'), 'true');
@@ -348,7 +348,7 @@ test('destroy removes the document listener and drops a pending answer', async f
 test('the picked items are a bordered list of rows, one list item per card', function () {
     var ui = build({ value: [LIBRARY[0], LIBRARY[2]] });
     assert.ok(ui.list.classList.contains('stolon-list'));
-    assert.ok(ui.list.classList.contains('rows'));
+    assert.ok(ui.list.classList.contains('stolon-rows'));
     assert.equal(ui.list.getAttribute('role'), 'list');
     var items = ui.list.children;
     assert.equal(items.length, 2);
@@ -360,14 +360,14 @@ test('the picked items are a bordered list of rows, one list item per card', fun
 
 test('by default the picked list grows with its items, and height, maxHeight, and setHeight pass to it', function () {
     var plain = build({ value: [LIBRARY[0]] });
-    assert.equal(plain.list.classList.contains('scrolls'), false);
+    assert.equal(plain.list.classList.contains('stolon-scrolls'), false);
     var ui = build({ value: [LIBRARY[0]], maxHeight: 280, minHeight: 90 });
-    assert.ok(ui.list.classList.contains('capped'));
+    assert.ok(ui.list.classList.contains('stolon-capped'));
     assert.equal(ui.list.style['--stolon-list-max'], '280px');
     assert.equal(ui.list.style['--stolon-list-min'], '90px');
     ui.picker.setHeight('fill');
-    assert.ok(ui.list.classList.contains('fill'));
-    assert.equal(ui.list.classList.contains('capped'), false);
+    assert.ok(ui.list.classList.contains('stolon-fill'));
+    assert.equal(ui.list.classList.contains('stolon-capped'), false);
     ui.picker.destroy();
 });
 

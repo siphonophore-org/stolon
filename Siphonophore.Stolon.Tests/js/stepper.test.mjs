@@ -17,9 +17,9 @@ function stepsOf(s) {
 test('a step state replaces the state its place gives it, and aria-current stays on the current step', function () {
     var s = createStepper({ steps: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B', state: 'attention' }, { id: 'c', label: 'C', state: 'optional' }], value: 'a' });
     var li = stepsOf(s);
-    assert.ok(li[0].classList.contains('current'));
-    assert.ok(li[1].classList.contains('attention'));
-    assert.ok(li[2].classList.contains('optional'));
+    assert.ok(li[0].classList.contains('stolon-current'));
+    assert.ok(li[1].classList.contains('stolon-attention'));
+    assert.ok(li[2].classList.contains('stolon-optional'));
     assert.equal(li[0].querySelector('.stolon-stepper-control').getAttribute('aria-current'), 'step');
     assert.match(li[1].textContent, /Needs attention/);
     assert.match(li[2].textContent, /Optional/);
@@ -28,7 +28,7 @@ test('a step state replaces the state its place gives it, and aria-current stays
 test('steps with no state keep the old look and text', function () {
     var s = createStepper({ steps: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }, { id: 'c', label: 'C' }], value: 'b', clickable: true });
     var li = stepsOf(s);
-    assert.ok(li[0].classList.contains('completed'));
+    assert.ok(li[0].classList.contains('stolon-completed'));
     assert.equal(li[0].querySelector('.stolon-stepper-number .material-icons').textContent, 'check');
     assert.equal(li[1].querySelector('.stolon-stepper-number').textContent, '2');
     assert.equal(li[2].querySelector('button'), null);
@@ -46,7 +46,7 @@ test('clickable all makes every step a button that reports itself', function () 
 
 test('the segments layout draws a segment per step, with the label as its tooltip and hidden text', function () {
     var s = createStepper({ layout: 'segments', steps: [{ id: 'a', label: 'Connect', state: 'completed' }, { id: 'b', label: 'Review' }], attentionText: 'Fix it' });
-    assert.equal(s.element.className, 'stolon-stepper segments');
+    assert.equal(s.element.className, 'stolon-stepper stolon-segments');
     var li = stepsOf(s);
     assert.ok(li[0].querySelector('.stolon-stepper-segment'));
     assert.equal(li[0].querySelector('.stolon-stepper-number'), null);

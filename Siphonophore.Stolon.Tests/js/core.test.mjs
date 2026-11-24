@@ -48,11 +48,11 @@ test('setStatus shows the icon of its state beside the text, as stolon-icon-text
     var el = dom.el('div');
     shared.setStatus(el, 'Saved.', false, { timeout: 0 });
     assert.equal(el.classList.contains('stolon-icon-text'), true);
-    assert.equal(el.classList.contains('success'), true);
+    assert.equal(el.classList.contains('stolon-success'), true);
     assert.equal(el.querySelector('.material-icons').textContent, 'check_circle');
     shared.setStatus(el, 'Could not save.', true, { timeout: 0 });
-    assert.equal(el.classList.contains('error'), true);
-    assert.equal(el.classList.contains('success'), false);
+    assert.equal(el.classList.contains('stolon-error'), true);
+    assert.equal(el.classList.contains('stolon-success'), false);
     assert.equal(el.querySelector('.material-icons').textContent, 'error');
     shared.setStatus(el, 'Checking.', false, { timeout: 0, state: 'info' });
     assert.equal(el.querySelector('.material-icons').textContent, 'info');
@@ -107,11 +107,11 @@ test('flashSaved shows savedText on the label and restores the original after th
         var tracker = shared.createChangeTracker({ indicator: indicator, savedText: 'Saved' });
         tracker.flashSaved();
         assert.equal(label.nodeValue, 'Saved');
-        assert.ok(indicator.classList.contains('save-success'));
+        assert.ok(indicator.classList.contains('stolon-save-success'));
         tracker.flashSaved();
         mock.timers.tick(1500);
         assert.equal(label.nodeValue, 'Unsaved changes');
-        assert.equal(indicator.classList.contains('visible'), false);
+        assert.equal(indicator.classList.contains('stolon-visible'), false);
     } finally {
         mock.timers.reset();
     }
@@ -237,10 +237,10 @@ test('BADGE_STATES names Locked, Expired, and the extra state names, and lists p
 test('every BADGE_STATES name and color has a rule in badge.css', function () {
     var css = readFileSync(new URL('../../src/css/badge.css', import.meta.url), 'utf8');
     BADGE_STATES.names.forEach(function (name) {
-        assert.ok(css.indexOf('.stolon-table-status-badge.' + name + ',') >= 0 || css.indexOf('.stolon-table-status-badge.' + name + ' {') >= 0, name);
+        assert.ok(css.indexOf('.stolon-table-status-badge.stolon-' + name + ',') >= 0 || css.indexOf('.stolon-table-status-badge.stolon-' + name + ' {') >= 0, name);
     });
     BADGE_STATES.colors.forEach(function (color) {
-        assert.ok(css.indexOf('.stolon-badge.' + color + ',') >= 0 || css.indexOf('.stolon-badge.' + color + ' {') >= 0, color);
+        assert.ok(css.indexOf('.stolon-badge.stolon-' + color + ',') >= 0 || css.indexOf('.stolon-badge.stolon-' + color + ' {') >= 0, color);
     });
 });
 

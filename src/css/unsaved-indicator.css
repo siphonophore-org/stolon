@@ -1,5 +1,5 @@
 /* Inline indicator that fades in to flag unsaved changes */
-/* Example: <span class="stolon-unsaved visible"><span class="stolon-unsaved-dot"></span>Unsaved</span> */
+/* Example: <span class="stolon-unsaved stolon-visible"><span class="stolon-unsaved-dot"></span>Unsaved</span> */
 .stolon-unsaved {
     display: inline-flex;
     align-items: center;
@@ -13,8 +13,8 @@
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s;
 }
-.stolon-unsaved.visible { opacity: 1; visibility: visible; }
-.stolon-unsaved.save-success { color: var(--stolon-success); }
+.stolon-unsaved.stolon-visible { opacity: 1; visibility: visible; }
+.stolon-unsaved.stolon-save-success { color: var(--stolon-success); }
 
 /* Small dot before the unsaved label in the current color */
 /* Example: <span class="stolon-unsaved-dot"></span> */

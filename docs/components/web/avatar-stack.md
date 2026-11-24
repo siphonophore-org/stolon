@@ -18,7 +18,7 @@ var stack = createAvatarStack({ users: [{ name: 'Ada', src: adaUrl }, { name: 'B
 view.querySelector('#watchers').appendChild(stack.element);
 ```
 
-Classes: `stolon-avatar-stack` with a `small`, `medium`, or `large` modifier, and `stolon-avatar-more` on the bubble. The handle is `{ element, getValue, setValue, destroy }`, where `getValue()` returns the users and `setValue(users)` draws new ones.
+Classes: `stolon-avatar-stack` with a `stolon-small`, `stolon-medium`, or `stolon-large` modifier, and `stolon-avatar-more` on the bubble. The handle is `{ element, getValue, setValue, destroy }`, where `getValue()` returns the users and `setValue(users)` draws new ones.
 
 ## States and Modifiers
 

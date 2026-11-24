@@ -75,7 +75,7 @@ function buildAvatar(spec: AvatarOptions, quiet?: boolean): BuiltAvatar {
         // With no picture, the person icon Jellyfin shows for a user without one.
         function showPlaceholder(): void {
             clear(root);
-            root.classList.add('placeholder');
+            root.classList.add('stolon-placeholder');
             if (state.name && !quiet) {
                 root.setAttribute('role', 'img');
                 root.setAttribute('aria-label', state.name);
@@ -86,13 +86,13 @@ function buildAvatar(spec: AvatarOptions, quiet?: boolean): BuiltAvatar {
         function addDot(): void {
             if (!state.status) return;
             var label = state.statusLabel || stolonText(STATUS_LABELS[state.status]);
-            root.appendChild(make('span', 'stolon-avatar-status ' + state.status, { role: 'img', title: label, 'aria-label': label }));
+            root.appendChild(make('span', 'stolon-avatar-status stolon-' + state.status, { role: 'img', title: label, 'aria-label': label }));
         }
         function showImage(url: string): void {
             if (mine !== drawn) return;
             if (!url) { showPlaceholder(); return; }
             clear(root);
-            root.classList.remove('placeholder');
+            root.classList.remove('stolon-placeholder');
             root.removeAttribute('role');
             root.removeAttribute('aria-label');
             var img = make('img', 'stolon-avatar-image', { src: url, alt: state.name });
@@ -167,7 +167,7 @@ export function createUserChip(options?: UserChipOptions): UserChipHandle {
         textEl.textContent = text;
         textEl.hidden = !text;
         // With a second line the avatar grows to span both lines.
-        root.classList.toggle('two-line', !!text);
+        root.classList.toggle('stolon-two-line', !!text);
     }
 
     setValue(options);

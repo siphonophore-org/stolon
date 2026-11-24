@@ -66,7 +66,7 @@ export function createAudioPlayer(options?: AudioPlayerOptions): AudioPlayerHand
     var audio = make('audio', 'stolon-audio-player-audio', { preload: 'metadata' });
     var playLabel = opts.playText || stolonText('Play');
     var pauseLabel = opts.pauseText || stolonText('ButtonPause');
-    var button = make('button', 'raised stolon-button secondary field stolon-audio-player-toggle', { type: 'button', title: playLabel, 'aria-label': playLabel });
+    var button = make('button', 'raised stolon-button stolon-secondary stolon-field stolon-audio-player-toggle', { type: 'button', title: playLabel, 'aria-label': playLabel });
     var glyph = icon('play_arrow');
     button.appendChild(glyph);
     var body = make('div', 'stolon-audio-player-body');
@@ -99,7 +99,7 @@ export function createAudioPlayer(options?: AudioPlayerOptions): AudioPlayerHand
         glyph.textContent = on ? 'pause' : 'play_arrow';
         button.setAttribute('title', on ? pauseLabel : playLabel);
         button.setAttribute('aria-label', on ? pauseLabel : playLabel);
-        root.classList.toggle('playing', on);
+        root.classList.toggle('stolon-playing', on);
     }
 
     function play(): void {
@@ -142,7 +142,7 @@ export function createAudioPlayer(options?: AudioPlayerOptions): AudioPlayerHand
     // An error takes the title's line and turns the button into an X, so the player keeps its height.
     function setFailed(on: boolean): void {
         failed = on;
-        root.classList.toggle('failed', on);
+        root.classList.toggle('stolon-failed', on);
         var text = on ? opts.errorText || stolonText('Stolon.CouldNotLoadAudio') : opts.title || '';
         titleEl.textContent = text;
         titleEl.hidden = !text;

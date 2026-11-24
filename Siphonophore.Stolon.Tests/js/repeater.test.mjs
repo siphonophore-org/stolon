@@ -141,7 +141,7 @@ test('the root carries only namespaced layout classes, never a bare class Jellyf
     assert.equal(card.r.element.classList.contains('card'), false);
     assert.ok(card.r.element.classList.contains('stolon-repeater-layout-card'));
     var inline = build();
-    assert.equal(inline.r.element.classList.contains('inline'), false);
+    assert.equal(inline.r.element.classList.contains('stolon-inline'), false);
     assert.ok(inline.r.element.classList.contains('stolon-repeater-layout-inline'));
 });
 
@@ -219,10 +219,10 @@ test('a clearable secret shows Clear while one is stored, and Clear posts an emp
     var ui = build({ fields: [{ key: 'name', label: 'Name' }, { key: 'token', label: 'Token', type: 'secret', clearable: true }], value: [{ name: 'a', token: SECRET_KEPT }] });
     var clear = rows(ui)[0].querySelector('.stolon-control-clear');
     assert.equal(clear.getAttribute('aria-label'), 'Clear token');
-    assert.equal(clear.classList.contains('hidden'), false);
+    assert.equal(clear.classList.contains('stolon-hidden'), false);
     assert.deepEqual(ui.r.getValue(), [{ name: 'a', token: SECRET_KEPT }]);
     clear.click();
-    assert.equal(clear.classList.contains('hidden'), true);
+    assert.equal(clear.classList.contains('stolon-hidden'), true);
     assert.deepEqual(ui.r.getValue(), [{ name: 'a', token: '' }]);
 });
 

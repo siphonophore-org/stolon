@@ -106,7 +106,7 @@ export function createPagination(options?: PaginationOptions): PaginationHandle 
     function pageButton(className: string, label: string, text: string, target: number, disabled: boolean, current: boolean, kind: string): HTMLButtonElement {
         var btn = make('button', 'stolon-pager-button ' + className, { type: 'button' });
         if (label) btn.setAttribute('aria-label', label);
-        if (current) { btn.classList.add('active'); btn.setAttribute('aria-current', 'page'); }
+        if (current) { btn.classList.add('stolon-active'); btn.setAttribute('aria-current', 'page'); }
         btn.disabled = !!disabled;
         btn.textContent = text;
         btn.addEventListener('click', function () { go(target, true, kind); });
@@ -139,7 +139,7 @@ export function createPagination(options?: PaginationOptions): PaginationHandle 
     // Gives focus back after a render replaced the button, to the same role, or the current page when that button is now disabled.
     function refocus(kind: string) {
         var wanted = buttons.querySelector<HTMLButtonElement>('.stolon-pager-' + (kind === 'number' ? 'number.active' : kind));
-        if (!wanted || wanted.disabled) wanted = buttons.querySelector<HTMLButtonElement>('.stolon-pager-number.active');
+        if (!wanted || wanted.disabled) wanted = buttons.querySelector<HTMLButtonElement>('.stolon-pager-number.stolon-active');
         if (wanted) wanted.focus();
     }
 

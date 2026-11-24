@@ -15,11 +15,11 @@ function flush() { return new Promise(function (resolve) { setImmediate(resolve)
 test('it shows busy and the rendering line while render runs, then the image', async function () {
     var finish;
     var frame = createPreviewFrame({ render: function () { return new Promise(function (r) { finish = r; }); } });
-    assert.ok(frame.element.classList.contains('busy'));
+    assert.ok(frame.element.classList.contains('stolon-busy'));
     assert.equal(frame.element.querySelector('.stolon-preview-frame-status-text').textContent, 'Rendering…');
     finish('poster.png');
     await flush();
-    assert.equal(frame.element.classList.contains('busy'), false);
+    assert.equal(frame.element.classList.contains('stolon-busy'), false);
     assert.equal(frame.element.querySelector('img.stolon-preview-frame-image').getAttribute('src'), 'poster.png');
     assert.equal(frame.element.querySelector('.stolon-preview-frame-status').hidden, true);
 });
@@ -61,12 +61,12 @@ test('update renders once its inputs settle, and a late render never wins over a
 test('the background pills switch the stage background, and setValue does too', function () {
     var frame = createPreviewFrame({ background: 'light' });
     var stage = frame.element.querySelector('.stolon-preview-frame-stage');
-    assert.ok(stage.classList.contains('light'));
+    assert.ok(stage.classList.contains('stolon-light'));
     var pills = all(frame.element, '.stolon-pill');
     pills[2].click();
     assert.equal(frame.getValue(), 'checker');
-    assert.ok(stage.classList.contains('checker'));
-    assert.equal(stage.classList.contains('light'), false);
+    assert.ok(stage.classList.contains('stolon-checker'));
+    assert.equal(stage.classList.contains('stolon-light'), false);
     frame.setValue('dark');
     assert.equal(pills[0].getAttribute('aria-pressed'), 'true');
     assert.equal(createPreviewFrame({ backgrounds: false }).element.querySelector('.stolon-preview-frame-backgrounds').hidden, true);

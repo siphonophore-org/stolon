@@ -32,7 +32,7 @@ export function badgeColor(color: unknown, fallback?: string): string {
 // The class list after stolon-badge and its color: the size modifier, then the caller's own classes.
 function extraClasses(size: unknown, className: unknown): string {
     var parts: string[] = [];
-    if (size === 'medium' || size === 'large') parts.push(size);
+    if (size === 'medium' || size === 'large') parts.push('stolon-' + size);
     var own = classNames(className);
     if (own) parts.push(own);
     return parts.length ? ' ' + parts.join(' ') : '';
@@ -67,7 +67,7 @@ export function makeBadge(label: unknown, color: unknown, size?: BadgeSize | str
  */
 export function badgeHtml(label: unknown, color: unknown, size?: BadgeSize | string | null, className?: string | null): string {
     var resolved = badgeColor(color);
-    var cls = 'stolon-badge' + (resolved ? ' ' + (isHexColor(resolved) ? 'custom' : resolved) : '') + extraClasses(size, className);
+    var cls = 'stolon-badge' + (resolved ? ' stolon-' + (isHexColor(resolved) ? 'custom' : resolved) : '') + extraClasses(size, className);
     return '<span class="' + cls + '"' + colorStyle(resolved) + '>' + escapeHtml(label) + '</span>';
 }
 
