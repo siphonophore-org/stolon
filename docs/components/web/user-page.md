@@ -95,8 +95,8 @@ Starts a user page that HostedPage serves. It loads the plugin's translations, a
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `translations` | <code>string</code> | address of the plugin's translations relative to the server root, such as MyPlugin/Translations [optional] |
-| `signInText` | <code>string</code> | the sign in button's label (default 'Sign in') |
-| `signInMessage` | <code>string</code> | the sentence for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.') |
+| `notFoundMessage` | <code>string</code> | the sentence on the not found screen (default 'This is not the page you are looking for.') |
+| `signInMessage` | <code>string</code> | the sentence on the sign in screen for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.') |
 | `deniedMessage` | <code>string</code> | the sentence for a viewer who is not an administrator (default 'Only administrators can open this page.') |
 | `notSelectedMessage` | <code>string</code> | the sentence for a viewer a selected users page does not list (default 'This page is for selected people. Ask your server's administrator for access.') |
 | `unreachableMessage` | <code>string</code> | the sentence when the server does not answer (default 'Could not reach the server.') |

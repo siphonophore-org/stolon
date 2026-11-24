@@ -226,7 +226,7 @@ B.subscribeWebPush({ publicKey: 'key' });
 B.webPushText('maybe');
 
 // User pages that a plugin hosts.
-var viewer: Promise<B.UserPageSession | null> = B.startUserPage({ translations: 'MyPlugin/Translations', signInText: 'Sign in' });
+var viewer: Promise<B.UserPageSession | null> = B.startUserPage({ translations: 'MyPlugin/Translations', notFoundMessage: 'That device was removed.' });
 viewer.then(function (s) { return s ? s.request('MyPlugin/Devices', { method: 'POST' }) : null; });
 B.showUserPageView('done');
 B.setUserPageMessage(view, 'error', 'That username is taken.');

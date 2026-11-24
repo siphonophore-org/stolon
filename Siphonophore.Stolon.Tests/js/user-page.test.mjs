@@ -10,8 +10,22 @@ var GOOD = 'a'.repeat(32);
 var OLD = 'b'.repeat(32);
 var calls;
 
+// The web client's storage, with its sign-ins for the servers given. What the page saves is kept in saved.
+var saved;
 function storage(servers) {
-    return { getItem: function (key) { return key === 'jellyfin_credentials' ? JSON.stringify({ Servers: servers }) : null; } };
+    saved = {};
+    return {
+        getItem: function (key) {
+            if (key in saved) return saved[key];
+            return key === 'jellyfin_credentials' ? JSON.stringify({ Servers: servers }) : null;
+        },
+        setItem: function (key, value) { saved[key] = String(value); }
+    };
+}
+
+// Lets the promises the page started settle.
+function settle() {
+    return new Promise(function (resolve) { setTimeout(resolve, 0); });
 }
 
 function reply(status, body) {
@@ -30,6 +44,13 @@ function server(options) {
             return reply(401, null);
         }
         if (url === 'MyPlugin/Access') return reply(options.listed ? 204 : 403, null);
+        if (url === 'QuickConnect/Enabled') return reply(200, false);
+        if (url === 'Branding/Configuration') return reply(200, { LoginDisclaimer: options.disclaimer || '' });
+        if (url === 'Users/AuthenticateByName') {
+            var sent = JSON.parse(init.body);
+            if (sent.Username === 'ana' && sent.Pw === 'secret') return reply(200, { User: { Id: 'u1', Name: 'Ana' }, AccessToken: GOOD, ServerId: SERVER });
+            return reply(401, null);
+        }
         return reply(200, { url: url });
     };
 }
@@ -97,19 +118,84 @@ test('the session calls the API as the viewer', async function () {
     assert.equal(last.auth, 'MediaBrowser Token="' + GOOD + '"');
 });
 
-test('a viewer with no sign-in gets the sign in card and the content stays hidden', async function () {
+test('a viewer with no sign-in gets the sign in screen and the content stays hidden', async function () {
+    var parts = page('user');
+    globalThis.localStorage = storage([]);
+    server({ disclaimer: 'Family use only.' });
+    startUserPage();
+    await settle();
+    assert.equal(document.body.hasAttribute('data-stolon-ready'), false);
+    assert.equal(parts.gate.hidden, false);
+    var screen = parts.gate.querySelector('.stolon-sign-in');
+    assert.equal(screen.querySelector('.stolon-screen-title').textContent, 'Please sign in');
+    assert.equal(screen.querySelector('.stolon-screen-text').textContent, 'Sign in to Jellyfin to open this page.');
+    assert.equal(screen.querySelector('#stolonSignInUser').getAttribute('autocomplete'), 'username');
+    assert.equal(screen.querySelector('#stolonSignInPassword').getAttribute('autocomplete'), 'current-password');
+    assert.equal(screen.querySelector('.stolon-sign-in-disclaimer').textContent, 'Family use only.');
+});
+
+test('signing in with the form continues the page as the viewer and keeps the sign in for the web client', async function () {
     var parts = page('user');
     globalThis.localStorage = storage([]);
     server({});
-    var session = await startUserPage();
-    assert.equal(session, null);
-    assert.equal(document.body.hasAttribute('data-stolon-ready'), false);
-    assert.equal(parts.gate.hidden, false);
-    var card = parts.gate.querySelector('.stolon-user-page-done');
-    assert.equal(card.getAttribute('data-stolon-state'), 'info');
-    assert.equal(parts.gate.querySelector('a.stolon-button').getAttribute('href'), 'web/');
-    assert.equal(parts.gate.querySelector('a.stolon-button').textContent, 'Sign in');
-    assert.equal(parts.gate.querySelector('.stolon-user-page-lead').textContent, 'Sign in to Jellyfin to open this page.');
+    var started = startUserPage();
+    await settle();
+    var screen = parts.gate.querySelector('.stolon-sign-in');
+    screen.querySelector('#stolonSignInUser').value = 'ana';
+    screen.querySelector('#stolonSignInPassword').value = 'secret';
+    screen.querySelector('form').dispatch('submit');
+    var session = await started;
+    assert.equal(session.user.Name, 'Ana');
+    assert.equal(session.token, GOOD);
+    var kept = JSON.parse(saved.jellyfin_credentials).Servers.filter(function (s) { return s.Id === SERVER; })[0];
+    assert.equal(kept.AccessToken, GOOD);
+    assert.equal(kept.UserId, 'u1');
+    var signIn = calls.filter(function (c) { return c.url === 'Users/AuthenticateByName'; })[0];
+    assert.match(signIn.auth, /^MediaBrowser Client="Jellyfin%20Web", Device="[^"]*", DeviceId="[0-9a-f]{32}", Version="1\.0"$/);
+    assert.ok(calls.every(function (c) { return c.url.indexOf('secret') === -1; }), 'the password never goes in an address');
+});
+
+test("a wrong password shows Jellyfin's message and clears the password, and Remember me off keeps nothing", async function () {
+    var parts = page('user');
+    globalThis.localStorage = storage([]);
+    server({});
+    var started = startUserPage();
+    await settle();
+    var screen = parts.gate.querySelector('.stolon-sign-in');
+    screen.querySelector('#stolonSignInUser').value = 'ana';
+    screen.querySelector('#stolonSignInPassword').value = 'wrong';
+    screen.querySelector('form').dispatch('submit');
+    await settle();
+    await settle();
+    assert.equal(screen.querySelector('.stolon-screen-error').textContent, 'Invalid username or password. Please try again.');
+    assert.equal(screen.querySelector('#stolonSignInPassword').value, '');
+    screen.querySelector('#stolonSignInRemember').checked = false;
+    screen.querySelector('#stolonSignInPassword').value = 'secret';
+    screen.querySelector('form').dispatch('submit');
+    assert.equal((await started).token, GOOD);
+    assert.equal(saved.jellyfin_credentials, undefined);
+});
+
+test('a stored sign in that expired asks the viewer to sign in again', async function () {
+    var parts = page('user');
+    globalThis.localStorage = storage([{ Id: SERVER, AccessToken: OLD }]);
+    server({});
+    startUserPage();
+    await settle();
+    await settle();
+    assert.equal(parts.gate.querySelector('.stolon-sign-in .stolon-screen-text').textContent, 'Your sign in expired. Sign in again.');
+});
+
+test('a page the server answered with not found shows the not found screen and asks nothing', async function () {
+    var parts = page('user');
+    document.body.setAttribute('data-stolon-screen', 'not-found');
+    server({});
+    assert.equal(await startUserPage(), null);
+    var screen = parts.gate.querySelector('.stolon-not-found');
+    assert.equal(screen.querySelector('.stolon-screen-title').textContent, 'Page not found');
+    assert.equal(screen.querySelector('.stolon-screen-text').textContent, 'This is not the page you are looking for.');
+    assert.equal(screen.querySelector('a').getAttribute('href'), 'web/');
+    assert.deepEqual(calls, []);
 });
 
 test('an administrator page turns away a signed in viewer who is not an administrator', async function () {
@@ -117,9 +203,10 @@ test('an administrator page turns away a signed in viewer who is not an administ
     server({ admin: false });
     var session = await startUserPage({ deniedMessage: 'Admins only.' });
     assert.equal(session, null);
-    assert.equal(parts.gate.querySelector('.stolon-user-page-done').getAttribute('data-stolon-state'), 'warn');
-    assert.equal(parts.gate.querySelector('.stolon-user-page-lead').textContent, 'Admins only.');
-    assert.equal(parts.gate.querySelector('a.stolon-button').textContent, 'Back to Jellyfin');
+    var screen = parts.gate.querySelector('.stolon-unauthorized');
+    assert.equal(screen.querySelector('.stolon-screen-title').textContent, "You can't open this page");
+    assert.equal(screen.querySelector('.stolon-screen-text').textContent, 'Admins only.');
+    assert.equal(screen.querySelector('a').textContent, 'Home');
 });
 
 test('an administrator page opens for an administrator', async function () {
@@ -135,8 +222,7 @@ test('a selected users page turns away a viewer the plugin does not list', async
     server({ listed: false });
     var session = await startUserPage();
     assert.equal(session, null);
-    assert.equal(parts.gate.querySelector('.stolon-user-page-done').getAttribute('data-stolon-state'), 'warn');
-    assert.equal(parts.gate.querySelector('.stolon-user-page-lead').textContent, "This page is for selected people. Ask your server's administrator for access.");
+    assert.equal(parts.gate.querySelector('.stolon-unauthorized .stolon-screen-text').textContent, "This page is for selected people. Ask your server's administrator for access.");
     assert.equal(calls[calls.length - 1].auth, 'MediaBrowser Token="' + GOOD + '"');
 });
 
@@ -165,7 +251,7 @@ test('later calls return the first check', async function () {
     page('user');
     server({});
     var first = startUserPage();
-    var second = startUserPage({ signInText: 'Other' });
+    var second = startUserPage({ signInMessage: 'Other' });
     assert.equal(first, second);
     await first;
     assert.equal(calls.filter(function (c) { return c.url === 'System/Info/Public'; }).length, 1);

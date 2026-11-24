@@ -1,0 +1,77 @@
+/* A screen in place of a page's content, sign in, unauthorized, or not found: the server's mark, a heading, a sentence, and its body in a narrow centered column */
+/* Example: <section class="stolon-screen stolon-user-page-card" role="region" aria-label="Please sign in"><img class="stolon-screen-logo" src="web/favicons/touchicon.png" alt=""><h1 class="stolon-screen-title">Please sign in</h1><p class="stolon-screen-text">Sign in to Jellyfin to open this page.</p><div class="stolon-screen-body"></div></section> */
+.stolon-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--stolon-gap-narrow);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: calc(var(--stolon-size-large) * 11);
+    margin: 0 auto;
+    text-align: center;
+}
+.stolon-screen.stolon-screen-web { padding: var(--stolon-gap-wide) 0; }
+
+/* The server's mark at the top of a screen, hidden when the web client has none */
+/* Example: <img class="stolon-screen-logo" src="web/favicons/touchicon.png" alt=""> */
+.stolon-screen-logo {
+    align-self: center;
+    width: calc(var(--stolon-size-large) * 2);
+    height: calc(var(--stolon-size-large) * 2);
+    object-fit: contain;
+}
+.stolon-screen-logo[hidden] { display: none; }
+
+/* A screen's heading and its sentence */
+/* Example: <h1 class="stolon-screen-title">Page not found</h1><p class="stolon-screen-text">This is not the page you are looking for.</p> */
+.stolon-screen-title { margin: 0; overflow-wrap: anywhere; }
+.stolon-screen-text { margin: 0; overflow-wrap: anywhere; }
+
+/* A screen's form and buttons, a field gap apart and as wide as the column */
+/* Example: <div class="stolon-screen-body"><form class="stolon-sign-in-form"></form></div> */
+.stolon-screen-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-wide);
+    margin-top: var(--stolon-gap-narrow);
+    text-align: left;
+}
+.stolon-sign-in-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-sign-in-form[hidden],
+.stolon-sign-in-quick-connect[hidden] { display: none; }
+/* A screen's button keeps its look as a link, and hides as a button does, over the button's own display */
+.stolon-screen-button { text-decoration: none; }
+.stolon-screen .stolon-screen-button[hidden] { display: none !important; }
+
+/* Remember me under the password, its box and text on one line */
+/* Example: <div class="stolon-sign-in-remember"><label><input type="checkbox" checked><span>Remember me</span></label></div> */
+.stolon-sign-in-remember label { display: inline-flex; align-items: center; gap: var(--stolon-gap-narrow); cursor: pointer; }
+
+/* A warning before signing in, such as on a connection that is not secure, and a sign in error, both in their status colors */
+/* Example: <p class="stolon-screen-warning" role="note">This connection isn't secure.</p><div class="stolon-screen-error" role="alert">Invalid username or password.</div> */
+.stolon-screen-warning { margin: 0; color: var(--stolon-orange-fg); }
+.stolon-screen-error { color: var(--stolon-red-fg); min-height: var(--stolon-line-medium); }
+.stolon-screen-error:empty { display: none; }
+
+/* Quick Connect: the code to enter on a signed in device, large and spaced so it reads at a glance */
+/* Example: <div class="stolon-sign-in-quick-connect" role="status"><p class="stolon-screen-text">Enter this code.</p><p class="stolon-sign-in-code">482 913</p></div> */
+.stolon-sign-in-quick-connect { display: flex; flex-direction: column; gap: var(--stolon-gap-narrow); text-align: center; }
+.stolon-sign-in-code {
+    margin: 0;
+    font-family: var(--stolon-mono);
+    font-size: 2em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Forgot password and the server's login disclaimer, under the form */
+/* Example: <div class="stolon-sign-in-after"><a class="stolon-screen-button" href="web/#/forgotpassword">Forgot password</a><p class="stolon-sign-in-disclaimer">Authorized use only.</p></div> */
+.stolon-sign-in-after { display: flex; flex-direction: column; gap: var(--stolon-gap-narrow); }
+.stolon-sign-in-disclaimer { margin: 0; color: var(--stolon-text-muted); white-space: pre-line; overflow-wrap: anywhere; }
+.stolon-sign-in-disclaimer[hidden] { display: none; }

@@ -271,8 +271,8 @@ export function resetWebClientShell(): void {
  * @param options {
  *   translations       : address of the plugin's translations relative to the server root [optional]
  *   menuItems          : the plugin's own user menu entries, after Settings [optional]
- *   signInText         : the sign in button's label (default 'Sign in')
- *   signInMessage      : the sentence for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.')
+ *   signInMessage      : the sentence on the sign in screen for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.')
+ *   notFoundMessage    : the sentence on the not found screen (default 'This is not the page you are looking for.')
  *   deniedMessage      : the sentence for a viewer who is not an administrator (default 'Only administrators can open this page.')
  *   notSelectedMessage : the sentence for a viewer a selected users page does not list (default 'This page is for selected people. Ask your server's administrator for access.')
  *   unreachableMessage : the sentence when the server does not answer (default 'Could not reach the server.')

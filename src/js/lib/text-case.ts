@@ -3,7 +3,7 @@
 // translations.ts makes titleCase and sentenceCase public.
 
 /** The words Stolon keeps as written in every plugin, as TextCase.DefaultExceptions in C#. Internal to the web components. */
-export var DEFAULT_CASING: string[] = ['Jellyfin', 'TV', 'ID', 'API', 'URL', 'HTTP', 'HTTPS', 'IP', 'DNS', 'HDR', 'SDR', '4K'];
+export var DEFAULT_CASING: string[] = ['Jellyfin', 'TV', 'ID', 'API', 'URL', 'HTTP', 'HTTPS', 'IP', 'DNS', 'HDR', 'SDR', '4K', 'Quick Connect'];
 
 var MINOR: Record<string, true> = {};
 ['a', 'an', 'and', 'as', 'at', 'but', 'by', 'for', 'from', 'in', 'into', 'nor', 'of', 'on', 'or', 'per', 'the', 'to', 'via', 'vs', 'with'].forEach(function (w) { MINOR[w] = true; });

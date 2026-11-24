@@ -19,7 +19,7 @@ public static class TextCase
     /// <summary>The name the translations build embeds the plugin's casing list under.</summary>
     public const string ResourceName = "Stolon.Casing.json";
 
-    private static readonly string[] _defaults = { "Jellyfin", "TV", "ID", "API", "URL", "HTTP", "HTTPS", "IP", "DNS", "HDR", "SDR", "4K" };
+    private static readonly string[] _defaults = { "Jellyfin", "TV", "ID", "API", "URL", "HTTP", "HTTPS", "IP", "DNS", "HDR", "SDR", "4K", "Quick Connect" };
 
     private static readonly HashSet<string> _minor = new(StringComparer.Ordinal)
     {

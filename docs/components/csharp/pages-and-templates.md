@@ -91,6 +91,10 @@ public async Task<IActionResult> Mine()
 
 The page script, `startUserPage`, reads the sign-in the web client stored for this server, checks it with `Users/Me`, and gives the plugin's script a session that calls the API as the viewer. See [User Page](../web/user-page.md).
 
+### Not Found
+
+`NotFound(this)` answers a missing item, such as an invite code that does not exist, with the page's frame, status code 404, and the not found screen in place of the content. It needs no sign in, and sends none of the page's content. See [Page Screens](../web/page-screens.md).
+
 **Gotchas**
 
 * Never put private data in the page or its values. Anyone with the address can read the page, so the data comes from an API call that Jellyfin authorizes.

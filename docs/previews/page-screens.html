@@ -1,0 +1,11 @@
+<!-- title: Page Screens -->
+<div class="stolon-user-page-gate" id="signIn"></div>
+<div id="unauthorized" style="margin-top: 24px;"></div>
+<div id="notFound" style="margin-top: 24px;"></div>
+<script type="module">
+const base = await window.__baseReady;
+const signIn = base.createSignIn({ serverId: 'preview', message: 'Sign in to Jellyfin to open this page.', onSignedIn: function () {} });
+document.getElementById('signIn').appendChild(signIn.element);
+document.getElementById('unauthorized').appendChild(base.createUnauthorized({ message: 'Only administrators can open this page.' }).element);
+document.getElementById('notFound').appendChild(base.createNotFound().element);
+</script>

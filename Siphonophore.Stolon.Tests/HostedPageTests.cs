@@ -299,6 +299,29 @@ public sealed class HostedPageTests : IDisposable
     }
 
     /// <summary>
+    /// The not found answer is the page's frame with status 404, the not found screen marked for the page script, and no content.
+    /// True: a missing invite or item reads as Jellyfin's own not found page, and nothing of the page's content is sent.
+    /// False: a missing item would answer 200, or show the page's content around an empty result.
+    /// </summary>
+    [Fact]
+    public void NotFound_AnswersWith404AndTheScreen()
+    {
+        var controller = new PageController { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
+        controller.HttpContext.Request.Path = "/invites/missing";
+        var page = new HostedPage("myplugin", HostedPageAccess.Anyone, HostedPageContent.Template("status"));
+
+        var found = page.Serve(controller);
+        var missing = page.NotFound(controller);
+
+        Assert.Equal(StatusCodes.Status200OK, found.StatusCode);
+        Assert.Contains("data-stolon-screen=\"\"", found.Content, StringComparison.Ordinal);
+        Assert.Equal(StatusCodes.Status404NotFound, missing.StatusCode);
+        Assert.Contains("data-stolon-screen=\"not-found\"", missing.Content, StringComparison.Ordinal);
+        Assert.DoesNotContain("stolon-status-page-card", missing.Content, StringComparison.Ordinal);
+        Assert.Equal("no-store", controller.HttpContext.Response.Headers["Cache-Control"]);
+    }
+
+    /// <summary>
     /// The administrator policy names Jellyfin's own.
     /// True: an administrator page's API refuses anyone else.
     /// False: the attribute would name a policy Jellyfin does not have and fail every call.

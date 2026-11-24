@@ -227,6 +227,17 @@ public sealed class HostedPage
     /// <param name="values">Values for the content's <c>{{KEY}}</c> tokens. Each is HTML encoded, so pass text, never markup.</param>
     /// <returns>The page.</returns>
     public ContentResult Serve(ControllerBase controller, IReadOnlyDictionary<string, string>? values = null)
+        => Answer(controller, values, notFound: false);
+
+    /// <summary>
+    /// Answers with the not found screen in the page's frame and status code 404, such as for an invite code or an item that does not
+    /// exist. The page's content is left out, and the screen shows to every viewer without a sign in.
+    /// </summary>
+    /// <param name="controller">The controller whose request is answered.</param>
+    /// <returns>The not found page.</returns>
+    public ContentResult NotFound(ControllerBase controller) => Answer(controller, null, notFound: true);
+
+    private ContentResult Answer(ControllerBase controller, IReadOnlyDictionary<string, string>? values, bool notFound)
     {
         ArgumentNullException.ThrowIfNull(controller);
         var context = controller.HttpContext;
@@ -248,10 +259,11 @@ public sealed class HostedPage
                 language,
                 assets.FaviconHref,
                 WebClientAssets.Shell(paths?.WebPath),
-                DetailsTemplate ? WebClientDetailsTemplate.Load(paths?.WebPath) : null,
-                values)
-            : Render(context.Request.Path, host?.FriendlyName, language, assets.FaviconHref, assets.IconFace, values);
-        return new ContentResult { Content = html, ContentType = "text/html; charset=utf-8", StatusCode = StatusCodes.Status200OK };
+                DetailsTemplate && !notFound ? WebClientDetailsTemplate.Load(paths?.WebPath) : null,
+                values,
+                notFound)
+            : Render(context.Request.Path, host?.FriendlyName, language, assets.FaviconHref, assets.IconFace, values, notFound);
+        return new ContentResult { Content = html, ContentType = "text/html; charset=utf-8", StatusCode = notFound ? StatusCodes.Status404NotFound : StatusCodes.Status200OK };
     }
 
     /// <summary>
@@ -287,12 +299,13 @@ public sealed class HostedPage
     /// <param name="faviconHref">The web client's favicon, relative to the web folder, or <c>null</c>.</param>
     /// <param name="iconFace">The icon face CSS, or empty.</param>
     /// <param name="values">Values for the content's tokens, encoded here.</param>
+    /// <param name="notFound">True to draw the not found screen in place of the content.</param>
     /// <returns>The document.</returns>
-    internal string Render(PathString path, string? serverName, string language, string? faviconHref, string iconFace, IReadOnlyDictionary<string, string>? values)
+    internal string Render(PathString path, string? serverName, string language, string? faviconHref, string iconFace, IReadOnlyDictionary<string, string>? values, bool notFound = false)
     {
         if (Frame == HostedPageFrame.WebClient)
         {
-            return RenderShell(path, serverName, null, language, faviconHref, WebClientAssets.Shell(null), null, values);
+            return RenderShell(path, serverName, null, language, faviconHref, WebClientAssets.Shell(null), null, values, notFound);
         }
 
         var server = string.IsNullOrWhiteSpace(serverName) ? "Jellyfin" : serverName;
@@ -308,6 +321,7 @@ public sealed class HostedPage
             ["ROOT"] = RootFor(path),
             ["ACCESS"] = AccessName(Access),
             ["ACCESS_CHECK"] = WebUtility.HtmlEncode(AccessCheck ?? string.Empty),
+            ["SCREEN"] = notFound ? "not-found" : string.Empty,
             ["TITLE"] = WebUtility.HtmlEncode(Title ?? server),
             ["FAVICON"] = faviconHref is null ? string.Empty : "<link rel=\"icon\" href=\"web/" + WebUtility.HtmlEncode(faviconHref) + "\" />",
             ["ICONS"] = iconFace.Length == 0 ? string.Empty : "<style>" + iconFace.Replace("</", "<\\/", StringComparison.Ordinal) + "</style>",
@@ -317,7 +331,7 @@ public sealed class HostedPage
             ["MARK"] = mark,
             ["COLUMN"] = Wide ? " stolon-wide" : string.Empty,
             ["OPTIONS"] = ScriptOptions(),
-            ["CONTENT"] = TemplateLoader.FillText(_content.Html, Encode(values))
+            ["CONTENT"] = notFound ? string.Empty : TemplateLoader.FillText(_content.Html, Encode(values))
         });
     }
 
@@ -333,7 +347,7 @@ public sealed class HostedPage
     /// <param name="details">The details page template, or <c>null</c> for none.</param>
     /// <param name="values">Values for the content's tokens, encoded here.</param>
     /// <returns>The document.</returns>
-    internal string RenderShell(PathString path, string? serverName, string? serverId, string language, string? faviconHref, WebClientShellAssets shell, string? details, IReadOnlyDictionary<string, string>? values)
+    internal string RenderShell(PathString path, string? serverName, string? serverId, string language, string? faviconHref, WebClientShellAssets shell, string? details, IReadOnlyDictionary<string, string>? values, bool notFound = false)
     {
         ArgumentNullException.ThrowIfNull(shell);
         var server = string.IsNullOrWhiteSpace(serverName) ? "Jellyfin" : serverName;
@@ -355,6 +369,7 @@ public sealed class HostedPage
             ["SERVER_ID"] = WebUtility.HtmlEncode(serverId ?? string.Empty),
             ["ACCESS"] = AccessName(Access),
             ["ACCESS_CHECK"] = WebUtility.HtmlEncode(AccessCheck ?? string.Empty),
+            ["SCREEN"] = notFound ? "not-found" : string.Empty,
             ["TITLE"] = WebUtility.HtmlEncode(Title ?? server),
             ["FAVICON"] = faviconHref is null ? string.Empty : "<link rel=\"icon\" href=\"web/" + WebUtility.HtmlEncode(faviconHref) + "\" />",
             ["MANIFEST"] = string.IsNullOrEmpty(Manifest) ? string.Empty : "<link rel=\"manifest\" href=\"" + WebUtility.HtmlEncode(Manifest) + "\" />",
@@ -368,7 +383,7 @@ public sealed class HostedPage
             ["MARK_ICON"] = WebUtility.HtmlEncode(MarkIcon ?? string.Empty),
             ["DETAILS"] = details is null ? string.Empty : "<template id=\"stolon-shell-details\">" + details + "</template>",
             ["OPTIONS"] = ScriptOptions(),
-            ["CONTENT"] = TemplateLoader.FillText(_content.Html, Encode(values))
+            ["CONTENT"] = notFound ? string.Empty : TemplateLoader.FillText(_content.Html, Encode(values))
         });
     }
 

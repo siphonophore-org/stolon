@@ -108,7 +108,7 @@ Stolon's text is in sentence case, as Jellyfin's is, such as "Allow media playba
 * Title case capitalizes every word except a, an, and, as, at, but, by, for, from, in, into, nor, of, on, or, per, the, to, via, vs, and with, unless the word is first, last, or after a colon. Each part of a hyphenated word is capitalized.
 * Sentence case capitalizes the first letter of each sentence and writes the rest in lower case.
 * A word with a capital inside it, such as `TV` or `iPhone`, or with letters and digits, such as `H.264` or `mp3`, stays as written. A placeholder such as `{0}` is never changed.
-* The casing list holds words and phrases that are written back exactly as given, matched as whole words regardless of case, the longest first. Stolon's defaults are `Jellyfin`, `TV`, `ID`, `API`, `URL`, `HTTP`, `HTTPS`, `IP`, `DNS`, `HDR`, `SDR`, and `4K`.
+* The casing list holds words and phrases that are written back exactly as given, matched as whole words regardless of case, the longest first. Stolon's defaults are `Jellyfin`, `TV`, `ID`, `API`, `URL`, `HTTP`, `HTTPS`, `IP`, `DNS`, `HDR`, `SDR`, `4K`, and `Quick Connect`.
 
 A plugin adds to the casing list with `Localization/casing.json`, a JSON array of distinct words or phrases.
 

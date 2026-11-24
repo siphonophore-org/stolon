@@ -127,6 +127,8 @@ test('menu links keep only web pages, mark the one for this page, and add the pa
 // The shell's frame as the webclient template writes it.
 function frame(access) {
     var el = dom.el;
+    // As the webclient template's body is.
+    document.body.classList.add('stolon-shell');
     document.body.setAttribute('data-stolon-access', access);
     document.body.setAttribute('data-stolon-mark', 'Requests');
     document.body.setAttribute('data-stolon-mark-icon', 'search');
@@ -205,10 +207,16 @@ test('a signed out viewer of a user page gets the sign in card and no bar entrie
     var parts = frame('user');
     globalThis.localStorage = store({});
     serve(false);
-    var session = await startWebClientShell();
-    assert.equal(session, null);
+    startWebClientShell();
+    await new Promise(function (resolve) { setTimeout(resolve, 0); });
+    await new Promise(function (resolve) { setTimeout(resolve, 0); });
     assert.equal(parts.gate.hidden, false);
-    assert.match(parts.gate.textContent, /Sign in/);
+    // In the web client frame the sign in screen wears the web client's own login classes.
+    var screen = parts.gate.querySelector('.stolon-sign-in');
+    assert.ok(screen.querySelector('form.manualLoginForm'));
+    assert.ok(screen.querySelector('.inputContainer input.emby-input#stolonSignInUser'));
+    assert.ok(screen.querySelector('button.raised.button-submit.block.emby-button'));
+    assert.equal(screen.querySelector('.stolon-user-page-field'), null);
     assert.equal(parts.avatar.hidden, true);
     assert.equal(parts.drawerButton.hidden, true);
     assert.equal(parts.nav.hidden, true);

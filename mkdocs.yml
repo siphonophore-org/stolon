@@ -142,6 +142,7 @@ nav:
               - Unsaved Indicator: components/web/unsaved-indicator.md
               - Empty State: components/web/empty-state.md
               - Status Page: components/web/status-page.md
+              - Page Screens: components/web/page-screens.md
               - User Page: components/web/user-page.md
               - Web Client Shell: components/web/web-client-shell.md
               - Web Client Markup: components/web/web-client-markup.md

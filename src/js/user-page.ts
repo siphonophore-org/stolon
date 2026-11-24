@@ -3,6 +3,7 @@ import { MESSAGE_ICONS } from './lib/message.js';
 import { stolonText } from './lib/stolon-text.js';
 import { loadTranslations } from './translations.js';
 import { createSpinner } from './spinner.js';
+import { createSignIn, createUnauthorized, createNotFound, showScreen, saveSignIn } from './page-screens.js';
 
 /** Who may open a user page, as HostedPage writes it into data-stolon-access. */
 export type UserPageAccess = 'anyone' | 'user' | 'administrator' | 'selected';
@@ -17,7 +18,7 @@ export interface UserPageUser {
 /** What startUserPage takes. Every text replaces a default label. */
 export interface UserPageOptions {
     translations?: string;
-    signInText?: string;
+    notFoundMessage?: string;
     signInMessage?: string;
     deniedMessage?: string;
     notSelectedMessage?: string;
@@ -126,8 +127,8 @@ function showGate(state: UserPageMessageState, message: string, linkText: string
  *
  * @param options {
  *   translations       : address of the plugin's translations relative to the server root, such as MyPlugin/Translations [optional]
- *   signInText         : the sign in button's label (default 'Sign in')
- *   signInMessage      : the sentence for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.')
+ *   signInMessage      : the sentence on the sign in screen for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.')
+ *   notFoundMessage    : the sentence on the not found screen (default 'This is not the page you are looking for.')
  *   deniedMessage      : the sentence for a viewer who is not an administrator (default 'Only administrators can open this page.')
  *   notSelectedMessage : the sentence for a viewer a selected users page does not list (default 'This page is for selected people. Ask your server's administrator for access.')
  *   unreachableMessage : the sentence when the server does not answer (default 'Could not reach the server.')
@@ -143,6 +144,11 @@ export function startUserPage(options?: UserPageOptions): Promise<UserPageSessio
     var ready = opts.translations ? loadTranslations(opts.translations).then(function () { return null; }) : Promise.resolve(null);
 
     started = ready.then(function () {
+        // A page the server answered with 404 shows the not found screen and nothing else.
+        if (body.getAttribute('data-stolon-screen') === 'not-found') {
+            showScreen(createNotFound({ message: opts.notFoundMessage }));
+            return null;
+        }
         if (access === 'anyone') {
             body.setAttribute('data-stolon-ready', '');
             return session(access, null, null, null);
@@ -156,12 +162,27 @@ export function startUserPage(options?: UserPageOptions): Promise<UserPageSessio
             .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
             .then(function (info: { Id?: unknown }) {
                 var serverId = info && typeof info.Id === 'string' ? info.Id : null;
+                if (!serverId) throw new Error('No server id');
                 var tokens = storedTokens(serverId);
-                // Each stored sign-in is tried in turn, since the web client may keep one that has expired.
+                var hadSignIn = tokens.length > 0;
+                // Each stored sign-in is tried in turn, since the web client may keep one that has expired. With none left the
+                // viewer signs in here, and the page goes on with that sign in, kept for the web client too when they asked.
                 function tryToken(index: number): Promise<UserPageSession | null> {
                     if (index >= tokens.length) {
-                        showGate('info', opts.signInMessage || stolonText('Stolon.SignInToOpen'), opts.signInText || stolonText('ButtonSignIn'));
-                        return Promise.resolve(null);
+                        return new Promise(function (resolve) {
+                            var screen = createSignIn({
+                                serverId: serverId as string,
+                                serverName: info && typeof (info as { ServerName?: unknown }).ServerName === 'string' ? (info as { ServerName: string }).ServerName : null,
+                                message: hadSignIn ? stolonText('Stolon.SignInExpired') : opts.signInMessage || stolonText('Stolon.SignInToOpen'),
+                                onSignedIn: function (result, keep) {
+                                    if (keep) saveSignIn(serverId as string, null, result);
+                                    screen.destroy();
+                                    tokens.push(result.AccessToken);
+                                    resolve(tryToken(tokens.length - 1));
+                                }
+                            });
+                            showScreen(screen);
+                        });
                     }
                     return fetch('Users/Me', { headers: { Authorization: authHeader(tokens[index]), Accept: 'application/json' } })
                         .then(function (r): Promise<UserPageSession | null> | UserPageSession | null {
@@ -169,7 +190,7 @@ export function startUserPage(options?: UserPageOptions): Promise<UserPageSessio
                             if (!r.ok) throw new Error('HTTP ' + r.status);
                             return r.json().then(function (user: UserPageUser) {
                                 if (access === 'administrator' && !(user && user.Policy && user.Policy.IsAdministrator)) {
-                                    showGate('warn', opts.deniedMessage || stolonText('Stolon.AdminOnly'), back);
+                                    showScreen(createUnauthorized({ message: opts.deniedMessage || stolonText('Stolon.AdminOnly') }));
                                     return null;
                                 }
                                 var admitted = function (): UserPageSession {
@@ -184,7 +205,7 @@ export function startUserPage(options?: UserPageOptions): Promise<UserPageSessio
                                 if (access !== 'selected' || admin || !check) return admitted();
                                 return fetch(check, { headers: { Authorization: authHeader(tokens[index]) } }).then(function (c) {
                                     if (c.status === 403) {
-                                        showGate('warn', opts.notSelectedMessage || stolonText('Stolon.SelectedOnly'), back);
+                                        showScreen(createUnauthorized({ message: opts.notSelectedMessage || stolonText('Stolon.SelectedOnly') }));
                                         return null;
                                     }
                                     if (!c.ok) throw new Error('HTTP ' + c.status);

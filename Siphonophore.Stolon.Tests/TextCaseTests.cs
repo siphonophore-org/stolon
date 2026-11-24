@@ -79,7 +79,7 @@ public class TextCaseTests
     [Fact]
     public void Exceptions_AreTheDefaultsWithNoCasingList()
     {
-        Assert.Equal(new[] { "Jellyfin", "TV", "ID", "API", "URL", "HTTP", "HTTPS", "IP", "DNS", "HDR", "SDR", "4K" }, TextCase.DefaultExceptions);
+        Assert.Equal(new[] { "Jellyfin", "TV", "ID", "API", "URL", "HTTP", "HTTPS", "IP", "DNS", "HDR", "SDR", "4K", "Quick Connect" }, TextCase.DefaultExceptions);
         Assert.Equal(TextCase.DefaultExceptions.OrderBy(w => w, StringComparer.Ordinal), TextCase.Exceptions.OrderBy(w => w, StringComparer.Ordinal));
     }
 
