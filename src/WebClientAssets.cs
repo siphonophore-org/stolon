@@ -169,19 +169,14 @@ internal static partial class WebClientAssets
         }
 
         list.AddRange(wanted.OfType<string>());
-        foreach (var route in RouteStyles)
-        {
-            var file = Directory.EnumerateFiles(root, route + ".*.css")
+        list.AddRange(RouteStyles
+            .Select(route => Directory.EnumerateFiles(root, route + ".*.css")
                 .Select(Path.GetFileName)
                 .OfType<string>()
                 .Where(name => RoutePattern().IsMatch(name))
                 .Order(StringComparer.Ordinal)
-                .FirstOrDefault();
-            if (file is not null)
-            {
-                list.Add(file);
-            }
-        }
+                .FirstOrDefault())
+            .OfType<string>());
 
         return list.Distinct(StringComparer.Ordinal).ToList();
     }
@@ -194,14 +189,9 @@ internal static partial class WebClientAssets
     /// <returns>The rules, or empty when no stylesheet holds them.</returns>
     internal static string Fonts(string root)
     {
-        foreach (var file in Directory.EnumerateFiles(root, "*.css").Order(StringComparer.Ordinal))
+        foreach (var css in Directory.EnumerateFiles(root, "*.css").Order(StringComparer.Ordinal).Select(File.ReadAllText)
+            .Where(css => css.Contains("font-family:Noto Sans;", StringComparison.Ordinal)))
         {
-            var css = File.ReadAllText(file);
-            if (!css.Contains("font-family:Noto Sans;", StringComparison.Ordinal))
-            {
-                continue;
-            }
-
             var rules = NotoFacePattern().Matches(css).Select(m => FontUrlPattern().Replace(m.Value, u => IsRelative(u.Groups[2].Value)
                 ? "url(" + u.Groups[1].Value + "web/" + u.Groups[2].Value + u.Groups[1].Value + ")"
                 : u.Value));

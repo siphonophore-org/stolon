@@ -92,20 +92,11 @@ public static partial class WebClientCheck
     {
         ArgumentNullException.ThrowIfNull(markup);
         var used = new SortedSet<string>(StringComparer.Ordinal);
-        foreach (Match attribute in ClassAttribute().Matches(markup))
-        {
-            var value = attribute.Groups[1].Value;
-            foreach (var part in SplitJoined(value))
-            {
-                foreach (var name in part.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-                {
-                    if (ClassName().IsMatch(name))
-                    {
-                        used.Add(name);
-                    }
-                }
-            }
-        }
+        var names = ClassAttribute().Matches(markup)
+            .SelectMany(attribute => SplitJoined(attribute.Groups[1].Value))
+            .SelectMany(part => part.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            .Where(name => ClassName().IsMatch(name));
+        used.UnionWith(names);
 
         return used.ToList();
     }

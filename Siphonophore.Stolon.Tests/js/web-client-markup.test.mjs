@@ -80,7 +80,8 @@ test('every Jellyfin class the builders write is in the startup check list, so a
 
 test('the builders escape the text and attributes they are given', function () {
     var html = m.webCard({ title: '<b>"x"</b>', href: 'a" onclick="y', key: 'k&' }) + m.webCheckbox({ 'data-x': '"><script>', 'bad name': 'z' }, '<i>');
-    assert.doesNotMatch(html, /<b>|<script>|<i>|onclick="y/);
+    // No tag the input carried survives as a tag, in any case or spacing.
+    assert.doesNotMatch(html, /<\s*\/?\s*(?:b|script|i)\b|onclick="y/i);
     assert.match(html, /&lt;b&gt;&quot;x&quot;&lt;\/b&gt;/);
     assert.match(html, /href="a&quot; onclick=&quot;y"/);
     assert.doesNotMatch(html, /bad name/);
