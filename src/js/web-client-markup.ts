@@ -20,13 +20,18 @@ export interface WebUserView {
 
 var esc = escapeHtml;
 
+// An address that runs script, such as javascript:, ignoring the spaces and control characters a browser ignores before the scheme.
+var SCRIPT_ADDRESS = /^(?:javascript|vbscript|data):/i;
+
 // The attributes as markup, each name checked and each value escaped. A true value writes the bare name, and false or null leaves it out.
+// A link to an address that runs script, such as a javascript: entry in config.json, goes nowhere.
 function attrs(list?: WebAttributes | null): string {
     var out = '';
     if (!list) return out;
     Object.keys(list).forEach(function (name) {
         var value = list[name];
         if (!/^[a-zA-Z_:][a-zA-Z0-9_.:-]*$/.test(name) || value === false || value === null || value === undefined) return;
+        if ((name === 'href' || name === 'src' || name === 'action') && SCRIPT_ADDRESS.test(String(value).replace(/[\u0000-\u0020]/g, ''))) value = '#';
         out += value === true ? ' ' + name : ' ' + name + '="' + esc(value) + '"';
     });
     return out;

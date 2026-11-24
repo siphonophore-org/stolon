@@ -376,10 +376,10 @@
     "user-multi-selector": 1196,
     "user-page": 4688,
     "user-selector": 1529,
-    "web-client-markup": 31845,
+    "web-client-markup": 32021,
     "web-client-shell": 19394,
     "web-push": 731,
     "world-map": 6255
   },
-  "bytes": 575165
+  "bytes": 575341
 }

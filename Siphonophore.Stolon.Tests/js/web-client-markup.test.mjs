@@ -204,3 +204,12 @@ test('webFillDetailSection fills a section of cards, and hides it when there are
     m.webFillDetailSection(section, 'cast', 'Cast', '');
     assert.equal(section.classList.contains('hide'), true);
 });
+
+test('a link to an address that runs script goes nowhere, and an ordinary one keeps its address', function () {
+    var icon = '<svg></svg>';
+    assert.match(m.webMenuItem(icon, 'Bad', 'javascript:alert(1)'), /href="#"/);
+    assert.match(m.webNavButton(' \tJaVaScRiPt:alert(1)', icon, 'Bad'), /href="#"/);
+    assert.match(m.webDrawerItem('data:text/html,x', icon, 'Bad'), /href="#"/);
+    assert.match(m.webMenuItem(icon, 'Good', 'web/#/home'), /href="web\/#\/home"/);
+    assert.match(m.webNavButton('https://example.com/a?b=1', icon, 'Out', false, true), /href="https:\/\/example.com\/a\?b=1"/);
+});
