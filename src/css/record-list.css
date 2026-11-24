@@ -4,7 +4,7 @@
 
 /* One record row: its title and secondary line, its tags under them, and a chevron or an aside control at its end. A row that opens takes the shared hover and focus ring */
 /* Example: <div class="stolon-item-row stolon-record-list-row stolon-openable" tabindex="0"><div class="stolon-record-list-body"><span class="stolon-item-row-text stolon-item-row-parts"></span><div class="stolon-tags stolon-record-list-tags"></div></div><button class="stolon-row-btn stolon-record-list-open"></button></div> */
-.stolon-record-list-row { padding-top: var(--stolon-pad-small); padding-bottom: var(--stolon-pad-small); }
+.stolon-record-list-row { padding-top: var(--stolon-pad-small); padding-bottom: var(--stolon-pad-small); padding-right: var(--stolon-field-pad); }
 .stolon-record-list-row.stolon-openable { cursor: pointer; }
 .stolon-record-list-row.stolon-openable:hover { background: var(--stolon-wash); }
 .stolon-record-list-row.stolon-openable:focus { outline: none; }

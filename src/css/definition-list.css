@@ -36,7 +36,7 @@
 @media (max-width: 600px) {
     .stolon-defs.stolon-list:not(.stolon-columns) { display: flex; }
     .stolon-defs.stolon-list:not(.stolon-columns) > .stolon-defs-row,
-    .stolon-defs-row { grid-template-columns: minmax(0, 1fr); gap: 0.1em; }
+    .stolon-defs-row { grid-template-columns: minmax(0, 1fr); gap: calc(var(--stolon-gap-narrow) / 4); }
 }
 
 /* Dimmed lines under a value, a meta line such as a size and a note, in the value's column */
@@ -67,7 +67,7 @@
 .stolon-defs.stolon-columns .stolon-defs-row {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--stolon-gap-narrow) / 4);
+    gap: calc(var(--stolon-gap-narrow) / 2);
     min-width: 0;
 }
 .stolon-defs.stolon-columns .stolon-defs-label {
@@ -81,7 +81,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: var(--stolon-gap-wide);
-    row-gap: calc(var(--stolon-gap-narrow) / 4);
+    row-gap: calc(var(--stolon-gap-narrow) / 2);
     align-content: start;
 }
 .stolon-defs.stolon-columns .stolon-defs-row.stolon-has-arrow > dt,

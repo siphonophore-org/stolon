@@ -26,8 +26,8 @@ test('every gap and margin is a spacing token, zero, auto, or a nudge under 4px'
     assert.deepEqual(found, []);
 });
 
-test('the two spacing tokens are narrow 8px and wide 16px', function () {
+test('the two spacing tokens are narrow 12px and wide 24px', function () {
     var tokens = readFileSync(join(cssDir, 'design-tokens.css'), 'utf8');
-    assert.match(tokens, /--stolon-gap-narrow: 8px;/);
-    assert.match(tokens, /--stolon-gap-wide: 16px;/);
+    assert.match(tokens, /--stolon-gap-narrow: 12px;/);
+    assert.match(tokens, /--stolon-gap-wide: 24px;/);
 });

@@ -30,8 +30,8 @@
     --stolon-scrim: rgba(0, 0, 0, 0.7);
 
     /* The two spacings between objects. Wide sits between components and under a title. Narrow sits inside a component. */
-    --stolon-gap-narrow: 8px;
-    --stolon-gap-wide: 16px;
+    --stolon-gap-narrow: 12px;
+    --stolon-gap-wide: 24px;
 
     /* The palette. Every color Stolon draws comes from one of these nine. */
     --stolon-red: #e5534b;
@@ -54,6 +54,9 @@
     /* The web client's font stack, for a user page that loads no Jellyfin theme. Every other page inherits Jellyfin's font. */
     --stolon-sans: "Noto Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
+    /* The widest a lone field grows on a page that uses the whole width, so a text box stays easy to read. */
+    --stolon-field-max: calc(var(--stolon-size-large) * 20);
+
     /* The size scale every field, button, pill, badge, and tag takes, as small, medium, or large. Medium matches a text field. */
     --stolon-size-small: 24px;
     --stolon-size-medium: 32px;
@@ -61,9 +64,9 @@
     --stolon-font-small: 12px;
     --stolon-font-medium: 14px;
     --stolon-font-large: 16px;
-    --stolon-pad-small: 8px;
-    --stolon-pad-medium: 12px;
-    --stolon-pad-large: 16px;
+    --stolon-pad-small: 10px;
+    --stolon-pad-medium: 14px;
+    --stolon-pad-large: 20px;
     --stolon-icon-small: 16px;
     --stolon-icon-medium: 18px;
     --stolon-icon-large: 20px;

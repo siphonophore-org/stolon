@@ -480,3 +480,14 @@ input.stolon-check-row-input:disabled { opacity: 0.4; cursor: default; }
 .stolon-dialog .emby-checkbox-label > input[type="checkbox"]:not(.emby-checkbox) { margin-right: var(--stolon-gap-narrow); }
 .pluginConfigurationPage .emby-checkbox-label,
 .stolon-dialog .emby-checkbox-label { display: inline-flex; align-items: center; }
+
+/* A config page uses the whole width. Jellyfin caps a form at 54em on wide screens, so tables, card grids, and the tool shell would stop short and leave a wide gap at the end of the page. */
+/* Example: <div class="pluginConfigurationPage"><form><div class="stolon-data-table"></div></form></div> */
+.pluginConfigurationPage form,
+.pluginConfigurationPage .readOnlyContent { max-width: none; }
+
+/* A lone field keeps a readable width on a full-width page. A field in a row of fields still shares the row. */
+/* Example: <div class="inputContainer"><label for="host">Host</label><input is="emby-input" id="host"></div> */
+.pluginConfigurationPage .inputContainer,
+.pluginConfigurationPage .selectContainer,
+.pluginConfigurationPage .stolon-field { max-width: var(--stolon-field-max); }
