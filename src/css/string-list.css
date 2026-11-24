@@ -1,5 +1,5 @@
 /* Editor for a list of strings, with rows above an add row */
-/* Example: <div class="stolon-string-list"><ul class="stolon-string-items"></ul><div class="stolon-string-add"><input type="text"><button type="button" class="raised stolon-button stolon-field">Add</button></div></div> */
+/* Example: <div class="stolon-string-list"><ul class="stolon-string-items"></ul><div class="stolon-string-add"><input type="text"><button type="button" class="raised stolon-button stolon-field-sized">Add</button></div></div> */
 .stolon-string-list {
     display: flex;
     flex-direction: column;
@@ -20,7 +20,7 @@
 /* It is built as stolon-item-row, which gives it the field look and height */
 
 /* Row holding the new value input and the add button */
-/* Example: <div class="stolon-string-add"><input type="text"><button type="button" class="raised stolon-button stolon-field">Add</button></div> */
+/* Example: <div class="stolon-string-add"><input type="text"><button type="button" class="raised stolon-button stolon-field-sized">Add</button></div> */
 .stolon-string-add {
     display: flex;
     gap: var(--stolon-gap-narrow);

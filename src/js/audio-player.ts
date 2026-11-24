@@ -66,7 +66,7 @@ export function createAudioPlayer(options?: AudioPlayerOptions): AudioPlayerHand
     var audio = make('audio', 'stolon-audio-player-audio', { preload: 'metadata' });
     var playLabel = opts.playText || stolonText('Play');
     var pauseLabel = opts.pauseText || stolonText('ButtonPause');
-    var button = make('button', 'raised stolon-button stolon-secondary stolon-field stolon-audio-player-toggle', { type: 'button', title: playLabel, 'aria-label': playLabel });
+    var button = make('button', 'raised stolon-button stolon-secondary stolon-field-sized stolon-audio-player-toggle', { type: 'button', title: playLabel, 'aria-label': playLabel });
     var glyph = icon('play_arrow');
     button.appendChild(glyph);
     var body = make('div', 'stolon-audio-player-body');

@@ -134,11 +134,11 @@ function html(parent, markup) {
 
 (function () {
     const s = section('Status callouts');
-    html(s, '<div class="stolon-info">stolon-info, a neutral hint or guidance.</div>').style.marginBottom = '8px';
-    html(s, '<div class="stolon-success">stolon-success, a healthy or completed state.</div>').style.marginBottom = '8px';
-    html(s, '<div class="stolon-warn">stolon-warn, a caution worth heeding.</div>').style.marginBottom = '8px';
-    html(s, '<div class="stolon-error">stolon-error, a blocking problem.</div>').style.marginBottom = '8px';
-    html(s, '<div class="stolon-neutral">stolon-neutral, a muted, inactive note.</div>').style.marginBottom = '8px';
+    html(s, '<div class="stolon-callout-info">stolon-info, a neutral hint or guidance.</div>').style.marginBottom = '8px';
+    html(s, '<div class="stolon-callout-success">stolon-success, a healthy or completed state.</div>').style.marginBottom = '8px';
+    html(s, '<div class="stolon-callout-warn">stolon-warn, a caution worth heeding.</div>').style.marginBottom = '8px';
+    html(s, '<div class="stolon-callout-error">stolon-error, a blocking problem.</div>').style.marginBottom = '8px';
+    html(s, '<div class="stolon-callout-neutral">stolon-neutral, a muted, inactive note.</div>').style.marginBottom = '8px';
     html(s, '<div class="stolon-error-message">TypeError: cannot read properties of undefined (reading \'Items\')</div>');
 })();
 
@@ -520,7 +520,7 @@ function html(parent, markup) {
           '<div class="stolon-edit-line">' +
             '<div class="stolon-field"><label>Artist</label><input type="text" placeholder="Set artist" /></div>' +
             '<div class="stolon-field"><label>Album</label><input type="text" placeholder="Set album" /></div>' +
-            '<button class="raised stolon-button stolon-primary stolon-field g-push">Apply</button>' +
+            '<button class="raised stolon-button stolon-primary stolon-field-sized g-push">Apply</button>' +
           '</div>' +
         '</div>');
 })();

@@ -39,7 +39,7 @@ test('a Jellyfin preview shows the text as the toast and names the header under 
 
 test('a preview with an error shows the error, and no preview shows nothing', function () {
     var preview = createNotifyPreview({ preview: { Channel: 'Discord', Error: 'Discord needs a JSON body.' } });
-    assert.equal(text(preview.element, '.stolon-error'), 'Discord needs a JSON body.');
+    assert.equal(text(preview.element, '.stolon-callout-error'), 'Discord needs a JSON body.');
     preview.setPreview(null);
     assert.equal(preview.element.children.length, 0);
 });
@@ -78,7 +78,7 @@ test('a Discord preview reads the body when the data is missing, and says when t
     assert.match(html, /stolon-notify-preview-discord-text">Hi <em>there<\/em></);
     assert.match(html, /discord-name">Fallback</);
     var bad = createNotifyPreview({ preview: { Channel: 0, Body: 'not json' } });
-    assert.equal(text(bad.element, '.stolon-error'), 'Discord needs a JSON body.');
+    assert.equal(text(bad.element, '.stolon-callout-error'), 'Discord needs a JSON body.');
 });
 
 test('Discord markdown escapes HTML, keeps escaped characters as typed, and never makes a link', function () {

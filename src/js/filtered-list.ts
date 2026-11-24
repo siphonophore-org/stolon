@@ -334,7 +334,7 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
 
     var toolButtons: Array<{ spec: FilteredListToolbarAction<T>; el: HTMLButtonElement }> = [];
     (opts.actions || []).forEach(function (spec) {
-        var btn = actionButton(spec, 'field');
+        var btn = actionButton(spec, 'field-sized');
         cleanups.push(listen(btn, 'click', function () { spec.onClick(view.getState()); }));
         toolButtons.push({ spec: spec, el: btn });
         toolbar.appendChild(btn);

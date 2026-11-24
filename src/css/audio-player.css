@@ -1,5 +1,5 @@
 /* A small audio player: a Play and Pause button a field tall, then the title over a seek slider and the current and total time */
-/* Example: <div class="stolon-audio-player" role="group" aria-label="Theme"><button class="raised stolon-button stolon-secondary stolon-field stolon-audio-player-toggle" aria-label="Play"></button><div class="stolon-audio-player-body"><div class="stolon-audio-player-title">theme.mp3</div><div class="stolon-audio-player-line"><div class="stolon-slider"></div><span class="stolon-audio-player-time">0:00 / 0:31</span></div></div></div> */
+/* Example: <div class="stolon-audio-player" role="group" aria-label="Theme"><button class="raised stolon-button stolon-secondary stolon-field-sized stolon-audio-player-toggle" aria-label="Play"></button><div class="stolon-audio-player-body"><div class="stolon-audio-player-title">theme.mp3</div><div class="stolon-audio-player-line"><div class="stolon-slider"></div><span class="stolon-audio-player-time">0:00 / 0:31</span></div></div></div> */
 .stolon-audio-player {
     display: flex;
     align-items: center;
@@ -18,7 +18,7 @@
 .stolon-audio-player-title[hidden] { display: none; }
 
 /* A player whose audio could not load: the error in red in the title's place, and the button an X that resets it */
-/* Example: <div class="stolon-audio-player stolon-failed"><button class="raised stolon-button stolon-secondary stolon-field stolon-audio-player-toggle" aria-label="Reset"><span class="material-icons">close</span></button><div class="stolon-audio-player-body"><div class="stolon-audio-player-title" role="alert">Could not load the audio.</div></div></div> */
+/* Example: <div class="stolon-audio-player stolon-failed"><button class="raised stolon-button stolon-secondary stolon-field-sized stolon-audio-player-toggle" aria-label="Reset"><span class="material-icons">close</span></button><div class="stolon-audio-player-body"><div class="stolon-audio-player-title" role="alert">Could not load the audio.</div></div></div> */
 .stolon-audio-player.stolon-failed .stolon-audio-player-title { color: var(--stolon-red-fg); }
 .stolon-audio-player.stolon-failed .stolon-audio-player-toggle .material-icons { color: var(--stolon-red-fg); }
 .stolon-audio-player.stolon-failed .stolon-audio-player-line { opacity: 0.5; }

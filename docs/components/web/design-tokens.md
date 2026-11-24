@@ -83,16 +83,16 @@ Discord's dark theme, for the [Notify Preview](notify-preview.md)'s Discord post
 
 ## Status Color Meanings
 
-A color means the same thing in every component and every plugin. Use "orange" for the warning color in class names, never "amber" or "warning". The callout class `stolon-warn` is the one exception, since it names a notice and not a color.
+A color means the same thing in every component and every plugin. Use "orange" for the warning color in class names, never "amber" or "warning". The callout class `stolon-callout-warn` and the status modifier `stolon-warn` are the one exception, since they name a notice and not a color.
 
 | Color | Means | Callout | Badge states |
 | :--- | :--- | :--- | :--- |
-| Green | Done, healthy, on | `stolon-success` | Active, Synced, Downloaded, Completed, Enabled |
-| Red | Failed, blocked, destructive | `stolon-error` | Disabled, Errored, Error, Deleting, Pending-Deletion, Failed |
-| Orange | Waiting, caution | `stolon-warn` | Expired, Queued, Paused |
+| Green | Done, healthy, on | `stolon-callout-success` | Active, Synced, Downloaded, Completed, Enabled |
+| Red | Failed, blocked, destructive | `stolon-callout-error` | Disabled, Errored, Error, Deleting, Pending-Deletion, Failed |
+| Orange | Waiting, caution | `stolon-callout-warn` | Expired, Queued, Paused |
 | Purple | Working, held | None | Locked, Running, Downloading, Pending, Pending-Download |
-| Blue | Information, role | `stolon-info` | Admin, Imported, Pending-Replacement |
-| Gray | Inactive, muted | `stolon-neutral` | Ignored, Group, Skipped, Unknown |
+| Blue | Information, role | `stolon-callout-info` | Admin, Imported, Pending-Replacement |
+| Gray | Inactive, muted | `stolon-callout-neutral` | Ignored, Group, Skipped, Unknown |
 
 Never use color alone. A badge always has a word, and a dot always has a `title`. See [Badge](badge.md) and [Status Dot](status-dot.md).
 

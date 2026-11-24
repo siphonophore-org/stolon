@@ -76,7 +76,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Accent | The theme's primary color | `--stolon-accent` | Brand color, primary |
 | Surface | The background of a panel or dialog | `--stolon-surface` | Panel color |
 | Fallback | A plain rule kept for an engine that cannot read `color-mix()` or `:is()` | | Polyfill, hack |
-| Callout | A soft inline notice in one status color | `stolon-info`, `stolon-success`, `stolon-warn`, `stolon-error`, `stolon-neutral` | Alert |
+| Callout | A soft inline notice in one status color | `stolon-callout-info`, `stolon-callout-success`, `stolon-callout-warn`, `stolon-callout-error`, `stolon-callout-neutral` | Alert |
 | Badge | A pill that holds a short status label | `stolon-badge` | Chip, label |
 | Badge states | The one map from every state a badge shows to its color, which a plugin maps its own statuses onto | `BADGE_STATES` | Status map, state colors |
 | Status card | A count over a label inside `stolon-cards`, tinted by color | `stolon-card` | Tile, counter |

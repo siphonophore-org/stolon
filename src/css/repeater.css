@@ -56,7 +56,7 @@
 .stolon-control > .stolon-adorned { width: 100%; min-width: 0; box-sizing: border-box; }
 
 /* A toggle field: the shared Checkbox a field tall, its box centered on the line of the fields beside it */
-/* Example: <div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" aria-label="Enabled" checked></label></div> */
+/* Example: <div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field-sized"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" aria-label="Enabled" checked></label></div> */
 .stolon-control-toggle { display: flex; align-items: center; }
 
 /* A secret with a Clear button after its box, shown while a secret is stored */
@@ -125,22 +125,22 @@
     right: 0;
 }
 /* A toggle in a stacked row reads as a checkbox: its box, then its label beside it as the box's text, then its message */
-/* Example: <div class="stolon-field-cell stolon-toggle"><label class="stolon-field-cell-label">Enabled</label><div class="stolon-control stolon-control-toggle"></div><div class="stolon-field-message"></div></div> */
-.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle {
+/* Example: <div class="stolon-field-cell stolon-toggle-cell"><label class="stolon-field-cell-label">Enabled</label><div class="stolon-control stolon-control-toggle"></div><div class="stolon-field-message"></div></div> */
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle-cell {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     column-gap: var(--stolon-gap-narrow);
 }
-.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle > .stolon-control { grid-row: 1; grid-column: 1; }
-.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle > .stolon-field-cell-label {
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle-cell > .stolon-control { grid-row: 1; grid-column: 1; }
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle-cell > .stolon-field-cell-label {
     grid-row: 1;
     grid-column: 2;
     font-size: var(--stolon-field-font);
     opacity: 1;
     cursor: pointer;
 }
-.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle > .stolon-field-message { grid-column: 1 / -1; }
+.stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-field-cell.stolon-toggle-cell > .stolon-field-message { grid-column: 1 / -1; }
 
 /* The first label leaves room for the buttons beside it, so it never runs under them */
 .stolon-repeater.stolon-repeater-layout-inline.stolon-compact .stolon-repeater-rows > .stolon-list-item > .stolon-field-cell:first-of-type > .stolon-field-cell-label {

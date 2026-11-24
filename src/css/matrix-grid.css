@@ -11,7 +11,7 @@
 .stolon-matrix-hint { font-size: var(--stolon-font-small); opacity: 0.7; }
 
 /* One cell's control with its message under it. A toggle column takes the narrow number track with its box centered under its heading */
-/* Example: <span class="stolon-matrix-cell"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" checked></label></div><div class="stolon-field-message"></div></span> */
+/* Example: <span class="stolon-matrix-cell"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field-sized"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input stolon-control-switch" checked></label></div><div class="stolon-field-message"></div></span> */
 .stolon-matrix-cell { display: flex; flex-direction: column; min-width: 0; white-space: normal; }
 .stolon-data-cell.stolon-end > .stolon-matrix-cell { align-items: flex-end; }
 .stolon-data-cell.stolon-center > .stolon-matrix-cell { align-items: center; }
@@ -35,5 +35,5 @@
 .stolon-matrix-grid.stolon-has-units { --stolon-data-min: calc(var(--stolon-size-large) * 3); }
 
 /* A disabled cell, its control greyed out with its value still shown */
-/* Example: <span class="stolon-matrix-cell stolon-disabled"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field"><input type="checkbox" disabled></label></div></span> */
+/* Example: <span class="stolon-matrix-cell stolon-disabled"><div class="stolon-control stolon-control-toggle"><label class="stolon-check-row stolon-checkbox stolon-field-sized"><input type="checkbox" disabled></label></div></span> */
 .stolon-matrix-cell.stolon-disabled { opacity: 0.45; cursor: not-allowed; }

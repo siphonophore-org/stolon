@@ -13,15 +13,15 @@ A soft inline notice. Pick the class by meaning.
 ## Usage
 
 ```html
-<div class="stolon-info">Password is your API key.</div>
-<div class="stolon-success">Connected.</div>
-<div class="stolon-warn">The last run failed.</div>
-<div class="stolon-error">The server could not be reached.</div>
-<div class="stolon-neutral">Sync is off, so nothing here applies.</div>
+<div class="stolon-callout-info">Password is your API key.</div>
+<div class="stolon-callout-success">Connected.</div>
+<div class="stolon-callout-warn">The last run failed.</div>
+<div class="stolon-callout-error">The server could not be reached.</div>
+<div class="stolon-callout-neutral">Sync is off, so nothing here applies.</div>
 <div class="stolon-error-message">Request failed with status 502</div>
 ```
 
-Classes: `stolon-info`, `stolon-success`, `stolon-warn`, `stolon-error`, `stolon-neutral`, `stolon-error-message`.
+Classes: `stolon-callout-info`, `stolon-callout-success`, `stolon-callout-warn`, `stolon-callout-error`, `stolon-callout-neutral`, `stolon-error-message`.
 
 ## States and Modifiers
 
@@ -42,11 +42,11 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 | Class | What it looks like |
 | :--- | :--- |
-| `stolon-info` | Soft inline callout with one shared shape and one color per meaning, in five variants |
-| `stolon-success` | Green callout for a successful or healthy state |
-| `stolon-warn` | Orange callout for a caution to heed |
-| `stolon-error` | Red callout for a failure or blocking problem |
-| `stolon-neutral` | Gray callout for a muted or inactive note |
+| `stolon-callout-info` | Soft inline callout with one shared shape and one color per meaning, in five variants |
+| `stolon-callout-success` | Green callout for a successful or healthy state |
+| `stolon-callout-warn` | Orange callout for a caution to heed |
+| `stolon-callout-error` | Red callout for a failure or blocking problem |
+| `stolon-callout-neutral` | Gray callout for a muted or inactive note |
 | `stolon-error-message` | Red, mono block for surfacing raw failure text such as an error body or a stack line |
 
 <!-- reference:end -->

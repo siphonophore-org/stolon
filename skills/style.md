@@ -63,14 +63,14 @@ The values live only in `design-tokens.css`. This table is for reading, and a ru
 * **A size is a modifier.** `stolon-button small`, `stolon-badge medium`, `stolon-tag large`. Buttons, pills, and fields default to medium. Badges and tags default to small.
 * **A field changes size with `small` or `large` on the field, or `data-stolon-size` on any ancestor.** Everything inside a sized component follows it.
 * **Never write a height, padding, text size, or icon size as a number.** Take it from the scale, or from a calc of scale tokens.
-* **Things on one line are one height.** A button beside a field takes the `stolon-field` modifier and matches the field at every size. Never put a small button beside a medium field.
+* **Things on one line are one height.** A button beside a field takes the `stolon-field-sized` modifier and matches the field at every size. Never put a small button beside a medium field.
 * **A row is at least a field tall.** A boxed row of text uses `stolon-item-row`, so a list of entries lines up with the input that adds to it.
 * **A row icon button is one fixed square** from the scale, built with `iconButton()`. Up and down arrows sit side by side.
 * **A dismiss X sits in the top right corner.** On a card, row, banner, or toast, the remove or close button is pinned to the top right, inset by the component's own padding, level with the first line. Status and detail lines leave room for it and never run under it.
 * **A glyph is sized to its text.** The remove mark on a tag, the icon in a button, and the dot in a pill scale with the size of the control they sit in.
 * **A glyph inside a shape is inset.** An icon in a circle or square leaves a clear margin of the shape's color on every side, and is centered in it.
 * **A picture grows with its text.** An avatar beside two lines of text spans both lines.
-* **A checkbox takes the scale too.** Small is the plain box and text most settings use. Medium is a size up. Large is a tile that fills its row. A small or medium checkbox in a row of fields stands a field tall with `stolon-field`, or sits in a field's frame with `stolon-boxed`.
+* **A checkbox takes the scale too.** Small is the plain box and text most settings use. Medium is a size up. Large is a tile that fills its row. A small or medium checkbox in a row of fields stands a field tall with `stolon-field-sized`, or sits in a field's frame with `stolon-boxed`.
 * **A larger picture is a multiple of the scale,** such as `calc(var(--stolon-size-large) * 6)` for a QR code, so it still lines up with the controls around it.
 
 ## Type

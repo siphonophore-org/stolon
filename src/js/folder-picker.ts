@@ -131,7 +131,7 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
         input.setAttribute('aria-label', pathLabel);
     }
     var field = make('div', 'stolon-folder-picker-field');
-    var browseButton = make('button', 'raised stolon-button stolon-field stolon-folder-picker-browse', { type: 'button' }, options.browseText || stolonText('Browse'));
+    var browseButton = make('button', 'raised stolon-button stolon-field-sized stolon-folder-picker-browse', { type: 'button' }, options.browseText || stolonText('Browse'));
     field.appendChild(input);
     field.appendChild(browseButton);
     root.appendChild(field);

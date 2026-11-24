@@ -95,7 +95,7 @@ function pick(preview: NotifyPreviewData, key: 'Method' | 'ContentType' | 'Body'
 }
 
 function message(text: string): HTMLElement {
-    return make('div', 'stolon-error', null, text);
+    return make('div', 'stolon-callout-error', null, text);
 }
 
 // A webhook's request line, its method and content type beside the saved address, over the body exactly as sent, laid out when it is JSON.

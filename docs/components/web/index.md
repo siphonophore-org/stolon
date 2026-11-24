@@ -70,7 +70,7 @@ Several components are built from a smaller one and inherit its look and behavio
 
 ## Naming Rules
 
-* Everything custom uses the `base` prefix. CSS classes are `stolon-` kebab case. A component is `stolon-name`, a part is `stolon-name-part`, and a state or variant is a modifier that also starts with `stolon-`, such as `stolon-selected`, `stolon-collapsed`, `stolon-active`, `stolon-dragging`, `stolon-disabled`, `stolon-hidden`, or a color name such as `stolon-green`.
+* Everything custom uses the `stolon-` prefix. CSS classes are kebab case. A component is `stolon-name`, a part is `stolon-name-part`, and a state or variant is a modifier that also starts with `stolon-`, such as `stolon-selected`, `stolon-collapsed`, `stolon-active`, `stolon-dragging`, `stolon-disabled`, `stolon-hidden`, or a color name such as `stolon-green`.
 * CSS variables are `--stolon-name`. JS exports are camelCase. C# types are PascalCase.
 * The only unprefixed classes are Jellyfin's own, which the kit restyles, such as `sectionTitle`, `sectionTitleContainer`, `fieldDescription`, `material-icons`, `inputContainer`, `checkboxContainer`, `selectContainer`, and `emby-*`, and the classes a plugin passes in, such as `className`, which stay as given.
 * Where Jellyfin supplies the element (`emby-button`, `emby-input`, `emby-select`, `emby-checkbox`), the kit adds `stolon-` classes beside the emby ones, as in `class="raised stolon-button stolon-primary"`.

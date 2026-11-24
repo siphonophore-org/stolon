@@ -122,8 +122,8 @@
 }
 
 /* A button on the same line as a field, which takes the field's height, padding, and text size, so the two line up at any size */
-/* Example: <div class="stolon-string-list-add"><input type="text"><button class="raised stolon-button stolon-field">Add</button></div> */
-.stolon-button.stolon-field {
+/* Example: <div class="stolon-string-list-add"><input type="text"><button class="raised stolon-button stolon-field-sized">Add</button></div> */
+.stolon-button.stolon-field-sized {
     flex: 0 0 auto;
     height: var(--stolon-field-height) !important;
     padding: 0 var(--stolon-field-pad) !important;

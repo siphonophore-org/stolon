@@ -75,7 +75,7 @@ export function createCheckbox(options?: CheckboxOptions): CheckboxHandle {
     var input = makeCheck('stolon-checkbox-input', attrs);
     input.checked = !!opts.checked;
     input.indeterminate = !!opts.indeterminate;
-    var root = makeCheckRow(input, null, 'stolon-checkbox stolon-' + size + (opts.field && size !== 'large' ? ' stolon-field' : '') + (opts.boxed && size !== 'large' ? ' stolon-field stolon-boxed' : '') + (opts.className ? ' ' + opts.className : ''));
+    var root = makeCheckRow(input, null, 'stolon-checkbox stolon-' + size + (opts.field && size !== 'large' ? ' stolon-field-sized' : '') + (opts.boxed && size !== 'large' ? ' stolon-field-sized stolon-boxed' : '') + (opts.className ? ' ' + opts.className : ''));
     // The text block the Checkbox List rows use: the label, with the description under it.
     var text = make('span', 'stolon-check-text');
     var labelEl = make('span', 'stolon-check-label');

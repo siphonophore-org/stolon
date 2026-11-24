@@ -114,7 +114,7 @@ One checkbox in Stolon's own look, with its text beside it, built on the checkbo
 | :--- | :--- |
 | `stolon-check-row.stolon-checkbox` | One checkbox with its text beside it, the box and text centered on one line, with no row padding or hover wash. Small is the plain box most pages use |
 | `stolon-check-row.stolon-checkbox.stolon-medium` | A medium checkbox, a size up: the medium button's height, the large box, and the large text |
-| `stolon-check-row.stolon-checkbox.stolon-field` | A checkbox a field tall, so it lines up with the text boxes and selects beside it |
+| `stolon-check-row.stolon-checkbox.stolon-field-sized` | A checkbox a field tall, so it lines up with the text boxes and selects beside it |
 | `stolon-check-row.stolon-checkbox.stolon-disabled` | A disabled checkbox, dimmed and taking no clicks |
 
 <!-- reference:end -->

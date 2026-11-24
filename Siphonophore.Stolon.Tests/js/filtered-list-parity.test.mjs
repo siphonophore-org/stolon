@@ -148,7 +148,7 @@ test('a toolbar action shows only while visible says so, and gets the state', fu
     var seen = null;
     var list = build({ actions: [{ id: 'retry', label: 'Retry Errors', icon: 'refresh', onClick: function (state) { seen = state.items.length; }, visible: function (state) { return state.items.some(function (i) { return i.state === 'Errored'; }); } }] });
     var btn = list.toolbar.querySelector('[data-action="retry"]');
-    assert.ok(btn.classList.contains('stolon-field'));
+    assert.ok(btn.classList.contains('stolon-field-sized'));
     assert.equal(btn.hidden, false);
     btn.click();
     assert.equal(seen, 3);

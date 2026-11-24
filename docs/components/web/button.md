@@ -23,7 +23,7 @@ Buttons are Jellyfin's `emby-button` with the `raised` class and the `stolon-but
 </button>
 ```
 
-Classes: `stolon-button` with `stolon-primary`, `stolon-secondary`, `stolon-destructive`, or `stolon-custom`, and `stolon-small`, `stolon-large`, `stolon-fill`, or `stolon-field`. `stolon-button-row` holds a row of them.
+Classes: `stolon-button` with `stolon-primary`, `stolon-secondary`, `stolon-destructive`, or `stolon-custom`, and `stolon-small`, `stolon-large`, `stolon-fill`, or `stolon-field-sized`. `stolon-button-row` holds a row of them.
 
 ## States and Modifiers
 
@@ -56,7 +56,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | `stolon-button.stolon-custom` | A button filled with a custom color from a hex code, with black or white text, whichever reads better |
 | `stolon-button.stolon-fill` | A medium or large button that spans the width it has. A small button keeps its own width |
 | `stolon-button-row` | A row of buttons a wide space apart, where fill buttons share the width evenly |
-| `stolon-button.stolon-field` | A button on the same line as a field, which takes the field's height, padding, and text size, so the two line up at any size |
+| `stolon-button.stolon-field-sized` | A button on the same line as a field, which takes the field's height, padding, and text size, so the two line up at any size |
 
 <!-- reference:end -->
 

@@ -22,7 +22,7 @@ Classes: `stolon-audio-player`, with the `stolon-playing` modifier, and the part
 
 ## States and Modifiers
 
-* The button is a `stolon-button` with the `stolon-field` modifier, so it is a field tall. It shows `play_arrow` or `pause`, with `playText` ("Play") or `pauseText` ("Pause") as its title and name. `playing` is on the root while it plays.
+* The button is a `stolon-button` with the `stolon-field-sized` modifier, so it is a field tall. It shows `play_arrow` or `pause`, with `playText` ("Play") or `pauseText` ("Pause") as its title and name. `playing` is on the root while it plays.
 * Starting a player pauses the one that was playing. `onPlay` runs when it starts, and `onPause` when it pauses or ends.
 * The player is a group named by `label`, the title by default, else "Audio".
 * The slider's value text reads the time, such as "0:42 of 3:05", and `seekText` ("Seek") names it.

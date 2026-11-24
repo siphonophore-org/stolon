@@ -70,7 +70,7 @@
 .stolon-filtered-pill-count:empty { display: none; }
 
 /* A button beside the search or on the bar of selected items, hidden while its visible test says no */
-/* Example: <button class="raised stolon-button stolon-secondary stolon-field stolon-filtered-action" data-action="retry"><span class="material-icons" aria-hidden="true">refresh</span><span>Retry Errors</span></button> */
+/* Example: <button class="raised stolon-button stolon-secondary stolon-field-sized stolon-filtered-action" data-action="retry"><span class="material-icons" aria-hidden="true">refresh</span><span>Retry Errors</span></button> */
 .stolon-filtered-action[hidden] { display: none !important; }
 
 /* The bar over a list with multiple selection: the select all, the count of selected items, and the bulk actions, washed while it carries actions */

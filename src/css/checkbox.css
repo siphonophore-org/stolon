@@ -55,12 +55,12 @@
 .stolon-checkbox.stolon-large .stolon-check-sub { font-size: var(--stolon-font-medium); opacity: 0.7; }
 
 /* A checkbox a field tall, so it lines up with the text boxes and selects beside it */
-/* Example: <label class="stolon-check-row stolon-checkbox stolon-small stolon-field"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" aria-label="Enabled"></label> */
-.stolon-check-row.stolon-checkbox.stolon-field { min-height: var(--stolon-field-height); }
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-small stolon-field-sized"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" aria-label="Enabled"></label> */
+.stolon-check-row.stolon-checkbox.stolon-field-sized { min-height: var(--stolon-field-height); }
 
 /* A boxed checkbox: its box and text in a frame drawn like a text box, a field tall with the field's border, corners,
    surface, and inset, so it matches the fields beside it edge for edge */
-/* Example: <label class="stolon-check-row stolon-checkbox stolon-small stolon-field stolon-boxed"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Enabled</span></span></label> */
+/* Example: <label class="stolon-check-row stolon-checkbox stolon-small stolon-field-sized stolon-boxed"><input type="checkbox" class="stolon-check-row-input stolon-checkbox-input" checked><span class="stolon-check-text"><span class="stolon-check-label">Enabled</span></span></label> */
 .stolon-check-row.stolon-checkbox.stolon-boxed {
     box-sizing: border-box;
     height: var(--stolon-field-height);

@@ -1,10 +1,10 @@
 /* Soft inline callout with one shared shape and one color per meaning, in five variants */
-/* Example: <div class="stolon-info">Password is your API key.</div> */
-.stolon-info,
-.stolon-success,
-.stolon-warn,
-.stolon-error,
-.stolon-neutral {
+/* Example: <div class="stolon-callout-info">Password is your API key.</div> */
+.stolon-callout-info,
+.stolon-callout-success,
+.stolon-callout-warn,
+.stolon-callout-error,
+.stolon-callout-neutral {
     border: 1px solid;
     border-radius: var(--stolon-radius-medium);
     padding: var(--stolon-pad-small) var(--stolon-pad-medium);
@@ -12,36 +12,36 @@
 }
 
 /* Blue callout for guidance and hints */
-/* Example: <div class="stolon-info">Password is your API key.</div> */
-.stolon-info {
+/* Example: <div class="stolon-callout-info">Password is your API key.</div> */
+.stolon-callout-info {
     background: var(--stolon-blue-soft);
     border-color: var(--stolon-blue-edge);
 }
 
 /* Green callout for a successful or healthy state */
-/* Example: <div class="stolon-success">Connected.</div> */
-.stolon-success {
+/* Example: <div class="stolon-callout-success">Connected.</div> */
+.stolon-callout-success {
     background: var(--stolon-green-soft);
     border-color: var(--stolon-green-edge);
 }
 
 /* Orange callout for a caution to heed */
-/* Example: <div class="stolon-warn">This replaces the current file.</div> */
-.stolon-warn {
+/* Example: <div class="stolon-callout-warn">This replaces the current file.</div> */
+.stolon-callout-warn {
     background: var(--stolon-orange-soft);
     border-color: var(--stolon-orange-edge);
 }
 
 /* Red callout for a failure or blocking problem */
-/* Example: <div class="stolon-error">Could not connect.</div> */
-.stolon-error {
+/* Example: <div class="stolon-callout-error">Could not connect.</div> */
+.stolon-callout-error {
     background: var(--stolon-red-soft);
     border-color: var(--stolon-red-edge);
 }
 
 /* Gray callout for a muted or inactive note */
-/* Example: <div class="stolon-neutral">Not configured.</div> */
-.stolon-neutral {
+/* Example: <div class="stolon-callout-neutral">Not configured.</div> */
+.stolon-callout-neutral {
     background: var(--stolon-gray-soft);
     border-color: var(--stolon-gray-edge);
 }

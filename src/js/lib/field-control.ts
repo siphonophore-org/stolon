@@ -337,7 +337,7 @@ export function createFieldGroup(fields: FieldSpec[], item: Record<string, any> 
             if (opts.onChange) opts.onChange(field.key);
         }, opts.name ? opts.name(field) : field.label);
         var extra = opts.cellClass && has(opts.cellClass, field.key) ? ' ' + opts.cellClass[field.key] : '';
-        var element = make('div', 'stolon-field-cell' + (field.type === 'toggle' ? ' stolon-toggle' : '') + extra, { 'data-key': field.key });
+        var element = make('div', 'stolon-field-cell' + (field.type === 'toggle' ? ' stolon-toggle-cell' : '') + extra, { 'data-key': field.key });
         var label = make('label', 'stolon-field-cell-label', null, field.label);
         if (control.input) {
             if (!control.input.id) control.input.id = nextId('field');
