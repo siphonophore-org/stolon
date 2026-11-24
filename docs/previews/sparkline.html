@@ -1,13 +1,13 @@
 <!-- title: Sparkline -->
-<div id="mount" style="display: grid; gap: 16px; max-width: 320px;"></div>
+<div id="mount" style="display: grid; gap: 16px; max-width: 480px;"></div>
 <script type="module">
 const base = await window.__baseReady;
 const mount = document.getElementById('mount');
 mount.appendChild(base.createSparkline({ label: 'Syncs this week', values: [3, 5, 4, 8, 6, 9, 12] }).element);
 mount.appendChild(base.createSparkline({ label: 'Errors this week', color: 'red', values: [6, 4, 5, 2, 3, 1, 1] }).element);
-const cards = document.createElement('div');
-cards.className = 'stolon-cards';
-cards.appendChild(base.createStatCard({ value: 47, label: 'Syncs', color: 'blue', trend: 12, trendSuffix: '%', sparkline: [3, 5, 4, 8, 6, 9, 12] }).element);
-cards.appendChild(base.createStatCard({ value: 1, label: 'Errors', color: 'red', trend: -5, positiveIsGood: false, sparkline: [6, 4, 5, 2, 3, 1, 1] }).element);
-mount.appendChild(cards);
+const cards = base.createStatusCardGrid({ cards: [
+    { icon: 'sync', title: 'Syncs', status: 'Ok', statusColor: 'green', value: 47, valueLabel: 'this week', sparkline: [3, 5, 4, 8, 6, 9, 12] },
+    { icon: 'error_outline', title: 'Errors', status: 'Check', statusColor: 'orange', value: 1, valueLabel: 'this week', sparkline: [6, 4, 5, 2, 3, 1, 1], sparklineColor: 'red' }
+] });
+mount.appendChild(cards.element);
 </script>

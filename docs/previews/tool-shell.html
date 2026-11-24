@@ -1,0 +1,59 @@
+<!-- title: Tool Shell -->
+<div id="wide"></div>
+<p>The same shell in a narrow frame turns the title into a menu of every tool.</p>
+<div id="narrow" style="max-width: 360px; padding: 16px; border: 1px dashed var(--stolon-border);"></div>
+<script type="module">
+const base = await window.__baseReady;
+const tools = [
+    { key: 'dashboard', name: 'Dashboard', icon: 'dashboard', href: '#dashboard' },
+    { key: 'ddns', name: 'DDNS', icon: 'public', href: '#ddns' },
+    { key: 'access', name: 'Access', icon: 'lock', href: '#access' },
+    { key: 'vpn', name: 'VPN', icon: 'vpn_lock', href: '#vpn', badge: { label: '4', color: 'orange' } },
+    { key: 'users', name: 'Users', icon: 'group', href: '#users' },
+    { key: 'scripts', name: 'Scripts', icon: 'code', href: '#scripts', badge: { label: 'Failed', color: 'red' } },
+    { key: 'storage', name: 'Storage', icon: 'storage', href: '#storage' },
+    { key: 'settings', name: 'Settings', icon: 'settings', href: '#settings' }
+];
+const cards = {
+    ddns: { status: 'Ok', statusColor: 'green', detail: 'Updated 4 minutes ago' },
+    access: { status: 'Off', statusColor: 'gray', detail: 'No rules are on' },
+    vpn: { status: 'Check', statusColor: 'orange', detail: '3 of 7 peers online' },
+    users: { status: 'Ok', statusColor: 'green', detail: '12 users, 2 signed in now' },
+    scripts: { status: 'Failed', detail: 'The nightly cleanup stopped at step 3 of 5' },
+    storage: { status: 'Check', statusColor: 'orange', detail: 'Media at 82%' },
+    settings: { status: 'Ok', statusColor: 'green', detail: 'Saved yesterday' }
+};
+
+function build(mount, current) {
+    let page = null;
+    const shell = base.createToolShell({
+        tools: tools,
+        current: current,
+        onSelect: (key, tool, event) => { event.preventDefault(); show(key); }
+    });
+    function show(key) {
+        if (page) page.destroy();
+        page = null;
+        shell.setCurrent(key);
+        shell.content.textContent = '';
+        if (key === 'dashboard') {
+            page = base.createStatusCardGrid({ cards: tools.filter((t) => cards[t.key]).map((t) => Object.assign({ icon: t.icon, title: t.name, href: t.href }, cards[t.key])) });
+            page.element.addEventListener('click', (e) => {
+                const card = e.target.closest('a');
+                if (!card) return;
+                e.preventDefault();
+                show(card.getAttribute('href').slice(1));
+            });
+            shell.content.appendChild(page.element);
+            return;
+        }
+        page = base.createSubTabs({ tabs: [{ id: 'status', label: 'Status', text: cards[key].detail + '.' }, { id: 'settings', label: 'Settings', text: 'The settings of this tool.' }] });
+        shell.content.appendChild(page.element);
+    }
+    mount.appendChild(shell.element);
+    show(current);
+}
+
+build(document.getElementById('wide'), 'dashboard');
+build(document.getElementById('narrow'), 'vpn');
+</script>

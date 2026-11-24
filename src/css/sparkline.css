@@ -21,7 +21,3 @@
 .stolon-sparkline.pink { --stolon-sparkline-color: var(--stolon-pink-fg); }
 .stolon-sparkline.teal { --stolon-sparkline-color: var(--stolon-teal-fg); }
 .stolon-sparkline.custom { --stolon-sparkline-color: var(--stolon-custom); }
-
-/* A sparkline under a stat card's label, in the card's own color */
-/* Example: <div class="stolon-card stolon-stat blue"><span class="stolon-card-count">12</span><span class="stolon-card-label">Syncs</span><span class="stolon-sparkline stolon-stat-sparkline"></span></div> */
-.stolon-stat-sparkline { margin-top: var(--stolon-gap-narrow); color: inherit; --stolon-sparkline-color: currentColor; }

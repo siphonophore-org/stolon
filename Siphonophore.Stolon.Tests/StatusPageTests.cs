@@ -76,9 +76,9 @@ public class StatusPageTests
     }
 
     /// <summary>
-    /// The card uses <c>.stolon-status-card</c> and not <c>.stolon-card</c>, which is the kit's stat card.
+    /// The card uses <c>.stolon-status-card</c> and not <c>.stolon-card</c>, which is the kit's count card.
     /// True: a page that links the kit CSS beside this card keeps its look.
-    /// False: the stat card rules would restyle the status card.
+    /// False: the count card rules would restyle the status card.
     /// </summary>
     [Fact]
     public void StatusTemplate_UsesUncollidingCardClass()

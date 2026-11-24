@@ -3,6 +3,7 @@
 .stolon-menu {
     position: relative;
     display: inline-block;
+    max-width: 100%;
 }
 
 /* Floating list of actions on the stolon-float surface, fixed to the viewport, placed by the menu under the button, or above it with no room, and aligned to its right edge or its left with stolon-menu-start */
@@ -26,6 +27,8 @@
     color: inherit;
     font: inherit;
     text-align: left;
+    text-decoration: none;
+    box-sizing: border-box;
     cursor: pointer;
 }
 .stolon-menu-item:hover,
@@ -33,3 +36,38 @@
 .stolon-menu-item:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: -2px; }
 .stolon-menu-item.destructive { color: var(--stolon-error); }
 .stolon-menu-item:disabled { opacity: 0.5; cursor: default; background: transparent; }
+
+/* Badge at the end of a menu item, after its label, which keeps the row one line tall */
+/* Example: <a class="stolon-menu-item stolon-icon-text" role="menuitem" href="#"><span class="stolon-menu-label">VPN</span><span class="stolon-badge red stolon-menu-badge">2</span></a> */
+.stolon-menu-badge {
+    flex: none;
+    align-self: center;
+    margin: -2px 0 -2px auto;
+}
+
+/* Menu button that shows its text and a dropdown chevron, set by the text option, the text cut with an ellipsis */
+/* Example: <button type="button" class="stolon-menu-button stolon-menu-text-button" aria-haspopup="menu"><span class="stolon-menu-text">VPN</span><span class="material-icons" aria-hidden="true">keyboard_arrow_down</span></button> */
+.stolon-menu-text-button {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--stolon-gap-narrow) / 2);
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: var(--stolon-size-medium);
+    padding: 0 var(--stolon-pad-small);
+    border: 0;
+    border-radius: var(--stolon-radius-small);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+.stolon-menu-text-button:hover { background: var(--stolon-wash); }
+.stolon-menu-text-button:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 1px; }
+.stolon-menu-text-button > .material-icons { flex: none; font-size: var(--stolon-chevron-primary); }
+.stolon-menu-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

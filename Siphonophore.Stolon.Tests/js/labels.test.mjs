@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { installFakeDom, all } from './fake-dom.mjs';
 
 var dom = installFakeDom();
-var { openEditorDialog, promptDialog, createCheckboxList, createUserMultiSelector, createSearchField, createPagination, createTranslations, createStringList, createNotifyPreview } = await import('../../src/js/index.js');
+var { openEditorDialog, promptDialog, createCheckboxList, createUserMultiSelector, createSearchField, createPagination, createTranslations, createStringList, createNotifyPreview, createToolShell } = await import('../../src/js/index.js');
 var { setCurrentTranslations } = await import('../../src/js/lib/stolon-text.js');
 
 beforeEach(function () {
@@ -163,4 +163,12 @@ test('createNotifyPreview names the stored address "Saved address" and the Disco
     var post = { Channel: 'Discord', Body: '{"embeds":[]}' };
     assert.match(createNotifyPreview({ preview: post }).element.children[0].innerHTML, /discord-name">Jellyfin</);
     assert.match(createNotifyPreview({ preview: post, username: 'Media bot' }).element.children[0].innerHTML, /discord-name">Media bot</);
+});
+
+test('createToolShell names its sidebar and title menu Tools by default and takes label', function () {
+    var plain = createToolShell({ tools: [{ key: 'a', name: 'A' }] });
+    assert.equal(plain.element.querySelector('.stolon-tool-shell-nav').getAttribute('aria-label'), 'Tools');
+    assert.equal(plain.element.querySelector('.stolon-menu-list').getAttribute('aria-label'), 'Tools');
+    var custom = createToolShell({ label: 'Areas' });
+    assert.equal(custom.element.querySelector('.stolon-tool-shell-nav').getAttribute('aria-label'), 'Areas');
 });

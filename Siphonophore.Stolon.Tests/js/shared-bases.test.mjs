@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { installFakeDom, all } from './fake-dom.mjs';
 
 var dom = installFakeDom();
-var { createList, createMediaCard, createOrderedList, createBanner, createStatCard } = await import('../../src/js/index.js');
+var { createList, createMediaCard, createOrderedList, createBanner } = await import('../../src/js/index.js');
 var { fillRowParts } = await import('../../src/js/list.js');
 var { createSelection, bindChecks } = await import('../../src/js/lib/selection.js');
 var { buildCard } = await import('../../src/js/lib/card.js');
@@ -71,7 +71,7 @@ test('bindChecks selects from row boxes, marks rows, skips disabled boxes, and s
     binding.destroy();
 });
 
-test('buildCard draws a colored count card that a stat card and count cards share', function () {
+test('buildCard draws a colored count card that count cards and filter cards share', function () {
     var card = buildCard({ tag: 'button', count: 4, label: 'Synced', color: 'green', className: 'x', attrs: { type: 'button' } });
     assert.equal(card.element.tagName, 'BUTTON');
     assert.equal(card.element.className, 'stolon-card x green');
@@ -79,8 +79,7 @@ test('buildCard draws a colored count card that a stat card and count cards shar
     assert.equal(card.label.textContent, 'Synced');
     var hex = buildCard({ count: 1, color: '#123456' });
     assert.ok(hex.element.classList.contains('custom'));
-    var stat = createStatCard({ value: 2, label: 'Items' });
-    assert.equal(stat.element.children[0].className, 'stolon-card-count');
+    assert.equal(hex.element.children[0].className, 'stolon-card-count');
 });
 
 test('a clearable pressed group turns the one button off on a second click', function () {

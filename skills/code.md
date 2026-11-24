@@ -30,20 +30,20 @@ Stolon is a set of base components and cores, with thin variations on top. A var
 | Data view core, `lib/data-view.ts` | The search, filters, sort, and paging of the Filtered List and every table on it |
 | Checkbox core, `lib/check.ts` | Checkbox, whose `createCheckbox` is the public face and gives the field control core its toggle field, the Filtered List's row checks and select all, which the Checkbox List and tables inherit, the Filter Panel, the Tree View, the Inherit Field, and the Log Viewer |
 | Selection core, `lib/selection.ts` | The picked ids of the Filtered List, the Checkbox List, and the Tree View |
-| Popover core, `lib/popover.ts`, and `.stolon-float` | Overflow Menu, Filter Panel, Help Hint, Tooltip, the typeahead dropdown, and the chart tooltip |
+| Popover core, `lib/popover.ts`, and `.stolon-float` | Overflow Menu, which the Tool Shell's title menu is built on, Filter Panel, Help Hint, Tooltip, the typeahead dropdown, and the chart tooltip |
 | Typeahead core, `lib/typeahead.ts` | Combo Box, Chip Select, and Media Picker |
 | Pressed group core, `lib/pressed-group.ts` | Pill Group, the Schedule Picker's days, the Inherit Field, the Date Range Picker's presets, the Filtered List's pills, the World Map's layers, and the Folder Picker and Preview Frame toggles |
 | Dialog core, `lib/dialog.ts` | `createModalShell`, which `openDialog` and the Detail Drawer are built on, and `bindModalBehavior`, which Bound Dialog is built on. Confirm Dialog, with its typed confirm, Prompt Dialog, Editor Dialog, Filter Panel, Folder Picker, Preview Frame, and the QR Code, whose inline layout opens the code in a dialog, are built on `openDialog` |
 | Message core, `lib/message.ts` | Field Message, Status Text, Banner, and Toast. Save Bar is built on the status line |
-| Card core, `lib/card.ts` | Count Cards, Stat Card, and the Filtered List's filter cards |
+| Card core, `lib/card.ts` | Count Cards and the Filtered List's filter cards |
 | Chart core, `lib/chart.ts` | Bar Chart, Line Chart, Pie Chart, and Sparkline. A radial chart, such as the pie, sets `radial` for a square plot with no axes. QR Code draws with its `svgEl` |
 | Clock core, `lib/clock.ts` | Relative Time, the only component that uses it. All of its live times share one timer |
 | Thumb core, `lib/thumb.ts` | Avatar, Media Card, Media Picker, Chip Select, Checkbox List rows, Paginated Table, Tree View, Image Picker, and Preview Frame. A source may be an address or a function that returns an address, a Blob, or a promise of one |
 | Validation core, `lib/validate.ts` | Every input. See [Validation](#validation) |
 | Color core, `lib/color.ts` | Every component that takes a status name or a hex code |
-| Badge core, `lib/badge.ts` | `makeBadge` and `badgeColor`, used by the shared bag, Checkbox List, Collapsible Section, Definition List, Detail Drawer, Matrix Grid, Media Card, and Sortable Card List |
+| Badge core, `lib/badge.ts` | `makeBadge` and `badgeColor`, used by the shared bag, Checkbox List, Collapsible Section, Definition List, Detail Drawer, Matrix Grid, Media Card, Overflow Menu, Sortable Card List, and Status Card |
 | Chips core, `lib/chips.ts` | Chip Select, Tag Input, and Media Picker |
-| Balance core, `lib/balance.ts` | Balanced Rows, List, Filtered List, Choice Group, and Count Cards |
+| Balance core, `lib/balance.ts` | Balanced Rows, List, Filtered List, Choice Group, Count Cards, and the Status Card grid |
 | Canvas core, `lib/canvas.ts` | Image Picker and QR Code |
 | File core, `lib/file.ts` | File Picker, QR Code, and the file intake core |
 | File intake core, `lib/file-intake.ts` | File Picker and Image Picker |

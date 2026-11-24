@@ -172,7 +172,7 @@ These files test one concern across many components. Add to the one that matches
 | `missing.test.mjs` | Helpers that had no tests | A helper with no home file gets its first test |
 | `kit.test.mjs` | Dialog focus, the Tab trap, and Escape across Dialog, Bound Dialog, and Editor Dialog, and the bundle entry | A change touches focus or Escape in a dialog |
 | `core.test.mjs` | The config page, the shared bag, and the browser helpers | A change touches one of those |
-| `display.test.mjs` | Breadcrumbs, Stepper, Banner, Divider, Avatar, User Chip, Stat Card, Progress Ring, Timeline, and Status Dot | A change touches one of those display components |
+| `display.test.mjs` | Breadcrumbs, Stepper, Banner, Divider, Avatar, User Chip, Progress Ring, Timeline, and Status Dot | A change touches one of those display components |
 | `fields.test.mjs` | Number Unit Field, Slider Field, and Schedule Picker | A change touches one of those fields |
 | `icons.test.mjs` | Each arrow comes from the one icon its meaning takes, per the Icons table in [style.md](style.md#icons) | A component draws a new icon |
 | `spacing.test.mjs` | Every gap and margin in the kit CSS is one of the two spacing tokens, per [Spacing and Shape](style.md#spacing-and-shape) | It fails, which means a CSS change broke the rule |

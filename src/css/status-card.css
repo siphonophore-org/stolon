@@ -1,0 +1,110 @@
+/* Grid of status cards a wide space apart, laid out in balanced rows by createStatusCardGrid */
+/* Example: <div class="stolon-status-tiles"><div class="stolon-status-tile"></div><div class="stolon-status-tile"></div></div> */
+.stolon-status-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-wide);
+}
+.stolon-status-tiles > .stolon-status-tile { flex: 1 1 calc(var(--stolon-size-large) * 5); }
+
+/* Rounded bordered card on the surface color with an icon and a status pill over a bold title and one quiet detail line. As a link or a button it takes the shared card hover and focus ring */
+/* Example: <a class="stolon-status-tile stolon-clickable" href="#vpn"><span class="stolon-status-tile-head"><span class="material-icons stolon-status-tile-icon" aria-hidden="true">vpn_lock</span><span class="stolon-badge green stolon-status-tile-pill">Ok</span></span><span class="stolon-status-tile-title">VPN</span><span class="stolon-status-tile-detail">3 of 7 peers online</span></a> */
+.stolon-status-tile {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-width: 0;
+    padding: var(--stolon-pad-large);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-medium);
+    background: var(--stolon-surface);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+}
+.stolon-status-tile[hidden] { display: none; }
+.stolon-status-tile.stolon-clickable { cursor: pointer; }
+button.stolon-status-tile { width: 100%; }
+
+/* Top row of a status card, the icon at the start and the pill at the end */
+/* Example: <span class="stolon-status-tile-head"><span class="material-icons stolon-status-tile-icon" aria-hidden="true">dns</span><span class="stolon-badge orange stolon-status-tile-pill">Check</span></span> */
+.stolon-status-tile-head {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    width: 100%;
+    min-height: var(--stolon-size-small);
+    margin-bottom: var(--stolon-gap-narrow);
+}
+
+/* Material icon of a status card, one small control tall, in the muted text color */
+/* Example: <span class="material-icons stolon-status-tile-icon" aria-hidden="true">storage</span> */
+.stolon-status-tile-icon {
+    flex: none;
+    font-size: var(--stolon-size-small);
+    line-height: 1;
+    color: var(--stolon-text-muted);
+}
+
+/* Status pill at the top right of a status card, a badge that never wraps or shrinks */
+/* Example: <span class="stolon-badge red stolon-status-tile-pill">Failed</span> */
+.stolon-status-tile-pill {
+    flex: none;
+    margin-left: auto;
+}
+
+/* Bold title of a status card, cut with an ellipsis and titled with its full text */
+/* Example: <span class="stolon-status-tile-title" title="Storage">Storage</span> */
+.stolon-status-tile-title,
+.stolon-status-tile-detail {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.stolon-status-tile-title {
+    font-size: var(--stolon-font-large);
+    line-height: var(--stolon-line-large);
+    font-weight: 600;
+}
+
+/* Large value of a status card, such as a count, in even width digits with a small label after it */
+/* Example: <span class="stolon-status-tile-value"><span class="stolon-status-tile-number">1,204</span><span class="stolon-status-tile-unit">items</span></span> */
+.stolon-status-tile-value {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: calc(var(--stolon-gap-narrow) / 2);
+    min-width: 0;
+    margin-top: calc(var(--stolon-gap-narrow) / 2);
+}
+.stolon-status-tile-value[hidden] { display: none; }
+.stolon-status-tile-number {
+    font-size: calc(var(--stolon-font-large) * 1.5);
+    line-height: calc(var(--stolon-line-large) * 1.25);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.stolon-status-tile-unit {
+    font-size: var(--stolon-font-small);
+    line-height: var(--stolon-line-small);
+    opacity: 0.7;
+}
+
+/* Sparkline under a status card's value, a narrow space below it */
+/* Example: <span class="stolon-sparkline stolon-status-tile-sparkline" role="img" aria-label="Syncs, from 3 to 12, low 3, high 12"></span> */
+.stolon-status-tile-sparkline { margin-top: var(--stolon-gap-narrow); }
+
+/* Quiet detail line of a status card, dimmed, cut with an ellipsis, and titled with its full text */
+/* Example: <span class="stolon-status-tile-detail" title="Media at 82%">Media at 82%</span> */
+.stolon-status-tile-detail {
+    margin-top: calc(var(--stolon-gap-narrow) / 2);
+    font-size: var(--stolon-font-small);
+    line-height: var(--stolon-line-small);
+    opacity: 0.7;
+}
+.stolon-status-tile-title[hidden],
+.stolon-status-tile-detail[hidden] { display: none; }

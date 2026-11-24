@@ -7,7 +7,7 @@ A row of large counts over labels, tinted by status.
 | When | Use |
 | :--- | :--- |
 | A summary of counts at the top of a page or tab | Count Cards. |
-| Counts that each need a trend | [Stat Card](stat-card.md). |
+| A state with a detail line, or a count that opens its page | [Status Card](status-card.md). |
 | Cards for records | `stolon-card-list` and `stolon-card-item`, or the [Record Card](record-card.md). Never confuse them with Count Cards. |
 
 ## Usage

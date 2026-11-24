@@ -1,4 +1,4 @@
-// Behavior tests for createBreadcrumbs, createStepper, createBanner, createDivider, createAvatar, createUserChip, createStatCard, createProgressRing, createTimeline, and createStatusDot, run on the stub DOM in fake-dom.mjs.
+// Behavior tests for createBreadcrumbs, createStepper, createBanner, createDivider, createAvatar, createUserChip, createProgressRing, createTimeline, and createStatusDot, run on the stub DOM in fake-dom.mjs.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { installFakeDom, all } from './fake-dom.mjs';
@@ -190,39 +190,6 @@ test('the user chip shows an avatar, a name, and an optional second line', funct
     assert.equal(J.createUserChip({ name: 'A' }).element.querySelector('.stolon-user-chip-text').hidden, true);
     c.setValue({ name: 'Bob', text: '' });
     assert.equal(c.getValue().name, 'Bob');
-});
-
-test('the stat card shows the value and label with the card color, and a trend with a direction', function () {
-    var s = J.createStatCard({ value: 1204, label: 'Items', color: 'blue', trend: 12, trendSuffix: '%', trendLabel: 'vs last week' });
-    assert.ok(s.element.classList.contains('stolon-card'));
-    assert.ok(s.element.classList.contains('blue'));
-    assert.equal(s.element.querySelector('.stolon-card-count').textContent, '1204');
-    assert.equal(s.element.querySelector('.stolon-card-label').textContent, 'Items');
-    var trend = s.element.querySelector('.stolon-stat-trend');
-    assert.ok(trend.classList.contains('good'));
-    assert.equal(trend.querySelector('.material-icons').textContent, 'arrow_upward');
-    assert.equal(trend.querySelector('.stolon-sr-only').textContent, 'Up');
-    assert.equal(trend.children[2].textContent, '12% vs last week');
-});
-
-test('the stat trend is bad for a decrease, reversed with positiveIsGood false, flat at zero, and hidden with no trend', function () {
-    assert.ok(J.createStatCard({ trend: -3 }).element.querySelector('.stolon-stat-trend').classList.contains('bad'));
-    assert.ok(J.createStatCard({ trend: -3, positiveIsGood: false }).element.querySelector('.stolon-stat-trend').classList.contains('good'));
-    var flat = J.createStatCard({ trend: 0 }).element.querySelector('.stolon-stat-trend');
-    assert.ok(flat.classList.contains('flat'));
-    assert.equal(flat.querySelector('.stolon-sr-only').textContent, 'No change');
-    assert.equal(J.createStatCard({ value: 1 }).element.querySelector('.stolon-stat-trend').hidden, true);
-    var custom = J.createStatCard({ trend: 1, trendUpText: 'Increase' }).element.querySelector('.stolon-sr-only');
-    assert.equal(custom.textContent, 'Increase');
-    assert.equal(J.createStatCard({ trend: -1, trendDownText: 'Decrease' }).element.querySelector('.stolon-sr-only').textContent, 'Decrease');
-    assert.equal(J.createStatCard({ trend: 0, trendFlatText: 'Same' }).element.querySelector('.stolon-sr-only').textContent, 'Same');
-});
-
-test('the stat card setValue merges new data', function () {
-    var s = J.createStatCard({ value: 1, label: 'A' });
-    s.setValue({ value: 2 });
-    assert.equal(s.element.querySelector('.stolon-card-count').textContent, '2');
-    assert.equal(s.getValue().label, 'A');
 });
 
 test('the progress ring is a progressbar with value attributes, and the arc length follows the value', function () {

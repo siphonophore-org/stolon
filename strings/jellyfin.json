@@ -14,7 +14,6 @@
     {"key": "Copied"},
     {"key": "Copy"},
     {"key": "Custom"},
-    {"key": "Down"},
     {"key": "Download"},
     {"key": "Episode"},
     {"key": "Filter"},
@@ -59,7 +58,6 @@
     {"key": "Trailer"},
     {"key": "Tuesday"},
     {"key": "Unknown"},
-    {"key": "Up"},
     {"key": "Video"},
     {"key": "Wednesday"}
   ],

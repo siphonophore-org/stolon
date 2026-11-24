@@ -91,7 +91,9 @@ B.createSearchField({});
 B.createSkeleton({});
 B.createSliderField({});
 B.createSpinner({});
-B.createStatCard({ trend: 3 });
+B.createStatusCard({ icon: 'vpn_lock', title: 'VPN', status: 'Ok', statusColor: 'green', detail: '3 of 7 peers online' }).setStatus('Check', 'orange');
+B.createStatusCardGrid({ cards: [{ title: 'Storage', value: 82, valueLabel: '%', href: '#storage' }] }).add({ title: 'Users', onClick: function (e: MouseEvent) { return e; } });
+B.createToolShell({ tools: [{ key: 'vpn', name: 'VPN', icon: 'vpn_lock', href: '#vpn', badge: { label: '2', color: 'red' } }], current: 'vpn', onSelect: function (key: string, tool, event: MouseEvent) { event.preventDefault(); return tool.name + key; } }).setCurrent('vpn');
 B.createStatusDot({});
 B.createStepper({});
 B.createStringList({});
@@ -130,8 +132,10 @@ B.createNumberUnitField({});
 B.createPagination({ pageSize: '25' });
 // @ts-expect-error A table column needs its key.
 B.createPaginatedTable<Row>(view, shared, { containerId: 'rows', endpoint: 'Rows', columns: [{}] });
-// @ts-expect-error The trend is a number.
-B.createStatCard({ trend: 'up' });
+// @ts-expect-error A status card value label is text.
+B.createStatusCard({ valueLabel: 3 });
+// @ts-expect-error A tool needs its key and name.
+B.createToolShell({ tools: [{ icon: 'dns' }] });
 // @ts-expect-error confirmDialog resolves to a boolean.
 B.confirmDialog('Remove it?').then(function (yes: string) { return yes; });
 // @ts-expect-error A secret field is an input.
@@ -176,9 +180,9 @@ B.createCheckbox({ label: 'Enabled', size: 'large', description: 'Sync it.', box
 B.createCheckbox({ ariaLabel: 'Enabled', field: true, boxed: true }).setIndeterminate(true);
 // @ts-expect-error The checkbox size is small, medium, or large.
 B.createCheckbox({ size: 'huge' });
-B.createStatCard({ value: 'Delivered 3m ago', label: 'Queue', detail: ['Next in 5m'], layout: 'label-top', valueColor: 'green' });
-// @ts-expect-error The layout is value-top or label-top.
-B.createStatCard({ layout: 'side' });
+B.createOverflowMenu({ text: 'VPN', items: [{ label: 'VPN', href: '#vpn', current: true, badge: 2 }], onSelect: function (value, item, event: MouseEvent) { return event; } }).setText('DDNS');
+// @ts-expect-error A menu item badge is text, a number, or { label, color }.
+B.createOverflowMenu({ items: [{ label: 'VPN', badge: true }] });
 B.createDefinitionList({ layout: 'columns', arrow: true, items: [{ label: 'From', value: 'Living Room', meta: '12 GB', note: 'Main' }] });
 B.createCompareTable({ columns: [{ key: 'a', label: 'A' }], rows: [{ section: 'Genres' }, { note: 'Changed by a rule.' }] });
 var grid = B.createMatrixGrid({ rows: [{ key: 'speed', label: 'Speed', cells: { at: null } }], columns: [{ key: 'limit', label: 'Limit', type: 'number', unit: 'Mbps' }, { key: 'role', label: 'Role', type: 'badge' }], note: 'Speeds are per server.' });
