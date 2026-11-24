@@ -2,7 +2,86 @@
 
 Standalone pages that a plugin serves outside the dashboard, such as invite links, public download pages, and "page not found".
 
-A standalone page renders through `StatusPage`, which fills the embedded `status` template. `PublicPage` adds the response headers and the favicon that those pages need.
+A page that regular users open from a link, such as an invite or a device setup page, is a `HostedPage` in the [User Page](../web/user-page.md) frame. A short message, such as "page not found", renders through `StatusPage`, which fills the embedded `status` template. `PublicPage` adds the response headers and the favicon that those pages need.
+
+## HostedPage
+
+Serves a page at a root path of the server, such as `/invites/{code}` or `/wireguard`, in the `page` template. A plugin declares the page once, with its prefix for the shared pages, who may open it, and its content, and serves it from a controller action.
+
+```csharp
+[ApiController]
+[Route("invites")]
+[ApiExplorerSettings(IgnoreApi = true)]
+public sealed class InvitePageController : ControllerBase
+{
+    private static readonly HostedPage Page = new(
+        "myplugin",
+        HostedPageAccess.Anyone,
+        HostedPageContent.Resource(typeof(Plugin).Assembly, "Web.invite.html"))
+    {
+        Title = "Invite",
+        Mark = "Invite",
+        MarkIcon = "person_add",
+        Translations = "MyPlugin/Translations"
+    };
+
+    [HttpGet("{code}")]
+    [AllowAnonymous]
+    [Produces("text/html")]
+    public ContentResult Invite(string code) =>
+        Page.Serve(this, new Dictionary<string, string> { ["CODE"] = code });
+}
+```
+
+`Serve` answers with the whole document. It sets the `PublicPage` hardening headers, `X-Content-Type-Options: nosniff`, and `frame-ancestors 'self'`. It writes the server's name in the header, the language the request asks for, and links the plugin's shared Stolon CSS and JS, the web client's favicon, and the web client's Material Icons face, all found from the request's services.
+
+The page sets its base address to the server root, written relative to the request path, such as `../` for `/invites/abc`. Every link in the frame and in the content works under a base path and behind a reverse proxy that strips a prefix, with no script to work out the root.
+
+### Why a Controller
+
+A plugin declares the page in its own controller, and Stolon serves it.
+
+* Jellyfin's plugin model routes a plugin's pages through MVC controllers, as the siblings' invite and request pages do. A plugin has no supported hook to add a route without one.
+* Stolon compiles into every plugin, so a controller in Stolon would exist once per plugin, with the same routes, and the routes would collide.
+* A route attribute keeps the path where Jellyfin and the reader expect it, beside the plugin's other routes.
+
+### Access
+
+A browser that opens a link sends no Jellyfin token, since the web client keeps its sign-in in local storage and sends it as a header. So the page itself is served to anyone, and access is enforced in two places.
+
+| Access | The page action | The page's API calls | The page script |
+| :--- | :--- | :--- | :--- |
+| `Anyone` | `[AllowAnonymous]` | `[AllowAnonymous]`, with the plugin's own checks such as a code and a rate limit | Shows the content at once |
+| `User` | `[AllowAnonymous]` | `[Authorize]` | Shows the content to a signed in viewer, and a sign in card to anyone else |
+| `Administrator` | `[AllowAnonymous]` | `[Authorize(Policy = HostedPage.AdministratorPolicy)]` | Shows the content to an administrator, and a card that turns away anyone else |
+
+The page script, `startUserPage`, reads the sign-in the web client stored for this server, checks it with `Users/Me`, and gives the plugin's script a session that calls the API as the viewer. See [User Page](../web/user-page.md).
+
+**Gotchas**
+
+* Never put private data in the page or its values. Anyone with the address can read the page, so the data comes from an API call that Jellyfin authorizes.
+* Values are HTML encoded, so pass text, never markup. Markup belongs in the content.
+* A route with a token, such as `{code}`, also matches `favicon.ico` under it. The page links the favicon from the web client, so the plugin needs no favicon route.
+* The prefix is the one the plugin passes to `GetSharedPages`, since the page links `web/configurationpage?name=<prefix>_stolon.css` and `.js`.
+* The web client's favicon and icon face are read from its `index.html` and the stylesheets it links, and kept until `index.html` changes. Without a web client the page has neither.
+* A request to `/wireguard` and to `/wireguard/` both work. Each gets the base address for its own depth.
+
+## HostedPageAccess
+
+Who may open a `HostedPage`: `Anyone`, `User` for any signed in user, or `Administrator`. The page writes it on its body as `data-stolon-access`, and the page script checks it. See [Access](#access) for the attribute each one takes.
+
+## HostedPageContent
+
+What a `HostedPage` serves inside its frame, read once on first use. `HostedPageContent.Resource` reads an HTML fragment the plugin embeds, by its full name or the end of it after a dot. `HostedPageContent.Template` reads a Stolon template, or any resource whose name ends in `.Templates.<name>.html`.
+
+```xml
+<EmbeddedResource Include="Web\invite.html" />
+```
+
+**Gotchas**
+
+* Missing content throws `InvalidOperationException` on the first request, with the name it looked for.
+* The fragment fills its `{{KEY}}` tokens in one pass from the values `Serve` takes. A token with no value stays as written.
 
 ## TemplateLoader
 
@@ -29,6 +108,7 @@ var html = TemplateLoader.Fill("status", new Dictionary<string, string>
 * A value that looks like a token is not expanded again, and a token with no entry stays in the text. Pass an empty string, not null, for a slot you want empty.
 * Key matching follows the dictionary's comparer.
 * The `status` template uses `TITLE`, `HEADING`, `MESSAGE`, `SPINNER`, `BUTTON`, and `CONTENT`.
+* The `page` template, which `HostedPage` fills, uses `LANGUAGE`, `ROOT`, `TITLE`, `FAVICON`, `ICONS`, `STYLESHEET`, `COLUMN`, `ACCESS`, `SERVER`, `MARK`, `CONTENT`, `SCRIPT`, and `OPTIONS`.
 
 ## StatusPage
 

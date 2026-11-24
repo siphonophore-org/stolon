@@ -1,0 +1,48 @@
+<!-- title: User Page -->
+<iframe id="page" title="User page parts" style="display: block; width: 100%; height: 900px; border: 0; border-radius: 8px;"></iframe>
+<template id="content">
+<section class="stolon-user-page-card">
+<h1 class="stolon-user-page-title">Card title</h1>
+<p class="stolon-user-page-lead">A short paragraph under the title says what the page is for.</p>
+<form class="stolon-user-page-form" novalidate>
+<div class="stolon-user-page-field">
+<label for="name">Device name</label>
+<input id="name" type="text" value="Living room TV" />
+<span class="stolon-user-page-hint">Shown in your device list.</span>
+</div>
+<div id="success" class="stolon-user-page-message" hidden></div>
+<div id="warn" class="stolon-user-page-message" hidden></div>
+<div id="error" class="stolon-user-page-message" hidden></div>
+<div class="stolon-user-page-actions">
+<button class="raised stolon-button primary large fill" type="button">Primary action</button>
+<button class="raised stolon-button secondary large fill" type="button">Secondary action</button>
+</div>
+</form>
+</section>
+<section class="stolon-user-page-card">
+<h2 class="stolon-user-page-subtitle">Steps</h2>
+<ol class="stolon-user-page-steps">
+<li>Each step is one short sentence.</li>
+<li>The numbers come from the list.</li>
+</ol>
+</section>
+<section class="stolon-user-page-card stolon-user-page-done" data-stolon-state="success">
+<span class="stolon-user-page-done-icon"><span class="material-icons" aria-hidden="true">check_circle</span></span>
+<h1 class="stolon-user-page-title">Finished</h1>
+<p class="stolon-user-page-lead">The finished state closes a flow.</p>
+<div class="stolon-user-page-actions">
+<a class="raised stolon-button primary large fill" href="web/">Go to sign in</a>
+</div>
+</section>
+<script type="module">
+const base = await import('./base/stolon.js');
+await base.startUserPage();
+base.setUserPageMessage(document.getElementById('success'), 'success', 'Saved.');
+base.setUserPageMessage(document.getElementById('warn'), 'warn', 'This code expires in 10 minutes.');
+base.setUserPageMessage(document.getElementById('error'), 'error', 'Could not save.');
+</script>
+</template>
+<script type="module">
+await window.__baseReady;
+window.__gallery.userPage({ frame: document.getElementById('page'), content: document.getElementById('content'), title: 'Devices', server: 'Den', mark: 'Devices', markIcon: 'devices' });
+</script>

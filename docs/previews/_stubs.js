@@ -1,6 +1,6 @@
 // Stubs of the Jellyfin dashboard globals (Dashboard, ApiClient) with mock users and mock paged rows.
 // The docs preview shell and the gallery both load this before the bundle, so they share one set of mock data.
-// Names that a preview snippet may use: window.__gallery (svg, rect) and window.__galleryData (USERS, ITEMS, COLORS, STATUSES, MEDIA).
+// Names that a preview snippet may use: window.__gallery (svg, rect, userPage) and window.__galleryData (USERS, ITEMS, COLORS, STATUSES, MEDIA).
 (function () {
     function svg(w, h, bg, label) {
         var s = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '">' +
@@ -16,7 +16,48 @@
             'dominant-baseline="middle" font-family="sans-serif">' + label + '</text></svg>';
         return 'data:image/svg+xml;utf8,' + encodeURIComponent(s);
     }
-    window.__gallery = { svg: svg, rect: rect };
+    // Fills the user page template the way HostedPage.Render does, with the content of a <template> element, and shows
+    // it in a frame that grows with it. With ?page in the address it replaces the whole preview, as a server would serve it.
+    // Options: content (the template element), values (for its tokens), frame (the iframe), title, server, mark, markIcon, wide, access.
+    function userPage(options) {
+        var encode = function (value) { return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+        return fetch('./base/page.html').then(function (r) { return r.text(); }).then(function (template) {
+            var mark = options.mark
+                ? '<span class="stolon-user-page-mark stolon-icon-text">' + (options.markIcon ? '<span class="material-icons" aria-hidden="true">' + encode(options.markIcon) + '</span>' : '') + '<span>' + encode(options.mark) + '</span></span>'
+                : '';
+            var values = {
+                LANGUAGE: 'en-us',
+                ROOT: './',
+                ACCESS: options.access || 'anyone',
+                TITLE: encode(options.title || options.server || 'Jellyfin'),
+                FAVICON: '',
+                ICONS: '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-icons-iconfont@6.7.0/dist/material-design-icons.min.css" />',
+                STYLESHEET: './base/stolon.css',
+                SCRIPT: './base/stolon.js',
+                SERVER: encode(options.server || 'Jellyfin'),
+                MARK: mark,
+                COLUMN: options.wide ? ' stolon-wide' : '',
+                OPTIONS: '',
+                CONTENT: options.content.innerHTML.replace(/\{\{(\w+)\}\}/g, function (all, key) { return options.values && key in options.values ? encode(options.values[key]) : all; })
+            };
+            var html = template.replace(/\{\{(\w+)\}\}/g, function (all, key) { return key in values ? values[key] : all; });
+            if (new URLSearchParams(location.search).has('page')) {
+                document.open();
+                document.write(html);
+                document.close();
+                return;
+            }
+            var frame = options.frame;
+            frame.addEventListener('load', function () {
+                var doc = frame.contentDocument;
+                var fit = function () { frame.style.height = doc.documentElement.scrollHeight + 'px'; };
+                if (frame.contentWindow.ResizeObserver) new frame.contentWindow.ResizeObserver(fit).observe(doc.body);
+                fit();
+            });
+            frame.srcdoc = html;
+        });
+    }
+    window.__gallery = { svg: svg, rect: rect, userPage: userPage };
 
     var COLORS = ['#0088cc', '#9b59b6', '#5cb85c', '#f0ad4e', '#d9534f', '#3498db'];
     var USERS = [

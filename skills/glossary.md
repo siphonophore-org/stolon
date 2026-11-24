@@ -81,6 +81,9 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Badge states | The one map from every state a badge shows to its color, which a plugin maps its own statuses onto | `BADGE_STATES` | Status map, state colors |
 | Status card | A count over a label inside `stolon-cards`, tinted by color | `stolon-card` | Tile, counter |
 | Status page | The themed standalone card page that `StatusPage` renders | `StatusPage`, `status.html` | Error page, landing page |
+| User page | A whole page a plugin hosts for regular users, in the frame of the `page` template, built from the kit's cards, fields, steps, and finished state | `stolon-user-page`, `page.html`, `startUserPage` | Public site, portal, landing page |
+| Sign in card | The card a user page shows in place of its content to a viewer who may not open it | `stolon-user-page-gate` | Login wall, paywall |
+| Finished state | The card that closes a flow on a user page, a round icon in its state's color over a heading and its buttons | `stolon-user-page-done` | Success screen, thank you page |
 | Record card | A card of label and value rows for one item | `stolon-record-card` | Detail panel |
 | Asset list | Rows for uploaded files, each with a thumbnail, a name and reference, and action buttons | `stolon-asset-list`, `stolon-asset-item` | File list, upload list |
 | Bulk edit bar | A bordered toolbar above a table for editing many rows at once | `stolon-bulk-edit-bar` | Batch bar, mass edit |
@@ -276,6 +279,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Shared pages | The embedded bundle pages a plugin registers under its own name | `GetSharedPages` | Assets |
 | Secret protector | Encrypts credentials at rest with Data Protection | `SecretProtector` | Vault, encryptor |
 | Public page | A standalone page a plugin serves outside the dashboard | `PublicPage`, `StatusPage` | Landing page |
+| Hosted page | A user page a plugin serves at a root path of the server, declared once with its prefix, access, and content | `HostedPage`, `HostedPageContent` | Route page, custom page |
+| Access | Who may open a hosted page, anyone, any signed in user, or administrators | `HostedPageAccess`, `data-stolon-access` | Permission, role |
 | Circuit breaker | Stops calls to a service after repeated failures, for a cooldown | `CircuitBreaker` | Throttle |
 | Backoff | A pause that grows with each failure of one record | `BackoffPolicy`, `BackoffState` | Delay, cooldown |
 | Retry | Repeating an operation after a transient fault | `RetryPolicy` | Reattempt |

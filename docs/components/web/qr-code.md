@@ -52,6 +52,7 @@ With layout 'inline' it draws only the text as a wrapped Copy Field that shows a
 | `dialogTitle` | <code>string</code> | the inline dialog's title (default 'QR code') |
 | `label` | <code>string</code> | the code's accessible name (default 'QR code for' and the text) |
 | `showValue` | <code>boolean</code> | false hides the Copy Field under the code (default true) |
+| `showActions` | <code>boolean</code> | false hides Copy image and Download, for a page that offers its own download (default true) |
 | `fileName` | <code>string</code> | the name of the downloaded PNG (default 'qr-code.png') |
 | `copyImageText` | <code>string</code> | the copy button's label (default 'Copy image') |
 | `downloadText` | <code>string</code> | the download button's label (default 'Download') |

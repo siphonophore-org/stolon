@@ -14,7 +14,7 @@ Use the latest version from the organization's GitHub Packages feed. A version s
 | :--- | :--- |
 | `src/*.cs` | Compiled into the plugin, under the plugin's own analyzers |
 | `stolon.css` and `stolon.js` | Embedded as `<RootNamespace>.Configuration.stolon.css` and `.js` |
-| `templates/*.html` | Embedded as `<RootNamespace>.Templates.<name>.html`, for `TemplateLoader` and `StatusPage` |
+| `templates/*.html` | Embedded as `<RootNamespace>.Templates.<name>.html`, for `TemplateLoader`, `StatusPage`, and `HostedPage` |
 | `stolon.d.ts` | Copied to the plugin's `obj/` folder for the editor, and never embedded |
 | `Localization/*.json` and `JellyfinString` items | Checked against Jellyfin's strings, then embedded as one file per language, with the `TranslationKeys` class. See [Translations](Translations.md) |
 

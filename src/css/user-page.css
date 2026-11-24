@@ -135,7 +135,7 @@
     gap: var(--stolon-gap-narrow);
     min-width: 0;
 }
-.stolon-user-page-field > label { font-weight: 600; }
+.stolon-user-page-field > label { color: var(--stolon-text-muted); }
 .stolon-user-page-hint {
     color: var(--stolon-text-muted);
     font-size: var(--stolon-font-small);
@@ -152,7 +152,7 @@
     padding: 0 var(--stolon-field-pad);
     background: var(--stolon-wash-strong);
     color: inherit;
-    border: 1px solid var(--stolon-border);
+    border: 1px solid var(--stolon-line);
     border-radius: var(--stolon-radius-small);
     font: inherit;
     font-size: var(--stolon-field-font);
@@ -260,6 +260,17 @@
 .stolon-user-page-message.stolon-warn > .material-icons { color: var(--stolon-orange-fg); }
 .stolon-user-page-message.stolon-error > .material-icons { color: var(--stolon-red-fg); }
 .stolon-user-page-message[hidden] { display: none; }
+
+/* A QR code on a user page is dark on white at a size a phone camera reads, since some scanners cannot read light on dark */
+/* Example: <div class="stolon-user-page-card"><div class="stolon-qr-code compact"><div class="stolon-qr-code-frame"></div></div></div> */
+.stolon-user-page .stolon-qr-code-frame {
+    max-width: calc(var(--stolon-size-large) * 7);
+    margin: 0 auto;
+    background: var(--stolon-on-accent);
+    color: var(--stolon-on-warning);
+    border-color: var(--stolon-line);
+}
+.stolon-user-page .stolon-qr-code-bg { fill: var(--stolon-on-accent); }
 
 /* A phone has less room around the cards */
 @media (max-width: 600px) {
