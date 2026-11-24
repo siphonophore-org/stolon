@@ -1,11 +1,11 @@
-// Behavior tests for createSparkline and the stat card's sparkline, run on the stub DOM in fake-dom.mjs.
+// Behavior tests for createSparkline and the status card's sparkline, run on the stub DOM in fake-dom.mjs.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { installFakeDom } from './fake-dom.mjs';
 
 var dom = installFakeDom();
 var { createSparkline } = await import('../../src/js/sparkline.js');
-var { createStatCard } = await import('../../src/js/stat-card.js');
+var { createStatusCard } = await import('../../src/js/status-card.js');
 
 beforeEach(function () {
     dom = installFakeDom();
@@ -42,13 +42,14 @@ test('a color takes the color core', function () {
     assert.ok(createSparkline({ values: [1], color: '#123456' }).element.classList.contains('stolon-custom'));
 });
 
-test('a stat card with sparkline draws one under its trend, named by its label, and setValue replaces it', function () {
-    var card = createStatCard({ value: 4, label: 'Syncs', trend: 2, sparkline: [1, 2, 4] });
-    var spark = card.element.querySelector('.stolon-stat-sparkline');
+test('a status card with sparkline draws one before its detail, named by its title, and setSparkline replaces it', function () {
+    var card = createStatusCard({ title: 'Syncs', value: 4, detail: 'Last at 14:02', sparkline: [1, 2, 4] });
+    var spark = card.element.querySelector('.stolon-status-card-sparkline');
     assert.ok(spark);
     assert.match(spark.getAttribute('aria-label'), /^Syncs, from 1 to 4/);
-    card.setValue({ sparkline: [5, 1] });
-    assert.equal(card.element.querySelectorAll('.stolon-stat-sparkline').length, 1);
-    card.setValue({ sparkline: null });
-    assert.equal(card.element.querySelector('.stolon-stat-sparkline'), null);
+    assert.equal(spark.nextSibling.className, 'stolon-status-card-detail');
+    card.setSparkline([5, 1]);
+    assert.equal(card.element.querySelectorAll('.stolon-status-card-sparkline').length, 1);
+    card.setSparkline(null);
+    assert.equal(card.element.querySelector('.stolon-status-card-sparkline'), null);
 });

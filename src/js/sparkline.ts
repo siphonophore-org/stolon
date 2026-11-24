@@ -23,7 +23,7 @@ export interface SparklineHandle extends ComponentHandle {
 }
 
 /**
- * A small line with no axes that shows the shape of a series, such as beside a number on a stat card. It fills the width it is given and is one line of text tall.
+ * A small line with no axes that shows the shape of a series, such as beside a number on a status card. It fills the width it is given and is one line of text tall.
  * It is an image whose name gives the first, last, lowest, and highest values, so a screen reader hears the numbers the shape shows.
  *
  * @param options {

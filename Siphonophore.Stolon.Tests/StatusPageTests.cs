@@ -18,7 +18,7 @@ public class StatusPageTests
 
         Assert.Contains("Sign in required", html, System.StringComparison.Ordinal);
         Assert.Contains("Please sign in.", html, System.StringComparison.Ordinal);
-        Assert.Contains("stolon-status-card", html, System.StringComparison.Ordinal);
+        Assert.Contains("stolon-status-page-card", html, System.StringComparison.Ordinal);
         // The content slot defaults to empty, so it must not leak as a literal token.
         Assert.DoesNotContain("{{", html, System.StringComparison.Ordinal);
     }
@@ -76,15 +76,15 @@ public class StatusPageTests
     }
 
     /// <summary>
-    /// The card uses <c>.stolon-status-card</c> and not <c>.stolon-card</c>, which is the kit's stat card.
+    /// The card uses <c>.stolon-status-page-card</c> and not <c>.stolon-card</c>, which is the kit's count card.
     /// True: a page that links the kit CSS beside this card keeps its look.
-    /// False: the stat card rules would restyle the status card.
+    /// False: the count card rules would restyle the status card.
     /// </summary>
     [Fact]
     public void StatusTemplate_UsesUncollidingCardClass()
     {
         var html = TemplateLoader.Load("status");
-        Assert.Contains("stolon-status-card", html, System.StringComparison.Ordinal);
+        Assert.Contains("stolon-status-page-card", html, System.StringComparison.Ordinal);
         Assert.DoesNotContain("class=\"stolon-card\"", html, System.StringComparison.Ordinal);
         Assert.DoesNotContain(".stolon-card{", html, System.StringComparison.Ordinal);
     }

@@ -118,11 +118,13 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Breadcrumbs | A trail of places that ends at the current one | `createBreadcrumbs` | Path bar, trail nav |
 | Divider | A horizontal rule with an optional label in the middle | `createDivider` | Separator, hr |
 | Sub tabs | Tabs inside a page, with panels | `createSubTabs` | Tab bar, nav |
+| Tool shell | The outer layout of a page of several tools, a sidebar of tools when wide and a title menu of tools when narrow | `createToolShell` | App shell, frame, master page |
+| Title menu | The heading of a narrow Tool Shell as a menu button that lists every tool | `stolon-tool-shell-switcher` | Back link, hamburger |
 | Banner | A callout with a close button | `createBanner` | Alert, notice |
 | Toast | A short message that appears for a moment and goes away | `createToaster` | Snackbar, notification |
 | Tooltip | A short text shown on hover and focus | `bindTooltips`, `setTooltip` | Hover text, title |
 | Help hint | A small icon beside a label that explains a field | `createHelpHint` | Info icon, question mark |
-| Overflow menu | A button that opens a short list of actions | `createOverflowMenu` | Kebab menu, context menu |
+| Overflow menu | A button that opens a short list of actions or links | `createOverflowMenu` | Kebab menu, context menu |
 | Filter panel | A Filter button with a count of the filters on that opens groups of checkboxes or radio choices | `createFilterPanel` | Facets, filter menu, filter dropdown |
 | Popover | A small panel that floats beside the control that opened it and closes on Escape or an outside click | `anchorPopover`, `stolon-float` | Popup, flyout, dropdown panel |
 | Balanced rows | Tiles that wrap in rows of even size, so no row holds a single tile | `balanceRows`, `bindBalancedRows`, `stolon-balanced` | Masonry, auto grid |
@@ -146,8 +148,9 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Timeline | A vertical list of events with time, title, and status | `createTimeline` | Activity feed, history list |
 | Status dot | A small colored dot that shows a state | `createStatusDot` | Indicator light |
 | Avatar | A round image, or the person icon when there is none, that stands for a user | `createAvatar`, `createUserChip` | Profile picture |
-| Stat card | A number or a short text, a label, detail lines, and a trend, on the card core. `label-top` puts the label first for a status | `createStatCard` | Metric tile, status card |
-| Count cards | A row of status cards drawn from data | `renderCards` | Counters, tiles |
+| Status card | A bordered card with an icon, a status pill, a bold title, one detail line, and an optional large value. It links or acts as a whole with `href` or `onClick` | `createStatusCard`, `stolon-status-card` | Stat card, metric tile, widget |
+| Status card grid | Status cards in balanced rows | `createStatusCardGrid`, `stolon-status-cards` | Card wall, dashboard grid |
+| Count cards | A row of colored counts over labels, drawn from data | `renderCards` | Counters, tiles |
 | Bar chart | Bars per label and series on the chart core | `createBarChart` | Column chart, histogram |
 | Line chart | A line per series through one point per label on the chart core | `createLineChart` | Trend chart, graph |
 | Pie chart | Shares of a whole as slices of a pie or a donut, with a legend of values and percents, on the chart core | `createPieChart` | Donut chart, ring chart |
@@ -227,7 +230,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Pressed group core | A group of on and off buttons, single or many, that may clear on a second click | `bindPressedGroup`, `lib/pressed-group.ts` | Toggle group helper |
 | Dialog core | The modal shell, focus, stacking, scroll lock, and button row every dialog shares | `createModalShell`, `lib/dialog.ts` | Modal base |
 | Message core | The state icons and the dismiss button every message shares | `MESSAGE_ICONS`, `dismissButton`, `lib/message.ts` | Alert helper |
-| Card core | The count over a label, tinted by a color, that count cards, the Stat Card, and filter cards share | `buildCard`, `lib/card.ts` | Tile helper |
+| Card core | The count over a label, tinted by a color, that count cards and filter cards share | `buildCard`, `lib/card.ts` | Tile helper |
 | Chart core | The frame, scale, axes, legend, tooltip, and hidden table of numbers every chart shares | `buildChart`, `lib/chart.ts` | Chart engine |
 | Clock core | The one shared ticking clock every live time on a page runs on | `watchClock`, `lib/clock.ts` | Timer, ticker |
 | Thumb core | The artwork thumbnail with a placeholder icon, from an item, an address, or an async source | `buildThumb`, `lib/thumb.ts` | Image helper |

@@ -1,0 +1,39 @@
+<!-- title: Status Card -->
+<div id="tools"></div>
+<div id="metrics" style="margin-top: 16px;"></div>
+<p><button type="button" class="raised stolon-button secondary small" id="refresh">Refresh VPN</button></p>
+<span id="cardStatus" class="stolon-status-text"></span>
+<script type="module">
+const base = await window.__baseReady;
+const note = document.getElementById('cardStatus');
+const grid = base.createStatusCardGrid({ cards: [
+    { icon: 'dashboard', title: 'Dashboard', status: 'Ok', statusColor: 'green', detail: 'Every tool is running', href: '#dashboard' },
+    { icon: 'public', title: 'DDNS', status: 'Ok', statusColor: 'green', detail: 'Updated 4 minutes ago', href: '#ddns' },
+    { icon: 'lock', title: 'Access', status: 'Off', statusColor: 'gray', detail: 'No rules are on', href: '#access' },
+    { icon: 'vpn_lock', title: 'VPN', status: 'Check', statusColor: 'orange', detail: '3 of 7 peers online', href: '#vpn' },
+    { icon: 'group', title: 'Users', status: 'Ok', statusColor: 'green', detail: '12 users, 2 signed in now', href: '#users' },
+    { icon: 'code', title: 'Scripts', status: 'Failed', detail: 'The nightly cleanup stopped at step 3 of 5 with an error', href: '#scripts' },
+    { icon: 'storage', title: 'Storage', status: 'Check', statusColor: 'orange', detail: 'Media at 82%', href: '#storage' },
+    { icon: 'settings', title: 'Settings', status: 'Ok', statusColor: 'green', detail: 'Saved yesterday', href: '#settings' }
+] });
+document.getElementById('tools').appendChild(grid.element);
+grid.element.addEventListener('click', (e) => {
+    const card = e.target.closest('a');
+    if (!card) return;
+    e.preventDefault();
+    note.textContent = 'Opens ' + card.getAttribute('href') + '.';
+});
+
+const metrics = base.createStatusCardGrid({ cards: [
+    { icon: 'movie', title: 'Items', value: '1,204', valueLabel: 'in 6 libraries', status: 'Synced' },
+    { icon: 'sync', title: 'Syncs', value: 47, valueLabel: 'this week', status: 'Running', sparkline: [3, 5, 4, 8, 6, 9, 12] },
+    { icon: 'error_outline', title: 'Errors', value: 2, valueLabel: 'today', status: 'Check', statusColor: 'orange', detail: 'Last at 14:02', onClick: () => { note.textContent = 'Opens the errors.'; } }
+] });
+document.getElementById('metrics').appendChild(metrics.element);
+
+const vpn = grid.getCards()[3];
+document.getElementById('refresh').addEventListener('click', () => {
+    vpn.setStatus('Ok', 'green');
+    vpn.setDetail('7 of 7 peers online');
+});
+</script>

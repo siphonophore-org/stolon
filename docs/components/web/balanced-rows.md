@@ -7,7 +7,7 @@ Groups of equal tiles wrap in rows of even size, so a wrapped row never holds a 
 | When | Use |
 | :--- | :--- |
 | Stolon's own groups, such as count cards, choice cards, the check grid, and a [List](list.md) in its grid layout | Nothing. Stolon balances them, and a page built with `createConfigPage` also balances every such group on it. |
-| A group of tiles a plugin builds itself, such as a row of stat cards | `balanceRows`. |
+| A group of tiles a plugin builds itself, such as a row of plain cards | `balanceRows`. |
 | Text chips that size to their words, such as tags, pills, and breadcrumbs | No `balanceRows`. They wrap like text. |
 
 ## Usage
@@ -44,7 +44,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function bindBalancedRows(root: ParentNode): BalanceHandle</code>
 
-Balances every group of tiles under a root, such as count cards, choice cards, and a check grid, so a wrapped row never holds a single tile. It also balances groups added later. createConfigPage runs it on every page.
+Balances every group of tiles under a root, such as count cards, status cards, choice cards, and a check grid, so a wrapped row never holds a single tile. It also balances groups added later. createConfigPage runs it on every page.
 
 | Class | What it looks like |
 | :--- | :--- |

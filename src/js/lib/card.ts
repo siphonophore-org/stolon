@@ -1,5 +1,5 @@
 // card.ts
-// The count card that count cards, the stat card, and the filtered list's filter cards share: a large count over a label, tinted by a color. None of it is exported from the bundle.
+// The count card that count cards and the filtered list's filter cards share: a large count over a label, tinted by a color. None of it is exported from the bundle.
 
 import { make, toText } from './dom.js';
 import { applyColor } from './color.js';
@@ -22,8 +22,8 @@ export interface CardParts {
 }
 
 /**
- * Builds a stolon-card: a large count over a label, in the color of its status. A count card, a stat card, and a filter
- * card are each this card, with a part or a behavior added.
+ * Builds a stolon-card: a large count over a label, in the color of its status. A count card and a filter card are each
+ * this card, with a behavior added.
  * Internal to the web components.
  *
  * @param opts { tag (default 'div'), count, label, color, className, attrs }

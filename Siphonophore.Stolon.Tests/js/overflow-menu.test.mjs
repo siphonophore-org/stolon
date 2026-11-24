@@ -154,3 +154,55 @@ test('destroy removes the document listener and the button listeners', function 
     assert.equal(ui.button.listeners.click.length, 0);
     assert.equal(ui.button.listeners.keydown.length, 0);
 });
+
+test('an item with href is a link, current marks it and the menu opens on it, and a badge follows the label', function () {
+    var picked = [];
+    var menu = createOverflowMenu({
+        items: [{ label: 'Dashboard', value: 'home', href: '#home' }, { label: 'VPN', value: 'vpn', href: '#vpn', current: true, badge: { label: '2', color: 'red' } }, { label: 'Users', badge: 5 }],
+        onSelect: function (value, item, event) { picked.push([value, event.type]); event.preventDefault(); }
+    });
+    dom.document.body.appendChild(menu.element);
+    var list = items({ list: menu.element.querySelector('.stolon-menu-list') });
+    assert.deepEqual(list.map(function (el) { return el.tagName; }), ['A', 'A', 'BUTTON']);
+    assert.equal(list[1].getAttribute('href'), '#vpn');
+    assert.equal(list[1].getAttribute('aria-current'), 'page');
+    assert.ok(list[1].classList.contains('stolon-selected'));
+    assert.equal(list[0].getAttribute('aria-current'), null);
+    assert.equal(list[1].querySelector('.stolon-menu-badge').textContent, '2');
+    assert.ok(list[1].querySelector('.stolon-menu-badge').classList.contains('stolon-red'));
+    assert.ok(list[2].querySelector('.stolon-menu-badge').classList.contains('stolon-gray'));
+    menu.element.querySelector('.stolon-menu-button').click();
+    assert.equal(dom.document.activeElement, list[1]);
+    var click = list[0].dispatch('click');
+    assert.deepEqual(picked, [['home', 'click']]);
+    assert.equal(click.defaultPrevented, true);
+    assert.equal(menu.isOpen(), false);
+});
+
+test('Space chooses a link item, and a click with Ctrl leaves the link to the browser', function () {
+    var picked = [];
+    var menu = createOverflowMenu({ items: [{ label: 'VPN', value: 'vpn', href: '#vpn' }], onSelect: function (value) { picked.push(value); } });
+    dom.document.body.appendChild(menu.element);
+    var link = menu.element.querySelector('.stolon-menu-item');
+    menu.open();
+    link.focus();
+    var space = link.dispatch('keydown', { key: ' ' });
+    assert.equal(space.defaultPrevented, true);
+    assert.deepEqual(picked, ['vpn']);
+    menu.open();
+    link.dispatch('click', { ctrlKey: true });
+    assert.deepEqual(picked, ['vpn']);
+    assert.equal(menu.isOpen(), false);
+});
+
+test('text puts the text and a dropdown chevron on the button, and setText replaces it', function () {
+    var menu = createOverflowMenu({ text: 'VPN', label: 'Tools', items: [{ label: 'VPN' }] });
+    var button = menu.element.querySelector('.stolon-menu-button');
+    assert.ok(button.classList.contains('stolon-menu-text-button'));
+    assert.equal(button.querySelector('.stolon-menu-text').textContent, 'VPN');
+    assert.equal(button.querySelector('.material-icons').textContent, 'keyboard_arrow_down');
+    assert.equal(button.getAttribute('aria-label'), null);
+    assert.equal(menu.element.querySelector('.stolon-menu-list').getAttribute('aria-label'), 'Tools');
+    menu.setText('Storage');
+    assert.equal(button.querySelector('.stolon-menu-text').textContent, 'Storage');
+});

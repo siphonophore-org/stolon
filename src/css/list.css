@@ -73,7 +73,8 @@
 /* Example: <div class="stolon-list stolon-rows"><div class="stolon-list-item stolon-selected">Item</div></div> */
 .stolon-list-item.stolon-selected:not(.stolon-card-item),
 .stolon-table-row.stolon-selected,
-.stolon-data-row.stolon-selected {
+.stolon-data-row.stolon-selected,
+.stolon-menu-item.stolon-selected {
     background: var(--stolon-accent-wash) !important;
     box-shadow: inset 3px 0 0 var(--stolon-accent);
 }

@@ -84,6 +84,7 @@ nav:
               - Indent: components/web/indent.md
               - Reset Group: components/web/reset-group.md
               - Sub Tabs: components/web/sub-tabs.md
+              - Tool Shell: components/web/tool-shell.md
               - Breadcrumbs: components/web/breadcrumbs.md
               - Stepper: components/web/stepper.md
               - Setup Checklist: components/web/setup-checklist.md
@@ -134,6 +135,7 @@ nav:
           - Feedback and Status:
               - Badge: components/web/badge.md
               - Count Cards: components/web/count-cards.md
+              - Status Card: components/web/status-card.md
               - Callout: components/web/callout.md
               - Status Text: components/web/status-text.md
               - Save Bar: components/web/save-bar.md
@@ -189,7 +191,6 @@ nav:
               - Notify Preview: components/web/notify-preview.md
               - Definition List: components/web/definition-list.md
               - Log Viewer: components/web/log-viewer.md
-              - Stat Card: components/web/stat-card.md
               - Avatar and User Chip: components/web/avatar.md
               - Timeline: components/web/timeline.md
               - Flow Diagram: components/web/flow-diagram.md

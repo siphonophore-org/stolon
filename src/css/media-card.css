@@ -10,8 +10,10 @@
 }
 .stolon-media-card[hidden] { display: none; }
 .stolon-media-card.stolon-clickable { cursor: pointer; }
-.stolon-media-card.stolon-clickable:hover { background: var(--stolon-wash); }
-.stolon-media-card.stolon-clickable:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+.stolon-media-card.stolon-clickable:hover,
+.stolon-status-card.stolon-clickable:hover { background: var(--stolon-wash); }
+.stolon-media-card.stolon-clickable:focus-visible,
+.stolon-status-card.stolon-clickable:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
 
 /* List row with the artwork at the start and the side column at the end, its text starting at the top so a pinned action lines up with the title */
 /* Example: <div class="stolon-media-card stolon-media-card-row"></div> */

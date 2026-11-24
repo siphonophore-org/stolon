@@ -124,6 +124,7 @@ The CSS is written to survive the desktop app's Qt WebEngine and older TV webvie
 | [Indent](indent.md) | A left ruled group under a toggle |
 | [Reset Group](reset-group.md) | Rows that pair a description with an action |
 | [Sub Tabs](sub-tabs.md) | An in page tab list with panels |
+| [Tool Shell](tool-shell.md) | A sidebar of tools beside the current tool, or a title menu of tools when narrow |
 | [Breadcrumbs](breadcrumbs.md) | A trail of places |
 | [Stepper](stepper.md) | Numbered steps for a flow |
 | [Setup Checklist](setup-checklist.md) | Numbered setup steps with state badges and a progress bar |
@@ -190,6 +191,7 @@ The CSS is written to survive the desktop app's Qt WebEngine and older TV webvie
 | :--- | :--- |
 | [Badge](badge.md) | A colored status pill |
 | [Count Cards](count-cards.md) | A row of large counts over labels |
+| [Status Card](status-card.md) | An icon, a status pill, a title, and a detail line, in balanced rows |
 | [Callout](callout.md) | A soft inline notice |
 | [Status Text](status-text.md) | A status line with the icon of its state |
 | [Save Bar](save-bar.md) | A Save button with a line above it for unsaved, saving, saved, and failed |
@@ -257,7 +259,6 @@ The CSS is written to survive the desktop app's Qt WebEngine and older TV webvie
 | [Notify Preview](notify-preview.md) | A notification as Discord, a webhook, Jellyfin, or a browser shows it |
 | [Definition List](definition-list.md) | Read only label and value pairs, in rows or columns |
 | [Log Viewer](log-viewer.md) | Scrolling mono output with a toolbar |
-| [Stat Card](stat-card.md) | A count or text status card with details and a trend |
 | [Avatar and User Chip](avatar.md) | A round picture or the person icon, and a pill |
 | [Timeline](timeline.md) | A vertical list of events |
 | [Flow Diagram](flow-diagram.md) | A hub with lanes of pills joined by arrows |

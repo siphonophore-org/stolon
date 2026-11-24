@@ -28,7 +28,7 @@ The template is `src/templates/status.html`, embedded as `<RootNamespace>.Templa
 * `{{BUTTON}}`: an `a.stolon-btn`, or empty when `buttonText` or `buttonHref` is null or empty. The defaults are "Back to Jellyfin" and `../web/`.
 * `{{CONTENT}}`: raw HTML that is not encoded. Pass only markup the plugin owns.
 
-Classes, all defined in the template's own `<style>` block: `stolon-status-card`, `stolon-logo`, `stolon-spinner`, `stolon-btn`, `stolon-fields`, `stolon-hint`, `stolon-field-pair`, `stolon-submit`, `stolon-note`, and `stolon-hidden`.
+Classes, all defined in the template's own `<style>` block: `stolon-status-page-card`, `stolon-logo`, `stolon-spinner`, `stolon-btn`, `stolon-fields`, `stolon-hint`, `stolon-field-pair`, `stolon-submit`, `stolon-note`, and `stolon-hidden`.
 
 ## States and Modifiers
 

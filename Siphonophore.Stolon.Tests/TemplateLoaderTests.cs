@@ -16,7 +16,7 @@ public class TemplateLoaderTests
     public void Load_ReturnsEmbeddedTemplate()
     {
         var html = TemplateLoader.Load("status");
-        Assert.Contains("stolon-status-card", html, System.StringComparison.Ordinal);
+        Assert.Contains("stolon-status-page-card", html, System.StringComparison.Ordinal);
     }
 
     /// <summary>

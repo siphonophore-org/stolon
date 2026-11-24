@@ -6,7 +6,7 @@ A small line with no axes that shows the shape of a series, one line of text tal
 
 | When | Use |
 | :--- | :--- |
-| The recent shape of a number, beside it, such as on a [Stat Card](stat-card.md) with `sparkline` | Sparkline |
+| The recent shape of a number, beside it, such as on a [Status Card](status-card.md) with `sparkline` | Sparkline |
 | Values or an axis the reader needs | [Line Chart](line-chart.md) |
 
 ## Usage
@@ -18,7 +18,7 @@ var spark = createSparkline({ label: 'Syncs this week', values: [3, 5, 4, 8, 6, 
 view.querySelector('#sparkHost').appendChild(spark.element);
 ```
 
-Classes: `stolon-sparkline`, with the parts `stolon-sparkline-line` and `stolon-sparkline-area`, and `stolon-stat-sparkline` inside a [Stat Card](stat-card.md). The handle is `{ element, getValue, setValue, destroy }`.
+Classes: `stolon-sparkline`, with the parts `stolon-sparkline-line` and `stolon-sparkline-area`, and `stolon-status-card-sparkline` inside a [Status Card](status-card.md). The handle is `{ element, getValue, setValue, destroy }`.
 
 ## States and Modifiers
 
@@ -38,7 +38,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createSparkline(options?: SparklineOptions): SparklineHandle</code>
 
-A small line with no axes that shows the shape of a series, such as beside a number on a stat card. It fills the width it is given and is one line of text tall. It is an image whose name gives the first, last, lowest, and highest values, so a screen reader hears the numbers the shape shows.
+A small line with no axes that shows the shape of a series, such as beside a number on a status card. It fills the width it is given and is one line of text tall. It is an image whose name gives the first, last, lowest, and highest values, so a screen reader hears the numbers the shape shows.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -59,7 +59,6 @@ A small line with no axes that shows the shape of a series, such as beside a num
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-sparkline` | A small line with no axes, one line of text tall, that fills its width, in the accent or a status color |
-| `stolon-stat-sparkline` | A sparkline under a stat card's label, in the card's own color |
 
 <!-- reference:end -->
 

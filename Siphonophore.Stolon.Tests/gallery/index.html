@@ -918,7 +918,7 @@ function html(parent, markup) {
 })();
 
 (function () {
-    const s = section('Avatar, user chip, stat card, and progress ring');
+    const s = section('Avatar, user chip, and progress ring');
     const r = row(s);
     r.appendChild(base.createAvatar({ name: 'Ada Lovelace', size: 'small' }).element);
     r.appendChild(base.createAvatar({ name: 'Bob Ross', status: 'green' }).element);
@@ -929,14 +929,6 @@ function html(parent, markup) {
     r2.style.marginTop = '12px';
     r2.appendChild(base.createUserChip({ name: 'Ada Lovelace', text: 'Administrator', status: 'green' }).element);
     r2.appendChild(base.createUserChip({ name: 'Bob', src: G.svg(64, 64, '#9b59b6', 'B') }).element);
-    const cards = document.createElement('div');
-    cards.className = 'stolon-cards';
-    cards.style.marginTop = '14px';
-    cards.appendChild(base.createStatCard({ value: '1,204', label: 'Items', color: 'blue', trend: 12, trendSuffix: '%', trendLabel: 'vs last week' }).element);
-    cards.appendChild(base.createStatCard({ value: 7, label: 'Errors', color: 'red', trend: 3, positiveIsGood: false }).element);
-    cards.appendChild(base.createStatCard({ value: 98, label: 'Uptime', color: 'green', trend: -1, trendSuffix: '%' }).element);
-    cards.appendChild(base.createStatCard({ value: 4, label: 'Servers', trend: 0 }).element);
-    s.appendChild(cards);
     const r3 = row(s);
     r3.style.marginTop = '14px';
     [['small', 25, ''], ['medium', 60, 'green'], ['large', 90, 'orange']].forEach(([size, value, color]) => r3.appendChild(base.createProgressRing({ size, value, color }).element));
@@ -1189,7 +1181,7 @@ function html(parent, markup) {
 (function () {
     const pages = [
         ['Time range field', 'time-range-field'], ['Duration field', 'duration-field'], ['Date range picker', 'date-range-picker'],
-        ['Checkbox', 'checkbox'], ['Collapsible section headers and panels', 'collapsible-section'], ['Stat card status', 'stat-card'],
+        ['Checkbox', 'checkbox'], ['Collapsible section headers and panels', 'collapsible-section'], ['Status card', 'status-card'], ['Tool shell', 'tool-shell'],
         ['Definition list columns', 'definition-list'], ['Paginated table thumbnails', 'paginated-table'], ['Inherit field', 'inherit-field'], ['Repeater', 'repeater'], ['Rule builder', 'rule-builder'],
         ['Record list', 'record-list'], ['Tree view', 'tree-view'], ['Compare table', 'compare-table'], ['Matrix grid', 'matrix-grid'],
         ['Bar chart', 'bar-chart'], ['Pie chart', 'pie-chart'], ['Line chart', 'line-chart'], ['Sparkline', 'sparkline'], ['Usage meter', 'usage-meter'],
