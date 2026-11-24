@@ -137,7 +137,7 @@ The List with a search, filters, a sort, a summary line, selection, and actions.
 
 | Type | What it is |
 | :--- | :--- |
-| `FilteredListOption` | One choice of a filter. color tints its card or pill, as a status color name or a hex code. |
+| `FilteredListOption` | One choice of a filter. color colors its card's count or its pill, as a status color name or a hex code. |
 | `FilteredListFilter` | One filter. kind picks how it is shown: a select, a row of pills with an All pill, count cards that each turn on and off, or a Date Range Picker that keeps items whose date field falls in the range. field is the item field it matches (default its name), and test decides a match for anything else. clearable lets a second click on the picked pill go back to All. A daterange filter needs no options, takes presets for its pills, and its values are [from, to]. |
 | `FilteredListSort` | One way to sort, shown as a choice in the sort select. |
 | `FilteredListBulkAction` | A button on the bar of selected items. onClick receives the selected items. |
@@ -147,7 +147,7 @@ The List with a search, filters, a sort, a summary line, selection, and actions.
 | :--- | :--- |
 | `stolon-filtered-list` | A List with a search, filters, a sort, and a summary line above it, the base a Data Table is built on |
 | `stolon-filtered-toolbar` | The search field and the selects on one line that wraps, the search taking the room left over |
-| `stolon-filtered-card` | Count cards that each turn a choice on and off: on is full strength, off is dimmed, and with none on every choice shows |
+| `stolon-filtered-card` | Count cards that each turn a choice on and off: on is outlined in its status color, off is dimmed, and with none on every choice shows |
 | `stolon-filtered-pill-count` | A row of pills, one per choice and an All pill, each with its count |
 | `stolon-filtered-action` | A button beside the search or on the bar of selected items, hidden while its visible test says no |
 | `stolon-filtered-selectbar` | The bar over a list with multiple selection: the select all, the count of selected items, and the bulk actions, washed while it carries actions |

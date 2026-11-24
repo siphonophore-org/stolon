@@ -47,7 +47,7 @@
 .stolon-filtered-select,
 .stolon-filtered-sort { flex: 0 1 auto; width: auto; min-width: calc(var(--stolon-size-large) * 3.5); }
 
-/* Count cards that each turn a choice on and off: on is full strength, off is dimmed, and with none on every choice shows */
+/* Count cards that each turn a choice on and off: on is outlined in its status color, off is dimmed, and with none on every choice shows */
 /* Example: <div class="stolon-cards stolon-filtered-cards"><button class="stolon-card stolon-filtered-card stolon-green" aria-pressed="true"><span class="stolon-card-count">4</span><span class="stolon-card-label">Synced</span></button></div> */
 .stolon-filtered-card {
     font: inherit;
@@ -55,9 +55,9 @@
     cursor: pointer;
     transition: opacity 0.2s, box-shadow 0.2s;
 }
-.stolon-filtered-card[aria-pressed="true"] { box-shadow: inset 0 0 0 1px currentColor; }
+.stolon-filtered-card[aria-pressed="true"] { border-color: var(--stolon-card-color, var(--stolon-accent)); box-shadow: inset 0 0 0 1px var(--stolon-card-color, var(--stolon-accent)); }
 .stolon-filtered-cards.stolon-picking .stolon-filtered-card[aria-pressed="false"] { opacity: 0.45; }
-.stolon-filtered-card:hover { box-shadow: inset 0 0 0 1px currentColor; }
+.stolon-filtered-card:hover { background: var(--stolon-wash); }
 .stolon-filtered-card:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
 
 /* A row of pills, one per choice and an All pill, each with its count */

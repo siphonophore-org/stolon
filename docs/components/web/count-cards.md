@@ -1,6 +1,6 @@
 # Count Cards
 
-A row of large counts over labels, tinted by status.
+A row of large counts over labels, in the status card's look, each count in its status color.
 
 ## Decision
 
@@ -40,7 +40,7 @@ Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`
 
 ## Gotchas
 
-* `renderCards` draws only a known color name or a hex code. Any other color leaves the card untinted.
+* `renderCards` draws only a known color name or a hex code. Any other color leaves the count in the text color.
 * There is no keyboard behavior.
 
 ## Reference
@@ -52,10 +52,10 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-cards` | Row of count cards that wraps to fit |
-| `stolon-card` | Rounded card showing a large count over a label, tinted by status |
-| `stolon-card-count` | Large bold count at the top of a card |
-| `stolon-card-label` | Small label under the count |
-| `stolon-card.stolon-green` | Status color modifiers for a card, each tinting the fill, text, and border |
+| `stolon-card` | Count card in the status card's look: a large count over a quiet label on the surface color, with the count in its status color |
+| `stolon-card-count` | Large bold count at the top of a card, in the card's status color |
+| `stolon-card-label` | Quiet label under the count, cut with an ellipsis |
+| `stolon-card.stolon-green` | Status color modifiers for a card, each coloring its count and, on a filter card, its outline |
 | `stolon-cards.stolon-compact` | A tighter row of small count cards, for many counts in little room, such as on a phone |
 
 <!-- reference:end -->

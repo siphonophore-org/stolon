@@ -17,7 +17,7 @@ import type { DateRangePickerHandle, DateRangePreset } from './date-range-picker
 import type { ComponentHandle, PagedResult } from './types.js';
 import { stolonText, fillLabel, labelText } from './lib/stolon-text.js';
 
-/** One choice of a filter. color tints its card or pill, as a status color name or a hex code. */
+/** One choice of a filter. color colors its card's count or its pill, as a status color name or a hex code. */
 export interface FilteredListOption {
     value: string;
     label: string;

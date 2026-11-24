@@ -79,7 +79,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Callout | A soft inline notice in one status color | `stolon-callout-info`, `stolon-callout-success`, `stolon-callout-warn`, `stolon-callout-error`, `stolon-callout-neutral` | Alert |
 | Badge | A pill that holds a short status label | `stolon-badge` | Chip, label |
 | Badge states | The one map from every state a badge shows to its color, which a plugin maps its own statuses onto | `BADGE_STATES` | Status map, state colors |
-| Status card | A count over a label inside `stolon-cards`, tinted by color | `stolon-card` | Tile, counter |
+| Count card | A count over a label inside `stolon-cards`, the count in its status color, in the status card's look | `stolon-card` | Tile, counter |
 | Status page | The themed standalone card page that `StatusPage` renders | `StatusPage`, `status.html` | Error page, landing page |
 | User page | A whole page a plugin hosts for regular users, in the frame of the `page` template, built from the kit's cards, fields, steps, and finished state | `stolon-user-page`, `page.html`, `startUserPage` | Public site, portal, landing page |
 | Sign in card | The card a user page shows in place of its content to a viewer who may not open it | `stolon-user-page-gate` | Login wall, paywall |
@@ -153,7 +153,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Avatar | A round image, or the person icon when there is none, that stands for a user | `createAvatar`, `createUserChip` | Profile picture |
 | Status card | A bordered card with an icon, a status pill, a bold title, one detail line, and an optional large value. It links or acts as a whole with `href` or `onClick` | `createStatusCard`, `stolon-status-card` | Stat card, metric tile, widget |
 | Status card grid | Status cards in balanced rows | `createStatusCardGrid`, `stolon-status-cards` | Card wall, dashboard grid |
-| Count cards | A row of colored counts over labels, drawn from data | `renderCards` | Counters, tiles |
+| Count cards | A row of counts over labels, each in its status color, drawn from data | `renderCards` | Counters, tiles |
 | Bar chart | Bars per label and series on the chart core | `createBarChart` | Column chart, histogram |
 | Line chart | A line per series through one point per label on the chart core | `createLineChart` | Trend chart, graph |
 | Pie chart | Shares of a whole as slices of a pie or a donut, with a legend of values and percents, on the chart core | `createPieChart` | Donut chart, ring chart |
@@ -233,7 +233,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Pressed group core | A group of on and off buttons, single or many, that may clear on a second click | `bindPressedGroup`, `lib/pressed-group.ts` | Toggle group helper |
 | Dialog core | The modal shell, focus, stacking, scroll lock, and button row every dialog shares | `createModalShell`, `lib/dialog.ts` | Modal base |
 | Message core | The state icons and the dismiss button every message shares | `MESSAGE_ICONS`, `dismissButton`, `lib/message.ts` | Alert helper |
-| Card core | The count over a label, tinted by a color, that count cards and filter cards share | `buildCard`, `lib/card.ts` | Tile helper |
+| Card core | The count over a label, colored by status, that count cards and filter cards share | `buildCard`, `lib/card.ts` | Tile helper |
 | Chart core | The frame, scale, axes, legend, tooltip, and hidden table of numbers every chart shares | `buildChart`, `lib/chart.ts` | Chart engine |
 | Clock core | The one shared ticking clock every live time on a page runs on | `watchClock`, `lib/clock.ts` | Timer, ticker |
 | Thumb core | The artwork thumbnail with a placeholder icon, from an item, an address, or an async source | `buildThumb`, `lib/thumb.ts` | Image helper |
