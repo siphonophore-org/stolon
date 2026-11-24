@@ -1,7 +1,5 @@
 <img src="https://raw.githubusercontent.com/siphonophore-org/siphonophore/main/brand/stolon/banner.svg" alt="Stolon: Part of the Siphonophore project" width="100%">
 
-# Stolon
-
 Shared configuration page components and C# helpers for Jellyfin plugins, delivered as the `Siphonophore.Stolon` NuGet package on GitHub Packages. The source and assets are compiled into each plugin at build time, so a plugin stays a single DLL with nothing extra to ship.
 
 ## Documentation
