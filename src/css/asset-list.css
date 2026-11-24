@@ -1,0 +1,66 @@
+/* Vertical list of uploaded asset rows */
+/* Example: <div class="stolon-asset-list"><div class="stolon-asset-item"></div></div> */
+.stolon-asset-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+
+/* One asset row with thumbnail, info, and actions */
+/* Example: <div class="stolon-asset-item"><img class="stolon-asset-thumb"><div class="stolon-asset-info"></div></div> */
+.stolon-asset-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: var(--stolon-gap-wide);
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-large);
+}
+/* Square checkerboard thumbnail so transparent images stay visible */
+/* Example: <img class="stolon-asset-thumb" src="logo.png"> */
+.stolon-asset-thumb {
+    width: calc(2 * var(--stolon-size-small));
+    height: calc(2 * var(--stolon-size-small));
+    object-fit: contain;
+    background-color: var(--stolon-surface);
+    background-image:
+        linear-gradient(45deg, var(--stolon-wash-strong) 25%, transparent 25%, transparent 75%, var(--stolon-wash-strong) 75%),
+        linear-gradient(45deg, var(--stolon-wash-strong) 25%, transparent 25%, transparent 75%, var(--stolon-wash-strong) 75%);
+    background-position: 0 0, 6px 6px;
+    background-size: 12px 12px;
+    border-radius: var(--stolon-radius-small);
+}
+/* Column holding the asset name and its reference */
+/* Example: <div class="stolon-asset-info"><div class="stolon-asset-name">logo.png</div><div class="stolon-asset-ref">logo</div></div> */
+.stolon-asset-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+}
+/* Bold asset name that clips with an ellipsis */
+/* Example: <div class="stolon-asset-name">logo.png</div> */
+.stolon-asset-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* Small dimmed mono reference that breaks anywhere */
+/* Example: <div class="stolon-asset-ref">assets/logo.png</div> */
+.stolon-asset-ref {
+    font-family: var(--stolon-mono);
+    font-size: 0.8rem;
+    opacity: 0.65;
+    word-break: break-all;
+}
+/* Row of action buttons at the end of an asset row */
+/* Example: <div class="stolon-asset-actions"><button class="stolon-row-btn" title="Copy" aria-label="Copy"><span class="material-icons" aria-hidden="true">content_copy</span></button></div> */
+.stolon-asset-actions {
+    align-self: start;
+    display: flex;
+    gap: var(--stolon-gap-narrow);
+}

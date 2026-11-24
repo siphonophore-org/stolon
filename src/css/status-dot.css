@@ -1,0 +1,21 @@
+/* Small round dot in a status color, which needs a title and an aria-label */
+/* Example: <span class="stolon-dot green" role="img" title="Active" aria-label="Active"></span> */
+.stolon-dot {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--stolon-radius-round);
+    background: var(--stolon-gray-fg);
+    vertical-align: middle;
+}
+.stolon-dot.green { background: var(--stolon-green-fg); }
+.stolon-dot.red { background: var(--stolon-red-fg); }
+.stolon-dot.orange { background: var(--stolon-orange-fg); }
+.stolon-dot.purple { background: var(--stolon-purple-fg); }
+.stolon-dot.blue { background: var(--stolon-blue-fg); }
+.stolon-dot.gray { background: var(--stolon-gray-fg); }
+.stolon-dot.yellow { background: var(--stolon-yellow-fg); }
+.stolon-dot.pink { background: var(--stolon-pink-fg); }
+.stolon-dot.teal { background: var(--stolon-teal-fg); }
+.stolon-dot.custom { background: var(--stolon-custom-fg); }

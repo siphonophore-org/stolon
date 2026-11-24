@@ -1,0 +1,59 @@
+/* Soft inline callout with one shared shape and one color per meaning, in five variants */
+/* Example: <div class="stolon-info">Password is your API key.</div> */
+.stolon-info,
+.stolon-success,
+.stolon-warn,
+.stolon-error,
+.stolon-neutral {
+    border: 1px solid;
+    border-radius: var(--stolon-radius-medium);
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    font-size: 0.9em;
+}
+
+/* Blue callout for guidance and hints */
+/* Example: <div class="stolon-info">Password is your API key.</div> */
+.stolon-info {
+    background: var(--stolon-blue-soft);
+    border-color: var(--stolon-blue-edge);
+}
+
+/* Green callout for a successful or healthy state */
+/* Example: <div class="stolon-success">Connected.</div> */
+.stolon-success {
+    background: var(--stolon-green-soft);
+    border-color: var(--stolon-green-edge);
+}
+
+/* Orange callout for a caution to heed */
+/* Example: <div class="stolon-warn">This replaces the current file.</div> */
+.stolon-warn {
+    background: var(--stolon-orange-soft);
+    border-color: var(--stolon-orange-edge);
+}
+
+/* Red callout for a failure or blocking problem */
+/* Example: <div class="stolon-error">Could not connect.</div> */
+.stolon-error {
+    background: var(--stolon-red-soft);
+    border-color: var(--stolon-red-edge);
+}
+
+/* Gray callout for a muted or inactive note */
+/* Example: <div class="stolon-neutral">Not configured.</div> */
+.stolon-neutral {
+    background: var(--stolon-gray-soft);
+    border-color: var(--stolon-gray-edge);
+}
+
+/* Red, mono block for surfacing raw failure text such as an error body or a stack line */
+/* Example: <div class="stolon-error-message">Request failed</div> */
+.stolon-error-message {
+    background: var(--stolon-red-bg);
+    color: var(--stolon-red-fg);
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    border-radius: var(--stolon-radius-small);
+    font-family: var(--stolon-mono);
+    font-size: 0.9em;
+    word-break: break-all;
+}

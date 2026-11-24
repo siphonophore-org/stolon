@@ -1,0 +1,21 @@
+<!-- title: Tabs -->
+<div id="mount"></div>
+<script type="module">
+const base = await window.__baseReady;
+const mount = document.getElementById('mount');
+const list = base.createDefinitionList({ items: [] });
+mount.appendChild(list.element);
+
+// The dashboard supplies LibraryMenu. This stub shows what it receives.
+window.LibraryMenu = {
+    setTabs: (key, index, getTabs) => list.setItems([
+        { label: 'Key', value: key, mono: true },
+        { label: 'Active', value: String(index) },
+        { label: 'Tabs', value: getTabs().map((tab) => tab.name).join(', ') }
+    ])
+};
+base.setTabs('myplugin', 1, [
+    { href: 'configurationpage?name=myplugin_overview', name: 'Overview' },
+    { href: 'configurationpage?name=myplugin_settings', name: 'Settings' }
+]);
+</script>

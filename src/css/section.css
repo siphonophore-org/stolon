@@ -1,0 +1,7 @@
+/* Section that is always open, with the collapsible section's frame, header, and body from collapsible-section.css, and no toggle or chevron */
+/* Example: <div class="stolon-section"><div class="stolon-section-title">Title</div><div class="stolon-section-content"></div></div> */
+.stolon-section { display: block; }
+
+/* Static header row styled like a collapsible header, with no button, pointer, or chevron */
+/* Example: <div class="stolon-section-title">Title</div> */
+.stolon-section-title { cursor: default; }

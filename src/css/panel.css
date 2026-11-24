@@ -1,0 +1,22 @@
+/* Bordered sub card on the surface color, for a group inside a section or a dialog, the surface a record card shares */
+/* Example: <div class="stolon-panel"><div class="stolon-panel-header">Schedule</div><div class="stolon-panel-body">Fields go here.</div></div> */
+.stolon-panel,
+.stolon-record-card {
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-large);
+}
+.stolon-panel { overflow: hidden; }
+
+/* Header strip of a panel with a divider under it */
+/* Example: <div class="stolon-panel-header">Schedule</div> */
+.stolon-panel-header {
+    padding: var(--stolon-pad-small) var(--stolon-pad-large);
+    font-weight: 600;
+    border-bottom: 1px solid var(--stolon-border);
+}
+
+/* Padded body of a panel, padded as a record card is */
+/* Example: <div class="stolon-panel-body">Fields go here.</div> */
+.stolon-panel-body,
+.stolon-record-card { padding: var(--stolon-pad-medium) var(--stolon-pad-large); }

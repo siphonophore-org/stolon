@@ -1,0 +1,18 @@
+/* Range input with a readout that keeps its width so the slider does not jump */
+/* Example: <div class="stolon-slider"><input type="range" aria-label="Opacity"><output class="stolon-slider-value">50%</output></div> */
+.stolon-slider {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-wide);
+}
+.stolon-slider > input[type="range"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    accent-color: var(--stolon-accent);
+}
+.stolon-slider-value {
+    flex: 0 0 auto;
+    min-width: 3.5em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}

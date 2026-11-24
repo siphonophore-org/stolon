@@ -1,0 +1,33 @@
+/* Container for a stack of reset or action rows */
+/* Example: <div class="stolon-reset-group"></div> */
+.stolon-reset-group { margin-bottom: var(--stolon-gap-wide); }
+
+/* Row pairing an action description with its button */
+/* Example: <div class="stolon-reset-row"><div class="stolon-reset-info"></div><button></button></div> */
+.stolon-reset-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    border-bottom: 1px solid var(--stolon-line);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 5%, transparent);
+}
+.stolon-reset-row:last-child { border-bottom: none; }
+
+/* Row with a faint red tint for the most destructive action */
+/* Example: <div class="stolon-reset-row stolon-reset-row-nuclear"></div> */
+.stolon-reset-row-nuclear {
+    background: var(--stolon-red-soft);
+    border-radius: var(--stolon-radius-small);
+    border-bottom: none;
+}
+/* Column that holds the description beside an action button */
+/* Example: <div class="stolon-reset-info"><div>Reset</div><div class="fieldDescription">Clears every setting.</div></div> */
+.stolon-reset-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    margin-right: var(--stolon-gap-wide);
+}
+.stolon-reset-info .fieldDescription { margin-top: 2px; }

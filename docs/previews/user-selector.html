@@ -1,0 +1,13 @@
+<!-- title: User Selector -->
+<div id="mount"></div>
+<span id="userStatus" class="stolon-status-text"></span>
+<script type="module">
+const base = await window.__baseReady;
+const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
+const approver = shared.createUserSelector({
+    adminFilter: 'exclude',
+    value: 'u2',
+    onChange: (id) => shared.setStatus('userStatus', 'Chose user ' + (id || 'none') + '.', false, { timeout: 0 })
+});
+document.getElementById('mount').appendChild(approver.element);
+</script>

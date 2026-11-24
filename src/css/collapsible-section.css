@@ -1,0 +1,234 @@
+/* Flat collapsible section so its fields align with the rest of the form */
+/* Example: <div class="stolon-collapsible-section"></div> */
+.stolon-collapsible-section,
+.stolon-section {
+    overflow: visible;
+}
+
+/* Clickable header row that toggles the section, flush with the form left edge */
+/* Example: <button class="stolon-collapsible-header" data-target="body"><span class="stolon-collapsible-title">Title</span><span class="stolon-collapsible-icon"></span></button> */
+.stolon-collapsible-header,
+.stolon-section-title {
+    width: 100%;
+    padding: var(--stolon-pad-small) 0;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--stolon-line);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: inherit;
+    /* A button does not take the page font on its own. */
+    font: inherit;
+    font-size: 1.1em;
+    font-weight: 500;
+    text-align: left;
+}
+.stolon-collapsible-header:hover {
+    color: var(--stolon-fg);
+}
+
+/* Header title, shown as written, that takes the free width */
+/* Example: <span class="stolon-collapsible-title">Title</span> */
+.stolon-collapsible-title { flex: 1; }
+/* A badge or status dot in the header, between the title and the chevron, that keeps its own size */
+/* Example: <span class="stolon-badge green stolon-collapsible-badge">Done</span> */
+.stolon-collapsible-badge {
+    flex: 0 0 auto;
+    margin: 0 var(--stolon-gap-narrow);
+    font-weight: normal;
+}
+/* The expand_more chevron, down while collapsed and turned up while open, as Jellyfin's expanders turn. Any control with aria-expanded that holds it turns it too, such as a card head */
+/* Example: <span class="stolon-collapsible-icon material-icons" aria-hidden="true">expand_more</span> */
+.stolon-collapsible-icon {
+    font-size: var(--stolon-chevron-primary);
+    color: var(--stolon-text-faint);
+    color: color-mix(in srgb, currentColor 50%, transparent);
+    transform: rotate(180deg);
+    transition: transform 0.15s;
+}
+.stolon-collapsible-bar.collapsed > .stolon-collapsible-icon,
+.stolon-collapsible-header.collapsed .stolon-collapsible-icon,
+[aria-expanded="false"] > .stolon-collapsible-icon {
+    transform: none;
+}
+
+/* Section body, flush left, hidden when collapsed */
+/* Example: <div id="body" class="stolon-collapsible-content"></div> */
+.stolon-collapsible-content,
+.stolon-section-content {
+    padding: var(--stolon-gap-wide) 0;
+    border-top: none;
+}
+/* The content's own padding sets the space under it, so its last block adds none, whatever that block is */
+.stolon-collapsible-content > :last-child,
+.stolon-section-content > :last-child,
+.pluginConfigurationPage .stolon-collapsible-content > :last-child,
+.stolon-dialog .stolon-collapsible-content > :last-child,
+.pluginConfigurationPage .stolon-section-content > :last-child,
+.stolon-dialog .stolon-section-content > :last-child { margin-bottom: 0 !important; }
+.stolon-collapsible-content.collapsed { display: none; }
+
+/* Footer action row inside a section, with a divider above, its buttons and status text centered on one line */
+/* Example: <div class="stolon-collapsible-actions"></div> */
+.stolon-collapsible-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    margin-top: var(--stolon-gap-wide);
+    padding-top: var(--stolon-gap-wide);
+    border-top: 1px solid var(--stolon-line);
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+.stolon-collapsible-actions .stolon-status-text { margin-top: 0; }
+
+/* A footer action row with no divider or space above it, for a row that follows its fields directly */
+/* Example: <div class="stolon-collapsible-actions flush"></div> */
+.stolon-collapsible-actions.flush { border-top: none; padding-top: 0; }
+
+/* A section in a numbered run, whose title starts with a round number counted from the sections before it */
+/* Example: <div class="stolon-collapsible-section numbered"><button class="stolon-collapsible-header"><span class="stolon-collapsible-title">Connection</span></button></div> */
+.stolon-collapsible-section.numbered { counter-increment: stolon-collapsible-step; }
+.stolon-collapsible-section.numbered > .stolon-collapsible-header .stolon-collapsible-title,
+.stolon-collapsible-section.numbered > .stolon-collapsible-bar > .stolon-collapsible-header .stolon-collapsible-title {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-collapsible-section.numbered > .stolon-collapsible-header .stolon-collapsible-title::before,
+.stolon-collapsible-section.numbered > .stolon-collapsible-bar > .stolon-collapsible-header .stolon-collapsible-title::before {
+    content: counter(stolon-collapsible-step);
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--stolon-radius-round);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    font-weight: 600;
+    background: var(--stolon-wash-strong);
+    background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+/* A Material icon in a rounded tile before the title, the size of an avatar, in the accent or a status color or hex code */
+/* Example: <span class="stolon-collapsible-tile" aria-hidden="true"><span class="material-icons">video_library</span></span> */
+.stolon-collapsible-tile {
+    flex: 0 0 auto;
+    width: var(--stolon-size-large);
+    height: var(--stolon-size-large);
+    margin-right: var(--stolon-gap-narrow);
+    border-radius: var(--stolon-radius-medium);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--stolon-accent-wash);
+    color: var(--stolon-accent);
+}
+.stolon-collapsible-tile .material-icons { font-size: var(--stolon-icon-large); }
+.stolon-collapsible-tile.blue { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); }
+.stolon-collapsible-tile.green { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
+.stolon-collapsible-tile.red { background: var(--stolon-red-bg); color: var(--stolon-red-fg); }
+.stolon-collapsible-tile.orange { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
+.stolon-collapsible-tile.purple { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
+.stolon-collapsible-tile.gray { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
+.stolon-collapsible-tile.teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
+.stolon-collapsible-tile.pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
+.stolon-collapsible-tile.yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
+.stolon-collapsible-tile.custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); }
+
+/* The title and its subtitle stacked in the free width, the title ending in an ellipsis with the full text in its tooltip */
+/* Example: <span class="stolon-collapsible-heading"><span class="stolon-collapsible-title" title="Movies">Movies</span><span class="stolon-collapsible-subtitle">1,204 items</span></span> */
+.stolon-collapsible-heading {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.stolon-collapsible-heading > .stolon-collapsible-title {
+    flex: 0 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* A dimmed line under the title, as text that ends in an ellipsis or a node such as a route */
+/* Example: <span class="stolon-collapsible-subtitle">Main Server to This Server</span> */
+.stolon-collapsible-subtitle {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--stolon-font-small);
+    line-height: var(--stolon-line-small);
+    font-weight: normal;
+    opacity: 0.7;
+}
+
+/* A node at the right of the header, such as a badge, a button, or a toggle, centered on the header's line */
+/* Example: <span class="stolon-collapsible-aside"><span class="stolon-badge gray">Copy</span></span> */
+.stolon-collapsible-aside {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    margin-left: var(--stolon-gap-narrow);
+    font-size: var(--stolon-font-medium);
+    font-weight: normal;
+}
+
+/* The row of a collapsible header that has an aside: the header button, the aside beside it, and the chevron, since a button cannot hold a control */
+/* Example: <div class="stolon-collapsible-bar"><button type="button" class="stolon-collapsible-header" data-target="body"><span class="stolon-collapsible-heading"><span class="stolon-collapsible-title">Movies</span></span></button><span class="stolon-collapsible-aside"></span><span class="stolon-collapsible-icon"></span></div> */
+.stolon-collapsible-bar {
+    display: flex;
+    align-items: center;
+    padding: var(--stolon-pad-small) 0;
+    border-bottom: 1px solid var(--stolon-line);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+    cursor: pointer;
+}
+.stolon-collapsible-bar > .stolon-collapsible-header {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+    padding: 0;
+    border-bottom: none;
+}
+.stolon-collapsible-bar > .stolon-collapsible-icon { flex: 0 0 auto; margin-left: var(--stolon-gap-narrow); }
+
+/* A narrow section, chosen by its own width, puts its aside on a line of its own under the title */
+/* Example: <div class="stolon-collapsible-section compact"></div> */
+.stolon-collapsible-section.compact > .stolon-collapsible-header,
+.stolon-collapsible-section.compact > .stolon-collapsible-bar { flex-wrap: wrap; }
+.stolon-collapsible-section.compact > .stolon-collapsible-header > .stolon-collapsible-aside,
+.stolon-collapsible-section.compact > .stolon-collapsible-bar > .stolon-collapsible-aside {
+    order: 1;
+    flex: 1 1 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+    margin: var(--stolon-gap-narrow) 0 0;
+}
+.stolon-collapsible-section.compact.has-tile > .stolon-collapsible-header > .stolon-collapsible-aside,
+.stolon-collapsible-section.compact.has-tile > .stolon-collapsible-bar > .stolon-collapsible-aside { padding-left: calc(var(--stolon-size-large) + var(--stolon-gap-narrow)); }
+
+/* A fixed panel, always open, whose header is a plain heading with no chevron */
+/* Example: <div class="stolon-collapsible-section fixed stolon-panel"><div class="stolon-collapsible-header"><span class="stolon-collapsible-heading"><span class="stolon-collapsible-title">Movies</span></span></div><div class="stolon-collapsible-content"></div></div> */
+.stolon-collapsible-section.fixed > .stolon-collapsible-header { cursor: default; }
+.stolon-collapsible-section.fixed > .stolon-collapsible-header:hover { color: inherit; }
+
+/* A section on the panel surface, its header and body inset by the panel's padding, collapsible or fixed */
+/* Example: <div class="stolon-collapsible-section stolon-panel"></div> */
+.stolon-collapsible-section.stolon-panel > .stolon-collapsible-header,
+.stolon-collapsible-section.stolon-panel > .stolon-collapsible-bar {
+    box-sizing: border-box;
+    padding: var(--stolon-pad-medium) var(--stolon-pad-large);
+    border-bottom: 1px solid var(--stolon-border);
+}
+.stolon-collapsible-section.stolon-panel > .stolon-collapsible-bar > .stolon-collapsible-header { padding: 0; border-bottom: none; }
+.stolon-collapsible-section.stolon-panel > .stolon-collapsible-header.collapsed,
+.stolon-collapsible-section.stolon-panel > .stolon-collapsible-bar.collapsed { border-bottom: none; }
+.stolon-collapsible-section.stolon-panel > .stolon-collapsible-content { padding: var(--stolon-pad-medium) var(--stolon-pad-large); }

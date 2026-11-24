@@ -1,0 +1,17 @@
+<!-- title: Asset List -->
+<div id="mount"></div>
+<script type="module">
+await window.__baseReady;
+const { rect } = window.__gallery;
+const { COLORS } = window.__galleryData;
+const names = ['logo.png', 'a-very-long-asset-file-name-that-clips-with-an-ellipsis.svg'];
+document.getElementById('mount').innerHTML = '<div class="stolon-asset-list">' + names.map((name, i) =>
+    '<div class="stolon-asset-item">' +
+        '<img class="stolon-asset-thumb" alt="" src="' + rect(48, 48, COLORS[i], 'A') + '">' +
+        '<div class="stolon-asset-info"><div class="stolon-asset-name">' + name + '</div><div class="stolon-asset-ref">assets/' + name + '</div></div>' +
+        '<div class="stolon-asset-actions">' +
+            '<button type="button" class="stolon-row-btn" title="Copy" aria-label="Copy"><span class="material-icons" aria-hidden="true">content_copy</span></button>' +
+            '<button type="button" class="stolon-row-btn destructive" title="Delete" aria-label="Delete"><span class="material-icons" aria-hidden="true">delete</span></button>' +
+        '</div>' +
+    '</div>').join('') + '</div>';
+</script>

@@ -1,0 +1,154 @@
+/* A column of items, bordered rows by default, that may scroll inside a fixed or filling height */
+/* Example: <div class="stolon-list rows" role="list"><div class="stolon-list-item" role="listitem">Item</div></div> */
+.stolon-list {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.stolon-list[hidden] { display: none; }
+
+/* Rows drawn as one bordered block with a divider between items */
+/* Example: <div class="stolon-list rows">...</div> */
+.stolon-list.rows {
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-large);
+}
+
+.stolon-list.rows > .stolon-list-item + .stolon-list-item { border-top: 1px solid var(--stolon-border); }
+
+/* Tiles in as many columns as fit, each at least --stolon-list-column wide */
+/* Example: <div class="stolon-list grid">...</div> */
+.stolon-list.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--stolon-list-column, 140px), 1fr));
+    gap: var(--stolon-gap-wide);
+    align-content: start;
+}
+
+.stolon-list.grid > .stolon-list-empty,
+.stolon-list.grid > .stolon-list-loading,
+.stolon-list.grid > .stolon-list-sentinel { grid-column: 1 / -1; }
+
+/* A list that scrolls inside itself rather than growing the page */
+/* Example: <div class="stolon-list rows scrolls fixed">...</div> */
+.stolon-list.scrolls {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+.stolon-list.fixed { height: var(--stolon-list-height, 320px); }
+
+.stolon-list.capped { max-height: var(--stolon-list-max, 320px); }
+
+/* A list that reaches from its top to the bottom of the window, and flexes inside a bounded column */
+/* Example: <div class="stolon-list rows scrolls fill">...</div> */
+.stolon-list.fill {
+    flex: 1 1 auto;
+    height: 320px;
+    height: calc(100vh - var(--stolon-list-top, 0px) - var(--stolon-list-gap, 16px));
+    min-height: var(--stolon-list-min, 160px);
+}
+
+@supports (height: 100dvh) {
+    .stolon-list.fill { height: calc(100dvh - var(--stolon-list-top, 0px) - var(--stolon-list-gap, 16px)); }
+}
+
+.stolon-list-item { min-width: 0; }
+
+/* An item that opens or is picked by a click, with the shared row hover, and an accent ring for a keyboard user */
+/* Example: <div class="stolon-list rows"><div class="stolon-list-item openable" tabindex="0">Item</div></div> */
+.stolon-list-item.openable,
+.stolon-list-item[aria-selected] { cursor: pointer; }
+.stolon-list-item.openable:hover,
+.stolon-list-item[aria-selected]:hover,
+.stolon-table-row:hover { background: var(--stolon-wash); }
+.stolon-list-item.openable:focus,
+.stolon-list-item[aria-selected]:focus { outline: none; }
+.stolon-list-item.openable:focus-visible,
+.stolon-list-item[aria-selected]:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
+
+/* A selected item or row, in the accent wash with a leading accent bar, the one selection look every list shares. An open record card keeps the accent on its outline and head only, so its body stays on the plain surface */
+/* Example: <div class="stolon-list rows"><div class="stolon-list-item selected">Item</div></div> */
+.stolon-list-item.selected:not(.stolon-card-item),
+.stolon-table-row.selected,
+.stolon-data-row.selected {
+    background: var(--stolon-accent-wash) !important;
+    box-shadow: inset 3px 0 0 var(--stolon-accent);
+}
+
+/* A text item, padded the way a component in a row pads itself */
+/* Example: <div class="stolon-list-item text">Item</div> */
+.stolon-list-item.text { padding: var(--stolon-pad-small) var(--stolon-pad-medium); }
+
+.stolon-list.plain > .stolon-list-item.text { padding: calc(var(--stolon-gap-narrow) / 2) 0; }
+
+/* The sentence a list shows while it holds no items */
+/* Example: <div class="stolon-list-empty">Nothing to show.</div> */
+.stolon-list-empty,
+.stolon-list-loading {
+    padding: var(--stolon-gap-wide);
+    text-align: center;
+}
+
+/* The dimmed empty sentence every empty region shares: a List's, an inline one, and a compact one */
+/* Example: <div class="stolon-empty-inline">This folder is empty.</div> */
+.stolon-list-empty,
+.stolon-list-loading,
+.stolon-empty-inline,
+.stolon-empty { opacity: 0.7; }
+
+.stolon-list.plain > .stolon-list-empty,
+.stolon-list.plain > .stolon-list-loading { padding: var(--stolon-gap-narrow) 0; text-align: left; }
+
+/* The empty sentence of a ul or ol list, which sits after the list rather than in it */
+/* Example: <ul class="stolon-list"></ul><div class="stolon-list-empty outside">Nothing added yet.</div> */
+.stolon-list-empty.outside { padding: 0; text-align: left; font-size: 0.9em; }
+
+.stolon-list-sentinel { height: 1px; flex: 0 0 auto; }
+
+/* A boxed row that looks like a field and is at least a field tall, with its text and row buttons centered, as in a string list */
+/* Example: <li class="stolon-item-row"><span class="stolon-item-row-text">value</span><button class="stolon-row-btn"></button></li> */
+.stolon-item-row {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    box-sizing: border-box;
+    min-height: var(--stolon-field-height);
+    padding: 0 calc((var(--stolon-field-height) - var(--stolon-size-small)) / 2 - 1px) 0 var(--stolon-field-pad);
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-small);
+    font-size: var(--stolon-field-font);
+}
+.stolon-item-row-text {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* A row's text in two parts, a primary and a dimmed secondary that starts at the same place on every row of the list, and wraps under the primary when the row is too narrow for both */
+/* Example: <span class="stolon-item-row-text stolon-item-row-parts"><span class="stolon-item-row-primary">Intro</span><span class="stolon-item-row-secondary">Position 1</span></span> */
+.stolon-item-row-parts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: var(--stolon-gap-wide);
+}
+.stolon-item-row-primary {
+    flex: 0 0 auto;
+    min-width: var(--stolon-item-primary-width, 0px);
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+}
+@supports (width: min(1px, 2px)) {
+    .stolon-item-row-primary { min-width: min(var(--stolon-item-primary-width, 0px), 100%); }
+}
+.stolon-item-row-secondary {
+    flex: 1 0 auto;
+    max-width: 100%;
+    opacity: 0.7;
+    overflow-wrap: anywhere;
+}

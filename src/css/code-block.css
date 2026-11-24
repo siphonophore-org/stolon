@@ -1,0 +1,38 @@
+/* Full width monospace textarea for editing code */
+/* Example: <textarea class="stolon-code"></textarea> */
+.stolon-code {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    min-height: 240px;
+    font-family: var(--stolon-mono);
+    font-size: 0.9em;
+    line-height: 1.45;
+    background: var(--stolon-surface);
+    color: var(--stolon-fg);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-small);
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    resize: vertical;
+    white-space: pre;
+    tab-size: 2;
+}
+.stolon-code:focus {
+    outline: none;
+    border-color: var(--stolon-accent);
+}
+
+/* Read only block of code or JSON that wraps and is only as tall as its text */
+/* Example: <pre class="stolon-code stolon-code-block">{ "event": "Approved" }</pre> */
+.stolon-code.stolon-code-block {
+    min-height: 0;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.85em;
+}
+
+/* Code field or block with a red border for content that is not valid */
+/* Example: <pre class="stolon-code stolon-code-block stolon-code-invalid"></pre> */
+.stolon-code.stolon-code-invalid { border-color: var(--stolon-error); }

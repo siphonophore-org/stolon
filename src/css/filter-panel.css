@@ -1,0 +1,90 @@
+/* Filter button with a leading icon, its text, and a round accent badge counting the filters on */
+/* Example: <button type="button" class="raised stolon-button stolon-filter-button active" aria-haspopup="dialog"><span class="material-icons" aria-hidden="true">filter_list</span><span class="stolon-filter-text">Filter</span><span class="stolon-filter-count" aria-hidden="true">3</span></button> */
+.stolon-filter-button {
+    gap: var(--stolon-gap-narrow);
+}
+
+/* Small round badge with the count of filters on, hidden while none is on */
+/* Example: <span class="stolon-filter-count" aria-hidden="true">3</span> */
+.stolon-filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--stolon-icon-medium);
+    height: var(--stolon-icon-medium);
+    padding: 0 calc(var(--stolon-gap-narrow) / 2);
+    box-sizing: border-box;
+    border-radius: var(--stolon-radius-round);
+    background: var(--stolon-accent);
+    color: var(--stolon-on-accent);
+    font-size: var(--stolon-font-small);
+    font-weight: 600;
+    line-height: 1;
+}
+.stolon-filter-count[hidden] { display: none; }
+
+/* Floating panel of filter groups on the stolon-float surface, fixed to the viewport, placed by createFilterPanel under the button, or above it with no room */
+/* Example: <div class="stolon-filter-panel stolon-float" role="dialog" aria-labelledby="t"><div class="stolon-filter-title" id="t">Filters</div><div class="stolon-filter-groups"></div><div class="stolon-filter-actions"></div></div> */
+.stolon-filter-panel {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+    width: calc(var(--stolon-size-large) * 7);
+    max-width: calc(100vw - 2 * var(--stolon-gap-wide));
+    max-height: calc(100vh - 2 * var(--stolon-gap-narrow));
+    box-sizing: border-box;
+    padding: var(--stolon-pad-medium);
+}
+.stolon-filter-panel[hidden] { display: none; }
+
+/* Bold heading at the top of the floating panel */
+/* Example: <div class="stolon-filter-title">Filters</div> */
+.stolon-filter-title {
+    font-weight: 600;
+}
+
+/* Scrolling stack of filter groups, in the floating panel or in the dialog body */
+/* Example: <div class="stolon-filter-groups"><fieldset class="stolon-filter-group"></fieldset></div> */
+.stolon-filter-groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-wide);
+    min-height: 0;
+    overflow-y: auto;
+}
+
+/* One group of checkbox rows, or radio rows with single, under its name */
+/* Example: <fieldset class="stolon-filter-group"><legend class="stolon-filter-group-name">Status</legend><label class="stolon-check-row stolon-filter-option"><input type="checkbox" class="stolon-check-row-input stolon-filter-input"><span class="stolon-check-label">Active</span></label></fieldset> */
+.stolon-filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+/* Small dimmed name over a group's rows */
+/* Example: <legend class="stolon-filter-group-name">Status</legend> */
+.stolon-filter-group-name {
+    padding: 0 0 calc(var(--stolon-gap-narrow) / 2);
+    font-size: var(--stolon-font-small);
+    font-weight: 600;
+    opacity: 0.7;
+}
+
+/* One option row, which shows an accent ring while its box has focus */
+/* Example: <label class="stolon-check-row stolon-filter-option"><input type="radio" class="stolon-check-row-input stolon-filter-input"><span class="stolon-check-label">Movies</span></label> */
+.stolon-filter-option:focus-within {
+    outline: 2px solid var(--stolon-accent);
+    outline-offset: -2px;
+}
+
+/* Row of the Clear and Done buttons at the end of the floating panel */
+/* Example: <div class="stolon-filter-actions"><button type="button" class="raised stolon-button small secondary stolon-filter-clear">Clear</button><button type="button" class="raised stolon-button small primary stolon-filter-done">Done</button></div> */
+.stolon-filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--stolon-gap-narrow);
+}

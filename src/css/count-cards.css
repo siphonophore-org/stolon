@@ -1,0 +1,58 @@
+/* Row of count cards that wraps to fit */
+/* Example: <div class="stolon-cards"></div> */
+.stolon-cards {
+    display: flex;
+    gap: var(--stolon-gap-wide);
+    flex-wrap: wrap;
+}
+
+/* Rounded card showing a large count over a label, tinted by status */
+/* Example: <div class="stolon-card blue"><span class="stolon-card-count">5</span><span class="stolon-card-label">Users</span></div> */
+.stolon-card {
+    flex: 1;
+    min-width: 90px;
+    padding: var(--stolon-pad-medium) var(--stolon-pad-large);
+    border-radius: var(--stolon-radius-large);
+    text-align: center;
+    border: 1px solid var(--stolon-border);
+    background: var(--stolon-wash-faint);
+    background: color-mix(in srgb, currentColor 3%, transparent);
+}
+/* Large bold count at the top of a card */
+/* Example: <span class="stolon-card-count">5</span> */
+.stolon-card-count {
+    display: block;
+    font-size: 1.5em;
+    font-weight: 600;
+    margin-bottom: var(--stolon-gap-narrow);
+}
+/* Small label under the count */
+/* Example: <span class="stolon-card-label">Users</span> */
+.stolon-card-label {
+    display: block;
+    font-size: 0.85em;
+    opacity: 0.9;
+}
+/* Status color modifiers for a card, each tinting the fill, text, and border */
+/* Example: <div class="stolon-card orange"><span class="stolon-card-count">2</span><span class="stolon-card-label">Queued</span></div> */
+.stolon-card.green { background: var(--stolon-green-bg); color: var(--stolon-green-fg); border-color: var(--stolon-green-fg); }
+.stolon-card.red { background: var(--stolon-red-bg); color: var(--stolon-red-fg); border-color: var(--stolon-red-fg); }
+.stolon-card.orange { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); border-color: var(--stolon-orange-fg); }
+.stolon-card.purple { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); border-color: var(--stolon-purple-fg); }
+.stolon-card.blue { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); border-color: var(--stolon-blue-fg); }
+.stolon-card.gray { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); border-color: var(--stolon-gray-fg); }
+.stolon-card.yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); border-color: var(--stolon-yellow-fg); }
+.stolon-card.pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); border-color: var(--stolon-pink-fg); }
+.stolon-card.teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); border-color: var(--stolon-teal-fg); }
+.stolon-card.custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); border-color: var(--stolon-custom-fg); }
+
+/* A tighter row of small count cards, for many counts in little room, such as on a phone */
+/* Example: <div class="stolon-cards compact"><div class="stolon-card green"></div></div> */
+.stolon-cards.compact { gap: var(--stolon-gap-narrow); --stolon-balance-min: 72px; }
+.stolon-cards.compact .stolon-card { min-width: 0; padding: var(--stolon-pad-small) calc(var(--stolon-gap-narrow) * 3 / 4); }
+.stolon-cards.compact .stolon-card-label { font-size: 0.78em; line-height: 1.25; }
+
+@media (max-width: 768px) {
+    .stolon-cards { gap: var(--stolon-gap-narrow); }
+    .stolon-card { min-width: 60px; padding: var(--stolon-pad-small) calc(var(--stolon-gap-narrow) * 3 / 4); }
+}

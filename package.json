@@ -1,0 +1,19 @@
+{
+  "name": "stolon-web",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "description": "Dev tools that type check and bundle the web components. Nothing here ships at runtime.",
+  "scripts": {
+    "bundle": "bash scripts/bundle.sh",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "check-bundle": "node scripts/check-bundle.mjs",
+    "strings": "node scripts/fetch-jellyfin-strings.mjs",
+    "strings:bump": "node scripts/bump-jellyfin.mjs",
+    "test": "node --import ./Siphonophore.Stolon.Tests/js/register.mjs --test Siphonophore.Stolon.Tests/js/*.test.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}

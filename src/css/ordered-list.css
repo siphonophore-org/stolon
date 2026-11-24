@@ -1,0 +1,18 @@
+/* Light ordered list of rows with move buttons, built by createOrderedList */
+/* Example: <ol class="stolon-ordered-list"><li class="stolon-ordered-item"><div class="stolon-ordered-main">Name</div><div class="stolon-ordered-arrows"></div></li></ol> */
+.stolon-ordered-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+
+/* One row with the caller's content and a pair of move buttons */
+/* Example: <li class="stolon-ordered-item stolon-item-row"><div class="stolon-ordered-main">Name</div><div class="stolon-ordered-arrows"></div></li> */
+/* It is built as stolon-item-row, which gives it the field look and height */
+
+/* Content of a row that takes the free width and clips */
+/* Example: <div class="stolon-ordered-main">Name</div> */
+.stolon-ordered-main { padding: var(--stolon-gap-narrow) 0; }

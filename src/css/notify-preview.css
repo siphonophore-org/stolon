@@ -1,0 +1,151 @@
+/* What one notification destination gets, drawn as its place shows it, from StolonNotifier's preview */
+/* Example: <div class="stolon-notify-preview"><div class="stolon-notify-preview-webhook">…</div></div> */
+.stolon-notify-preview { min-width: 0; overflow-wrap: anywhere; }
+
+/* A webhook's request line, its method, address, and content type, joined to the Code Block of its body below */
+/* Example: <div class="stolon-notify-preview-line"><span class="stolon-notify-preview-method">POST</span><span class="stolon-notify-preview-address">Saved address</span><span class="stolon-notify-preview-type">application/json</span></div> */
+.stolon-notify-preview-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    font-family: var(--stolon-mono);
+    font-size: var(--stolon-font-small);
+    background: var(--stolon-wash);
+    border: 1px solid var(--stolon-border);
+    border-bottom: 0;
+    border-radius: var(--stolon-radius-small) var(--stolon-radius-small) 0 0;
+}
+.stolon-notify-preview-method { font-weight: 600; color: var(--stolon-green-fg); }
+.stolon-notify-preview-address,
+.stolon-notify-preview-type { opacity: 0.7; }
+.stolon-notify-preview-type { margin-left: auto; }
+.stolon-notify-preview-line + .stolon-notify-preview-body { border-top-left-radius: 0; border-top-right-radius: 0; }
+
+/* A Jellyfin message as the web client's toast, at the bottom left of a strip of the page, with a note under it */
+/* Example: <div class="stolon-notify-preview-jellyfin"><div class="stolon-notify-preview-screen"><div class="stolon-notify-preview-toast stolon-float">Dune is available.</div></div></div> */
+.stolon-notify-preview-screen {
+    display: flex;
+    padding: var(--stolon-pad-large);
+    background: var(--stolon-wash);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-small);
+}
+.stolon-notify-preview-toast {
+    min-width: calc(var(--stolon-size-large) * 6);
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: var(--stolon-pad-medium) var(--stolon-pad-large);
+    white-space: pre-wrap;
+}
+.stolon-notify-preview-jellyfin .fieldDescription { margin-top: var(--stolon-gap-narrow); }
+
+/* A web push as a browser notification on the floating surface: the icon, then the title, text, site, and image */
+/* Example: <div class="stolon-notify-preview-push stolon-float"><div class="stolon-notify-preview-push-text"><div class="stolon-notify-preview-push-title">Approved</div></div></div> */
+.stolon-notify-preview-push {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--stolon-gap-narrow);
+    max-width: calc(var(--stolon-size-large) * 10);
+    padding: var(--stolon-pad-medium);
+    box-sizing: border-box;
+}
+.stolon-notify-preview-push-icon { width: var(--stolon-size-large); height: var(--stolon-size-large); border-radius: var(--stolon-radius-small); object-fit: cover; flex: none; }
+.stolon-notify-preview-push-text { flex: 1; min-width: 0; }
+.stolon-notify-preview-push-title { font-weight: 600; }
+.stolon-notify-preview-push-body { white-space: pre-line; }
+.stolon-notify-preview-push-site { font-size: var(--stolon-font-small); opacity: 0.7; }
+.stolon-notify-preview-push-image { display: block; max-width: 100%; margin-top: var(--stolon-gap-narrow); border-radius: var(--stolon-radius-small); }
+
+/* A Discord post in Discord's dark theme, in any Jellyfin theme: the avatar beside the name, app tag, time, text, and embeds */
+/* Example: <div class="stolon-notify-preview-discord"><div class="stolon-notify-preview-discord-avatar">J</div><div class="stolon-notify-preview-discord-content">…</div></div> */
+.stolon-notify-preview-discord {
+    display: flex;
+    gap: var(--stolon-gap-wide);
+    padding: var(--stolon-pad-medium) var(--stolon-pad-large);
+    background: var(--stolon-discord-bg);
+    color: var(--stolon-discord-text);
+    border-radius: var(--stolon-radius-large);
+    font-size: var(--stolon-font-large);
+    line-height: var(--stolon-line-large);
+}
+.stolon-notify-preview-discord-avatar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: var(--stolon-size-large);
+    height: var(--stolon-size-large);
+    overflow: hidden;
+    border-radius: var(--stolon-radius-round);
+    background: var(--stolon-discord-brand);
+    color: var(--stolon-on-accent);
+    font-weight: 600;
+}
+.stolon-notify-preview-discord-avatar img,
+.stolon-notify-preview-discord-author img,
+.stolon-notify-preview-discord-footer img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--stolon-radius-round); }
+.stolon-notify-preview-discord-content { flex: 1; min-width: 0; }
+.stolon-notify-preview-discord-header { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--stolon-gap-narrow); }
+.stolon-notify-preview-discord-name { color: var(--stolon-discord-strong); font-weight: 600; }
+.stolon-notify-preview-discord-tag {
+    padding: 0 var(--stolon-pad-small);
+    border-radius: var(--stolon-radius-small);
+    background: var(--stolon-discord-brand);
+    color: var(--stolon-on-accent);
+    font-size: var(--stolon-font-small);
+    line-height: var(--stolon-line-small);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.stolon-notify-preview-discord-time { color: var(--stolon-discord-muted); font-size: var(--stolon-font-small); }
+.stolon-notify-preview-discord-text,
+.stolon-notify-preview-discord-description,
+.stolon-notify-preview-discord-field-value { white-space: pre-line; }
+.stolon-notify-preview-discord-link,
+.stolon-notify-preview-discord-title.linked { color: var(--stolon-discord-link); }
+.stolon-notify-preview-discord-code {
+    padding: 0 calc(var(--stolon-pad-small) / 4);
+    border: 1px solid var(--stolon-discord-edge);
+    border-radius: var(--stolon-radius-small);
+    background: var(--stolon-discord-embed);
+    font-family: var(--stolon-mono);
+    font-size: var(--stolon-font-small);
+}
+
+/* One embed with a bar of its color, from the post as a custom color, beside its parts and an optional thumbnail */
+/* Example: <article class="stolon-notify-preview-discord-embed custom" style="--stolon-custom: #f44336"><div class="stolon-notify-preview-discord-grid">…</div></article> */
+.stolon-notify-preview-discord-embed {
+    max-width: calc(var(--stolon-size-large) * 13);
+    margin-top: var(--stolon-gap-narrow);
+    box-sizing: border-box;
+    border-left: calc(var(--stolon-gap-narrow) / 2) solid var(--stolon-discord-edge);
+    border-radius: var(--stolon-radius-small);
+    background: var(--stolon-discord-embed);
+}
+.stolon-notify-preview-discord-embed.custom { border-left-color: var(--stolon-custom-fg); }
+.stolon-notify-preview-discord-grid { display: flex; gap: var(--stolon-gap-wide); padding: var(--stolon-pad-small) var(--stolon-pad-large) var(--stolon-pad-large) var(--stolon-pad-medium); }
+.stolon-notify-preview-discord-main { display: flex; flex: 1; flex-direction: column; gap: var(--stolon-gap-narrow); min-width: 0; font-size: var(--stolon-font-medium); line-height: var(--stolon-line-medium); }
+.stolon-notify-preview-discord-author { display: flex; align-items: center; gap: var(--stolon-gap-narrow); color: var(--stolon-discord-strong); font-weight: 600; }
+.stolon-notify-preview-discord-author img { width: var(--stolon-size-small); height: var(--stolon-size-small); }
+.stolon-notify-preview-discord-title { color: var(--stolon-discord-strong); font-size: var(--stolon-font-large); line-height: var(--stolon-line-large); font-weight: 600; }
+.stolon-notify-preview-discord-fields { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--stolon-gap-narrow); }
+.stolon-notify-preview-discord-field { grid-column: span 12; min-width: 0; }
+.stolon-notify-preview-discord-field[data-span="6"] { grid-column: span 6; }
+.stolon-notify-preview-discord-field[data-span="4"] { grid-column: span 4; }
+.stolon-notify-preview-discord-field-name { color: var(--stolon-discord-strong); font-weight: 600; }
+.stolon-notify-preview-discord-image { display: block; max-width: 100%; border-radius: var(--stolon-radius-small); }
+.stolon-notify-preview-discord-thumbnail {
+    flex: none;
+    max-width: calc(var(--stolon-size-large) * 2);
+    max-height: calc(var(--stolon-size-large) * 2);
+    border-radius: var(--stolon-radius-small);
+    object-fit: contain;
+}
+.stolon-notify-preview-discord-footer { display: flex; align-items: center; gap: var(--stolon-gap-narrow); font-size: var(--stolon-font-small); line-height: var(--stolon-line-small); }
+.stolon-notify-preview-discord-footer img { width: var(--stolon-icon-large); height: var(--stolon-icon-large); }
+.stolon-notify-preview-discord-dot { margin: 0 calc(var(--stolon-gap-narrow) / 4); }
+@media (max-width: 600px) {
+    .stolon-notify-preview-discord { gap: var(--stolon-gap-narrow); padding-left: var(--stolon-pad-small); padding-right: var(--stolon-pad-small); }
+}

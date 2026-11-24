@@ -1,0 +1,14 @@
+<!-- title: Tooltip -->
+<!-- min-height: 140 -->
+<div id="mount"></div>
+<script type="module">
+const base = await window.__baseReady;
+const view = document.getElementById('view');
+const mount = document.getElementById('mount');
+const target = base.setTooltip(document.createElement('button'), 'Shown on hover and on keyboard focus.');
+target.type = 'button';
+target.className = 'raised stolon-button small';
+target.textContent = 'Hover or focus me';
+mount.appendChild(target);
+base.bindTooltips(mount);
+</script>

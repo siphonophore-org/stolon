@@ -1,0 +1,15 @@
+/* Floating tooltip bubble on the stolon-float surface that bindTooltips positions beside its target, above a dialog and a toast */
+/* Example: <div class="stolon-tooltip stolon-float" role="tooltip">Shown on hover and focus.</div> */
+.stolon-tooltip {
+    position: fixed;
+    max-width: min(calc(var(--stolon-size-large) * 7), calc(100vw - 2 * var(--stolon-gap-wide)));
+    padding: var(--stolon-gap-narrow) var(--stolon-pad-medium);
+    font-size: var(--stolon-font-small);
+    line-height: var(--stolon-line-small);
+    pointer-events: none;
+}
+.stolon-tooltip.stolon-float { z-index: calc(var(--stolon-layer-dialog) + 2); }
+
+/* Focus ring for an element that has a tooltip, so a keyboard user sees where it is */
+/* Example: <span data-stolon-tip="Hint" tabindex="0">Hover me</span> */
+[data-stolon-tip]:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }

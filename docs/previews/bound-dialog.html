@@ -1,0 +1,24 @@
+<!-- title: Bound Dialog -->
+<!-- min-height: 400 -->
+<div id="itemDetailModal" class="stolon-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="stolon-dialog-content small">
+        <button type="button" id="btnModalClose" class="stolon-row-btn stolon-dialog-close" title="Close" aria-label="Close"><span class="material-icons" aria-hidden="true">close</span></button>
+        <h2 id="modalTitle" class="stolon-modal-title">Item Detail</h2>
+        <div id="modalContent" class="stolon-modal-body"></div>
+    </div>
+</div>
+<button type="button" id="btnDetail" class="raised stolon-button primary"><span>Open Detail</span></button>
+<span id="boundStatus" class="stolon-status-text"></span>
+<script type="module">
+const base = await window.__baseReady;
+const view = document.getElementById('view');
+const shared = base.createShared(view, 'preview-plugin', 'Preview');
+const detail = base.bindDialog('itemDetailModal', {
+    root: view,
+    onClose: () => shared.setStatus('boundStatus', 'Detail closed.', false, { timeout: 0 })
+});
+shared.bindClick('btnDetail', () => {
+    document.getElementById('modalContent').textContent = 'The page filled this body before it opened the dialog.';
+    detail.open();
+});
+</script>

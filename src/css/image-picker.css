@@ -1,0 +1,79 @@
+/* An image frame in a square, portrait, or wide shape beside its Select Image and Remove buttons */
+/* Example: <div class="stolon-image-picker square" role="group"><div class="stolon-image-picker-body"><div class="stolon-image-picker-frame"></div><div class="stolon-image-picker-actions"></div></div></div> */
+.stolon-image-picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-image-picker[hidden] { display: none; }
+.stolon-image-picker-body {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-wide);
+}
+.stolon-image-picker-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-image-picker-actions > [hidden] { display: none; }
+.stolon-image-picker-description { opacity: 0.7; font-size: 0.9em; }
+
+/* The stolon-thumb frame that holds the preview, or the placeholder icon and text while empty */
+/* Example: <span class="stolon-thumb stolon-image-picker-frame"><img class="stolon-thumb-image stolon-image-picker-image" alt="poster.png" src="poster.png"></span> */
+.stolon-image-picker-frame {
+    width: 128px;
+    height: 128px;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-large);
+}
+.stolon-image-picker.portrait .stolon-image-picker-frame { width: 120px; height: 180px; }
+.stolon-image-picker.wide .stolon-image-picker-frame { width: 256px; height: 144px; }
+/* The frame's placeholder stacks its icon over the empty text, a little stronger than other thumbs */
+.stolon-image-picker .stolon-image-picker-placeholder {
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+    padding: var(--stolon-pad-small);
+    text-align: center;
+    opacity: 0.6;
+}
+.stolon-image-picker-placeholder .material-icons { font-size: calc(var(--stolon-size-large) * 0.9); }
+.stolon-image-picker-empty { font-size: 0.85em; }
+
+@media (max-width: 600px) {
+    .stolon-image-picker.wide .stolon-image-picker-frame { width: 100%; height: auto; padding-top: 56.25%; }
+}
+
+/* The picture an empty picker shows in place of its placeholder: initials or an icon on a status color over the surface, filling the frame */
+/* Example: <span class="stolon-thumb stolon-image-picker-frame"><span class="stolon-image-picker-fallback blue" aria-hidden="true">AL</span></span> */
+.stolon-image-picker-fallback {
+    --stolon-image-picker-fallback-bg: var(--stolon-blue-bg);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--stolon-size-large) * 0.9);
+    font-weight: 600;
+    background-color: var(--stolon-surface);
+    background-image: linear-gradient(var(--stolon-image-picker-fallback-bg), var(--stolon-image-picker-fallback-bg));
+    color: var(--stolon-blue-fg);
+}
+.stolon-image-picker-fallback[hidden] { display: none; }
+.stolon-image-picker-fallback .material-icons { font-size: calc(var(--stolon-size-large) * 1.4); }
+.stolon-image-picker-fallback.green { --stolon-image-picker-fallback-bg: var(--stolon-green-bg); color: var(--stolon-green-fg); }
+.stolon-image-picker-fallback.red { --stolon-image-picker-fallback-bg: var(--stolon-red-bg); color: var(--stolon-red-fg); }
+.stolon-image-picker-fallback.orange { --stolon-image-picker-fallback-bg: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
+.stolon-image-picker-fallback.purple { --stolon-image-picker-fallback-bg: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
+.stolon-image-picker-fallback.gray { --stolon-image-picker-fallback-bg: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
+.stolon-image-picker-fallback.yellow { --stolon-image-picker-fallback-bg: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
+.stolon-image-picker-fallback.pink { --stolon-image-picker-fallback-bg: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
+.stolon-image-picker-fallback.teal { --stolon-image-picker-fallback-bg: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
+.stolon-image-picker-fallback.custom { --stolon-image-picker-fallback-bg: var(--stolon-custom); color: var(--stolon-custom-on); }

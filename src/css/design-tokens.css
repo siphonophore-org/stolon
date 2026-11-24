@@ -1,0 +1,150 @@
+/* Design tokens for the accent, surface, border, washes, status colors, and the mono font stack */
+/* Example: color: var(--stolon-accent); */
+:root {
+    --stolon-accent: var(--jf-palette-primary-main, #00a4dc);
+    --stolon-accent-hover: #0088cc;
+    --stolon-border: #555;
+    --stolon-surface: var(--jf-palette-background-paper, #181818);
+    /* The theme text color, for a wash on an element that fades its own color, where currentColor is already faded. */
+    --stolon-fg: var(--jf-palette-text-primary, #fff);
+    /* Text on an accent or status fill. It stays white in every theme, since the fill never follows the theme text color. */
+    --stolon-on-accent: #fff;
+    /* Text on a light status fill such as green, orange, yellow, gray, and blue, where white falls below 3 to 1. */
+    --stolon-on-warning: #1a1a1a;
+    /* Washes of the accent and of the text color, plain here and upgraded below. Faint marks a resting surface, the
+       plain wash a hover, strong a pressed or selected item, and heavy a pressed item on a wash. */
+    --stolon-accent-wash: rgba(0, 164, 220, 0.12);
+    --stolon-accent-wash-strong: rgba(0, 164, 220, 0.22);
+    --stolon-wash-faint: rgba(255, 255, 255, 0.04);
+    --stolon-wash: rgba(255, 255, 255, 0.08);
+    --stolon-wash-strong: rgba(255, 255, 255, 0.12);
+    --stolon-wash-heavy: rgba(255, 255, 255, 0.18);
+    /* A divider between rows or under a heading, lighter than a control's border. */
+    --stolon-line: rgba(255, 255, 255, 0.1);
+    /* Text two steps quieter than the theme text: muted for a secondary heading, faint for a hint or an empty state. */
+    --stolon-text-muted: rgba(255, 255, 255, 0.65);
+    --stolon-text-faint: rgba(255, 255, 255, 0.5);
+    /* The overlay behind a dialog. */
+    --stolon-scrim: rgba(0, 0, 0, 0.7);
+
+    /* The two spacings between objects. Wide sits between components and under a title. Narrow sits inside a component. */
+    --stolon-gap-narrow: 8px;
+    --stolon-gap-wide: 16px;
+
+    /* The palette. Every color Stolon draws comes from one of these nine. */
+    --stolon-red: #e5534b;
+    --stolon-orange: #f0883e;
+    --stolon-yellow: #d4a72c;
+    --stolon-green: #3fb950;
+    --stolon-teal: #2ab3a6;
+    --stolon-blue: #00a4dc;
+    --stolon-purple: #aa5cc3;
+    --stolon-pink: #e0609e;
+    --stolon-gray: #9198a1;
+
+    /* The status colors, each a color of the palette. */
+    --stolon-error: var(--stolon-red);
+    --stolon-error-hover: #c2453e;
+    --stolon-success: var(--stolon-green);
+    --stolon-warning: var(--stolon-orange);
+
+    --stolon-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+    /* The size scale every field, button, pill, badge, and tag takes, as small, medium, or large. Medium matches a text field. */
+    --stolon-size-small: 24px;
+    --stolon-size-medium: 32px;
+    --stolon-size-large: 40px;
+    --stolon-font-small: 12px;
+    --stolon-font-medium: 14px;
+    --stolon-font-large: 16px;
+    --stolon-pad-small: 8px;
+    --stolon-pad-medium: 12px;
+    --stolon-pad-large: 16px;
+    --stolon-icon-small: 16px;
+    --stolon-icon-medium: 18px;
+    --stolon-icon-large: 20px;
+    --stolon-line-small: 16px;
+    --stolon-line-medium: 20px;
+    --stolon-line-large: 24px;
+
+    /* Corner rounding: small for fields, buttons, badges, and rows, medium for cards and panels, large for sections and dialogs, round for pills and dots. */
+    --stolon-radius-small: 4px;
+    --stolon-radius-medium: 6px;
+    --stolon-radius-large: 8px;
+    --stolon-radius-round: 999px;
+
+    /* The shadow a floating box casts, such as a menu, a dropdown, a tooltip, or a toast, and the stronger one a dialog casts. */
+    --stolon-shadow-float: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --stolon-shadow-dialog: 0 4px 16px rgba(0, 0, 0, 0.5);
+
+    /* The stacking layers: a floating box over the page, and a dialog with its overlay over everything. */
+    --stolon-layer-float: 1000;
+    --stolon-layer-dialog: 10000;
+
+    /* A field's height, text, and side padding. A field, or anything around it, at another size sets these. */
+    --stolon-field-height: var(--stolon-size-medium);
+    --stolon-field-font: var(--stolon-font-medium);
+    --stolon-field-pad: var(--stolon-pad-medium);
+
+    /* The two chevron sizes. Primary opens a section, card, or dropdown. Secondary moves an item or separates a trail. */
+    --stolon-chevron-primary: 24px;
+    --stolon-chevron-secondary: 18px;
+
+    /* Each palette color as text (fg), as a badge or tag fill (bg, 20%), as a callout or row tint (soft, 12%), and as
+       the edge of that tint (edge, 40%). The tints are plain here and upgraded below. */
+    --stolon-red-fg: var(--stolon-red); --stolon-red-bg: rgba(229, 83, 75, 0.2); --stolon-red-soft: rgba(229, 83, 75, 0.12); --stolon-red-edge: rgba(229, 83, 75, 0.4);
+    --stolon-orange-fg: var(--stolon-orange); --stolon-orange-bg: rgba(240, 136, 62, 0.2); --stolon-orange-soft: rgba(240, 136, 62, 0.12); --stolon-orange-edge: rgba(240, 136, 62, 0.4);
+    --stolon-yellow-fg: var(--stolon-yellow); --stolon-yellow-bg: rgba(212, 167, 44, 0.2); --stolon-yellow-soft: rgba(212, 167, 44, 0.12); --stolon-yellow-edge: rgba(212, 167, 44, 0.4);
+    --stolon-green-fg: var(--stolon-green); --stolon-green-bg: rgba(63, 185, 80, 0.2); --stolon-green-soft: rgba(63, 185, 80, 0.12); --stolon-green-edge: rgba(63, 185, 80, 0.4);
+    --stolon-teal-fg: var(--stolon-teal); --stolon-teal-bg: rgba(42, 179, 166, 0.2); --stolon-teal-soft: rgba(42, 179, 166, 0.12); --stolon-teal-edge: rgba(42, 179, 166, 0.4);
+    --stolon-blue-fg: var(--stolon-blue); --stolon-blue-bg: rgba(0, 164, 220, 0.2); --stolon-blue-soft: rgba(0, 164, 220, 0.12); --stolon-blue-edge: rgba(0, 164, 220, 0.4);
+    --stolon-purple-fg: var(--stolon-purple); --stolon-purple-bg: rgba(170, 92, 195, 0.2); --stolon-purple-soft: rgba(170, 92, 195, 0.12); --stolon-purple-edge: rgba(170, 92, 195, 0.4);
+    --stolon-pink-fg: var(--stolon-pink); --stolon-pink-bg: rgba(224, 96, 158, 0.2); --stolon-pink-soft: rgba(224, 96, 158, 0.12); --stolon-pink-edge: rgba(224, 96, 158, 0.4);
+    --stolon-gray-fg: var(--stolon-gray); --stolon-gray-bg: rgba(145, 152, 161, 0.2); --stolon-gray-soft: rgba(145, 152, 161, 0.12); --stolon-gray-edge: rgba(145, 152, 161, 0.4);
+
+    /* Discord's dark theme, for the Notify Preview's Discord post only, so it looks as Discord shows it in any Jellyfin theme. */
+    --stolon-discord-bg: #313338;
+    --stolon-discord-embed: #2b2d31;
+    --stolon-discord-edge: #1e1f22;
+    --stolon-discord-text: #dbdee1;
+    --stolon-discord-strong: #f2f3f5;
+    --stolon-discord-muted: #949ba4;
+    --stolon-discord-link: #00a8fc;
+    --stolon-discord-brand: #5865f2;
+}
+/* A custom color from a hex code, which applyColor sets as --stolon-custom with --stolon-custom-on for text on its fill */
+/* Example: <span class="stolon-badge custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #fff">VIP</span> */
+.custom {
+    --stolon-custom-fg: var(--stolon-custom, #9198a1);
+    --stolon-custom-bg: rgba(145, 152, 161, 0.2);
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+    .custom { --stolon-custom-bg: color-mix(in srgb, var(--stolon-custom, #9198a1) 20%, transparent); }
+}
+
+/* A token holding color-mix() fails where it is used, not where it is parsed, so each starts plain and upgrades here. */
+@supports (color: color-mix(in srgb, red, blue)) {
+    :root {
+        --stolon-accent-hover: color-mix(in srgb, var(--stolon-accent) 82%, #000);
+        --stolon-border: color-mix(in srgb, currentColor 30%, transparent);
+        --stolon-error-hover: color-mix(in srgb, var(--stolon-error) 82%, #000);
+        --stolon-accent-wash: color-mix(in srgb, var(--stolon-accent) 12%, transparent);
+        --stolon-accent-wash-strong: color-mix(in srgb, var(--stolon-accent) 22%, transparent);
+        --stolon-wash-faint: color-mix(in srgb, currentColor 4%, transparent);
+        --stolon-wash: color-mix(in srgb, currentColor 8%, transparent);
+        --stolon-wash-strong: color-mix(in srgb, currentColor 12%, transparent);
+        --stolon-wash-heavy: color-mix(in srgb, currentColor 18%, transparent);
+        --stolon-line: color-mix(in srgb, var(--stolon-fg) 10%, transparent);
+        --stolon-text-muted: color-mix(in srgb, var(--stolon-fg) 65%, transparent);
+        --stolon-text-faint: color-mix(in srgb, var(--stolon-fg) 50%, transparent);
+        --stolon-red-bg: color-mix(in srgb, var(--stolon-red) 20%, transparent); --stolon-red-soft: color-mix(in srgb, var(--stolon-red) 12%, transparent); --stolon-red-edge: color-mix(in srgb, var(--stolon-red) 40%, transparent);
+        --stolon-orange-bg: color-mix(in srgb, var(--stolon-orange) 20%, transparent); --stolon-orange-soft: color-mix(in srgb, var(--stolon-orange) 12%, transparent); --stolon-orange-edge: color-mix(in srgb, var(--stolon-orange) 40%, transparent);
+        --stolon-yellow-bg: color-mix(in srgb, var(--stolon-yellow) 20%, transparent); --stolon-yellow-soft: color-mix(in srgb, var(--stolon-yellow) 12%, transparent); --stolon-yellow-edge: color-mix(in srgb, var(--stolon-yellow) 40%, transparent);
+        --stolon-green-bg: color-mix(in srgb, var(--stolon-green) 20%, transparent); --stolon-green-soft: color-mix(in srgb, var(--stolon-green) 12%, transparent); --stolon-green-edge: color-mix(in srgb, var(--stolon-green) 40%, transparent);
+        --stolon-teal-bg: color-mix(in srgb, var(--stolon-teal) 20%, transparent); --stolon-teal-soft: color-mix(in srgb, var(--stolon-teal) 12%, transparent); --stolon-teal-edge: color-mix(in srgb, var(--stolon-teal) 40%, transparent);
+        --stolon-blue-bg: color-mix(in srgb, var(--stolon-blue) 20%, transparent); --stolon-blue-soft: color-mix(in srgb, var(--stolon-blue) 12%, transparent); --stolon-blue-edge: color-mix(in srgb, var(--stolon-blue) 40%, transparent);
+        --stolon-purple-bg: color-mix(in srgb, var(--stolon-purple) 20%, transparent); --stolon-purple-soft: color-mix(in srgb, var(--stolon-purple) 12%, transparent); --stolon-purple-edge: color-mix(in srgb, var(--stolon-purple) 40%, transparent);
+        --stolon-pink-bg: color-mix(in srgb, var(--stolon-pink) 20%, transparent); --stolon-pink-soft: color-mix(in srgb, var(--stolon-pink) 12%, transparent); --stolon-pink-edge: color-mix(in srgb, var(--stolon-pink) 40%, transparent);
+        --stolon-gray-bg: color-mix(in srgb, var(--stolon-gray) 20%, transparent); --stolon-gray-soft: color-mix(in srgb, var(--stolon-gray) 12%, transparent); --stolon-gray-edge: color-mix(in srgb, var(--stolon-gray) 40%, transparent);
+    }
+}

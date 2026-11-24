@@ -1,0 +1,12 @@
+<!-- title: Avatar -->
+<div id="mount"></div>
+<script type="module">
+const base = await window.__baseReady;
+const view = document.getElementById('view');
+const mount = document.getElementById('mount');
+mount.style.cssText = 'display:flex;flex-wrap:wrap;align-items:center;gap:12px';
+mount.appendChild(base.createAvatar({ name: 'Ada Lovelace', size: 'small' }).element);
+mount.appendChild(base.createAvatar({ name: 'Bob Ross', status: 'green' }).element);
+mount.appendChild(base.createAvatar({ name: 'Carol', size: 'large', status: 'red', statusLabel: 'Offline' }).element);
+mount.appendChild(base.createUserChip({ name: 'Ada Lovelace', text: 'Administrator', status: 'green' }).element);
+</script>

@@ -1,0 +1,27 @@
+/* A small line with no axes, one line of text tall, that fills its width, in the accent or a status color */
+/* Example: <span class="stolon-sparkline green" role="img" aria-label="Trend, from 3 to 9, low 2, high 9"><svg viewBox="0 0 100 24" preserveAspectRatio="none"></svg></span> */
+.stolon-sparkline {
+    --stolon-sparkline-color: var(--stolon-accent);
+    display: block;
+    width: 100%;
+    min-width: calc(var(--stolon-size-large) * 1.5);
+    height: var(--stolon-line-large);
+    color: var(--stolon-sparkline-color);
+}
+.stolon-sparkline > svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.stolon-sparkline-line { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.stolon-sparkline-area { fill: currentColor; opacity: 0.15; stroke: none; }
+.stolon-sparkline.green { --stolon-sparkline-color: var(--stolon-green-fg); }
+.stolon-sparkline.red { --stolon-sparkline-color: var(--stolon-red-fg); }
+.stolon-sparkline.orange { --stolon-sparkline-color: var(--stolon-orange-fg); }
+.stolon-sparkline.purple { --stolon-sparkline-color: var(--stolon-purple-fg); }
+.stolon-sparkline.blue { --stolon-sparkline-color: var(--stolon-blue-fg); }
+.stolon-sparkline.gray { --stolon-sparkline-color: var(--stolon-gray-fg); }
+.stolon-sparkline.yellow { --stolon-sparkline-color: var(--stolon-yellow-fg); }
+.stolon-sparkline.pink { --stolon-sparkline-color: var(--stolon-pink-fg); }
+.stolon-sparkline.teal { --stolon-sparkline-color: var(--stolon-teal-fg); }
+.stolon-sparkline.custom { --stolon-sparkline-color: var(--stolon-custom); }
+
+/* A sparkline under a stat card's label, in the card's own color */
+/* Example: <div class="stolon-card stolon-stat blue"><span class="stolon-card-count">12</span><span class="stolon-card-label">Syncs</span><span class="stolon-sparkline stolon-stat-sparkline"></span></div> */
+.stolon-stat-sparkline { margin-top: var(--stolon-gap-narrow); color: inherit; --stolon-sparkline-color: currentColor; }

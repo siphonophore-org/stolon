@@ -1,0 +1,40 @@
+/* A compact label and control field for dense, multiple-per-line layouts */
+/* Example: <div class="stolon-field"><label for="year">Year</label><input is="emby-input" id="year"></div> */
+.stolon-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 10em;
+    min-width: 0;
+}
+.stolon-field > label {
+    display: block;
+    margin: 0 0 var(--stolon-gap-narrow) 0;
+}
+.stolon-field > input,
+.stolon-field > select,
+.stolon-field > .emby-input,
+.stolon-field > .emby-select {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* A field that keeps its natural width instead of growing to fill the row */
+/* Example: <div class="stolon-field stolon-field-fixed"></div> */
+.stolon-field-fixed {
+    flex: 0 0 auto;
+}
+
+/* A row that places fields side by side and wraps on narrow widths */
+/* Example: <div class="stolon-field-row"><div class="stolon-field"></div><div class="stolon-field"></div></div> */
+.stolon-field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-wide);
+    align-items: flex-end;
+}
+
+/* Text box in a compact field at the height of a select beside it */
+/* Example: <div class="stolon-field"><input is="emby-input" class="emby-input"></div> */
+.pluginConfigurationPage .stolon-field input.emby-input,
+.stolon-dialog .stolon-field input.emby-input { padding-top: 0.5em; padding-bottom: 0.5em; }

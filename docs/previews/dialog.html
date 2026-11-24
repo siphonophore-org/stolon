@@ -1,0 +1,37 @@
+<!-- title: Dialog -->
+<!-- min-height: 460 -->
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <button type="button" id="btnOpen" class="raised stolon-button primary"><span>Open Dialog</span></button>
+    <button type="button" id="btnWide" class="raised stolon-button secondary"><span>Open Wide Dialog</span></button>
+</div>
+<span id="dialogStatus" class="stolon-status-text"></span>
+<script type="module">
+const base = await window.__baseReady;
+const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
+shared.bindClick('btnOpen', () => base.openDialog({
+    title: 'Session Log',
+    body: '<p>The backdrop, the close button, and Escape all close it.</p>',
+    size: 'small',
+    buttons: [
+        { text: 'Close', className: 'stolon-button secondary', action: (close) => close() },
+        { text: 'Retry', className: 'stolon-button primary', value: 'retry' }
+    ],
+    onClose: (value) => shared.setStatus('dialogStatus', 'Closed with ' + (value || 'nothing') + '.', false, { timeout: 0 })
+}));
+shared.bindClick('btnWide', () => {
+    let fields = '';
+    for (let i = 1; i <= 12; i++) {
+        fields += '<div class="inputContainer"><label>Field ' + i + '</label><input type="text" value="Value ' + i + '"></div>';
+    }
+    base.openDialog({
+        title: 'Wide Dialog',
+        size: 'large',
+        body: fields,
+        buttons: [
+            { text: 'Remove', className: 'stolon-button destructive', action: (close) => close() },
+            { text: 'Cancel', className: 'stolon-button secondary', action: (close) => close() },
+            { text: 'Done', className: 'stolon-button primary', action: (close) => close() }
+        ]
+    });
+});
+</script>

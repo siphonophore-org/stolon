@@ -1,0 +1,47 @@
+/* Placeholder for loading content, made of pulsing lines, a block, or a circle */
+/* Example: <div class="stolon-skeleton" role="status" aria-busy="true"><span class="stolon-skeleton-line"></span><span class="stolon-skeleton-line"></span></div> */
+.stolon-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+
+/* One line of text, with the last line shorter */
+/* Example: <span class="stolon-skeleton-line"></span> */
+.stolon-skeleton-line {
+    display: block;
+    height: 0.9em;
+    border-radius: var(--stolon-radius-small);
+    background: var(--stolon-wash-strong);
+    animation: stolon-pulse 1.4s ease-in-out infinite;
+}
+.stolon-skeleton-line + .stolon-skeleton-line:last-child { width: 60%; }
+
+/* A block or a circle in three sizes */
+/* Example: <span class="stolon-skeleton-block stolon-skeleton-medium"></span> */
+.stolon-skeleton-block,
+.stolon-skeleton-circle {
+    display: block;
+    background: var(--stolon-wash-strong);
+    animation: stolon-pulse 1.4s ease-in-out infinite;
+}
+.stolon-skeleton-block { width: 100%; border-radius: var(--stolon-radius-medium); }
+.stolon-skeleton-block.stolon-skeleton-small { height: 32px; }
+.stolon-skeleton-block.stolon-skeleton-medium { height: 80px; }
+.stolon-skeleton-block.stolon-skeleton-large { height: 160px; }
+.stolon-skeleton-circle { border-radius: var(--stolon-radius-round); }
+.stolon-skeleton-circle.stolon-skeleton-small { width: 24px; height: 24px; }
+.stolon-skeleton-circle.stolon-skeleton-medium { width: 40px; height: 40px; }
+.stolon-skeleton-circle.stolon-skeleton-large { width: 64px; height: 64px; }
+
+@keyframes stolon-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+}
+
+/* A user who asks for less motion gets still placeholders */
+@media (prefers-reduced-motion: reduce) {
+    .stolon-skeleton-line,
+    .stolon-skeleton-block,
+    .stolon-skeleton-circle { animation: none; }
+}

@@ -1,0 +1,27 @@
+/* Removable chips stacked above a search input with a results dropdown, built by createChipSelect */
+/* Example: <div class="stolon-chip-select"><div class="stolon-tags"></div><div class="stolon-combo"></div></div> */
+.stolon-chip-select {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+
+/* Chip row that sits flush above the input and hides while no chip is selected */
+/* Example: <div class="stolon-chip-select"><div class="stolon-tags"></div></div> */
+.stolon-chip-select .stolon-tags:empty {
+    display: none;
+}
+.stolon-chip-select .stolon-tags {
+    margin-top: 0;
+}
+
+
+/* A round picture at the start of a chip, from the thumb core, as tall as the chip's text and inset from its edge, for the chip select and the tag input */
+/* Example: <span class="stolon-tag has-thumb"><span class="stolon-thumb stolon-tag-thumb"><img class="stolon-thumb-image" alt="" src="poster.jpg"></span><span>Alien</span></span> */
+.stolon-tag-thumb {
+    width: var(--stolon-icon-medium);
+    height: var(--stolon-icon-medium);
+    border-radius: var(--stolon-radius-round);
+}
+.stolon-tag-thumb .stolon-thumb-placeholder .material-icons { font-size: var(--stolon-icon-small); }
+.stolon-tag.has-thumb { padding-left: calc(var(--stolon-pad-small) / 2); }

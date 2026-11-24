@@ -1,0 +1,38 @@
+<!-- title: Paginated Table -->
+<div id="contentTable"></div>
+<script type="module">
+const base = await window.__baseReady;
+const view = document.getElementById('view');
+const shared = base.createShared(view, 'preview-plugin', 'Preview');
+// Stands in for a plugin's image proxy: a short wait, then artwork as a Blob, or a failure every seventh row so its placeholder shows.
+const HUES = [210, 280, 30, 140, 0];
+function loadArt(item) {
+    return function () {
+        const n = Number(item.id.split('-')[1]) || 0;
+        return new Promise((resolve, reject) => setTimeout(() => {
+            if (n % 7 === 0) { reject(new Error('No artwork')); return; }
+            const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="60"><rect width="40" height="60" fill="hsl(' + HUES[n % 5] + ',45%,45%)"/><text x="20" y="36" font-size="16" text-anchor="middle" fill="#fff" font-family="sans-serif">' + n + '</text></svg>';
+            resolve(new Blob([svg], { type: 'image/svg+xml' }));
+        }, 400 + (n % 4) * 200));
+    };
+}
+const table = base.createPaginatedTable(view, shared, {
+    containerId: 'contentTable',
+    endpoint: 'Items',
+    search: { placeholder: 'Search episodes' },
+    selection: { enabled: true, idKey: 'id' },
+    pagination: { pageSize: 10, loadMore: true },
+    filters: { options: [{ value: 'Queued', label: 'Queued' }, { value: 'Errored', label: 'Errored' }] },
+    columns: [
+        { key: 'name', type: 'custom', image: loadArt, imageShape: 'portrait', render: (item) =>
+            '<div class="stolon-table-item-info"><div class="stolon-table-item-title">' + shared.escapeHtml(item.name) + '</div>' +
+            '<div class="stolon-table-item-sub">' + shared.formatSize(item.sizeBytes) + '</div></div>' },
+        { key: 'status', type: 'status' }
+    ],
+    getDisplayStatus: (item) => item.status,
+    getStatusClass: (item) => item.status,
+    actions: { onRowClick: (item) => shared.showAlert('Opened ' + item.name) },
+    emptyState: { message: 'No items found.' }
+});
+table.load();
+</script>

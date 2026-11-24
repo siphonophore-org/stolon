@@ -1,0 +1,107 @@
+/* A chart on the shared chart core: an inline SVG plot that fills its width, a legend under it when there are several series, and a hidden table of the numbers */
+/* Example: <figure class="stolon-chart stolon-bar-chart"><div class="stolon-chart-plot" tabindex="0"><svg></svg></div><div class="stolon-chart-legend"></div><table class="stolon-sr-only"></table></figure> */
+.stolon-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+    min-width: 0;
+    margin: 0;
+    color: var(--stolon-fg);
+}
+.stolon-chart-plot { min-width: 0; border-radius: var(--stolon-radius-small); }
+.stolon-chart-plot:focus { outline: none; }
+.stolon-chart-plot:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+.stolon-chart-plot > svg { display: block; overflow: visible; }
+
+/* The gridlines, the ticks, and the labels, in the text color and the small font, so they never scale with the plot */
+/* Example: <g class="stolon-chart-grid"><line class="stolon-chart-zero"></line><text class="stolon-chart-tick">50</text><text class="stolon-chart-label">Mon</text></g> */
+.stolon-chart-grid line { stroke: var(--stolon-border); stroke-width: 1; shape-rendering: crispEdges; }
+.stolon-chart-grid line.stolon-chart-zero { stroke: var(--stolon-wash-strong); }
+.stolon-chart text {
+    fill: currentColor;
+    font-size: var(--stolon-font-small);
+    font-family: inherit;
+    font-variant-numeric: tabular-nums;
+}
+.stolon-chart-tick,
+.stolon-chart-label { opacity: 0.7; }
+.stolon-chart-value { font-weight: 600; }
+
+/* One series of marks in its status color, or a hex color through --stolon-custom, the accent when it names none */
+/* Example: <g class="stolon-chart-series green"><rect class="stolon-chart-mark"></rect></g> */
+.stolon-chart-series { --stolon-chart-color: var(--stolon-accent); color: var(--stolon-chart-color); }
+.stolon-chart-series.green { --stolon-chart-color: var(--stolon-green-fg); }
+.stolon-chart-series.red { --stolon-chart-color: var(--stolon-red-fg); }
+.stolon-chart-series.orange { --stolon-chart-color: var(--stolon-orange-fg); }
+.stolon-chart-series.purple { --stolon-chart-color: var(--stolon-purple-fg); }
+.stolon-chart-series.blue { --stolon-chart-color: var(--stolon-blue-fg); }
+.stolon-chart-series.gray { --stolon-chart-color: var(--stolon-gray-fg); }
+.stolon-chart-series.yellow { --stolon-chart-color: var(--stolon-yellow-fg); }
+.stolon-chart-series.pink { --stolon-chart-color: var(--stolon-pink-fg); }
+.stolon-chart-series.teal { --stolon-chart-color: var(--stolon-teal-fg); }
+.stolon-chart-series.custom { --stolon-chart-color: var(--stolon-custom); }
+.stolon-chart-series rect.stolon-chart-mark { fill: var(--stolon-chart-color); }
+.stolon-chart-series .stolon-chart-value { fill: var(--stolon-fg); }
+
+/* A mark under the pointer or the arrow keys, drawn stronger than the rest */
+/* Example: <rect class="stolon-chart-mark"></rect> */
+.stolon-chart-mark { cursor: default; outline: none; }
+.stolon-chart-plot:hover rect.stolon-chart-mark { opacity: 0.75; }
+.stolon-chart-plot rect.stolon-chart-mark:hover { opacity: 1; }
+
+/* Bars grow up from the axis as they draw, except under reduced motion */
+/* Example: <figure class="stolon-chart stolon-bar-chart"></figure> */
+.stolon-bar-chart rect.stolon-chart-mark {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: stolon-chart-grow 0.4s ease-out;
+}
+@keyframes stolon-chart-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+    .stolon-chart .stolon-chart-mark,
+    .stolon-chart .stolon-chart-line,
+    .stolon-chart .stolon-chart-area { animation: none; transition: none; }
+}
+
+/* The legend under a chart with several series: a swatch and a name per series, wrapping as a row */
+/* Example: <div class="stolon-chart-legend"><span class="stolon-chart-key"><span class="stolon-chart-swatch blue"></span><span>Movies</span></span></div> */
+.stolon-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-narrow) var(--stolon-gap-wide);
+    font-size: var(--stolon-font-small);
+}
+.stolon-chart-legend[hidden] { display: none; }
+.stolon-chart-key { display: inline-flex; align-items: center; gap: var(--stolon-gap-narrow); min-width: 0; }
+
+/* A small square in a series color, in the legend and the tooltip */
+/* Example: <span class="stolon-chart-swatch green"></span> */
+.stolon-chart-swatch {
+    flex: 0 0 auto;
+    width: calc(var(--stolon-gap-narrow) * 1.25);
+    height: calc(var(--stolon-gap-narrow) * 1.25);
+    border-radius: calc(var(--stolon-radius-small) / 2);
+    background: var(--stolon-accent);
+}
+.stolon-chart-swatch.green { background: var(--stolon-green-fg); }
+.stolon-chart-swatch.red { background: var(--stolon-red-fg); }
+.stolon-chart-swatch.orange { background: var(--stolon-orange-fg); }
+.stolon-chart-swatch.purple { background: var(--stolon-purple-fg); }
+.stolon-chart-swatch.blue { background: var(--stolon-blue-fg); }
+.stolon-chart-swatch.gray { background: var(--stolon-gray-fg); }
+.stolon-chart-swatch.yellow { background: var(--stolon-yellow-fg); }
+.stolon-chart-swatch.pink { background: var(--stolon-pink-fg); }
+.stolon-chart-swatch.teal { background: var(--stolon-teal-fg); }
+.stolon-chart-swatch.custom { background: var(--stolon-custom); }
+
+/* The tooltip of a mark, on the shared tooltip surface: the label over the value */
+/* Example: <div class="stolon-tooltip stolon-chart-tip stolon-float" role="tooltip"><div class="stolon-chart-tip-label">Mon</div><div class="stolon-chart-tip-value"><strong>42</strong></div></div> */
+.stolon-chart-tip[hidden] { display: none; }
+.stolon-chart-tip-label { opacity: 0.7; }
+.stolon-chart-tip-value { display: flex; align-items: center; gap: var(--stolon-gap-narrow); font-variant-numeric: tabular-nums; }
+.stolon-chart-tip-detail { opacity: 0.7; }
+
+/* The empty sentence that stands in for the plot and the legend when a chart has nothing to draw, in the List's empty look */
+/* Example: <figure class="stolon-chart stolon-pie-chart"><div class="stolon-list-empty stolon-chart-empty">Nothing to show.</div></figure> */
+.stolon-chart-empty[hidden],
+.stolon-chart-plot[hidden] { display: none; }

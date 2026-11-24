@@ -1,0 +1,57 @@
+/* Bordered toolbar above a table holding a stack of field lines for editing many rows at once */
+/* Example: <div class="stolon-bulk-edit-bar"><div class="stolon-bulk-edit-title">Bulk Edit</div><div class="stolon-edit-line"></div></div> */
+.stolon-bulk-edit-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+    padding: var(--stolon-pad-medium);
+    margin-bottom: var(--stolon-gap-wide);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-medium);
+    background: var(--stolon-wash-faint);
+    background: color-mix(in srgb, currentColor 4%, transparent);
+}
+.stolon-bulk-edit-bar > button {
+    align-self: flex-start;
+    margin-top: var(--stolon-gap-narrow);
+}
+
+/* Heading that labels the bulk-edit region */
+/* Example: <div class="stolon-bulk-edit-title">Bulk Edit</div> */
+.stolon-bulk-edit-title {
+    font-size: 1em;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-bottom: calc(var(--stolon-gap-narrow) / 4);
+}
+
+/* Table row stacked into a column for a multi-line field editor */
+/* Example: <div class="stolon-table-row stolon-edit-row"><div class="stolon-edit-line"></div></div> */
+.stolon-edit-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--stolon-gap-narrow);
+    padding: var(--stolon-pad-medium);
+}
+
+/* One line of fields placed side by side inside an editor */
+/* Example: <div class="stolon-edit-line"><div class="stolon-field"></div></div> */
+.stolon-edit-line {
+    display: flex;
+    gap: var(--stolon-gap-narrow);
+    align-items: flex-end;
+    width: 100%;
+}
+
+/* Muted, non-wrapping secondary text within an editor line, such as a file size */
+/* Example: <span class="stolon-edit-secondary">2.34 MB</span> */
+.stolon-edit-secondary {
+    font-size: 0.85em;
+    opacity: 0.5;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* A button in an editor line lines up with the fields beside it */
+/* Example: <div class="stolon-edit-line"><div class="stolon-field"><input type="text"></div><button class="stolon-button primary field">Apply</button></div> */
+.stolon-edit-line > .stolon-button { align-self: flex-end; }

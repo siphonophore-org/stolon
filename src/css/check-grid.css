@@ -1,0 +1,8 @@
+/* Checkboxes laid out in as many columns as fit */
+/* Example: <div class="stolon-check-grid"><label class="emby-checkbox-label"><input type="checkbox" is="emby-checkbox"><span class="checkboxLabel">Poster</span></label></div> */
+.stolon-check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+    gap: 0 var(--stolon-gap-wide);
+}
+.stolon-check-grid .emby-checkbox-label { width: auto; }

@@ -1,0 +1,12 @@
+/* Status line under a form, such as after a save or a check, built as stolon-icon-text with the icon of its state */
+/* Example: <div class="stolon-status-text stolon-icon-text success" role="status"><span class="material-icons" aria-hidden="true">check_circle</span><span class="stolon-status-message">Saved.</span></div> */
+.stolon-status-text {
+    transition: opacity 0.3s;
+    margin-top: var(--stolon-gap-narrow);
+}
+.stolon-status-text:not(.stolon-icon-text) { display: block; }
+
+/* The older ok and bad classes setStatus also sets, in the success and error colors. Each state's own color is the shared message rule */
+/* Example: <div class="stolon-status-text stolon-status-ok">Saved.</div> */
+.stolon-status-ok { color: var(--stolon-success); }
+.stolon-status-bad { color: var(--stolon-error); }

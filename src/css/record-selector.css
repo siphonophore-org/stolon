@@ -1,0 +1,26 @@
+/* Stacked dropdown and action row for picking a record */
+/* Example: <div class="stolon-selector"><select class="stolon-selector-dropdown"></select><div class="stolon-selector-actions"></div></div> */
+.stolon-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+    margin-bottom: var(--stolon-gap-wide);
+}
+
+/* Full width dropdown for the picker, styled by the shared field rules in form.css */
+/* Example: <select class="stolon-selector-dropdown"><option>One</option></select> */
+.stolon-selector-dropdown {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Wrapping row of action buttons under the dropdown */
+/* Example: <div class="stolon-selector-actions"><button class="stolon-button"></button></div> */
+.stolon-selector-actions {
+    display: flex;
+    gap: var(--stolon-gap-narrow);
+    flex-wrap: wrap;
+}
+.stolon-selector-actions .stolon-button {
+    flex: 0 0 auto;
+}

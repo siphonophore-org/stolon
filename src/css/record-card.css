@@ -1,0 +1,24 @@
+/* Detail card showing label and value rows for a single item, on the panel's surface and padding from panel.css */
+/* Example: <div class="stolon-record-card"><div class="stolon-record-row"><span class="stolon-record-label">Last result</span><span>OK</span></div></div> */
+.stolon-record-card { display: block; }
+/* Label and value pair on one line */
+/* Example: <div class="stolon-record-row"><span class="stolon-record-label">Status</span><span>OK</span></div> */
+.stolon-record-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--stolon-gap-wide);
+    font-size: 0.9em;
+}
+.stolon-record-row + .stolon-record-row {
+    margin-top: var(--stolon-gap-narrow);
+}
+/* Dimmed label that keeps its natural width */
+/* Example: <span class="stolon-record-label">Status</span> */
+.stolon-record-label { flex: 0 0 auto; }
+/* Right aligned value that breaks anywhere rather than running past the card */
+/* Example: <div class="stolon-record-row"><span class="stolon-record-label">ID</span><span class="stolon-mono">2f40d5d8</span></div> */
+.stolon-record-row > :last-child:not(.stolon-record-label) {
+    min-width: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+}

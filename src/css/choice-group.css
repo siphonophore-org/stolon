@@ -1,0 +1,59 @@
+/* Grid of equal radio cards, three across and one per row on a phone */
+/* Example: <div class="stolon-choice-group" role="radiogroup"><label class="stolon-choice selected">...</label></div> */
+.stolon-choice-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--stolon-gap-narrow);
+}
+
+/* One radio card holding a hidden input, a name, and a sentence, outlined in the accent when selected */
+/* Example: <label class="stolon-choice"><input type="radio" name="mode" value="Scan"><span class="stolon-choice-name">Scan</span><span class="stolon-choice-text">Pull on a schedule.</span></label> */
+.stolon-choice {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+    padding: var(--stolon-pad-medium);
+    border-radius: var(--stolon-radius-large);
+    cursor: pointer;
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    transition: border-color 0.15s, background 0.15s;
+}
+.stolon-choice:hover { background: var(--stolon-wash); }
+/* Two rules rather than one list, since an engine without :has() drops the whole rule and would lose .selected too. */
+.stolon-choice.selected {
+    border-color: var(--stolon-accent);
+    background: var(--stolon-accent-wash);
+}
+.stolon-choice:has(input:checked) {
+    border-color: var(--stolon-accent);
+    background: var(--stolon-accent-wash);
+}
+/* The card is the control, so its input stays hidden, outranking the shared checkbox and radio look */
+label.stolon-choice > input[type="radio"],
+label.stolon-choice > input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    border: 0;
+    pointer-events: none;
+}
+
+/* Bold name of a choice */
+/* Example: <span class="stolon-choice-name">Scan</span> */
+.stolon-choice-name { font-weight: 600; }
+
+/* Small dimmed sentence under the name */
+/* Example: <span class="stolon-choice-text">Pull on a schedule.</span> */
+.stolon-choice-text {
+    font-size: 0.85em;
+    opacity: 0.7;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .stolon-choice-group { grid-template-columns: 1fr; }
+}

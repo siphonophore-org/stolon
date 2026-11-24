@@ -1,0 +1,30 @@
+/* Pill that shows a short status label in a status color */
+/* Example: <span class="stolon-badge green">Active</span> */
+.stolon-badge,
+.stolon-table-status-badge {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: var(--stolon-size-small);
+    padding: 0 var(--stolon-pad-small);
+    border-radius: var(--stolon-radius-small);
+    font-size: var(--stolon-font-small);
+    line-height: 1;
+    white-space: nowrap;
+    border: none;
+}
+.stolon-badge.green, .stolon-table-status-badge.Active, .stolon-table-status-badge.Synced, .stolon-table-status-badge.Downloaded, .stolon-table-status-badge.Completed, .stolon-table-status-badge.Enabled { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
+.stolon-badge.red, .stolon-table-status-badge.Disabled, .stolon-table-status-badge.Errored, .stolon-table-status-badge.Error, .stolon-table-status-badge.Deleting, .stolon-table-status-badge.Pending-Deletion, .stolon-table-status-badge.Failed { background: var(--stolon-red-bg); color: var(--stolon-red-fg); }
+.stolon-badge.orange, .stolon-table-status-badge.Expired, .stolon-table-status-badge.Queued, .stolon-table-status-badge.Paused { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
+.stolon-badge.purple, .stolon-table-status-badge.Locked, .stolon-table-status-badge.Running, .stolon-table-status-badge.Downloading, .stolon-table-status-badge.Pending, .stolon-table-status-badge.Pending-Download { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
+.stolon-badge.blue, .stolon-table-status-badge.Admin, .stolon-table-status-badge.Imported, .stolon-table-status-badge.Pending-Replacement { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); }
+.stolon-badge.gray, .stolon-table-status-badge.Ignored, .stolon-table-status-badge.Group, .stolon-table-status-badge.Skipped, .stolon-table-status-badge.Unknown { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
+.stolon-badge.yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
+.stolon-badge.pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
+.stolon-badge.teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
+.stolon-badge.custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); }
+
+/* A badge at the medium or large size of the scale */
+/* Example: <span class="stolon-badge green medium">Synced</span> */
+.stolon-badge.medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); }
+.stolon-badge.large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }

@@ -1,0 +1,32 @@
+/* Drop zone that is also a button, with a list of the chosen files under it */
+/* Example: <div class="stolon-file-picker"><div class="stolon-file-zone stolon-icon-text" role="button" tabindex="0"><span class="material-icons" aria-hidden="true">upload_file</span><span class="stolon-file-text">Drop files here or click to select.</span></div></div> */
+.stolon-file-picker {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-file-zone {
+    justify-content: center;
+    padding: var(--stolon-gap-wide);
+    border: 2px dashed var(--stolon-border);
+    border-radius: var(--stolon-radius-large);
+    text-align: center;
+    cursor: pointer;
+}
+.stolon-file-zone:hover,
+.stolon-file-zone.dragover { border-color: var(--stolon-accent); background: var(--stolon-accent-wash); }
+.stolon-file-zone:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+
+/* One chosen file with its name, size, and remove button */
+/* Example: <li class="stolon-file-item stolon-item-row"><span class="stolon-item-row-text stolon-item-row-parts"><span class="stolon-item-row-primary stolon-file-name">poster.png</span><span class="stolon-item-row-secondary stolon-file-size">1.2 MB</span></span></li> */
+.stolon-file-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-file-list:empty { display: none; }
+/* A file row is built as stolon-item-row, with its name as the row text */
+.stolon-file-size { opacity: 0.7; font-size: 0.85em; white-space: nowrap; }

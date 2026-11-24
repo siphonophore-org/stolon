@@ -1,0 +1,15 @@
+/* Page section heading with a full width underline rule, spaced from the heading before it */
+/* Example: <div class="sectionTitleContainer flex align-items-center"><h2 class="sectionTitle">Settings</h2></div> */
+.sectionTitleContainer {
+    margin-top: var(--stolon-gap-wide);
+}
+.sectionTitleContainer:first-child {
+    margin-top: var(--stolon-gap-wide);
+}
+.sectionTitleContainer .sectionTitle {
+    flex: 1;
+    width: 100%;
+    border-bottom: 1px solid var(--stolon-border);
+    padding-bottom: var(--stolon-gap-narrow);
+    margin-bottom: var(--stolon-gap-wide);
+}

@@ -1,0 +1,21 @@
+<!-- title: Count Cards -->
+<div id="statusRow"></div>
+<div class="stolon-cards compact" style="--stolon-balance-max: 4">
+    <div class="stolon-card pink"><span class="stolon-card-count">4</span><span class="stolon-card-label">Pink</span></div>
+    <div class="stolon-card teal"><span class="stolon-card-count">9</span><span class="stolon-card-label">Teal</span></div>
+    <div class="stolon-card yellow"><span class="stolon-card-count">2</span><span class="stolon-card-label">Yellow</span></div>
+    <div class="stolon-card blue"><span class="stolon-card-count">6</span><span class="stolon-card-label">Blue</span></div>
+    <div class="stolon-card gray"><span class="stolon-card-count">1</span><span class="stolon-card-label">Gray</span></div>
+</div>
+<script type="module">
+const base = await window.__baseReady;
+const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
+base.bindBalancedRows(document.getElementById('view'));
+shared.renderCards('statusRow', [
+    { label: 'Queued', count: 12, color: 'orange' },
+    { label: 'Synced', count: 340, color: 'green' },
+    { label: 'Errored', count: 3, color: 'red' },
+    { label: 'Pending', count: 21, color: 'purple' },
+    { label: 'Ignored', count: 8, color: 'gray' }
+]);
+</script>

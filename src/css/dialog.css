@@ -1,0 +1,148 @@
+/* Full screen dimmed overlay that centers its panel */
+/* Example: <div class="stolon-dialog"><div class="stolon-dialog-content"></div></div> */
+.stolon-dialog {
+    position: fixed;
+    inset: 0;
+    background: var(--stolon-scrim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--stolon-layer-dialog);
+    padding: var(--stolon-gap-wide);
+}
+
+/* Centered, scrollable modal panel, 60% of the window wide at the medium size, whose padding every part inside it is set by */
+/* Example: <div class="stolon-dialog-content medium"></div> */
+.stolon-dialog-content {
+    --stolon-dialog-pad: calc(var(--stolon-pad-large) * 1.5);
+    box-sizing: border-box;
+    width: 60vw;
+    min-width: 420px;
+    min-width: min(420px, 100%);
+    max-width: 100%;
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    padding: var(--stolon-dialog-pad);
+    border-radius: var(--stolon-radius-large);
+    box-shadow: var(--stolon-shadow-dialog);
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* A small panel, 40% of the window wide, for a short prompt or confirmation */
+/* Example: <div class="stolon-dialog-content small"></div> */
+.stolon-dialog-content.small { width: 40vw; min-width: 320px; min-width: min(320px, 100%); }
+
+/* A large panel, 80% of the window wide, for an editor, with its buttons pinned at the bottom and the whole screen on a phone. A drawer's footer shares the pinned row */
+/* Example: <div class="stolon-dialog-content large"></div> */
+.stolon-dialog-content.large { width: 80vw; min-width: 560px; min-width: min(560px, 100%); }
+.stolon-dialog-content.large .stolon-modal-button-row,
+.stolon-drawer-content .stolon-drawer-footer {
+    position: sticky;
+    bottom: calc(-1 * var(--stolon-dialog-pad));
+    z-index: 2;
+    justify-content: flex-end;
+    margin: var(--stolon-gap-narrow) calc(-1 * var(--stolon-dialog-pad)) calc(-1 * var(--stolon-dialog-pad));
+    padding: var(--stolon-pad-medium) var(--stolon-dialog-pad);
+    background: inherit;
+    border-top: 1px solid var(--stolon-border);
+}
+.stolon-dialog-content.large .stolon-modal-button,
+.stolon-drawer-content .stolon-drawer-footer .stolon-modal-button { flex: none; min-width: 7em; }
+/* The destructive buttons sit at the start and the rest at the end, however many of each */
+.stolon-dialog-content.large .stolon-modal-button.stolon-button.destructive + .stolon-modal-button:not(.destructive),
+.stolon-drawer-content .stolon-drawer-footer .stolon-modal-button.stolon-button.destructive + .stolon-modal-button:not(.destructive) { margin-left: auto; }
+@media (max-width: 600px) {
+    /* On a phone every panel takes the width of the screen, and a large one or a drawer takes the whole screen. */
+    .stolon-dialog-content { width: 100%; min-width: 0; }
+    .stolon-dialog:has(.stolon-dialog-content.large) { padding: 0; align-items: stretch; }
+    /* The same by the class openDialog sets on the overlay, for engines without :has(). */
+    .stolon-dialog.large,
+    .stolon-dialog.stolon-drawer { padding: 0; align-items: stretch; }
+    .stolon-dialog-content.large,
+    .stolon-dialog-content.stolon-drawer-content {
+        --stolon-dialog-pad: var(--stolon-gap-wide);
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border: 0;
+        border-radius: 0;
+        padding: calc(var(--stolon-dialog-pad) + env(safe-area-inset-top)) var(--stolon-dialog-pad) 0;
+    }
+    .stolon-dialog-content.large .stolon-dialog-close,
+    .stolon-dialog-content.stolon-drawer-content .stolon-dialog-close { top: calc(var(--stolon-dialog-pad) + env(safe-area-inset-top)); }
+    .stolon-dialog-content.large .stolon-modal-button-row,
+    .stolon-drawer-content .stolon-drawer-footer {
+        bottom: 0;
+        margin: auto calc(-1 * var(--stolon-dialog-pad)) 0;
+        padding: var(--stolon-pad-medium) var(--stolon-dialog-pad) calc(var(--stolon-pad-medium) + env(safe-area-inset-bottom));
+    }
+    .stolon-dialog-content.large .stolon-modal-title { font-size: 1.3em; }
+    /* Buttons wrap on a narrow screen, with a destructive one last rather than alone on the first line. */
+    .stolon-modal-button-row { flex-wrap: wrap; row-gap: var(--stolon-gap-narrow); }
+    .stolon-dialog-content.large .stolon-modal-button,
+    .stolon-drawer-content .stolon-drawer-footer .stolon-modal-button { flex: 1 1 auto; }
+    .stolon-modal-button-row .stolon-modal-button.stolon-button.destructive { order: 1; }
+    .stolon-modal-button-row .stolon-modal-button.stolon-button.destructive + .stolon-modal-button:not(.destructive) { margin-left: 0; }
+}
+
+/* The corner close button, a row button pinned to the top right corner of the panel and inset by the panel's padding, level with the title */
+/* Example: <button type="button" class="stolon-row-btn stolon-dialog-close" title="Close" aria-label="Close"><span class="material-icons" aria-hidden="true">close</span></button> */
+.stolon-dialog-close {
+    position: absolute;
+    top: var(--stolon-dialog-pad, var(--stolon-pad-medium));
+    right: var(--stolon-dialog-pad, var(--stolon-pad-medium));
+}
+
+/* Modal heading */
+/* Example: <h2 class="stolon-modal-title">Title</h2> */
+.stolon-modal-title { margin-top: 0; padding-right: var(--stolon-size-medium); }
+
+/* Dialog links in the accent color, except a link styled as a button */
+/* Example: <p>See <a href="https://example.com">the guide</a>.</p> */
+.stolon-dialog a:not(.raised):not(.emby-button):not([is="emby-linkbutton"]) { color: var(--stolon-accent); }
+
+/* Modal body region between header and footer */
+/* Example: <div class="stolon-modal-body"></div> */
+.stolon-modal-body { margin: var(--stolon-gap-wide) 0; }
+
+/* Field block with a label inside a modal */
+/* Example: <div class="stolon-modal-field"><div class="stolon-modal-field-label">Name</div></div> */
+.stolon-modal-field { margin-bottom: var(--stolon-gap-wide); }
+
+/* Dimmed label above a modal field */
+/* Example: <div class="stolon-modal-field-label">Name</div> */
+.stolon-modal-field-label { opacity: 0.7; margin-bottom: var(--stolon-gap-narrow); }
+
+/* Footer row of equal width modal buttons */
+/* Example: <div class="stolon-modal-button-row"><button class="stolon-modal-button"></button></div> */
+.stolon-modal-button-row { display: flex; gap: var(--stolon-gap-narrow); margin-top: var(--stolon-gap-narrow); }
+
+/* Equal width button in the footer row */
+/* Example: <button class="stolon-modal-button raised">Save</button> */
+.stolon-modal-button {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 0;
+    gap: calc(var(--stolon-gap-narrow) / 2);
+    border-radius: var(--stolon-radius-small);
+    padding: var(--stolon-pad-medium) var(--stolon-pad-large);
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.35;
+    cursor: pointer;
+}
+
+/* A footer button that cannot be pressed yet, such as a typed confirm before its text matches, dimmed with no pointer */
+/* Example: <button class="stolon-modal-button raised stolon-button destructive" disabled>Delete</button> */
+.stolon-modal-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}

@@ -1,0 +1,131 @@
+/* A button on Jellyfin's raised button, medium unless small or large, muted like secondary unless it names a variant, with any icon beside its label */
+/* Example: <button is="emby-button" type="button" class="raised stolon-button primary"><span>Save</span></button> */
+.stolon-button {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: var(--stolon-gap-narrow);
+    box-sizing: border-box;
+    height: var(--stolon-size-medium) !important;
+    min-height: 0 !important;
+    min-width: auto !important;
+    padding: 0 var(--stolon-pad-medium) !important;
+    font-size: var(--stolon-font-medium) !important;
+    line-height: 1 !important;
+    border: 0 !important;
+    border-radius: var(--stolon-radius-small);
+    background-color: var(--stolon-wash-strong);
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+    color: inherit;
+    cursor: pointer;
+}
+.stolon-button .material-icons { font-size: var(--stolon-icon-medium); }
+
+.stolon-button.small {
+    height: var(--stolon-size-small) !important;
+    padding: 0 var(--stolon-pad-small) !important;
+    font-size: var(--stolon-font-small) !important;
+}
+.stolon-button.small .material-icons { font-size: var(--stolon-icon-small); }
+
+.stolon-button.large {
+    height: var(--stolon-size-large) !important;
+    padding: 0 var(--stolon-pad-large) !important;
+    font-size: var(--stolon-font-large) !important;
+}
+.stolon-button.large .material-icons { font-size: var(--stolon-icon-large); }
+
+/* The accent filled button for the main action */
+/* Example: <button class="raised stolon-button primary">Save</button> */
+.stolon-button.primary {
+    background-color: var(--stolon-accent) !important;
+    color: var(--stolon-on-accent) !important;
+}
+.stolon-button.primary:hover {
+    background-color: var(--stolon-accent-hover) !important;
+}
+
+/* The muted button for a lower emphasis action */
+/* Example: <button class="raised stolon-button secondary">Cancel</button> */
+.stolon-button.secondary {
+    background-color: var(--stolon-wash-strong) !important;
+    background-color: color-mix(in srgb, currentColor 10%, transparent) !important;
+    color: inherit !important;
+}
+.stolon-button.secondary:hover {
+    background-color: var(--stolon-wash-heavy) !important;
+    background-color: color-mix(in srgb, currentColor 18%, transparent) !important;
+}
+
+/* The red filled button for an action that destroys data */
+/* Example: <button class="raised stolon-button destructive">Delete</button> */
+.stolon-button.destructive {
+    background-color: var(--stolon-error) !important;
+    color: var(--stolon-on-accent) !important;
+}
+.stolon-button.destructive:hover {
+    background-color: var(--stolon-error-hover) !important;
+}
+
+/* A button filled with a custom color from a hex code, with black or white text, whichever reads better */
+/* Example: <button class="raised stolon-button custom" style="--stolon-custom: #e91e63; --stolon-custom-on: #fff">Boost</button> */
+.stolon-button.custom {
+    background-color: var(--stolon-custom) !important;
+    color: var(--stolon-custom-on, var(--stolon-on-accent)) !important;
+}
+.stolon-button.custom:hover {
+    filter: brightness(0.9);
+}
+
+/* A medium or large button that spans the width it has. A small button keeps its own width */
+/* Example: <button class="raised stolon-button primary fill">Save</button> */
+.stolon-button.fill:not(.small) {
+    display: flex !important;
+    width: 100%;
+}
+
+/* A row of buttons a wide space apart, where fill buttons share the width evenly */
+/* Example: <div class="stolon-button-row"><button class="raised stolon-button secondary fill">Cancel</button><button class="raised stolon-button primary fill">Save</button></div> */
+.stolon-button-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--stolon-gap-wide);
+}
+.stolon-button-row > .stolon-button.fill:not(.small) {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+}
+/* Jellyfin's button margin would inset a row's buttons from the buttons and fields beside it */
+.stolon-button-row > .stolon-button { margin: 0 !important; }
+
+/* A button that turns on and off by aria-pressed, filled with the accent while on and muted while off, whatever variant it names */
+/* Example: <button class="raised stolon-button" aria-pressed="true">Daily</button><button class="raised stolon-button" aria-pressed="false">Weekly</button> */
+.stolon-button[aria-pressed="true"] {
+    background-color: var(--stolon-accent) !important;
+    color: var(--stolon-on-accent) !important;
+    opacity: 1;
+}
+.stolon-button[aria-pressed="true"]:hover {
+    background-color: var(--stolon-accent-hover) !important;
+}
+.stolon-button[aria-pressed="false"] {
+    background-color: transparent !important;
+    color: inherit !important;
+    box-shadow: inset 0 0 0 1px var(--stolon-border);
+    opacity: 0.7;
+}
+.stolon-button[aria-pressed="false"]:hover {
+    background-color: var(--stolon-wash) !important;
+    opacity: 0.85;
+}
+
+/* A button on the same line as a field, which takes the field's height, padding, and text size, so the two line up at any size */
+/* Example: <div class="stolon-string-list-add"><input type="text"><button class="raised stolon-button field">Add</button></div> */
+.stolon-button.field {
+    flex: 0 0 auto;
+    height: var(--stolon-field-height) !important;
+    padding: 0 var(--stolon-field-pad) !important;
+    font-size: var(--stolon-field-font) !important;
+}

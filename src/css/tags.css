@@ -1,0 +1,114 @@
+/* Row of removable tag chips that wraps */
+/* Example: <div class="stolon-tags"><span class="stolon-tag">name<button type="button" class="stolon-tag-remove" aria-label="Remove name"><span class="material-icons" aria-hidden="true">close</span></button></span></div> */
+.stolon-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-narrow);
+    margin-top: var(--stolon-gap-narrow);
+}
+
+/* Single rounded tag chip with a remove control */
+/* Example: <span class="stolon-tag">name<button type="button" class="stolon-tag-remove" aria-label="Remove name"><span class="material-icons" aria-hidden="true">close</span></button></span> */
+.stolon-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    background: var(--stolon-wash);
+    background: color-mix(in srgb, currentColor 8%, transparent);
+    box-sizing: border-box;
+    height: var(--stolon-size-small);
+    border-radius: var(--stolon-radius-small);
+    padding: 0 var(--stolon-pad-small);
+    font-size: var(--stolon-font-small);
+    line-height: 1;
+}
+
+/* A tag at the medium or large size of the scale */
+/* Example: <span class="stolon-tag medium">name</span> */
+.stolon-tag.medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); }
+.stolon-tag.large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
+
+/* Small x control at the end of a tag, a square the size of the tag's icon that turns red on hover. A button gets the same look as a span */
+/* Example: <button type="button" class="stolon-tag-remove" aria-label="Remove name"><span class="material-icons" aria-hidden="true">close</span></button> */
+.stolon-tag-remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    width: var(--stolon-icon-small);
+    height: var(--stolon-icon-small);
+    margin-left: calc(var(--stolon-gap-narrow) / -2);
+    margin-right: calc(var(--stolon-gap-narrow) / -2);
+    cursor: pointer;
+    opacity: 0.6;
+    font-size: var(--stolon-icon-small);
+    line-height: 1;
+}
+.stolon-tag-remove.material-icons,
+.stolon-tag-remove .material-icons { font-family: 'Material Icons'; font-size: inherit; line-height: 1; }
+.stolon-tag.medium .stolon-tag-remove { width: var(--stolon-icon-medium); height: var(--stolon-icon-medium); font-size: var(--stolon-icon-medium); }
+.stolon-tag.large .stolon-tag-remove { width: var(--stolon-icon-large); height: var(--stolon-icon-large); font-size: var(--stolon-icon-large); }
+button.stolon-tag-remove {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    color: inherit;
+}
+.stolon-tag-remove:hover { opacity: 1; color: var(--stolon-error); }
+button.stolon-tag-remove:focus { outline: none; }
+button.stolon-tag-remove:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; opacity: 1; }
+
+/* Faded, struck through tag for something switched off, such as a turned off destination */
+/* Example: <span class="stolon-tag stolon-tag-off">Discord (off)</span> */
+.stolon-tag.stolon-tag-off { opacity: 0.5; text-decoration: line-through; }
+
+/* Round tag filled with the blue token, with dark text and its x inset in a filled circle a little smaller than the tag */
+/* Example: <span class="stolon-tag stolon-tag-pill">name<button type="button" class="stolon-tag-remove" aria-label="Remove name"><span class="material-icons" aria-hidden="true">close</span></button></span> */
+.stolon-tag.stolon-tag-pill {
+    background: var(--stolon-blue-fg);
+    color: var(--stolon-on-warning);
+    border-radius: var(--stolon-radius-round);
+}
+.stolon-tag-pill .stolon-tag-remove {
+    width: calc(var(--stolon-size-small) - var(--stolon-gap-narrow) * 3 / 4);
+    height: calc(var(--stolon-size-small) - var(--stolon-gap-narrow) * 3 / 4);
+    margin-right: calc(var(--stolon-gap-narrow) * 3 / 8 - var(--stolon-pad-small));
+    font-size: calc((var(--stolon-size-small) - var(--stolon-gap-narrow) * 3 / 4) * 0.7);
+    border-radius: var(--stolon-radius-round);
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.15);
+    background: color-mix(in srgb, currentColor 15%, transparent);
+    color: var(--stolon-on-warning);
+}
+.stolon-tag-pill.medium .stolon-tag-remove {
+    width: calc(var(--stolon-size-medium) - var(--stolon-gap-narrow) * 3 / 4);
+    height: calc(var(--stolon-size-medium) - var(--stolon-gap-narrow) * 3 / 4);
+    margin-right: calc(var(--stolon-gap-narrow) * 3 / 8 - var(--stolon-pad-medium));
+    font-size: calc((var(--stolon-size-medium) - var(--stolon-gap-narrow) * 3 / 4) * 0.7);
+}
+.stolon-tag-pill.large .stolon-tag-remove {
+    width: calc(var(--stolon-size-large) - var(--stolon-gap-narrow) * 3 / 4);
+    height: calc(var(--stolon-size-large) - var(--stolon-gap-narrow) * 3 / 4);
+    margin-right: calc(var(--stolon-gap-narrow) * 3 / 8 - var(--stolon-pad-large));
+    font-size: calc((var(--stolon-size-large) - var(--stolon-gap-narrow) * 3 / 4) * 0.7);
+}
+.stolon-tag-pill .stolon-tag-remove:hover {
+    background: rgba(0, 0, 0, 0.3);
+    background: color-mix(in srgb, currentColor 30%, transparent);
+    color: var(--stolon-on-warning);
+}
+
+/* A tag tinted with a status color, or a hex code through custom */
+/* Example: <span class="stolon-tag green"><span>Invited</span></span> */
+.stolon-tag.green { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
+.stolon-tag.red { background: var(--stolon-red-bg); color: var(--stolon-red-fg); }
+.stolon-tag.orange { background: var(--stolon-orange-bg); color: var(--stolon-orange-fg); }
+.stolon-tag.purple { background: var(--stolon-purple-bg); color: var(--stolon-purple-fg); }
+.stolon-tag.blue { background: var(--stolon-blue-bg); color: var(--stolon-blue-fg); }
+.stolon-tag.gray { background: var(--stolon-gray-bg); color: var(--stolon-gray-fg); }
+.stolon-tag.yellow { background: var(--stolon-yellow-bg); color: var(--stolon-yellow-fg); }
+.stolon-tag.pink { background: var(--stolon-pink-bg); color: var(--stolon-pink-fg); }
+.stolon-tag.teal { background: var(--stolon-teal-bg); color: var(--stolon-teal-fg); }
+.stolon-tag.custom { background: var(--stolon-custom-bg); color: var(--stolon-custom-fg); }

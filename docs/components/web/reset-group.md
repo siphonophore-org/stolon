@@ -1,0 +1,61 @@
+# Reset Group
+
+A stack of rows that pair a description with an action button, as for per table resets.
+
+## Decision
+
+| When | Use |
+| :--- | :--- |
+| A list of destructive actions, each with a sentence of explanation | Reset Group |
+| Ordinary settings | [Form Fields](form-fields.md) |
+
+## Usage
+
+```html
+<h3 class="stolon-subsection-title">Reset Individual Tables</h3>
+<div class="stolon-reset-group">
+    <div class="stolon-reset-row">
+        <div class="stolon-reset-info">
+            <div>Content Sync</div>
+            <div class="fieldDescription">Forgets content tracking.</div>
+        </div>
+        <button is="emby-button" type="button" class="raised stolon-button destructive small"><span>Reset</span></button>
+    </div>
+</div>
+```
+
+Classes: `stolon-reset-group`, `stolon-reset-row`, `stolon-reset-row-nuclear`, `stolon-reset-info`.
+
+## States and Modifiers
+
+* `stolon-reset-row-nuclear` gives the one dangerous row a red tint and no rule.
+* The last row has no rule.
+
+## Gotchas
+
+* Pair each button with a [Confirm Dialog](confirm-dialog.md). The rows have no JavaScript.
+
+## Reference
+
+Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this section.
+
+<!-- reference:start -->
+
+| Class | What it looks like |
+| :--- | :--- |
+| `stolon-reset-group` | Container for a stack of reset or action rows |
+| `stolon-reset-row` | Row pairing an action description with its button |
+| `stolon-reset-row-nuclear` | Row with a faint red tint for the most destructive action |
+| `stolon-reset-info` | Column that holds the description beside an action button |
+
+<!-- reference:end -->
+
+## Example
+
+<iframe class="stolon-preview" src="../../../assets/previews/reset-group.html" title="Reset Group example" loading="lazy"></iframe>
+
+## Example Code
+
+```html
+--8<-- "reset-group.html"
+```

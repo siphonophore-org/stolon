@@ -1,0 +1,15 @@
+/* A start and an end time side by side, each with the clock icon inside its box, and the range's message under them */
+/* Example: <div class="stolon-time-range"><div class="stolon-time-range-row"><span class="stolon-adorned stolon-adorned-picker"><input type="time" class="stolon-time-range-start"></span><span class="stolon-adorned stolon-adorned-picker"><input type="time" class="stolon-time-range-end"></span></div></div> */
+.stolon-time-range {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.stolon-time-range-row {
+    display: grid;
+    /* Two boxes side by side while each keeps room for a whole value, and stacked when they do not fit. */
+    grid-template-columns: repeat(auto-fit, minmax(calc(var(--stolon-size-large) * 3), 1fr));
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-time-range-row > input,
+.stolon-time-range-row > .stolon-adorned { min-width: 0; box-sizing: border-box; }

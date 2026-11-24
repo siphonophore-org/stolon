@@ -1,0 +1,15 @@
+<!-- title: Pill Group -->
+<div class="stolon-pill-group" id="frequency" role="group" aria-label="Frequency">
+    <button type="button" class="stolon-pill" data-value="daily" aria-pressed="false">Daily</button>
+    <button type="button" class="stolon-pill" data-value="weekly" aria-pressed="false">Weekly</button>
+    <button type="button" class="stolon-pill" data-value="monthly" aria-pressed="false">Monthly</button>
+</div>
+<span id="frequencyStatus" class="stolon-status-text"></span>
+<script type="module">
+const base = await window.__baseReady;
+const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
+const frequency = base.createPillGroup(document.getElementById('frequency'), {
+    onChange: (value) => shared.setStatus('frequencyStatus', 'Chose ' + value + '.', false, { timeout: 0 })
+});
+frequency.set('weekly');
+</script>

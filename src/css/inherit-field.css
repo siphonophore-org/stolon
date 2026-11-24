@@ -1,0 +1,40 @@
+/* A field with an Inherit and Override toggle beside it, which wraps under the field where the line is too narrow */
+/* Example: <div class="stolon-inherit inheriting"><div class="stolon-inherit-field"><select></select></div><div class="stolon-pill-group stolon-inherit-toggle" role="group"><button class="stolon-pill" aria-pressed="true">Inherit (English)</button><button class="stolon-pill" aria-pressed="false">Override</button></div></div> */
+.stolon-inherit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-inherit-field {
+    flex: 1 1 12em;
+    min-width: 0;
+}
+.stolon-inherit-field > select,
+.stolon-inherit-field > textarea,
+.stolon-inherit-field > input:not([type="checkbox"]),
+.stolon-inherit-field > .stolon-adorned { width: 100%; box-sizing: border-box; }
+.stolon-inherit-toggle { flex: 0 0 auto; }
+.stolon-inherit-toggle.stolon-check-row { min-height: var(--stolon-field-height); align-items: center; }
+
+/* A checkbox field: its box and text a field tall and centered, on one line with the Override toggle beside it */
+/* Example: <div class="stolon-inherit check"><div class="stolon-inherit-field"><label><input type="checkbox"><span>Save Artwork</span></label></div><label class="stolon-check-row stolon-inherit-toggle"><input type="checkbox" class="stolon-check-row-input"><span class="stolon-check-text">Override</span></label></div> */
+.stolon-inherit.check { align-items: center; }
+.stolon-inherit.check > .stolon-inherit-field {
+    display: flex;
+    align-items: center;
+    min-height: var(--stolon-field-height);
+}
+.stolon-inherit.check > .stolon-inherit-field > label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+.stolon-inherit.check > .stolon-inherit-field > label > input { margin: 0; }
+
+/* The field while it inherits, dimmed and disabled with the inherited value in it */
+/* Example: <div class="stolon-inherit inheriting"><div class="stolon-inherit-field"><input type="number" disabled></div></div> */
+.stolon-inherit.inheriting > .stolon-inherit-field { opacity: 0.5; }

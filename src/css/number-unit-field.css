@@ -1,0 +1,9 @@
+/* A number input and a unit select side by side, with a message under them */
+/* Example: <div class="stolon-number-unit"><div class="stolon-number-unit-row"><input type="number"><select><option>MB</option></select></div></div> */
+.stolon-number-unit-row {
+    display: flex;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-number-unit-row > input,
+.stolon-number-unit-row > .stolon-adorned { flex: 1 1 auto; min-width: 0; box-sizing: border-box; }
+.stolon-number-unit-row > select { flex: 0 0 auto; width: auto; min-width: 84px; }

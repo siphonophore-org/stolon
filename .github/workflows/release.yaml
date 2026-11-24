@@ -1,0 +1,163 @@
+name: '🚀 Release'
+
+# One run does the whole release: test, bundle, pack, tag, GitHub release, GitHub Packages push.
+#
+# The version is <jellyfin>.<X>, computed here and never written into the repository. <jellyfin> is the
+# Jellyfin version in jellyfin.json, such as 12.4, and X counts the releases for it: the first is 12.4.0,
+# then 12.4.1, and so on. Moving jellyfin.json to a new Jellyfin version starts X over at 0. Before
+# anything is pushed the version is checked against both GitHub Packages and the repository's tags, so a
+# version that already exists is refused instead of silently skipped.
+#
+# The tag and GitHub release are made before the push to GitHub Packages, so a published version always
+# has its tag and notes. If a run fails after tagging, re-running it on the same commit picks the tagged version back
+# up: the existing tag and release are kept and only the missing push is done.
+#
+# Start it from the Actions tab. Leave the version blank to release the next X, or type one to override,
+# for example to re-release a version an earlier run tagged.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release. Blank means the next one for the Jellyfin version in jellyfin.json (12.4.0, then 12.4.1, and so on).'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+  # The run's own token pushes the package to the organization's GitHub Packages feed.
+  packages: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # A dispatch from any other branch must never publish.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        with:
+          dotnet-version: 10.0.3xx
+
+      - name: Resolve version
+        id: ver
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REQUESTED: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          # Versions already on GitHub Packages. A package with no versions yet answers 404.
+          PUBLISHED=$(gh api --paginate "orgs/${GITHUB_REPOSITORY_OWNER}/packages/nuget/Siphonophore.Stolon/versions" --jq '.[].name' 2>/dev/null || true)
+          HEAD_SHA=$(git rev-parse HEAD)
+          published() { echo "${PUBLISHED}" | grep -qx "$1"; }
+          tagged() { git rev-parse -q --verify "refs/tags/v$1" >/dev/null; }
+          # A tag on this very commit with no package behind it is a release an earlier run started.
+          resumable() { tagged "$1" && ! published "$1" && [ "$(git rev-list -n 1 "v$1")" = "${HEAD_SHA}" ]; }
+          JELLYFIN=$(jq -r '.jellyfin' jellyfin.json)
+          if ! [[ "${JELLYFIN}" =~ ^[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::jellyfin.json needs \"jellyfin\" as major.minor, such as 12.4."
+            exit 1
+          fi
+          PATTERN="^${JELLYFIN//./\\.}\\.([0-9]+)$"
+          if [ -n "${REQUESTED}" ]; then
+            if ! [[ "${REQUESTED}" =~ ${PATTERN} ]]; then
+              echo "::error::Version must be ${JELLYFIN}.N, for the Jellyfin version in jellyfin.json."
+              exit 1
+            fi
+            VERSION="${REQUESTED}"
+            if ! resumable "${VERSION}" && { published "${VERSION}" || tagged "${VERSION}"; }; then
+              echo "::error::Version ${VERSION} already exists on GitHub Packages or as a tag. Pick another."
+              exit 1
+            fi
+          else
+            # A tag on this commit that an earlier run made is finished first.
+            VERSION=""
+            for TAG in $(git tag --points-at HEAD --list "v${JELLYFIN}.*"); do
+              if [[ "${TAG#v}" =~ ${PATTERN} ]] && resumable "${TAG#v}"; then
+                VERSION="${TAG#v}"
+              fi
+            done
+            if [ -z "${VERSION}" ]; then
+              # The next X after the highest one published or tagged, or 0 for the first release.
+              HIGHEST=-1
+              for V in ${PUBLISHED} $(git tag --list "v${JELLYFIN}.*" | sed 's/^v//'); do
+                if [[ "${V}" =~ ${PATTERN} ]] && [ "${BASH_REMATCH[1]}" -gt "${HIGHEST}" ]; then
+                  HIGHEST="${BASH_REMATCH[1]}"
+                fi
+              done
+              VERSION="${JELLYFIN}.$((HIGHEST + 1))"
+            fi
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Releasing ${VERSION}"
+
+      # The same checks the build job runs, in the same order: the bundle (which installs the tools and type
+      # checks), then the golden copy, typings, and docs, then both test suites, so a release never ships
+      # what the build would have failed.
+      - name: Bundle shared assets
+        run: bash scripts/bundle.sh
+
+      - name: Check bundle, typings, and docs
+        run: |
+          node scripts/check-bundle.mjs
+          bash scripts/check-types.sh
+          node scripts/build-docs.mjs --check
+
+      - name: Test JavaScript
+        run: node --import ./Siphonophore.Stolon.Tests/js/register.mjs --test Siphonophore.Stolon.Tests/js/*.test.mjs
+
+      - name: Test
+        run: dotnet test Siphonophore.Stolon.Tests/Siphonophore.Stolon.Tests.csproj -c Release
+
+      - name: Pack
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          dotnet pack Siphonophore.Stolon.csproj -c Release -o nupkg -p:Version="${VERSION}"
+          ls -l nupkg
+
+      - name: Check package
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: bash scripts/check-package.sh "nupkg/Siphonophore.Stolon.${VERSION}.nupkg"
+
+      # Tag and release first, so a published version always has both. Each is skipped when an earlier run
+      # already made it.
+      - name: Tag and release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -euo pipefail
+          if ! git rev-parse -q --verify "refs/tags/v${VERSION}" >/dev/null; then
+            git tag "v${VERSION}"
+          fi
+          git push origin "v${VERSION}"
+          if ! gh release view "v${VERSION}" >/dev/null 2>&1; then
+            gh release create "v${VERSION}" nupkg/*.nupkg --title "v${VERSION}" --generate-notes
+          fi
+
+      - name: Push to GitHub Packages
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget push "nupkg/Siphonophore.Stolon.${VERSION}.nupkg" \
+            --source "https://nuget.pkg.github.com/${GITHUB_REPOSITORY_OWNER}/index.json" \
+            --api-key "${GH_TOKEN}" \
+            --skip-duplicate

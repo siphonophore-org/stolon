@@ -1,0 +1,31 @@
+/* Field box that holds tag pills and a text input that grows to the free width */
+/* Example: <div class="stolon-tag-input"><div class="stolon-tag-input-box"><div class="stolon-tags"></div><input class="stolon-tag-input-field" type="text"><span class="material-icons stolon-adorned-icon">search</span></div></div> */
+.stolon-tag-input-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    position: relative;
+    gap: var(--stolon-gap-narrow);
+    padding: calc((var(--stolon-field-height) - var(--stolon-size-small)) / 2 - 1px) calc(var(--stolon-field-pad) + var(--stolon-chevron-primary)) calc((var(--stolon-field-height) - var(--stolon-size-small)) / 2 - 1px) var(--stolon-field-pad);
+    min-height: var(--stolon-field-height);
+    box-sizing: border-box;
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-small);
+    cursor: text;
+}
+.stolon-tag-input-box:focus-within { border-color: var(--stolon-accent); }
+.stolon-tag-input-box .stolon-tags { margin-top: 0; display: contents; }
+.pluginConfigurationPage .stolon-tag-input-box input.stolon-tag-input-field,
+.stolon-dialog .stolon-tag-input-box input.stolon-tag-input-field,
+.stolon-tag-input-box input.stolon-tag-input-field {
+    flex: 1 1 calc(var(--stolon-size-large) * 3);
+    width: auto !important;
+    min-width: calc(var(--stolon-size-large) * 2);
+    height: var(--stolon-size-small) !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    outline: none !important;
+}

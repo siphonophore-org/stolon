@@ -1,0 +1,134 @@
+/* Dims the rows while the first page loads, with the search and filters still usable */
+/* Example: <div class="stolon-table-loading"><div class="stolon-table-wrapper"></div></div> */
+.stolon-table-loading .stolon-table-body { opacity: 0.6; pointer-events: none; }
+
+/* A status badge from the bag's statusBadge inside a bare button that opens the row */
+/* Example: <button type="button" class="stolon-table-status-btn"><span class="stolon-table-status-badge Active">Active</span></button> */
+.stolon-table-status-btn {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+.stolon-table-status-btn:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+
+/* Flexible gap that pushes the controls after it to the end of the header */
+/* Example: <span class="stolon-table-header-spacer"></span> */
+.stolon-table-header-spacer { flex: 1; }
+
+/* The reload row button, whose icon turns while the table reloads */
+/* Example: <button class="stolon-row-btn stolon-table-reload-btn spinning" title="Reload"><span class="material-icons" aria-hidden="true">refresh</span></button> */
+.stolon-table-reload-btn.spinning .material-icons { animation: stolon-spin 0.8s linear infinite; }
+
+/* The rows, a list of bordered rows */
+/* Example: <div class="stolon-table-body stolon-list rows" role="list"><div class="stolon-table-row stolon-list-item" role="listitem"></div></div> */
+.stolon-table-body { min-width: 0; }
+
+/* Single table row */
+/* Example: <div class="stolon-table-row"><div class="stolon-table-cell"></div></div> */
+.stolon-table-row {
+    display: flex;
+    align-items: center;
+    padding: var(--stolon-gap-narrow);
+    border-bottom: 1px solid var(--stolon-border);
+    transition: background-color 0.15s;
+}
+.stolon-table-row:last-child { border-bottom: none; }
+
+/* A row inside a list, where the list draws the dividers */
+/* Example: <div class="stolon-list rows"><div class="stolon-table-row stolon-list-item"></div></div> */
+.stolon-list.rows > .stolon-table-row { border-bottom: none; }
+
+
+/* Single cell within a row */
+/* Example: <div class="stolon-table-cell">value</div> */
+.stolon-table-cell { flex: 1; padding: 0 var(--stolon-gap-narrow); min-width: 0; }
+
+/* Narrow cell for a row checkbox */
+/* Example: <div class="stolon-table-cell stolon-table-cell-checkbox"><input class="stolon-table-row-checkbox" type="checkbox"></div> */
+.stolon-table-cell.stolon-table-cell-checkbox { flex: 0 0 auto; }
+
+/* Fixed width cell that right aligns a status badge */
+/* Example: <div class="stolon-table-cell stolon-table-cell-status"><button class="stolon-table-status-btn"></button></div> */
+.stolon-table-cell.stolon-table-cell-status { flex: 0 0 calc(var(--stolon-size-large) * 3); text-align: right; }
+
+/* Checkbox that selects one row */
+/* Example: <input class="stolon-table-row-checkbox" type="checkbox"> */
+.stolon-table-row-checkbox { margin: 0; cursor: pointer; }
+
+/* Title over sub text block for a row cell */
+/* Example: <div class="stolon-table-item-info"><div class="stolon-table-item-title">Name</div><div class="stolon-table-item-sub">path</div></div> */
+.stolon-table-item-info, .stolon-table-cell .stolon-table-item-info { flex: 1; min-width: 0; }
+
+/* Medium weight title that clips with an ellipsis */
+/* Example: <div class="stolon-table-item-title">Name</div> */
+.stolon-table-item-title {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Small dimmed sub line that clips with an ellipsis */
+/* Example: <div class="stolon-table-item-sub">path</div> */
+.stolon-table-item-sub {
+    font-size: var(--stolon-font-small);
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Truncated error subline shown under a row item when it failed */
+/* Example: <div class="stolon-table-item-error">download failed</div> */
+.stolon-table-item-error {
+    font-size: var(--stolon-font-small);
+    color: var(--stolon-error);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Footer line showing the loaded and total counts */
+/* Example: <div class="stolon-table-footer"><span class="stolon-table-item-count"></span></div> */
+.stolon-table-footer { display: flex; align-items: center; gap: var(--stolon-gap-wide); padding: var(--stolon-gap-narrow); font-size: var(--stolon-font-small); }
+
+/* Dimmed count of the loaded and total rows */
+/* Example: <span class="stolon-table-item-count">20/85 items</span> */
+.stolon-table-item-count { opacity: 0.7; }
+
+/* The Load More and Load All buttons, shown in the footer while more rows remain */
+/* Example: <span class="stolon-table-footer-actions"><button class="raised stolon-button secondary small stolon-table-load-more">Load More</button><button class="raised stolon-button secondary small stolon-table-load-all">Load All</button></span> */
+.stolon-table-footer-actions { display: flex; gap: var(--stolon-gap-narrow); }
+.stolon-table-footer-actions[hidden] { display: none; }
+
+/* Cell that lines a thumbnail up beside its text */
+/* Example: <div class="stolon-table-cell stolon-table-cell-with-thumb"><span class="stolon-thumb stolon-table-thumb portrait"></span></div> */
+.stolon-table-cell.stolon-table-cell-with-thumb { display: flex; align-items: center; gap: var(--stolon-gap-narrow); }
+
+/* A row thumbnail, a stolon-thumb frame in the column's imageShape, portrait by default */
+/* Example: <span class="stolon-thumb stolon-table-thumb portrait"><span class="stolon-thumb-placeholder"><span class="material-icons">movie</span></span><img class="stolon-thumb-image" alt="" src="poster.jpg"></span> */
+.stolon-table-thumb {
+    width: var(--stolon-size-large);
+    height: calc(var(--stolon-size-large) * 1.5);
+    border-radius: var(--stolon-radius-small);
+}
+.stolon-table-thumb.wide { width: calc(var(--stolon-size-large) * 8 / 3); }
+.stolon-table-thumb.square { width: calc(var(--stolon-size-large) * 1.5); }
+.stolon-table-thumb.round { width: calc(var(--stolon-size-medium) * 1.5); height: calc(var(--stolon-size-medium) * 1.5); border-radius: var(--stolon-radius-round); }
+
+@media (max-width: 768px) {
+    /* A fixed width, so every row's columns line up whatever its badge says. */
+    .stolon-table-cell.stolon-table-cell-status { flex: 0 0 calc(var(--stolon-size-large) * 2.75); }
+}
+
+/* On a phone the first column after any checkbox keeps 60% of the row and the other columns wrap beneath it */
+@media (max-width: 600px) {
+    .stolon-table-row { flex-wrap: wrap; }
+    .stolon-table-cell { flex-basis: auto; }
+    .stolon-table-row > .stolon-table-cell:first-child:not(.stolon-table-cell-checkbox),
+    .stolon-table-row > .stolon-table-cell-checkbox + .stolon-table-cell { flex: 1 0 60%; }
+    .stolon-table-row > .stolon-table-cell.stolon-table-cell-status { margin-left: auto; }
+}

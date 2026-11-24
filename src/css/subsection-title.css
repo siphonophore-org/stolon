@@ -1,0 +1,15 @@
+/* Small muted uppercase header for a subsection grouped inside a section or form */
+/* Example: <h3 class="stolon-subsection-title">Authentication</h3> */
+.stolon-subsection-title {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--stolon-text-muted);
+    color: color-mix(in srgb, currentColor 60%, transparent);
+    margin: var(--stolon-gap-wide) 0 var(--stolon-gap-wide) 0;
+    padding-bottom: calc(var(--stolon-gap-narrow) * 3 / 4);
+    border-bottom: 1px solid var(--stolon-line);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+/* The title fades its own text, so its rule mixes the theme text color, not the faded currentColor. */
+.stolon-subsection-title:first-child { margin-top: 0; }

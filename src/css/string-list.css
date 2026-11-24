@@ -1,0 +1,33 @@
+/* Editor for a list of strings, with rows above an add row */
+/* Example: <div class="stolon-string-list"><ul class="stolon-string-items"></ul><div class="stolon-string-add"><input type="text"><button type="button" class="raised stolon-button field">Add</button></div></div> */
+.stolon-string-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-string-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-string-items:empty { display: none; }
+
+/* One row with the text and its buttons */
+/* Example: <li class="stolon-string-item stolon-item-row"><span class="stolon-string-text stolon-item-row-text">value</span></li> */
+/* It is built as stolon-item-row, which gives it the field look and height */
+
+/* Row holding the new value input and the add button */
+/* Example: <div class="stolon-string-add"><input type="text"><button type="button" class="raised stolon-button field">Add</button></div> */
+.stolon-string-add {
+    display: flex;
+    gap: var(--stolon-gap-narrow);
+    align-items: center;
+}
+.stolon-string-add > input { flex: 1 1 auto; min-width: 0; box-sizing: border-box; }
+
+/* Sentence shown while the list is empty */
+/* Example: <div class="stolon-list-empty outside stolon-string-empty">Nothing added yet.</div> */
+/* It is built as the list's own empty sentence, stolon-list-empty outside */

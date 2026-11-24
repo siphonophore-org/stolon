@@ -1,0 +1,15 @@
+/* Callout row with an icon, a message, and a dismiss button, which takes its colors from the callout classes */
+/* Example: <div class="stolon-banner stolon-icon-text stolon-warn"><span class="material-icons" aria-hidden="true">warning</span><div class="stolon-banner-body"><div class="stolon-banner-text">Back up first.</div></div></div> */
+/* It is built as stolon-icon-text, which lines its icon up with the first line */
+/* Its dismiss button is pinned to the top right corner, inset by the callout's padding, and the text leaves room for it */
+.stolon-banner { position: relative; }
+.stolon-banner-body { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.stolon-banner-title { font-weight: 600; }
+.stolon-banner-close { position: absolute; top: var(--stolon-pad-small); right: var(--stolon-pad-medium); }
+.stolon-banner.dismissible .stolon-banner-body { padding-right: calc(var(--stolon-size-small) + var(--stolon-gap-narrow)); }
+.stolon-banner-close:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 1px; }
+
+/* The buttons under a banner's text, such as Apply */
+/* Example: <div class="stolon-banner-body"><div class="stolon-banner-text">Settings changed.</div><div class="stolon-button-row stolon-banner-actions"><button class="raised stolon-button small primary">Apply</button></div></div> */
+.stolon-banner-actions { display: flex; flex-wrap: wrap; gap: var(--stolon-gap-narrow); margin-top: var(--stolon-gap-narrow); }
+.stolon-banner-actions[hidden] { display: none; }

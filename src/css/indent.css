@@ -1,0 +1,9 @@
+/* Indented group with a thin rule under a toggle's checkbox, so its fields line up with the toggle's label */
+/* Example: <div class="stolon-indent"></div> */
+.stolon-indent {
+    margin-left: var(--stolon-gap-narrow);
+    padding-left: var(--stolon-gap-wide);
+    margin-top: var(--stolon-gap-narrow);
+    border-left: 2px solid var(--stolon-line);
+    border-left: 2px solid color-mix(in srgb, currentColor 12%, transparent);
+}

@@ -1,0 +1,62 @@
+/* A QR code in the rounded style, round dots in the text color and rounded finder eyes in the accent on the surface.
+   The code on the left, and beside it Copy Image and Download as two equal buttons a field tall over its text as a Copy Field, filling the line and level with the code's bottom edge */
+/* Example: <div class="stolon-qr-code"><div class="stolon-qr-code-frame" role="img" aria-label="QR code for https://example.com"><svg viewBox="0 0 29 29"></svg></div><div class="stolon-qr-code-side"><div class="stolon-button-row stolon-qr-code-actions"></div><div class="stolon-copy-field"></div></div></div> */
+.stolon-qr-code {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--stolon-gap-wide);
+    min-width: 0;
+}
+.stolon-qr-code-frame {
+    flex: 0 0 auto;
+    width: calc(var(--stolon-size-large) * 6);
+    max-width: 100%;
+    box-sizing: border-box;
+    background: var(--stolon-surface);
+    color: var(--stolon-fg);
+    border: 1px solid var(--stolon-border);
+    border-radius: calc(var(--stolon-radius-large) * 2);
+    overflow: hidden;
+}
+.stolon-qr-code-side {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+/* The buttons and the Copy Field are part of the code, so they take none of the page's field spacing and end level with the frame */
+.pluginConfigurationPage .stolon-qr-code-side > [class],
+.stolon-dialog .stolon-qr-code-side > [class] { margin: 0 !important; }
+.stolon-qr-code .stolon-field-message[hidden] { display: none; }
+
+/* A narrow QR code stacks: the code the full width, then the buttons and the text under it at the same width */
+/* Example: <div class="stolon-qr-code compact"></div> */
+.stolon-qr-code.compact,
+.stolon-qr-code.stolon-qr-code-dialog { flex-direction: column; align-items: stretch; }
+.stolon-qr-code.compact > .stolon-qr-code-frame,
+.stolon-qr-code.stolon-qr-code-dialog > .stolon-qr-code-frame { width: 100%; }
+
+/* The code in its dialog: stacked, a code-sized column centered in the dialog */
+/* Example: <div class="stolon-qr-code compact stolon-qr-code-dialog"></div> */
+.stolon-qr-code.stolon-qr-code-dialog { width: calc(var(--stolon-size-large) * 8); max-width: 100%; margin: 0 auto; }
+
+/* An inline QR code: its whole text as a wrapped Copy Field with a QR button beside Copy that opens the code in a dialog */
+/* Example: <div class="stolon-qr-code inline"><div class="stolon-copy-field wrap"><input type="text" readonly hidden><div class="stolon-copy-field-text stolon-mono" role="textbox" aria-readonly="true" tabindex="0">https://example.com</div><button class="stolon-row-btn stolon-copy-button"></button><button class="stolon-row-btn stolon-qr-code-open" aria-label="Show QR Code"><span class="material-icons">qr_code_2</span></button></div></div> */
+.stolon-qr-code.inline { flex-direction: column; align-items: stretch; gap: var(--stolon-gap-narrow); }
+.pluginConfigurationPage .stolon-qr-code.inline > [class],
+.stolon-dialog .stolon-qr-code.inline > [class] { margin: 0 !important; }
+
+.stolon-qr-code-frame[hidden],
+.stolon-qr-code-actions[hidden],
+.stolon-qr-code-side > .stolon-copy-field[hidden] { display: none; }
+.stolon-qr-code-frame > svg { display: block; width: 100%; height: auto; }
+.stolon-qr-code-bg { fill: var(--stolon-surface); }
+.stolon-qr-code-modules { fill: currentColor; }
+.stolon-qr-code-eyes { fill: var(--stolon-accent); }
+
+/* The Copy Image and Download buttons, two equal halves of a button row the code's width, a field tall like the Copy Field under them */
+/* Example: <div class="stolon-button-row stolon-qr-code-actions"><button class="raised stolon-button secondary fill stolon-qr-code-copy">Copy Image</button><button class="raised stolon-button secondary fill stolon-qr-code-download">Download</button></div> */
+.stolon-qr-code-actions { flex-wrap: nowrap; }
+.stolon-qr-code-actions > .stolon-button { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stolon-qr-code-copy.success { color: var(--stolon-green-fg); }

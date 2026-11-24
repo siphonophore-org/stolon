@@ -1,0 +1,386 @@
+// stolon-text.ts
+// The base text core: every default word a component shows, read from the page's current translations at render
+// time, with US English when none are loaded.
+import type { TranslationsHandle } from '../translations.js';
+import { convertCase, DEFAULT_CASING } from './text-case.js';
+
+/**
+ * Stolon's own text in US English, by key. A key that starts with Stolon. is Stolon's own string, and any other is a
+ * Jellyfin string, written as the translations build writes it in English. strings/en-us.json and strings/jellyfin.json
+ * ship the same keys to every plugin. Internal to the web components.
+ */
+export var BASE_TEXT = {
+    'Add': 'Add',
+    'Album': 'Album',
+    'All': 'All',
+    'Artist': 'Artist',
+    'Audio': 'Audio',
+    'Browse': 'Browse',
+    'ButtonCancel': 'Cancel',
+    'ButtonClose': 'Close',
+    'ButtonInfo': 'Info',
+    'ButtonPause': 'Pause',
+    'ButtonRemove': 'Remove',
+    'Copied': 'Copied',
+    'Copy': 'Copy',
+    'Custom': 'Custom',
+    'Down': 'Down',
+    'Download': 'Download',
+    'Episode': 'Episode',
+    'Filter': 'Filter',
+    'Filters': 'Filters',
+    'Friday': 'Friday',
+    'HeaderApp': 'App',
+    'HeaderError': 'Error',
+    'ItemCount': '{0} items',
+    'Help': 'Help',
+    'Hide': 'Hide',
+    'LabelCollection': 'Collection',
+    'LabelFailed': 'Failed',
+    'LabelPath': 'Path',
+    'LabelPlaylist': 'Playlist',
+    'LabelSource': 'Source',
+    'LabelTime': 'Time',
+    'LabelValue': 'Value',
+    'Monday': 'Monday',
+    'Movie': 'Movie',
+    'MusicVideo': 'Music video',
+    'Next': 'Next',
+    'None': 'None',
+    'Off': 'Off',
+    'OptionEveryday': 'Every day',
+    'OptionWeekdays': 'Weekdays',
+    'OptionWeekends': 'Weekends',
+    'Person': 'Person',
+    'Play': 'Play',
+    'Preview': 'Preview',
+    'Previous': 'Previous',
+    'Reset': 'Reset',
+    'Saturday': 'Saturday',
+    'Save': 'Save',
+    'Search': 'Search',
+    'Season': 'Season',
+    'Select': 'Select',
+    'SelectAll': 'Select all',
+    'Series': 'Series',
+    'Sort': 'Sort',
+    'Sunday': 'Sunday',
+    'Thursday': 'Thursday',
+    'Trailer': 'Trailer',
+    'Tuesday': 'Tuesday',
+    'Unknown': 'Unknown',
+    'Up': 'Up',
+    'Video': 'Video',
+    'Wednesday': 'Wednesday',
+    'Stolon.Active': 'Active',
+    'Stolon.AddRule': 'Add rule',
+    'Stolon.AddWindow': 'Add window',
+    'Stolon.Admin': 'Admin',
+    'Stolon.AfterSync': 'After sync',
+    'Stolon.AllOf': 'All {value}',
+    'Stolon.AlreadyAdded': 'Already added.',
+    'Stolon.AlreadyInList': 'Already in the list.',
+    'Stolon.AutoScroll': 'Auto scroll',
+    'Stolon.Background': 'Background',
+    'Stolon.Book': 'Book',
+    'Stolon.Breadcrumb': 'Breadcrumb',
+    'Stolon.Channel': 'Channel',
+    'Stolon.Checkered': 'Checkered',
+    'Stolon.Checking': 'Checking',
+    'Stolon.Clear': 'Clear',
+    'Stolon.ClearValue': 'Clear {value}',
+    'Stolon.ClockOfTotal': '{0} of {1}',
+    'Stolon.CollapseValue': 'Collapse {value}',
+    'Stolon.Color': 'Color',
+    'Stolon.ColumnForRow': '{column} for {row}',
+    'Stolon.Comparison': 'Comparison',
+    'Stolon.Completed': 'Completed',
+    'Stolon.Confirm': 'Confirm',
+    'Stolon.CopiedValue': 'Copied {value}.',
+    'Stolon.CopyAll': 'Copy all',
+    'Stolon.CopyFailed': 'Copy failed.',
+    'Stolon.CopyImage': 'Copy image',
+    'Stolon.CouldNotLoad': 'Could not load.',
+    'Stolon.CouldNotLoadAudio': 'Could not load the audio.',
+    'Stolon.CouldNotReadFile': 'Could not read this file.',
+    'Stolon.CouldNotReadFolder': 'Could not read this folder.',
+    'Stolon.CouldNotRender': 'Could not render the preview.',
+    'Stolon.CouldNotSave': 'Could not save.',
+    'Stolon.CouldNotSearch': 'Could not search.',
+    'Stolon.CouldNotSearchLibrary': 'Could not search the library.',
+    'Stolon.CountSelected': '{count} selected',
+    'Stolon.Current': 'Current',
+    'Stolon.Dark': 'Dark',
+    'Stolon.Day': 'Day',
+    'Stolon.Days': 'Days',
+    'Stolon.Decrease': 'Decrease',
+    'Stolon.Details': 'Details',
+    'Stolon.Dialog': 'Dialog',
+    'Stolon.Discard': 'Discard',
+    'Stolon.DiscardChanges': 'Discard your changes?',
+    'Stolon.DiscordToday': 'Today at {value}',
+    'Stolon.DiscordYesterday': 'Yesterday at {value}',
+    'Stolon.Dismiss': 'Dismiss',
+    'Stolon.Done': 'Done',
+    'Stolon.DoneOfTotal': '{done} of {total} done',
+    'Stolon.DragToReorder': 'Drag to reorder',
+    'Stolon.DropFiles': 'Drop files here or click to select.',
+    'Stolon.EditValue': 'Edit {value}',
+    'Stolon.EnableValue': 'Enable {value}',
+    'Stolon.Enabled': 'Enabled',
+    'Stolon.End': 'End',
+    'Stolon.EndAfterStart': 'The end must be after the start.',
+    'Stolon.EndOnOrAfterStart': 'End must be on or after the start.',
+    'Stolon.EnterColor': 'Enter a color such as #3498db.',
+    'Stolon.EnterDuration': 'Enter a duration from {min} to {max}.',
+    'Stolon.EnterKey': 'Enter a key.',
+    'Stolon.ExpandValue': 'Expand {value}',
+    'Stolon.Field': 'Field',
+    'Stolon.FolderEmpty': 'This folder is empty.',
+    'Stolon.FileNotJson': 'The file is not valid JSON.',
+    'Stolon.FileNotRead': 'The file could not be read.',
+    'Stolon.FiltersOnMany': '{value} filters on',
+    'Stolon.FiltersOnOne': '{value} filter on',
+    'Stolon.FixFields': 'Fix the fields marked in red.',
+    'Stolon.From': 'From',
+    'Stolon.GoUp': 'Go up',
+    'Stolon.Grid': 'Grid',
+    'Stolon.Hours': 'Hours',
+    'Stolon.ImageTooLarge': 'The image is larger than {value}.',
+    'Stolon.Increase': 'Increase',
+    'Stolon.InheritValue': 'Inherit ({value})',
+    'Stolon.ItemNumber': 'Item {index}',
+    'Stolon.ItemsOne': '{0} item',
+    'Stolon.JustNow': 'Just now',
+    'Stolon.Key': 'Key',
+    'Stolon.KeyUsed': 'Key is already used.',
+    'Stolon.Last30Days': 'Last 30 days',
+    'Stolon.Last7Days': 'Last 7 days',
+    'Stolon.LargerThanLimit': '{value} is larger than the size limit.',
+    'Stolon.Layers': 'Layers',
+    'Stolon.LeaveUnsaved': 'You have unsaved changes. Leave without saving?',
+    'Stolon.Light': 'Light',
+    'Stolon.Link': 'Link',
+    'Stolon.ListFull': 'The list is full.',
+    'Stolon.LoadAll': 'Load all',
+    'Stolon.LoadMore': 'Load more',
+    'Stolon.LoadedCount': '{0}/{1}',
+    'Stolon.Loading': 'Loading',
+    'Stolon.Local': 'Local',
+    'Stolon.Log': 'Log',
+    'Stolon.Match': 'Match',
+    'Stolon.MatchAll': 'Match all',
+    'Stolon.MatchAny': 'Match any',
+    'Stolon.Minutes': 'Minutes',
+    'Stolon.MoreActions': 'More actions',
+    'Stolon.MoveDown': 'Move down',
+    'Stolon.MoveDownValue': 'Move {value} down',
+    'Stolon.MoveUp': 'Move up',
+    'Stolon.MoveUpValue': 'Move {value} up',
+    'Stolon.NeedsAttention': 'Needs attention',
+    'Stolon.NewItem': 'New item',
+    'Stolon.NewTag': 'New tag',
+    'Stolon.NoChange': 'No change',
+    'Stolon.NoChanges': 'No changes.',
+    'Stolon.NoImage': 'No image.',
+    'Stolon.NoItems': 'No items.',
+    'Stolon.NoItemsAvailable': 'No items available.',
+    'Stolon.NoItemsFound': 'No items found.',
+    'Stolon.NoItemsSelected': 'No items selected.',
+    'Stolon.NoMatches': 'No matches.',
+    'Stolon.NoOutput': 'No output yet.',
+    'Stolon.NoPreview': 'No preview.',
+    'Stolon.NoUsers': 'No users available.',
+    'Stolon.NoWindows': 'No windows. Access is allowed at any time.',
+    'Stolon.NotAcceptedType': '{value} is not an accepted type.',
+    'Stolon.NotAnImage': 'This file is not an image.',
+    'Stolon.NotStarted': 'Not started',
+    'Stolon.Note': 'Note',
+    'Stolon.Notifications': 'Notifications',
+    'Stolon.NothingMatches': 'Nothing matches.',
+    'Stolon.NothingToCompare': 'Nothing to compare.',
+    'Stolon.NothingToMap': 'Nothing to map.',
+    'Stolon.NothingToShow': 'Nothing to show.',
+    'Stolon.NotifyDiscordJson': 'Discord needs a JSON body.',
+    'Stolon.Now': 'Now',
+    'Stolon.On': 'On',
+    'Stolon.OpContains': 'contains',
+    'Stolon.OpEquals': 'equals',
+    'Stolon.OpHasAll': 'has all of',
+    'Stolon.OpHasAny': 'has any of',
+    'Stolon.OpHasNone': 'has none of',
+    'Stolon.OpIs': 'is',
+    'Stolon.OpIsNot': 'is not',
+    'Stolon.OpLessThan': 'is less than',
+    'Stolon.OpMoreThan': 'is more than',
+    'Stolon.OpNotEquals': 'does not equal',
+    'Stolon.OpStartsWith': 'starts with',
+    'Stolon.Opacity': 'Opacity',
+    'Stolon.OpenValue': 'Open {value}',
+    'Stolon.Operator': 'Operator',
+    'Stolon.Optional': 'Optional',
+    'Stolon.Override': 'Override',
+    'Stolon.PageSize': 'Page size',
+    'Stolon.PageValue': 'Page {value}',
+    'Stolon.Pagination': 'Pagination',
+    'Stolon.PickColor': 'Pick a color',
+    'Stolon.Placeholders': 'Placeholders',
+    'Stolon.Program': 'Program',
+    'Stolon.Progress': 'Progress',
+    'Stolon.Property': 'Property',
+    'Stolon.PushAddToHomeScreen': 'Add this page to the home screen to get notifications on an iPhone or iPad.',
+    'Stolon.PushBlocked': 'Notifications are blocked. Allow them in the browser\'s settings for this site.',
+    'Stolon.PushNeedsHttps': 'Notifications work only when the page opens over HTTPS.',
+    'Stolon.PushOff': 'Notifications are off.',
+    'Stolon.PushOn': 'Notifications are on.',
+    'Stolon.PushUnsupported': 'This browser cannot show notifications.',
+    'Stolon.QrCode': 'QR code',
+    'Stolon.QrCodeFor': 'QR code for {value}',
+    'Stolon.QrTooLong': 'This text is too long for a QR code.',
+    'Stolon.Range': 'Range',
+    'Stolon.RangeOfTotal': '{from} to {to} of {total}',
+    'Stolon.Reload': 'Reload',
+    'Stolon.RemoveValue': 'Remove {value}',
+    'Stolon.Rendering': 'Rendering…',
+    'Stolon.Replace': 'Replace',
+    'Stolon.RequestFailed': 'Request failed',
+    'Stolon.ResizeValue': 'Resize {value}',
+    'Stolon.Row': 'Row',
+    'Stolon.RowsFull': 'No more rows can be added.',
+    'Stolon.Rule': 'Rule',
+    'Stolon.SaveFailed': 'Save failed.',
+    'Stolon.Saved': 'Saved.',
+    'Stolon.SavedAddress': 'Saved address',
+    'Stolon.SavedLeaveBlank': 'Saved, leave blank to keep',
+    'Stolon.ChangesSaved': 'Changes saved.',
+    'Stolon.Saving': 'Saving…',
+    'Stolon.SearchItems': 'Search items',
+    'Stolon.SearchLibrary': 'Search the library',
+    'Stolon.Seconds': 'Seconds',
+    'Stolon.Sections': 'Sections',
+    'Stolon.Seek': 'Seek',
+    'Stolon.SelectFolder': 'Select a folder',
+    'Stolon.SelectImage': 'Select image',
+    'Stolon.SelectOneFile': 'Select one file.',
+    'Stolon.SelectRow': 'Select row',
+    'Stolon.SelectValue': 'Select {value}',
+    'Stolon.SeriesNumber': 'Series {value}',
+    'Stolon.SetupProgress': 'Setup progress',
+    'Stolon.Show': 'Show',
+    'Stolon.ShowOnlyChanges': 'Show only changes',
+    'Stolon.ShowQrCode': 'Show QR code',
+    'Stolon.Showing': 'Showing {shown} of {total}.',
+    'Stolon.ShowingCount': 'Showing {0} of {1}',
+    'Stolon.ShowingFirst': 'Showing the first {shown} of {total}.',
+    'Stolon.Song': 'Song',
+    'Stolon.SparklineSummary': 'from {first} to {last}, low {low}, high {high}',
+    'Stolon.Start': 'Start',
+    'Stolon.Table': 'Table',
+    'Stolon.TagsFull': 'No more tags can be added.',
+    'Stolon.Target': 'Target',
+    'Stolon.TargetFor': 'Target for {value}',
+    'Stolon.TextMismatch': 'The text does not match.',
+    'Stolon.TimeElapsed': 'Time elapsed',
+    'Stolon.To': 'To',
+    'Stolon.ToDo': 'To do',
+    'Stolon.ToastHeaderNote': 'The web client shows the text. Apps that show a title show {value} above it.',
+    'Stolon.ToastNote': 'The web client shows the text.',
+    'Stolon.Today': 'Today',
+    'Stolon.Tree': 'Tree',
+    'Stolon.Trend': 'Trend',
+    'Stolon.TypeToConfirm': 'Type {value} to confirm.',
+    'Stolon.Unit': 'Unit',
+    'Stolon.UnsavedChanges': 'Unsaved changes',
+    'Stolon.UnsavedChangesMessage': 'Unsaved changes.',
+    'Stolon.Usage': 'Usage',
+    'Stolon.ValidateBetween': 'Enter a {kind} from {min} to {max}.',
+    'Stolon.ValidateCheck': 'Check this box.',
+    'Stolon.ValidateDate': 'Enter a date.',
+    'Stolon.ValidateEarliest': 'Enter {min} or later.',
+    'Stolon.ValidateEmail': 'Enter an email address.',
+    'Stolon.ValidateLatest': 'Enter {max} or earlier.',
+    'Stolon.ValidateMax': 'Enter {max} or less.',
+    'Stolon.ValidateMaxLength': 'Enter no more than {maxLength} characters.',
+    'Stolon.ValidateMaxNoun': 'Enter {noun} of {max} or less.',
+    'Stolon.ValidateMin': 'Enter {min} or more.',
+    'Stolon.ValidateMinLength': 'Enter at least {minLength} characters.',
+    'Stolon.ValidateMinNoun': 'Enter {noun} of {min} or more.',
+    'Stolon.ValidateNumber': 'Enter a number.',
+    'Stolon.ValidatePattern': 'Check the format.',
+    'Stolon.ValidateRange': 'Enter a number from {min} to {max}.',
+    'Stolon.ValidateRangeNoun': 'Enter {noun} from {min} to {max}.',
+    'Stolon.ValidateRequired': 'Fill this in.',
+    'Stolon.ValidateRequiredNoun': 'Enter {noun}.',
+    'Stolon.ValidateSelect': 'Select an option.',
+    'Stolon.ValidateStep': 'Enter a multiple of {step}.',
+    'Stolon.ValidateTime': 'Enter a time.',
+    'Stolon.ValidateUrl': 'Enter a web address.',
+    'Stolon.ValidateWhole': 'Enter a whole number.',
+    'Stolon.Waiting': 'Waiting',
+    'Stolon.WindowName': '{day} {start} to {end}',
+    'Stolon.Working': 'Working',
+    'Stolon.WorldMap': 'World map',
+    'Stolon.Zoom': 'Zoom'
+};
+
+var current: TranslationsHandle | null = null;
+
+/** Makes a handle the page's current translations, which every component reads its default text from. Internal to the web components. */
+export function setCurrentTranslations(handle: TranslationsHandle | null): void {
+    current = handle;
+}
+
+/** The page's current translations, the handle loadTranslations gave last, or null. Internal to the web components. */
+export function getCurrentTranslations(): TranslationsHandle | null {
+    return current;
+}
+
+/** The language of the page's current translations, else US English. Internal to the web components. */
+export function pageLanguage(): string {
+    return current ? current.language : 'en-us';
+}
+
+/**
+ * One of Stolon's own strings in the page's current translations, else in US English. Read it while drawing, so a
+ * component built after the strings load shows them. Internal to the web components.
+ *
+ * @param key the key, such as Stolon.LoadMore
+ */
+export function stolonText(key: keyof typeof BASE_TEXT): string {
+    return current && current.has(key) ? current.tr(key) : BASE_TEXT[key];
+}
+
+/**
+ * A label, such as a column's or a field's, in sentence case in the page's language with the page's casing list, as
+ * sentenceCase writes it. inside true lowers its first word too, for a label inside a sentence. Internal to the web components.
+ *
+ * @param label the label
+ * @param inside true when the label sits inside a sentence [optional]
+ */
+export function labelText(label: unknown, inside?: boolean): string {
+    var text = label === undefined || label === null ? '' : String(label);
+    return convertCase(text, current ? current.casing : DEFAULT_CASING, pageLanguage(), false, !inside);
+}
+
+/**
+ * Fills a label into a template at {key}, in sentence case for its place, so "All {value}" with Runs reads "All runs".
+ * Other placeholders stay for data. Internal to the web components.
+ *
+ * @param template the template, such as All {value}
+ * @param key the placeholder's name, such as value
+ * @param label the label
+ */
+export function fillLabel(template: unknown, key: string, label: unknown): string {
+    var text = String(template);
+    var token = '{' + key + '}';
+    var out = '';
+    var from = 0;
+    var at = text.indexOf(token);
+    while (at >= 0) {
+        var head = text.slice(0, at).replace(/\s+$/, '');
+        out += text.slice(from, at) + labelText(label, !(head === '' || /[.!?]$/.test(head)));
+        from = at + token.length;
+        at = text.indexOf(token, from);
+    }
+    return out + text.slice(from);
+}

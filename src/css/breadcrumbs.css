@@ -1,0 +1,32 @@
+/* Trail of places that wraps on a narrow screen, with chevrons between them */
+/* Example: <nav class="stolon-breadcrumbs" aria-label="Breadcrumb"><ol class="stolon-breadcrumb-list"><li class="stolon-breadcrumb"><a class="stolon-breadcrumb-link" href="#">Servers</a></li></ol></nav> */
+.stolon-breadcrumb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-breadcrumb { display: inline-flex; align-items: center; gap: var(--stolon-gap-narrow); }
+.stolon-breadcrumb > .material-icons { font-size: var(--stolon-chevron-secondary); opacity: 0.6; }
+
+/* A place that can be opened, as a link or a button that looks like one */
+/* Example: <button type="button" class="stolon-breadcrumb-link">Servers</button> */
+.stolon-breadcrumb-link {
+    padding: calc(var(--stolon-gap-narrow) / 4) calc(var(--stolon-gap-narrow) / 2);
+    border: 0;
+    border-radius: var(--stolon-radius-small);
+    background: transparent;
+    color: var(--stolon-accent);
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+.stolon-breadcrumb-link:hover { text-decoration: underline; }
+.stolon-breadcrumb-link:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 1px; }
+
+/* The current place, which is plain text */
+/* Example: <span class="stolon-breadcrumb-current" aria-current="page">Settings</span> */
+.stolon-breadcrumb-current { padding: calc(var(--stolon-gap-narrow) / 4) calc(var(--stolon-gap-narrow) / 2); font-weight: 600; }

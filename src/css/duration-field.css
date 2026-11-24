@@ -1,0 +1,13 @@
+/* Hours, minutes, and seconds number boxes on one line, each with its unit inside before its arrows, and the message under them */
+/* Example: <div class="stolon-duration"><div class="stolon-duration-row" role="group"><span class="stolon-adorned stolon-adorned-number stolon-adorned-with-unit"><input type="number" data-stolon-unit="h"></span></div></div> */
+.stolon-duration {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.stolon-duration-row {
+    display: flex;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-duration-row > input,
+.stolon-duration-row > .stolon-adorned { flex: 1 1 0; min-width: 0; box-sizing: border-box; }

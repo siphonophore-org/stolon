@@ -1,0 +1,35 @@
+/* Wrapper that places a menu button and its floating list */
+/* Example: <div class="stolon-menu"><button type="button" class="stolon-row-btn stolon-menu-button" aria-haspopup="menu"></button><div class="stolon-menu-list" role="menu" hidden></div></div> */
+.stolon-menu {
+    position: relative;
+    display: inline-block;
+}
+
+/* Floating list of actions on the stolon-float surface, fixed to the viewport, placed by the menu under the button, or above it with no room, and aligned to its right edge or its left with stolon-menu-start */
+/* Example: <div class="stolon-menu-list stolon-float" role="menu"><button type="button" class="stolon-menu-item stolon-icon-text" role="menuitem">Edit</button></div> */
+.stolon-menu-list {
+    position: fixed;
+    min-width: calc(var(--stolon-size-large) * 4);
+    max-width: calc(100vw - 2 * var(--stolon-gap-wide));
+    margin: 0;
+    padding: calc(var(--stolon-gap-narrow) / 2);
+}
+
+/* One action row built as stolon-icon-text, which tints on hover and focus, and shows red as destructive */
+/* Example: <button type="button" class="stolon-menu-item stolon-icon-text destructive" role="menuitem"><span class="material-icons" aria-hidden="true">delete</span><span>Remove</span></button> */
+.stolon-menu-item {
+    width: 100%;
+    padding: var(--stolon-gap-narrow) var(--stolon-pad-small);
+    border: 0;
+    border-radius: var(--stolon-radius-small);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.stolon-menu-item:hover,
+.stolon-menu-item:focus { background: var(--stolon-wash); outline: none; }
+.stolon-menu-item:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: -2px; }
+.stolon-menu-item.destructive { color: var(--stolon-error); }
+.stolon-menu-item:disabled { opacity: 0.5; cursor: default; background: transparent; }

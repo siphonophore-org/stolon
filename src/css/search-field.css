@@ -1,0 +1,26 @@
+/* Search input with a search icon at its trailing end, which a clear button replaces while it has text */
+/* Example: <div class="stolon-search"><input type="search" aria-label="Search"><span class="material-icons" aria-hidden="true">search</span><button type="button" class="stolon-row-btn stolon-search-clear"></button></div> */
+.stolon-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.stolon-search > .material-icons {
+    position: absolute;
+    right: var(--stolon-field-pad);
+    font-size: var(--stolon-icon-medium);
+    opacity: 0.7;
+    pointer-events: none;
+}
+.stolon-search > .material-icons[hidden] { display: none; }
+.stolon-search > input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: calc(var(--stolon-field-pad) + var(--stolon-chevron-primary)) !important;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.stolon-search > input::-webkit-search-cancel-button,
+.stolon-search > input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+.stolon-search-clear { position: absolute; right: 4px; }
+.stolon-search-clear:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 1px; }

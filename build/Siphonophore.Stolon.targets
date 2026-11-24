@@ -1,0 +1,43 @@
+<Project>
+
+  <Import Project="$(MSBuildThisFileDirectory)Siphonophore.Stolon.Translations.targets" />
+
+  <!--
+    Injected into every consuming plugin at build time:
+      * the shared C# helpers are compiled into the plugin assembly, and
+      * the shared CSS/JS are embedded with the plugin's own namespace, so Jellyfin serves them
+        via configurationpage?name=stolon.{css,js} with no extra runtime assembly, and
+      * the plugin's translations are checked and built in, by Siphonophore.Stolon.Translations.targets.
+    $(RootNamespace) is the consuming plugin's namespace (such as Jellyfin.Plugin.Example).
+  -->
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\src\*.cs">
+      <Link>Siphonophore.Stolon\%(Filename)%(Extension)</Link>
+      <Visible>false</Visible>
+    </Compile>
+
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\assets\stolon.css">
+      <LogicalName>$(RootNamespace).Configuration.stolon.css</LogicalName>
+      <Visible>false</Visible>
+    </EmbeddedResource>
+
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\assets\stolon.js">
+      <LogicalName>$(RootNamespace).Configuration.stolon.js</LogicalName>
+      <Visible>false</Visible>
+    </EmbeddedResource>
+
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)..\templates\*.html">
+      <LogicalName>$(RootNamespace).Templates.%(Filename).html</LogicalName>
+      <Visible>false</Visible>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!--
+    Copies the typings of the shared JS to obj/stolon.d.ts, so a plugin's jsconfig.json can include them
+    for editor checks. Nothing here reaches the plugin assembly.
+  -->
+  <Target Name="StolonCopyTypings" BeforeTargets="BeforeBuild" Condition="Exists('$(MSBuildThisFileDirectory)..\assets\stolon.d.ts')">
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\assets\stolon.d.ts" DestinationFolder="$(BaseIntermediateOutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

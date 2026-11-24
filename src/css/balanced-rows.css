@@ -1,0 +1,13 @@
+/* Tiles in rows of even size, so no row holds a single tile, laid out by balanceRows */
+/* Example: <div class="stolon-cards stolon-balanced"><div class="stolon-card"></div></div> */
+.stolon-balanced {
+    display: grid !important;
+    grid-template-columns: repeat(var(--stolon-balance-columns, 1), minmax(0, 1fr)) !important;
+}
+
+.stolon-balanced > * {
+    grid-column: span var(--stolon-balance-span, 1);
+    min-width: 0;
+}
+
+.stolon-balanced > [hidden] { display: none; }

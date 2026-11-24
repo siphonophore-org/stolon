@@ -1,0 +1,56 @@
+/* Static table that pairs each source row with a target select, with a sentence in place of the table while there is no source */
+/* Example: <div class="stolon-mapping-table"><div class="stolon-static-table-scroll"><table class="stolon-static-table stolon-mapping-table-grid"></table></div></div> */
+.stolon-mapping-table {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-mapping-table-grid th,
+.stolon-mapping-table-grid td { vertical-align: middle; }
+.stolon-mapping-table-grid thead th { width: 50%; }
+
+/* Source cell with its name and an optional dimmed description under it */
+/* Example: <th class="stolon-mapping-table-source" scope="row"><span class="stolon-mapping-table-name">Movies</span><span class="stolon-mapping-table-description">source-a</span></th> */
+.stolon-mapping-table-grid .stolon-mapping-table-source {
+    font-weight: 400;
+    white-space: normal;
+    background: none;
+    overflow-wrap: anywhere;
+}
+.stolon-mapping-table-name { display: block; }
+.stolon-mapping-table-description {
+    display: block;
+    opacity: 0.7;
+    font-size: 0.85em;
+}
+
+/* Target cell whose select fills it */
+/* Example: <td class="stolon-mapping-table-target"><select><option value="">None</option></select></td> */
+.stolon-mapping-table-target > select { width: 100%; min-width: 0; box-sizing: border-box; }
+
+
+/* A table with extra columns: a toggle first, a cell per extra field, and a remove button last. A row switched off dims its source and target */
+/* Example: <table class="stolon-static-table stolon-mapping-table-grid extended"><tr class="stolon-mapping-table-row off"><td class="stolon-mapping-table-toggle"></td><th class="stolon-mapping-table-source"></th><td class="stolon-mapping-table-target"></td><td class="stolon-mapping-table-extra"></td><td class="stolon-mapping-table-remove"></td></tr></table> */
+.stolon-mapping-table-grid.extended thead th { width: auto; }
+.stolon-mapping-table-grid .stolon-mapping-table-toggle,
+.stolon-mapping-table-grid .stolon-mapping-table-remove { width: 1%; white-space: nowrap; }
+.stolon-mapping-table-grid .stolon-mapping-table-extra .stolon-field-cell-label { display: none; }
+.stolon-mapping-table-row.off > .stolon-mapping-table-source,
+.stolon-mapping-table-row.off > .stolon-mapping-table-target,
+.stolon-mapping-table-row.off > .stolon-mapping-table-extra { opacity: 0.55; }
+
+@media (max-width: 600px) {
+    .stolon-mapping-table-grid thead { display: none; }
+    .stolon-mapping-table-grid,
+    .stolon-mapping-table-grid tbody,
+    .stolon-mapping-table-grid tr,
+    .stolon-mapping-table-grid th,
+    .stolon-mapping-table-grid td { display: block; }
+    .stolon-mapping-table-grid .stolon-mapping-table-source { padding-bottom: calc(var(--stolon-gap-narrow) / 2); }
+    .stolon-static-table.stolon-mapping-table-grid .stolon-mapping-table-target,
+    .stolon-static-table.stolon-mapping-table-grid .stolon-mapping-table-extra,
+    .stolon-static-table.stolon-mapping-table-grid .stolon-mapping-table-remove { padding-top: 0; border-top: 0; }
+    .stolon-mapping-table-grid .stolon-mapping-table-toggle,
+    .stolon-mapping-table-grid .stolon-mapping-table-remove { width: auto; }
+    .stolon-mapping-table-grid .stolon-mapping-table-extra .stolon-field-cell-label { display: block; }
+}

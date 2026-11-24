@@ -1,0 +1,41 @@
+/* Fixed stack of toasts in a corner of the screen, which lets clicks through around the toasts */
+/* Example: <div class="stolon-toaster stolon-toaster-bottom-end" role="region" aria-label="Notifications"></div> */
+.stolon-toaster {
+    position: fixed;
+    z-index: calc(var(--stolon-layer-dialog) + 1);
+    display: flex;
+    flex-direction: column;
+    width: calc(var(--stolon-size-large) * 9);
+    max-width: calc(100vw - 2 * var(--stolon-gap-wide));
+    pointer-events: none;
+}
+.stolon-toaster-bottom-end { bottom: var(--stolon-gap-wide); right: var(--stolon-gap-wide); }
+.stolon-toaster-bottom-start { bottom: var(--stolon-gap-wide); left: var(--stolon-gap-wide); }
+.stolon-toaster-top-end { top: var(--stolon-gap-wide); right: var(--stolon-gap-wide); flex-direction: column-reverse; }
+.stolon-toaster-top-start { top: var(--stolon-gap-wide); left: var(--stolon-gap-wide); flex-direction: column-reverse; }
+
+/* Persistent live region inside the stack that holds the toasts of one urgency */
+/* Example: <div class="stolon-toaster-live" role="status" aria-live="polite"></div> */
+.stolon-toaster-live { display: flex; flex-direction: column; }
+.stolon-toaster-top-end .stolon-toaster-live,
+.stolon-toaster-top-start .stolon-toaster-live { flex-direction: column-reverse; }
+
+/* One message on the stolon-float surface, built as stolon-icon-text with an icon, text, and a dismiss button, bordered in the color of its kind */
+/* Example: <div class="stolon-toast stolon-float stolon-icon-text success"><span class="material-icons" aria-hidden="true">check_circle</span><div class="stolon-toast-body"><div class="stolon-toast-message">Saved.</div></div></div> */
+.stolon-toast {
+    position: relative;
+    padding: var(--stolon-pad-small) calc(var(--stolon-pad-small) + var(--stolon-size-small) + var(--stolon-gap-narrow)) var(--stolon-pad-small) var(--stolon-pad-medium);
+    pointer-events: auto;
+    margin-top: var(--stolon-gap-narrow);
+}
+.stolon-toast.stolon-float { border-left-width: calc(var(--stolon-gap-narrow) / 2); }
+.stolon-toast.info { border-left-color: var(--stolon-blue-fg); }
+.stolon-toast.success { border-left-color: var(--stolon-green-fg); }
+.stolon-toast.warn { border-left-color: var(--stolon-orange-fg); }
+.stolon-toast.error { border-left-color: var(--stolon-red-fg); }
+.stolon-toast-body { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.stolon-toast-title { font-weight: 600; }
+/* The dismiss button, pinned to the toast's top right corner and inset by its padding */
+/* Example: <button class="stolon-row-btn stolon-toast-close" title="Dismiss"></button> */
+.stolon-toast-close { position: absolute; top: var(--stolon-pad-small); right: var(--stolon-pad-small); }
+.stolon-toast .stolon-row-btn:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 1px; }

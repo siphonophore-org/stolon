@@ -1,0 +1,65 @@
+/* Vertical list of events joined by a line, each with a colored marker */
+/* Example: <ol class="stolon-timeline"><li class="stolon-timeline-item green"><span class="stolon-timeline-marker"></span><div class="stolon-timeline-body"><div class="stolon-timeline-title">Synced</div></div></li></ol> */
+.stolon-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.stolon-timeline-item {
+    position: relative;
+    display: flex;
+    gap: var(--stolon-gap-wide);
+    padding-bottom: var(--stolon-gap-wide);
+}
+.stolon-timeline-item:last-child { padding-bottom: 0; }
+.stolon-timeline-item:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: var(--stolon-icon-large);
+    bottom: 0;
+    left: calc(var(--stolon-icon-large) / 2 - 1px);
+    border-left: 2px solid var(--stolon-border);
+}
+
+/* Round marker in the status color, with an optional icon in it */
+/* Example: <span class="stolon-timeline-marker" aria-hidden="true"></span> */
+.stolon-timeline-marker {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--stolon-icon-large);
+    height: var(--stolon-icon-large);
+    box-sizing: border-box;
+    border-radius: var(--stolon-radius-round);
+    background: var(--stolon-gray-fg);
+    color: var(--stolon-on-warning);
+}
+.stolon-timeline-marker .material-icons { font-size: var(--stolon-icon-small); }
+.stolon-timeline-item.green .stolon-timeline-marker { background: var(--stolon-green-fg); color: var(--stolon-on-warning); }
+.stolon-timeline-item.red .stolon-timeline-marker { background: var(--stolon-red-fg); }
+.stolon-timeline-item.orange .stolon-timeline-marker { background: var(--stolon-orange-fg); color: var(--stolon-on-warning); }
+.stolon-timeline-item.purple .stolon-timeline-marker { background: var(--stolon-purple-fg); }
+.stolon-timeline-item.blue .stolon-timeline-marker { background: var(--stolon-blue-fg); }
+.stolon-timeline-item.yellow .stolon-timeline-marker { background: var(--stolon-yellow-fg); color: var(--stolon-on-warning); }
+.stolon-timeline-item.pink .stolon-timeline-marker { background: var(--stolon-pink-fg); }
+.stolon-timeline-item.teal .stolon-timeline-marker { background: var(--stolon-teal-fg); }
+.stolon-timeline-item.custom .stolon-timeline-marker { background: var(--stolon-custom-fg); color: var(--stolon-custom-on, var(--stolon-on-accent)); }
+.stolon-timeline-body { min-width: 0; overflow-wrap: anywhere; }
+.stolon-timeline-time { display: block; font-size: 0.8em; opacity: 0.7; }
+.stolon-timeline-title { font-weight: 600; }
+.stolon-timeline-text { font-size: 0.9em; opacity: 0.85; margin-top: 2px; }
+
+/* A block of mono text kept as written under an event's body, such as a log or a stack trace, which scrolls sideways inside itself */
+/* Example: <pre class="stolon-timeline-pre stolon-mono">Error: timeout</pre> */
+.stolon-timeline-pre {
+    margin: var(--stolon-gap-narrow) 0 0;
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+    white-space: pre;
+    font-size: var(--stolon-font-small);
+    background: var(--stolon-wash);
+    border-radius: var(--stolon-radius-small);
+}

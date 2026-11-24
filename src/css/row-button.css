@@ -1,0 +1,52 @@
+/* Low emphasis icon button for table and list rows, with save, success, and dirty states */
+/* Example: <button class="stolon-row-btn"><span class="material-icons">edit</span></button> */
+.stolon-row-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    width: var(--stolon-size-small);
+    height: var(--stolon-size-small);
+    margin: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: var(--stolon-radius-small);
+    color: inherit;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+}
+.stolon-row-btn:hover {
+    opacity: 1;
+    background: var(--stolon-wash-strong);
+}
+.stolon-row-btn .material-icons { font-size: var(--stolon-icon-large); line-height: 1; }
+.stolon-row-btn:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 1px; }
+.stolon-row-btn:disabled { opacity: 0.25; cursor: default; background: none; }
+.stolon-row-btn.save:hover { color: var(--stolon-accent); }
+.stolon-row-btn.success {
+    color: var(--stolon-success) !important;
+    opacity: 1 !important;
+}
+.stolon-row-btn.dirty {
+    color: var(--stolon-warning) !important;
+    opacity: 1 !important;
+}
+
+/* A row button that destroys data, red on hover, as the destructive button variant */
+/* Example: <button class="stolon-row-btn destructive" title="Delete" aria-label="Delete"><span class="material-icons" aria-hidden="true">delete</span></button> */
+.stolon-row-btn.destructive:hover { color: var(--stolon-error); }
+
+/* Up or down row button that moves its row, with a secondary chevron */
+/* Example: <button class="stolon-row-btn move" data-move="-1"><span class="material-icons">keyboard_arrow_up</span></button> */
+.stolon-row-btn.move .material-icons { font-size: var(--stolon-chevron-secondary); }
+
+/* Up and down row buttons side by side at the end of a row */
+/* Example: <div class="stolon-row-arrows"><button class="stolon-row-btn move" data-move="-1"></button><button class="stolon-row-btn move" data-move="1"></button></div> */
+.stolon-row-arrows {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+}

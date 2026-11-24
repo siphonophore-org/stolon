@@ -1,0 +1,14 @@
+/* Time input and day toggles, side by side where there is room and stacked where there is not */
+/* Example: <div class="stolon-schedule"><input type="time" class="stolon-schedule-time"><div class="stolon-toggle-group stolon-schedule-days" role="group"></div></div> */
+.stolon-schedule {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--stolon-gap-wide);
+}
+.stolon-schedule-time { flex: 0 0 auto; }
+.stolon-schedule-days .stolon-toggle { padding: 0 var(--stolon-pad-medium); }
+
+/* The time's message on its own line under the time and the days */
+/* Example: <div class="stolon-schedule"><input type="time"><div class="stolon-schedule-days"></div><div class="stolon-field-message"></div></div> */
+.stolon-schedule > .stolon-field-message { flex: 1 0 100%; margin-top: 0; }

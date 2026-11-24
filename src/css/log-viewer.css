@@ -1,0 +1,39 @@
+/* Log viewer with a toolbar over a scrolling mono output area */
+/* Example: <div class="stolon-log"><div class="stolon-log-toolbar"></div><div class="stolon-log-output" role="log" tabindex="0"></div></div> */
+.stolon-log {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-log-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-log-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    margin-right: auto;
+    cursor: pointer;
+}
+
+/* Area of lines in the mono font, given its height and scrolling by createList */
+/* Example: <div class="stolon-log-output" role="log"><div class="stolon-log-line error"><span class="stolon-log-text">Failed</span></div></div> */
+.stolon-log-output {
+    box-sizing: border-box;
+    padding: var(--stolon-gap-narrow) var(--stolon-pad-medium);
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-small);
+    font-family: var(--stolon-mono);
+    font-size: 0.85em;
+    line-height: 1.5;
+}
+.stolon-log-output:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+.stolon-log-line { white-space: pre-wrap; overflow-wrap: anywhere; }
+.stolon-log-time { opacity: 0.7; margin-right: var(--stolon-gap-wide); }
+.stolon-log-line.debug { opacity: 0.65; }
+.stolon-log-line.warn { color: var(--stolon-orange-fg); }
+.stolon-log-line.error { color: var(--stolon-red-fg); }

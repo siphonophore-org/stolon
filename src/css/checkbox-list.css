@@ -1,0 +1,82 @@
+/* One selectable row with a checkbox, an optional thumbnail, a text block, and an optional note */
+/* Example: <label class="stolon-check-row"><input class="stolon-check-row-input" /><span class="stolon-check-text"></span></label> */
+.stolon-check-row {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    padding: calc(var(--stolon-gap-narrow) * 0.75) var(--stolon-gap-narrow);
+    border-radius: var(--stolon-radius-medium);
+    cursor: pointer;
+}
+.stolon-check-row:hover { background: var(--stolon-wash); }
+
+/* Checkbox at the start of a row */
+/* Example: <input type="checkbox" class="stolon-check-row-input"> */
+.stolon-check-row-input {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+/* Thumbnail shown before the text when a row supplies an imageUrl, a stolon-thumb frame with its placeholder under the image */
+/* Example: <span class="stolon-thumb stolon-check-thumb"><img class="stolon-thumb-image" alt="" src="poster.jpg"></span> */
+.stolon-check-thumb {
+    width: var(--stolon-size-medium);
+    height: var(--stolon-size-medium);
+    border-radius: var(--stolon-radius-small);
+}
+
+/* Text block that stacks a label over an optional sublabel */
+/* Example: <span class="stolon-check-text"><span class="stolon-check-label">Name</span><span class="stolon-check-sub">detail</span></span> */
+.stolon-check-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Row label that clips with an ellipsis */
+/* Example: <span class="stolon-check-label">Name</span> */
+.stolon-check-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Small dimmed sublabel that clips with an ellipsis */
+/* Example: <span class="stolon-check-sub">detail</span> */
+.stolon-check-sub {
+    font-size: var(--stolon-font-small);
+    opacity: 0.7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* A person's avatar at the start of a row, the size of a thumbnail, with the person icon when they have no picture */
+/* Example: <span class="stolon-avatar stolon-avatar-small stolon-check-avatar"></span> */
+.stolon-check-avatar { width: var(--stolon-size-medium); height: var(--stolon-size-medium); flex: 0 0 auto; }
+.stolon-check-avatar .stolon-avatar-icon { font-size: var(--stolon-icon-large); }
+
+/* A badge or note at the end of a row, drawn as a stolon-badge */
+/* Example: <span class="stolon-badge gray stolon-check-note">Family</span> */
+.stolon-check-badge,
+.stolon-check-note { flex: 0 0 auto; }
+
+/* Select all row that sits above the list with a divider */
+/* Example: <label class="stolon-check-row stolon-check-selectall"></label> */
+.stolon-check-selectall {
+    font-weight: 600;
+    border-bottom: 1px solid var(--stolon-border);
+    border-radius: 0;
+    margin-bottom: var(--stolon-gap-narrow);
+}
+
+/* Dimmed row that cannot be selected */
+/* Example: <label class="stolon-check-row stolon-check-row-disabled"></label> */
+.stolon-check-row-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.stolon-check-row-disabled .stolon-check-row-input {
+    cursor: not-allowed;
+}

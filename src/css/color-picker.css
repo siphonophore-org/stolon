@@ -1,0 +1,93 @@
+/* A color field: a swatch inside the box with the hex code beside it, and with alpha an opacity box on the same line */
+/* Example: <div class="stolon-color-picker"><div class="stolon-color-picker-row"><div class="stolon-color-picker-box"><span class="stolon-color-swatch"></span><input type="text" class="stolon-mono stolon-color-text"></div></div></div> */
+.stolon-color-picker {
+    display: flex;
+    flex-direction: column;
+}
+.stolon-color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-color-picker-box {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.stolon-color-picker-box > .stolon-color-text {
+    width: 100% !important;
+    padding-left: calc(var(--stolon-field-pad) + var(--stolon-icon-medium) + var(--stolon-gap-narrow) + 1ch) !important;
+}
+
+/* The # before the hex digits, part of the box so it is never typed */
+/* Example: <span class="stolon-color-hash" aria-hidden="true">#</span> */
+.stolon-color-hash {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--stolon-field-pad) + var(--stolon-icon-medium) + var(--stolon-gap-narrow));
+    transform: translateY(-50%);
+    font-family: var(--stolon-mono);
+    font-size: var(--stolon-field-font);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* The square at the leading end of the box showing the color, over a soft checkerboard so a see-through color reads as one */
+/* Example: <span class="stolon-color-swatch"><span class="stolon-color-swatch-fill"></span><input type="color" class="stolon-color-native"></span> */
+.stolon-color-swatch {
+    position: absolute;
+    top: 50%;
+    left: var(--stolon-field-pad);
+    transform: translateY(-50%);
+    width: var(--stolon-icon-medium);
+    height: var(--stolon-icon-medium);
+    border-radius: var(--stolon-radius-small);
+    overflow: hidden;
+    background-color: var(--stolon-surface);
+    background-image: linear-gradient(45deg, var(--stolon-wash-strong) 25%, transparent 25%, transparent 75%, var(--stolon-wash-strong) 75%), linear-gradient(45deg, var(--stolon-wash-strong) 25%, transparent 25%, transparent 75%, var(--stolon-wash-strong) 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 4px 4px;
+}
+.stolon-color-swatch-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px var(--stolon-border);
+}
+.stolon-color-native {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.stolon-color-swatch:focus-within { outline: 2px solid var(--stolon-accent); outline-offset: 1px; }
+
+/* The opacity box in percent beside the hex box, with the shared up and down arrows and a percent sign before them */
+/* Example: <div class="stolon-color-alpha"><span class="stolon-adorned stolon-adorned-number"><input type="number" class="stolon-color-alpha-input"></span><span class="stolon-color-alpha-unit">%</span></div> */
+.stolon-color-alpha {
+    position: relative;
+    flex: 0 0 auto;
+    width: calc(var(--stolon-size-large) * 2.5);
+}
+.stolon-color-alpha .stolon-color-alpha-input {
+    padding-right: calc(var(--stolon-field-pad) + var(--stolon-chevron-primary) + 1em) !important;
+    text-align: right;
+}
+.stolon-color-alpha-unit {
+    position: absolute;
+    top: 50%;
+    right: calc(var(--stolon-chevron-primary) + var(--stolon-gap-narrow));
+    transform: translateY(-50%);
+    font-size: var(--stolon-field-font);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Only the opacity box, for a color that comes from elsewhere, such as an image */
+/* Example: <div class="stolon-color-picker alpha opacity-only"><div class="stolon-color-picker-row"><div class="stolon-color-picker-box"></div><div class="stolon-color-alpha"></div></div></div> */
+.stolon-color-picker.opacity-only .stolon-color-picker-box { display: none; }

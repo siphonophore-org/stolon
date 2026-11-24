@@ -1,0 +1,24 @@
+<!-- title: Browser Helpers -->
+<div id="out"></div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px;">
+    <button type="button" id="btnDownload" class="raised stolon-button secondary small"><span>Download JSON</span></button>
+</div>
+<script type="module">
+const base = await window.__baseReady;
+const list = base.createDefinitionList({ items: [] });
+document.getElementById('out').appendChild(list.element);
+const items = [
+    { label: 'plural', value: base.plural(1, 'item') + ', ' + base.plural(3, 'item') + ', ' + base.plural(2, 'child', 'children'), mono: true },
+    { label: 'escapeHtml', value: base.escapeHtml('<b>"Tom" & Jerry</b>'), mono: true },
+    { label: 'generateGuid', value: base.generateGuid(), mono: true },
+    { label: 'generateGuid compact', value: base.generateGuid({ compact: true }), mono: true }
+];
+list.setItems(items);
+base.errorText(new Response(JSON.stringify({ title: 'Bad request' }), { status: 400 }), 'Could not save.')
+    .then((text) => list.setItems(items.concat({ label: 'errorText', value: text, mono: true })));
+
+const searched = base.debounce((value) => list.setItems(items.concat({ label: 'debounce', value: 'ran once with ' + value, mono: true })), 300);
+searched('a'); searched('ab'); searched('abc');
+
+document.getElementById('btnDownload').addEventListener('click', () => base.downloadJson('channels.json', [{ name: 'News' }]));
+</script>

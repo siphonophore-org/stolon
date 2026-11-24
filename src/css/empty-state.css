@@ -1,0 +1,22 @@
+/* Bordered box with centered muted text for an empty region */
+/* Example: <div class="stolon-empty-section">Queue is empty. Add a URL above to get started.</div> */
+.stolon-empty-section {
+    text-align: center;
+    padding: calc(var(--stolon-gap-wide) * 2.5) calc(var(--stolon-gap-wide) * 1.5);
+    color: var(--stolon-text-faint);
+    color: color-mix(in srgb, currentColor 50%, transparent);
+    font-size: 1.1em;
+    border: 1px solid var(--stolon-line);
+    border-radius: var(--stolon-radius-large);
+}
+/* The box fades its own text, so its border mixes the theme text color, not the faded currentColor. */
+/* Small dimmed line that says a region holds nothing yet, for a region that is not a List */
+/* Example: <div class="stolon-empty-inline">This folder is empty.</div> */
+.stolon-empty-inline { font-size: 0.9em; }
+.stolon-empty-inline[hidden] { display: none; }
+
+/* Compact dimmed message for an empty list */
+/* Example: <div class="stolon-empty">No records yet</div> */
+.stolon-empty {
+    padding: var(--stolon-pad-large) 0;
+}

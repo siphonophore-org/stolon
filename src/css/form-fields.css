@@ -1,0 +1,482 @@
+/* Bottom gap of one field gap under every field container and kit block, on a config page and in a dialog */
+/* Example: <div class="inputContainer"><label for="x">Name</label><input is="emby-input" id="x"></div> */
+.pluginConfigurationPage .inputContainer,
+.stolon-dialog .inputContainer,
+.pluginConfigurationPage .selectContainer,
+.stolon-dialog .selectContainer,
+.pluginConfigurationPage .checkboxContainer,
+.stolon-dialog .checkboxContainer,
+.pluginConfigurationPage .stolon-selector,
+.stolon-dialog .stolon-selector,
+.pluginConfigurationPage .stolon-cards,
+.stolon-dialog .stolon-cards,
+.pluginConfigurationPage .stolon-card-list,
+.stolon-dialog .stolon-card-list,
+.pluginConfigurationPage .stolon-choice-group,
+.stolon-dialog .stolon-choice-group,
+.pluginConfigurationPage .stolon-warn,
+.stolon-dialog .stolon-warn,
+.pluginConfigurationPage .stolon-info,
+.stolon-dialog .stolon-info,
+.pluginConfigurationPage .stolon-success,
+.stolon-dialog .stolon-success,
+.pluginConfigurationPage .stolon-error,
+.stolon-dialog .stolon-error,
+.pluginConfigurationPage .stolon-neutral,
+.stolon-dialog .stolon-neutral,
+.pluginConfigurationPage .stolon-record-card,
+.stolon-dialog .stolon-record-card,
+.pluginConfigurationPage .stolon-asset-list,
+.stolon-dialog .stolon-asset-list,
+.pluginConfigurationPage .stolon-field-row,
+.stolon-dialog .stolon-field-row,
+.pluginConfigurationPage .stolon-panel,
+.stolon-dialog .stolon-panel,
+.pluginConfigurationPage .stolon-static-table-scroll,
+.stolon-dialog .stolon-static-table-scroll,
+.pluginConfigurationPage .stolon-pill-group,
+.stolon-dialog .stolon-pill-group,
+.pluginConfigurationPage .stolon-ordered-list,
+.stolon-dialog .stolon-ordered-list,
+.pluginConfigurationPage .stolon-section,
+.stolon-dialog .stolon-section,
+.pluginConfigurationPage .stolon-collapsible-section,
+.stolon-dialog .stolon-collapsible-section,
+.pluginConfigurationPage .stolon-copy-field,
+.stolon-dialog .stolon-copy-field,
+.pluginConfigurationPage .stolon-string-list,
+.stolon-dialog .stolon-string-list,
+.pluginConfigurationPage .stolon-kv-editor,
+.stolon-dialog .stolon-kv-editor,
+.pluginConfigurationPage .stolon-file-picker,
+.stolon-dialog .stolon-file-picker,
+.pluginConfigurationPage .stolon-folder-picker,
+.stolon-dialog .stolon-folder-picker,
+.pluginConfigurationPage .stolon-image-picker,
+.stolon-dialog .stolon-image-picker,
+.pluginConfigurationPage .stolon-access-schedule,
+.stolon-dialog .stolon-access-schedule,
+.pluginConfigurationPage .stolon-mapping-table,
+.stolon-dialog .stolon-mapping-table,
+.pluginConfigurationPage .stolon-media-picker,
+.stolon-dialog .stolon-media-picker,
+.pluginConfigurationPage .stolon-number-unit,
+.stolon-dialog .stolon-number-unit,
+.pluginConfigurationPage .stolon-slider,
+.stolon-dialog .stolon-slider,
+.pluginConfigurationPage .stolon-schedule,
+.stolon-dialog .stolon-schedule,
+.pluginConfigurationPage .stolon-tag-input,
+.stolon-dialog .stolon-tag-input,
+.pluginConfigurationPage .stolon-log,
+.stolon-dialog .stolon-log,
+.pluginConfigurationPage .stolon-subtabs,
+.stolon-dialog .stolon-subtabs,
+.pluginConfigurationPage .stolon-defs,
+.stolon-dialog .stolon-defs,
+.pluginConfigurationPage .stolon-timeline-wrap,
+.stolon-dialog .stolon-timeline-wrap,
+.pluginConfigurationPage .stolon-stepper,
+.stolon-dialog .stolon-stepper {
+    margin: 0 0 var(--stolon-gap-wide) 0 !important;
+}
+
+/* The last block in a record card or a panel body sits on the padding, with no gap below it */
+/* Example: <div class="stolon-record-card"><div class="stolon-field-row"></div></div> */
+.pluginConfigurationPage .stolon-record-card > :last-child,
+.stolon-dialog .stolon-record-card > :last-child,
+.pluginConfigurationPage .stolon-panel-body > :last-child,
+.stolon-dialog .stolon-panel-body > :last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Field containers with no padding so every field starts on the same left edge */
+/* Example: <div class="inputContainer"><input is="emby-input"></div> */
+.pluginConfigurationPage .inputContainer,
+.stolon-dialog .inputContainer,
+.pluginConfigurationPage .selectContainer,
+.stolon-dialog .selectContainer,
+.pluginConfigurationPage .checkboxContainer,
+.stolon-dialog .checkboxContainer {
+    padding: 0 !important;
+}
+
+/* Field container children with no margin, so only the container sets spacing, matching kit classes by prefix */
+/* Example: <div class="inputContainer"><label>Name</label><input is="emby-input"><div class="stolon-selector"></div></div> */
+.pluginConfigurationPage .inputContainer > label,
+.pluginConfigurationPage .inputContainer > input,
+.pluginConfigurationPage .inputContainer > textarea,
+.pluginConfigurationPage .inputContainer > select,
+.pluginConfigurationPage .inputContainer > button,
+.pluginConfigurationPage .inputContainer > .emby-input,
+.pluginConfigurationPage .inputContainer > .emby-textarea,
+.pluginConfigurationPage .inputContainer > .emby-select-wrapper,
+.pluginConfigurationPage .inputContainer > [class^="stolon-"],
+.pluginConfigurationPage .inputContainer > [class*=" stolon-"],
+.pluginConfigurationPage .selectContainer > label,
+.pluginConfigurationPage .selectContainer > input,
+.pluginConfigurationPage .selectContainer > textarea,
+.pluginConfigurationPage .selectContainer > select,
+.pluginConfigurationPage .selectContainer > button,
+.pluginConfigurationPage .selectContainer > .emby-input,
+.pluginConfigurationPage .selectContainer > .emby-textarea,
+.pluginConfigurationPage .selectContainer > .emby-select-wrapper,
+.pluginConfigurationPage .selectContainer > [class^="stolon-"],
+.pluginConfigurationPage .selectContainer > [class*=" stolon-"],
+.pluginConfigurationPage .checkboxContainer > label,
+.pluginConfigurationPage .checkboxContainer > input,
+.pluginConfigurationPage .checkboxContainer > textarea,
+.pluginConfigurationPage .checkboxContainer > select,
+.pluginConfigurationPage .checkboxContainer > button,
+.pluginConfigurationPage .checkboxContainer > .emby-input,
+.pluginConfigurationPage .checkboxContainer > .emby-textarea,
+.pluginConfigurationPage .checkboxContainer > .emby-select-wrapper,
+.pluginConfigurationPage .checkboxContainer > [class^="stolon-"],
+.pluginConfigurationPage .checkboxContainer > [class*=" stolon-"],
+.stolon-dialog .inputContainer > label,
+.stolon-dialog .inputContainer > input,
+.stolon-dialog .inputContainer > textarea,
+.stolon-dialog .inputContainer > select,
+.stolon-dialog .inputContainer > button,
+.stolon-dialog .inputContainer > .emby-input,
+.stolon-dialog .inputContainer > .emby-textarea,
+.stolon-dialog .inputContainer > .emby-select-wrapper,
+.stolon-dialog .inputContainer > [class^="stolon-"],
+.stolon-dialog .inputContainer > [class*=" stolon-"],
+.stolon-dialog .selectContainer > label,
+.stolon-dialog .selectContainer > input,
+.stolon-dialog .selectContainer > textarea,
+.stolon-dialog .selectContainer > select,
+.stolon-dialog .selectContainer > button,
+.stolon-dialog .selectContainer > .emby-input,
+.stolon-dialog .selectContainer > .emby-textarea,
+.stolon-dialog .selectContainer > .emby-select-wrapper,
+.stolon-dialog .selectContainer > [class^="stolon-"],
+.stolon-dialog .selectContainer > [class*=" stolon-"],
+.stolon-dialog .checkboxContainer > label,
+.stolon-dialog .checkboxContainer > input,
+.stolon-dialog .checkboxContainer > textarea,
+.stolon-dialog .checkboxContainer > select,
+.stolon-dialog .checkboxContainer > button,
+.stolon-dialog .checkboxContainer > .emby-input,
+.stolon-dialog .checkboxContainer > .emby-textarea,
+.stolon-dialog .checkboxContainer > .emby-select-wrapper,
+.stolon-dialog .checkboxContainer > [class^="stolon-"],
+.stolon-dialog .checkboxContainer > [class*=" stolon-"] {
+    margin: 0 !important;
+}
+
+/* Last child of a field container with no space below it, other than a description that carries its own gap */
+/* Example: <div class="inputContainer"><input is="emby-input"><button class="raised">Clear</button></div> */
+.pluginConfigurationPage .inputContainer > :last-child:not(.fieldDescription),
+.pluginConfigurationPage .selectContainer > :last-child:not(.fieldDescription),
+.pluginConfigurationPage .checkboxContainer > :last-child:not(.fieldDescription),
+.stolon-dialog .inputContainer > :last-child:not(.fieldDescription),
+.stolon-dialog .selectContainer > :last-child:not(.fieldDescription),
+.stolon-dialog .checkboxContainer > :last-child:not(.fieldDescription) {
+    margin-bottom: 0 !important;
+}
+
+/* Helper text with a small gap above and a full gap below */
+/* Example: <div class="fieldDescription">Used to sign in.</div> */
+.pluginConfigurationPage .fieldDescription,
+.stolon-dialog .fieldDescription {
+    margin: var(--stolon-gap-narrow) 0 var(--stolon-gap-wide) 0 !important;
+}
+
+/* Field label with a small gap above its control, as a plain label or as inputLabel and selectLabel */
+/* Example: <div class="selectContainer"><label class="selectLabel">Mode</label><select is="emby-select"></select></div> */
+.pluginConfigurationPage .inputContainer > label,
+.stolon-dialog .inputContainer > label,
+.pluginConfigurationPage .selectContainer > label,
+.stolon-dialog .selectContainer > label,
+.pluginConfigurationPage .inputLabel,
+.stolon-dialog .inputLabel,
+.pluginConfigurationPage .selectLabel,
+.stolon-dialog .selectLabel {
+    display: block !important;
+    margin: 0 0 var(--stolon-gap-narrow) 0 !important;
+}
+
+/* Inputs, text areas, and selects that fill the row so every field shares one left and right edge. A checkbox or radio keeps its own size */
+/* Example: <div class="inputContainer"><input is="emby-input" type="text"></div> */
+.pluginConfigurationPage .inputContainer input:not([type="checkbox"]):not([type="radio"]),
+.stolon-dialog .inputContainer input:not([type="checkbox"]):not([type="radio"]),
+.pluginConfigurationPage .inputContainer textarea,
+.stolon-dialog .inputContainer textarea,
+.pluginConfigurationPage .selectContainer select,
+.stolon-dialog .selectContainer select {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Dropdown with one chevron in the text color, drawn from two thin gradient strokes to match Jellyfin's keyboard_arrow_down */
+/* Example: <select is="emby-select"><option>One</option></select> */
+.pluginConfigurationPage select,
+.stolon-dialog select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-image: linear-gradient(45deg, transparent 42%, currentColor 42%, currentColor 58%, transparent 58%), linear-gradient(-45deg, transparent 42%, currentColor 42%, currentColor 58%, transparent 58%) !important;
+    background-repeat: no-repeat !important;
+    background-size: calc(var(--stolon-chevron-primary) / 4) calc(var(--stolon-chevron-primary) / 4), calc(var(--stolon-chevron-primary) / 4) calc(var(--stolon-chevron-primary) / 4) !important;
+    background-position: calc(100% - 14px - var(--stolon-chevron-primary) / 4) 50%, calc(100% - 14px) 50% !important;
+    padding-right: 34px !important;
+}
+
+/* Hides the second chevron that emby-select adds for emby-select-withcolor, so a dropdown shows only one */
+/* Example: <div class="selectContainer"><select is="emby-select" class="emby-select-withcolor"></select></div> */
+.pluginConfigurationPage .selectArrowContainer,
+.stolon-dialog .selectArrowContainer {
+    display: none !important;
+}
+
+/* One field look for text inputs, text areas, and selects, with the same surface, border, and radius */
+/* Example: <input is="emby-input" type="text"> and <select class="stolon-selector-dropdown"> render alike */
+.pluginConfigurationPage input[type="text"],
+.stolon-dialog input[type="text"],
+.pluginConfigurationPage input[type="number"],
+.stolon-dialog input[type="number"],
+.pluginConfigurationPage input[type="password"],
+.stolon-dialog input[type="password"],
+.pluginConfigurationPage input[type="search"],
+.stolon-dialog input[type="search"],
+.pluginConfigurationPage input[type="url"],
+.stolon-dialog input[type="url"],
+.pluginConfigurationPage input[type="email"],
+.stolon-dialog input[type="email"],
+.pluginConfigurationPage input[type="date"],
+.stolon-dialog input[type="date"],
+.pluginConfigurationPage input[type="time"],
+.stolon-dialog input[type="time"],
+.pluginConfigurationPage textarea,
+.stolon-dialog textarea,
+.pluginConfigurationPage select,
+.stolon-dialog select {
+    box-sizing: border-box !important;
+    background-color: var(--stolon-surface) !important;
+    color: inherit !important;
+    border: 1px solid var(--stolon-border) !important;
+    border-radius: var(--stolon-radius-small) !important;
+    font-size: var(--stolon-field-font) !important;
+    padding: 0 var(--stolon-field-pad);
+}
+
+/* Every single line field at one height, medium unless the field or something around it is small or large.
+   The height is fixed, so the field has no padding above or below its text. Jellyfin's select style adds some, which would
+   leave less room than the text needs and clip letters such as y and g. */
+/* Example: <input is="emby-input" type="text" class="small"> */
+.pluginConfigurationPage input[type="text"],
+.stolon-dialog input[type="text"],
+.pluginConfigurationPage input[type="number"],
+.stolon-dialog input[type="number"],
+.pluginConfigurationPage input[type="password"],
+.stolon-dialog input[type="password"],
+.pluginConfigurationPage input[type="search"],
+.stolon-dialog input[type="search"],
+.pluginConfigurationPage input[type="url"],
+.stolon-dialog input[type="url"],
+.pluginConfigurationPage input[type="email"],
+.stolon-dialog input[type="email"],
+.pluginConfigurationPage input[type="date"],
+.stolon-dialog input[type="date"],
+.pluginConfigurationPage input[type="time"],
+.stolon-dialog input[type="time"],
+.pluginConfigurationPage select,
+.stolon-dialog select {
+    height: var(--stolon-field-height) !important;
+    min-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    line-height: normal !important;
+}
+
+/* A text area keeps its own height and takes the field's text size and padding */
+/* Example: <textarea is="emby-textarea"></textarea> */
+.pluginConfigurationPage textarea,
+.stolon-dialog textarea {
+    padding: var(--stolon-pad-small) var(--stolon-field-pad);
+}
+
+/* A field, or everything inside a component, at the small or large size of the scale */
+/* Example: <div class="stolon-search" data-stolon-size="small"></div> */
+[data-stolon-size="small"],
+input.small,
+select.small,
+textarea.small {
+    --stolon-field-height: var(--stolon-size-small);
+    --stolon-field-font: var(--stolon-font-small);
+    --stolon-field-pad: var(--stolon-pad-small);
+}
+[data-stolon-size="large"],
+input.large,
+select.large,
+textarea.large {
+    --stolon-field-height: var(--stolon-size-large);
+    --stolon-field-font: var(--stolon-font-large);
+    --stolon-field-pad: var(--stolon-pad-large);
+}
+
+/* Focused field with an accent border and no outline */
+/* Example: <input is="emby-input" type="text"> while it has focus */
+.pluginConfigurationPage input[type="text"]:focus,
+.stolon-dialog input[type="text"]:focus,
+.pluginConfigurationPage input[type="number"]:focus,
+.stolon-dialog input[type="number"]:focus,
+.pluginConfigurationPage input[type="password"]:focus,
+.stolon-dialog input[type="password"]:focus,
+.pluginConfigurationPage input[type="search"]:focus,
+.stolon-dialog input[type="search"]:focus,
+.pluginConfigurationPage input[type="url"]:focus,
+.stolon-dialog input[type="url"]:focus,
+.pluginConfigurationPage input[type="email"]:focus,
+.stolon-dialog input[type="email"]:focus,
+.pluginConfigurationPage textarea:focus,
+.stolon-dialog textarea:focus,
+.pluginConfigurationPage select:focus,
+.stolon-dialog select:focus {
+    outline: none !important;
+    border-color: var(--stolon-accent) !important;
+}
+
+/* Date input in a field container, which takes the field look while a compact date input keeps its own */
+/* Example: <div class="inputContainer"><label>Starts on</label><input type="date"></div> */
+.pluginConfigurationPage .inputContainer input[type="date"],
+.stolon-dialog .inputContainer input[type="date"] {
+    background-color: var(--stolon-surface) !important;
+    color: inherit !important;
+    border: 1px solid var(--stolon-border) !important;
+    border-radius: var(--stolon-radius-small) !important;
+    padding: 0.55em 0.7em;
+}
+.pluginConfigurationPage .inputContainer input[type="date"]:focus,
+.stolon-dialog .inputContainer input[type="date"]:focus {
+    outline: none !important;
+    border-color: var(--stolon-accent) !important;
+}
+
+/* Dropdown options on the field surface in the theme text color */
+/* Example: <select is="emby-select"><option>One</option></select> */
+.pluginConfigurationPage select option,
+.stolon-dialog select option {
+    background-color: var(--stolon-surface);
+    color: var(--stolon-fg);
+}
+
+/* Checkbox container whose description wraps onto its own line under the checkbox */
+/* Example: <div class="checkboxContainer"><label class="emby-checkbox-label"></label><div class="fieldDescription">Help</div></div> */
+.pluginConfigurationPage .checkboxContainer,
+.stolon-dialog .checkboxContainer {
+    flex-wrap: wrap;
+}
+.pluginConfigurationPage .checkboxContainer > .fieldDescription,
+.stolon-dialog .checkboxContainer > .fieldDescription {
+    flex: 0 0 100%;
+    width: 100%;
+}
+
+/* Empty label that emby-select and emby-input add when a control has no label, hidden so it takes no room */
+/* Example: <label class="selectLabel"></label> */
+.pluginConfigurationPage label.selectLabel:empty,
+.stolon-dialog label.selectLabel:empty,
+.pluginConfigurationPage label.inputLabel:empty,
+.stolon-dialog label.inputLabel:empty { display: none !important; }
+
+/* One checkbox and radio look for every box Stolon draws or a page writes, an accent fill with a drawn check while on.
+   Jellyfin's upgraded emby-checkbox draws its own box and is left alone. */
+/* Example: <label class="stolon-check-row"><input type="checkbox" class="stolon-check-row-input" checked><span>Movies</span></label> */
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox),
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox),
+.pluginConfigurationPage input[type="radio"],
+.stolon-dialog input[type="radio"],
+input[type="checkbox"].stolon-check-row-input,
+input[type="radio"].stolon-check-row-input {
+    -webkit-appearance: none;
+    appearance: none;
+    position: relative;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    width: var(--stolon-icon-medium);
+    height: var(--stolon-icon-medium);
+    margin: 0;
+    border: 2px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-small);
+    background: transparent;
+    color: var(--stolon-on-accent);
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+.pluginConfigurationPage input[type="radio"],
+.stolon-dialog input[type="radio"],
+input[type="radio"].stolon-check-row-input { border-radius: var(--stolon-radius-round); }
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox):hover,
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox):hover,
+.pluginConfigurationPage input[type="radio"]:hover,
+.stolon-dialog input[type="radio"]:hover,
+input.stolon-check-row-input:hover { border-color: var(--stolon-accent); }
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox):checked,
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox):checked,
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox):indeterminate,
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox):indeterminate,
+.pluginConfigurationPage input[type="radio"]:checked,
+.stolon-dialog input[type="radio"]:checked,
+input.stolon-check-row-input:checked,
+input[type="checkbox"].stolon-check-row-input:indeterminate {
+    background: var(--stolon-accent);
+    border-color: var(--stolon-accent);
+}
+
+/* The check mark, the bar of a partly checked box, and a radio's dot, drawn in CSS so no icon font is needed */
+/* Example: <input type="checkbox" class="stolon-check-row-input" checked> */
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox):checked::after,
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox):checked::after,
+input[type="checkbox"].stolon-check-row-input:checked::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 30%;
+    height: 55%;
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox):indeterminate::after,
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox):indeterminate::after,
+input[type="checkbox"].stolon-check-row-input:indeterminate::after {
+    content: '';
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+    background: currentColor;
+}
+.pluginConfigurationPage input[type="radio"]:checked::after,
+.stolon-dialog input[type="radio"]:checked::after,
+input[type="radio"].stolon-check-row-input:checked::after {
+    content: '';
+    position: absolute;
+    inset: 25%;
+    border-radius: var(--stolon-radius-round);
+    background: currentColor;
+}
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox):focus-visible,
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox):focus-visible,
+.pluginConfigurationPage input[type="radio"]:focus-visible,
+.stolon-dialog input[type="radio"]:focus-visible,
+input.stolon-check-row-input:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+.pluginConfigurationPage input[type="checkbox"]:not(.emby-checkbox):disabled,
+.stolon-dialog input[type="checkbox"]:not(.emby-checkbox):disabled,
+.pluginConfigurationPage input[type="radio"]:disabled,
+.stolon-dialog input[type="radio"]:disabled,
+input.stolon-check-row-input:disabled { opacity: 0.4; cursor: default; }
+
+/* A label beside a Stolon drawn checkbox sits a narrow gap away and centered on it, where Jellyfin's own upgrade does not lay it out */
+/* Example: <label class="emby-checkbox-label"><input type="checkbox" is="emby-checkbox"><span class="checkboxLabel">Poster</span></label> */
+.pluginConfigurationPage .emby-checkbox-label > input[type="checkbox"]:not(.emby-checkbox),
+.stolon-dialog .emby-checkbox-label > input[type="checkbox"]:not(.emby-checkbox) { margin-right: var(--stolon-gap-narrow); }
+.pluginConfigurationPage .emby-checkbox-label,
+.stolon-dialog .emby-checkbox-label { display: inline-flex; align-items: center; }

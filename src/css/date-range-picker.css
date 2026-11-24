@@ -1,0 +1,16 @@
+/* Preset pills over a from and a to date box, each with the calendar icon inside, and the range's message under them */
+/* Example: <div class="stolon-date-range"><div class="stolon-pill-group stolon-date-range-presets" role="group"></div><div class="stolon-date-range-row"><span class="stolon-adorned stolon-adorned-picker"><input type="date" class="stolon-date-range-from"></span><span class="stolon-adorned stolon-adorned-picker"><input type="date" class="stolon-date-range-to"></span></div></div> */
+.stolon-date-range {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.stolon-date-range-presets:not([hidden]) { margin-bottom: var(--stolon-gap-narrow); }
+.stolon-date-range-row {
+    display: grid;
+    /* Two boxes side by side while each keeps room for a whole value, and stacked when they do not fit. */
+    grid-template-columns: repeat(auto-fit, minmax(calc(var(--stolon-size-large) * 4), 1fr));
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-date-range-row > input,
+.stolon-date-range-row > .stolon-adorned { min-width: 0; box-sizing: border-box; }

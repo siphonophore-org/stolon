@@ -1,0 +1,155 @@
+/* Vertical list of record cards in priority order, each with a head row and a body the open card shows */
+/* Example: <div class="stolon-card-list"><div class="stolon-card-item selected"><div class="stolon-card-item-head">...</div><div class="stolon-card-item-body">...</div></div></div> */
+.stolon-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+
+/* One record card. selected marks the open one, collapsed folds it, disabled dims its text, dragging fades it */
+/* Example: <div class="stolon-card-item selected"></div> */
+.stolon-card-item {
+    background: var(--stolon-surface);
+    border: 1px solid var(--stolon-border);
+    border-radius: var(--stolon-radius-large);
+    transition: border-color 0.15s, background 0.15s;
+}
+.stolon-card-item.selected { border-color: var(--stolon-accent); }
+.stolon-card-item.dragging { opacity: 0.4; }
+.stolon-card-item.drop-before { box-shadow: 0 -3px 0 0 var(--stolon-accent); }
+.stolon-card-item.drop-after { box-shadow: 0 3px 0 0 var(--stolon-accent); }
+.stolon-card-item.disabled .stolon-card-item-main { opacity: 0.55; }
+
+/* Clickable head row: grip, number, main text, arrows, and the collapsible chevron, which turns by its aria-expanded. Tinted when the card is open */
+/* Example: <div class="stolon-card-item-head" draggable="true" role="button" tabindex="0"></div> */
+.stolon-card-item-head {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-wide);
+    padding: var(--stolon-pad-small) var(--stolon-pad-medium);
+    cursor: pointer;
+    user-select: none;
+    border-radius: var(--stolon-radius-large);
+}
+.stolon-card-item-head:hover { background: var(--stolon-wash); }
+.stolon-card-item.selected > .stolon-card-item-head { background: var(--stolon-accent-wash); border-radius: var(--stolon-radius-large) var(--stolon-radius-large) 0 0; }
+.stolon-card-item.selected.collapsed > .stolon-card-item-head { border-radius: var(--stolon-radius-large); }
+
+/* Drag handle icon at the left of the head */
+/* Example: <span class="stolon-card-item-grip material-icons">drag_indicator</span> */
+.stolon-card-item-grip {
+    color: var(--stolon-text-faint);
+    color: color-mix(in srgb, currentColor 35%, transparent);
+    cursor: grab;
+    display: flex;
+}
+
+/* Round priority number, filled with the accent on the open card */
+/* Example: <span class="stolon-card-item-num">1</span> */
+.stolon-card-item-num {
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--stolon-radius-round);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9em;
+    background: var(--stolon-wash);
+    background: color-mix(in srgb, currentColor 8%, transparent);
+    border: 1px solid var(--stolon-border);
+}
+.stolon-card-item.selected .stolon-card-item-num {
+    background: var(--stolon-accent);
+    border-color: var(--stolon-accent);
+    color: var(--stolon-on-accent);
+}
+
+/* Title line and sub line that take the remaining width and clip */
+/* Example: <div class="stolon-card-item-main"><div class="stolon-card-item-title">Name</div><div class="stolon-card-item-sub">detail</div></div> */
+.stolon-card-item-main {
+    flex: 1;
+    min-width: 0;
+}
+/* Bold title line that clips with an ellipsis */
+/* Example: <div class="stolon-card-item-title">Name</div> */
+.stolon-card-item-title {
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+}
+/* The title's name ends in an ellipsis, and its badges wrap under it when the head is too narrow, so nothing runs under the buttons */
+/* Example: <div class="stolon-card-item-title"><span class="stolon-dot green"></span><span>Living room</span><span class="stolon-badge purple">Both</span></div> */
+.stolon-card-item-title { flex-wrap: wrap; row-gap: calc(var(--stolon-gap-narrow) / 2); }
+.stolon-card-item-title > span:not(.stolon-dot):not(.stolon-badge) {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.stolon-card-item-title > .stolon-dot,
+.stolon-card-item-title > .stolon-badge { flex: 0 0 auto; }
+.stolon-card-item-main > .stolon-item-row-primary { flex-shrink: 1; min-width: 0; }
+
+/* Small dimmed mono sub line that clips with an ellipsis */
+/* Example: <div class="stolon-card-item-sub">10.0.0.1</div> */
+.stolon-card-item-sub {
+    font-family: var(--stolon-mono);
+    font-size: 0.8em;
+    opacity: 0.65;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* The sub line in the page's own font, for words rather than an address or path */
+/* Example: <div class="stolon-card-item-sub stolon-card-item-sub-text">Someone requests a title</div> */
+.stolon-card-item-sub.stolon-card-item-sub-text {
+    font-family: inherit;
+    font-size: 0.85em;
+}
+
+/* Tags under the title and sub line that wrap rather than clip, such as where a record applies */
+/* Example: <div class="stolon-tags stolon-card-item-tags"><span class="stolon-tag">HD</span><span class="stolon-tag stolon-tag-off">4K (off)</span></div> */
+.stolon-card-item-main .stolon-card-item-tags {
+    margin-top: var(--stolon-gap-narrow);
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-card-item-tags .stolon-tag { font-size: 0.85em; padding: calc(var(--stolon-gap-narrow) / 4) var(--stolon-pad-small); }
+.stolon-card-item-tags .material-icons { font-size: var(--stolon-icon-small); opacity: 0.8; }
+
+/* A head row that only holds a control at its end (such as Unblock) opens nothing itself */
+/* Example: <div class="stolon-card-item-head stolon-card-item-head-static">...<button class="stolon-row-btn"></button></div> */
+.stolon-card-item-head.stolon-card-item-head-static { cursor: default; }
+.stolon-card-item-head.stolon-card-item-head-static:hover { background: none; }
+.stolon-card-item-head:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: -2px; }
+
+/* Body shown only inside the open, unfolded card */
+/* Example: <div class="stolon-card-item-body"></div> */
+.stolon-card-item-body {
+    padding: var(--stolon-gap-narrow) var(--stolon-gap-wide) var(--stolon-gap-wide);
+    border-top: 1px solid var(--stolon-line);
+    border-top: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+.stolon-card-item.collapsed .stolon-card-item-body,
+.stolon-card-item:not(.selected) .stolon-card-item-body { display: none; }
+
+/* Action row under the list, for an Add button */
+/* Example: <div class="stolon-card-list-actions"><button class="stolon-button primary">Add</button></div> */
+.stolon-card-list-actions {
+    margin: var(--stolon-gap-wide) 0 var(--stolon-gap-wide);
+}
+
+@media (max-width: 768px) {
+    /* A narrow head uses the narrow gap, so the name keeps room beside the grip, number, and buttons. */
+    .stolon-card-item-head { gap: var(--stolon-gap-narrow); }
+    .stolon-card-item-sub { display: none; }
+    /* A sub line in words says what the record is, so it stays on a phone and only an address or path drops. */
+    .stolon-card-item-sub.stolon-card-item-sub-text { display: block; }
+}

@@ -1,0 +1,23 @@
+/* Inline wrapper for a help icon button and its bubble, which shows on hover, focus, and a tap */
+/* Example: <span class="stolon-help"><button type="button" class="stolon-row-btn stolon-help-button" title="Help" aria-label="Help"><span class="material-icons" aria-hidden="true">help_outline</span></button><span class="stolon-help-tip" role="tooltip">Explains the field.</span></span> */
+.stolon-help {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: var(--stolon-gap-narrow);
+}
+
+/* Bubble on the stolon-float surface, fixed to the viewport, that explains the field, placed by the hint beside its icon, and hidden until the hint is hovered, focused, or open */
+/* Example: <span class="stolon-help-tip stolon-float" role="tooltip">Explains the field.</span> */
+.stolon-help-tip {
+    display: none;
+    position: fixed;
+    width: max-content;
+    max-width: min(calc(var(--stolon-size-large) * 7), calc(100vw - 2 * var(--stolon-gap-wide)));
+    margin: 0;
+    padding: var(--stolon-gap-narrow) var(--stolon-pad-medium);
+    font-size: var(--stolon-font-small);
+    font-weight: normal;
+    line-height: var(--stolon-line-small);
+}
+.stolon-help.open .stolon-help-tip { display: block; }

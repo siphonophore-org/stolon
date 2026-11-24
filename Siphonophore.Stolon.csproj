@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- This package ships source, the bundled assets, Jellyfin's strings, the build targets, and the build task in
+         tasks/. It has no runtime assembly. -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NoWarn>NU5100;NU5128</NoWarn>
+
+    <PackageId>Siphonophore.Stolon</PackageId>
+    <!-- The Release workflow passes -p:Version=<jellyfin>.<X>, such as 12.4.0. This default only marks a pack made
+         outside that workflow. scripts/pack.sh versions a local pack as the next release with a dev suffix. -->
+    <Version Condition="'$(Version)' == ''">0.0.0-local</Version>
+    <Authors>Siphonophore</Authors>
+    <Description>Shared configuration-UI assets (CSS/JS) and C# helpers for Siphonophore Jellyfin plugins. Authored as per-component sources, bundled at build time, and compiled into the consuming plugin so plugins stay a single DLL.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- GNU GPL version 3, as the plugins are. Jellyfin's strings under jellyfin/ keep their GPL license file. -->
+    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
+    <PackageTags>jellyfin;plugin</PackageTags>
+    <!-- GitHub Packages files the package under this repository. -->
+    <RepositoryUrl>https://github.com/siphonophore-org/stolon</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <!-- Bundle the CSS/JS from src/ before building or packing. Runs the bundler on Unix; the Error below
+       is the cross-platform safety net (e.g. a Windows pack must run scripts/bundle.sh manually first). -->
+  <Target Name="EnsureBundledAssets" BeforeTargets="Build;Pack">
+    <Exec Condition="'$(OS)' != 'Windows_NT'"
+          Command="bash &quot;$(MSBuildProjectDirectory)/scripts/bundle.sh&quot;" />
+    <Error Condition="!Exists('$(MSBuildProjectDirectory)/dist/stolon.css') Or !Exists('$(MSBuildProjectDirectory)/dist/stolon.js') Or !Exists('$(MSBuildProjectDirectory)/dist/jellyfin/source.json')"
+           Text="Bundled assets or Jellyfin's strings are missing. Run scripts/bundle.sh before building or packing." />
+  </Target>
+
+  <!-- The build task is built with the package and packed under tasks/, where the translations targets load it. -->
+  <ItemGroup>
+    <ProjectReference Include="tasks/Siphonophore.Stolon.Tasks.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);StolonPackTasks;StolonPackJellyfinStrings</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <Target Name="StolonPackTasks">
+    <MSBuild Projects="tasks/Siphonophore.Stolon.Tasks.csproj" Targets="Build" Properties="Configuration=$(Configuration)">
+      <Output TaskParameter="TargetOutputs" ItemName="_BaseTasksOutput" />
+    </MSBuild>
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(_BaseTasksOutput)" PackagePath="tasks/net10.0/" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Jellyfin's strings are fetched by scripts/bundle.sh, so they are listed once the bundle has run. -->
+  <Target Name="StolonPackJellyfinStrings">
+    <ItemGroup>
+      <_BaseJellyfinString Include="dist/jellyfin/**/*" />
+      <TfmSpecificPackageFile Include="@(_BaseJellyfinString)" PackagePath="jellyfin/" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <None Include="src/*.cs" Pack="true" PackagePath="src/" />
+    <None Include="dist/stolon.css" Pack="true" PackagePath="assets/" />
+    <None Include="dist/stolon.js" Pack="true" PackagePath="assets/" />
+    <None Include="dist/stolon.d.ts" Pack="true" PackagePath="assets/" />
+    <None Include="src/templates/*.html" Pack="true" PackagePath="templates/" />
+    <!-- Stolon's own strings, built into every plugin by the translations targets. -->
+    <None Include="strings/*.json" Pack="true" PackagePath="strings/" />
+    <None Include="build/*.targets" Pack="true" PackagePath="build/" />
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

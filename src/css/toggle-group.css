@@ -1,0 +1,24 @@
+/* A wrapping row of on and off pills, for choosing any number, in the stolon-toggle-group row the pill group shares. One pill: dim when off, accent tinted when its aria-pressed is true */
+/* Example: <button class="stolon-toggle" aria-pressed="false"><span class="material-icons">forum</span>Discord</button> */
+.stolon-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    box-sizing: border-box;
+    height: var(--stolon-size-medium);
+    padding: 0 var(--stolon-pad-medium) 0 var(--stolon-pad-small);
+    line-height: 1;
+    border-radius: var(--stolon-radius-round);
+    border: 1px solid var(--stolon-border);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    opacity: 0.7;
+}
+.stolon-toggle .material-icons { font-size: var(--stolon-icon-medium); }
+.stolon-toggle[aria-pressed="true"] {
+    opacity: 1;
+    background: var(--stolon-accent-wash-strong);
+    border-color: var(--stolon-accent);
+}

@@ -1,0 +1,67 @@
+/* A world map that shades countries by their counts, with a layer toggle per kind of count above it */
+/* Example: <div class="stolon-world-map"><div class="stolon-world-layers"></div><div class="stolon-world-frame"><svg viewBox="0 0 1000 394"></svg></div></div> */
+.stolon-world-map {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-narrow);
+}
+
+/* The layer toggles: on is filled with the layer's color and shows a check, off is an outline with an empty dot */
+/* Example: <button class="raised stolon-button small stolon-world-layer" aria-pressed="true" style="--stolon-layer: var(--stolon-green-fg)"><span class="material-icons">check</span><span class="stolon-world-layer-dot"></span><span>People</span></button> */
+.stolon-world-layers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-world-layer.stolon-button[aria-pressed="true"] {
+    background-color: var(--stolon-wash-strong) !important;
+    box-shadow: inset 0 0 0 1px var(--stolon-layer);
+    color: inherit !important;
+    opacity: 1;
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+    .stolon-world-layer.stolon-button[aria-pressed="true"] { background-color: color-mix(in srgb, var(--stolon-layer) 28%, transparent) !important; }
+}
+.stolon-world-layer.stolon-button[aria-pressed="false"] {
+    background-color: transparent !important;
+    box-shadow: inset 0 0 0 1px var(--stolon-border);
+    color: inherit !important;
+    opacity: 0.7;
+}
+.stolon-world-layer[aria-pressed="false"] > .material-icons { display: none; }
+.stolon-world-layer-dot {
+    width: var(--stolon-gap-narrow);
+    height: var(--stolon-gap-narrow);
+    border-radius: var(--stolon-radius-round);
+    background: var(--stolon-layer);
+}
+.stolon-world-layer[aria-pressed="true"] > .stolon-world-layer-dot { display: none; }
+
+/* The map itself, which scales to its width, with uncounted countries in a faint wash */
+/* Example: <div class="stolon-world-frame"><svg viewBox="0 0 1000 394"><path class="stolon-world-country counted selected"></path></svg></div> */
+.stolon-world-frame {
+    position: relative;
+}
+.stolon-world-frame > svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.stolon-world-country {
+    fill: var(--stolon-wash-strong);
+    stroke: var(--stolon-surface);
+    stroke-width: 0.5;
+    transition: fill-opacity 0.2s;
+}
+.stolon-world-country.counted {
+    fill: var(--stolon-world-fill, var(--stolon-accent));
+    cursor: pointer;
+}
+.stolon-world-country.counted:hover { stroke: currentColor; stroke-width: 1; }
+.stolon-world-country:focus { outline: none; }
+.stolon-world-country.counted:focus-visible { stroke: var(--stolon-accent); stroke-width: 1.5; }
+.stolon-world-country.selected {
+    stroke: currentColor;
+    stroke-width: 1.8;
+    fill-opacity: 1 !important;
+}

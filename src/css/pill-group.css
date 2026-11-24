@@ -1,0 +1,42 @@
+/* A wrapping row of pills where exactly one is chosen, wired by createPillGroup. The toggle group shares the row */
+/* Example: <div class="stolon-pill-group" role="group"><button type="button" class="stolon-pill" aria-pressed="true">Daily</button><button type="button" class="stolon-pill" aria-pressed="false">Weekly</button></div> */
+.stolon-pill-group,
+.stolon-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--stolon-gap-narrow);
+}
+
+/* One pill, outlined when off and filled with the accent and white text when aria-pressed is true or it has selected */
+/* Example: <button type="button" class="stolon-pill selected" aria-pressed="true">Daily</button> */
+.stolon-pill {
+    box-sizing: border-box;
+    height: var(--stolon-size-medium);
+    padding: 0 var(--stolon-pad-large);
+    font-size: var(--stolon-font-medium);
+    line-height: 1;
+    border-radius: var(--stolon-radius-round);
+    border: 1px solid var(--stolon-border);
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* A pill at the small or large size of the scale */
+/* Example: <button type="button" class="stolon-pill small">Daily</button> */
+.stolon-pill.small { height: var(--stolon-size-small); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-small); }
+.stolon-pill.large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
+/* The hover, focus, and disabled look that pills and toggles share */
+.stolon-pill:hover,
+.stolon-toggle:hover { border-color: var(--stolon-accent); }
+.stolon-pill:focus-visible,
+.stolon-toggle:focus-visible { outline: 2px solid var(--stolon-accent); outline-offset: 2px; }
+.stolon-pill:disabled,
+.stolon-toggle:disabled { opacity: 0.5; cursor: default; }
+.stolon-pill[aria-pressed="true"],
+.stolon-pill.selected {
+    background: var(--stolon-accent);
+    border-color: var(--stolon-accent);
+    color: var(--stolon-on-accent);
+}

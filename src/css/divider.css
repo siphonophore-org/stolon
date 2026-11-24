@@ -1,0 +1,18 @@
+/* Horizontal rule with an optional centered label */
+/* Example: <div class="stolon-divider" role="separator"><span class="stolon-divider-label">Or</span></div> */
+.stolon-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--stolon-gap-wide);
+    margin: var(--stolon-gap-wide) 0;
+    font-size: 0.85em;
+    opacity: 0.7;
+}
+.stolon-divider::before,
+.stolon-divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--stolon-border);
+}
+.stolon-divider.stolon-divider-plain { gap: 0; }
+.stolon-divider.stolon-divider-plain::after { display: none; }

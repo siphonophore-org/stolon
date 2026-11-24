@@ -1,0 +1,145 @@
+import { make, icon, iconButton, nextId, listen, runAll, clear } from './lib/dom.js';
+import { anchorPopover } from './lib/popover.js';
+import type { ComponentHandle } from './types.js';
+import { stolonText } from './lib/stolon-text.js';
+
+/** One action in an overflow menu. An item with no value reports its label. */
+export interface OverflowMenuItem {
+    label: string;
+    value?: unknown;
+    disabled?: boolean;
+    destructive?: boolean;
+    icon?: string;
+}
+
+/** What createOverflowMenu takes. onSelect runs with the chosen item's value and the item. */
+export interface OverflowMenuOptions {
+    items?: OverflowMenuItem[];
+    label?: string;
+    icon?: string;
+    align?: 'start' | 'end';
+    onSelect?(value: unknown, item: OverflowMenuItem): void;
+}
+
+/** What createOverflowMenu returns. */
+export interface OverflowMenuHandle extends ComponentHandle {
+    setItems(next: OverflowMenuItem[]): void;
+    getItems(): OverflowMenuItem[];
+    open(): void;
+    close(): void;
+    isOpen(): boolean;
+    destroy(): void;
+}
+
+/**
+ * A button, by default with the three dot icon, that opens a small menu of actions. Arrow keys move between the items, Enter and Space choose one, Escape closes the menu and returns focus to the button, and a click outside closes it.
+ *
+ * @param options {
+ *   items    : array of { label, value, disabled, destructive, icon } [optional]
+ *   label    : title and aria-label of the button and the menu (default 'More actions')
+ *   icon     : Material icon name on the button (default 'more_vert')
+ *   align    : 'end' opens toward the left from the button's right edge, 'start' toward the right (default 'end')
+ *   onSelect : function(value, item) called when an item is chosen [optional]
+ * }
+ * @returns { element, setItems, getItems, open, close, isOpen, destroy }.
+ * An item with no value reports its label. A disabled item is skipped by the arrow keys.
+ */
+export function createOverflowMenu(options?: OverflowMenuOptions): OverflowMenuHandle {
+    options = options || {};
+    var items: OverflowMenuItem[] = (options.items || []).slice();
+    var cleanups: Array<() => void> = [];
+    var label: string = options.label || stolonText('Stolon.MoreActions');
+
+    var root = make('div', 'stolon-menu' + (options.align === 'start' ? ' stolon-menu-start' : ''));
+    var button = iconButton('stolon-row-btn stolon-menu-button', options.icon || 'more_vert', label);
+    var list = make('div', 'stolon-menu-list', { role: 'menu', 'aria-label': label });
+    list.id = nextId('menu');
+    list.hidden = true;
+    button.setAttribute('aria-haspopup', 'menu');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-controls', list.id);
+    root.appendChild(button);
+    root.appendChild(list);
+
+    function enabled(): HTMLButtonElement[] {
+        return Array.prototype.filter.call(list.querySelectorAll<HTMLButtonElement>('.stolon-menu-item'), function (el: HTMLButtonElement): boolean { return !el.disabled; });
+    }
+
+    function focusAt(index: number): void {
+        var all = enabled();
+        if (!all.length) return;
+        all[(index + all.length) % all.length].focus();
+    }
+
+    function render(): void {
+        clear(list);
+        items.forEach(function (item: OverflowMenuItem): void {
+            var el = make('button', 'stolon-menu-item stolon-icon-text' + (item.destructive ? ' destructive' : ''), { type: 'button', role: 'menuitem', tabindex: '-1' });
+            if (item.icon) el.appendChild(icon(item.icon));
+            el.appendChild(make('span', 'stolon-menu-label', null, item.label));
+            if (item.disabled) {
+                el.disabled = true;
+                el.setAttribute('aria-disabled', 'true');
+            }
+            el.addEventListener('click', function (): void {
+                if (el.disabled) return;
+                close(true);
+                if (options!.onSelect) options!.onSelect(item.value === undefined ? item.label : item.value, item);
+            });
+            list.appendChild(el);
+        });
+    }
+
+    var popover = anchorPopover(button, list, {
+        align: options.align === 'start' ? 'start' : 'end',
+        onDismiss: function (): void { button.setAttribute('aria-expanded', 'false'); }
+    });
+
+    function open(): void {
+        if (popover.isOpen()) return;
+        popover.open();
+        button.setAttribute('aria-expanded', 'true');
+    }
+
+    function close(refocus?: boolean): void {
+        if (!popover.isOpen()) return;
+        popover.close();
+        button.setAttribute('aria-expanded', 'false');
+        if (refocus) button.focus();
+    }
+
+    cleanups.push(listen(button, 'click', function (): void {
+        if (popover.isOpen()) close(true);
+        else { open(); focusAt(0); }
+    }));
+
+    cleanups.push(listen(button, 'keydown', function (e: KeyboardEvent): void {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            open();
+            focusAt(e.key === 'ArrowDown' ? 0 : -1);
+        }
+    }));
+
+    cleanups.push(listen(list, 'keydown', function (e: KeyboardEvent): void {
+        var all: HTMLButtonElement[] = enabled();
+        var at: number = all.indexOf(e.target as HTMLButtonElement);
+        if (e.key === 'ArrowDown') { e.preventDefault(); focusAt(at + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); focusAt(at - 1); }
+        else if (e.key === 'Home') { e.preventDefault(); focusAt(0); }
+        else if (e.key === 'End') { e.preventDefault(); focusAt(-1); }
+        else if (e.key === 'Tab') close(false);
+    }));
+
+    render();
+
+    return {
+        element: root,
+        setItems: function (next: OverflowMenuItem[]): void { items = (next || []).slice(); render(); },
+        getItems: function (): OverflowMenuItem[] { return items.slice(); },
+        open: open,
+        close: function (): void { close(false); },
+        isOpen: popover.isOpen,
+        destroy: function (): void { popover.destroy(); runAll(cleanups); clear(list); }
+    };
+}

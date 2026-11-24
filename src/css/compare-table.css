@@ -1,0 +1,30 @@
+/* A Data Table of properties by columns of values, with a Show Only Changes toggle in its toolbar */
+/* Example: <div class="stolon-filtered-list stolon-data-table stolon-compare-table"><div class="stolon-filtered-toolbar"><button class="stolon-toggle stolon-compare-toggle" aria-pressed="false">Show Only Changes</button></div></div> */
+.stolon-compare-toggle .material-icons { font-size: var(--stolon-icon-small); }
+
+/* A row whose values differ, in the accent wash */
+/* Example: <div class="stolon-data-row changed" role="row"></div> */
+.stolon-compare-table .stolon-data-row.changed { background: var(--stolon-accent-wash); }
+
+/* One value. A value that differs from the first column is bold, and a missing one is dimmed */
+/* Example: <span class="stolon-compare-value differs">1980</span> */
+.stolon-compare-value { overflow: hidden; text-overflow: ellipsis; }
+.stolon-compare-value.differs { font-weight: 600; }
+.stolon-compare-value.missing { opacity: 0.55; }
+
+/* A section row, one small uppercase dimmed heading across every column over the rows it groups */
+/* Example: <div class="stolon-data-row stolon-compare-section" role="row"><div class="stolon-data-cell" role="cell"><span class="stolon-compare-section-text">Genres</span></div></div> */
+.stolon-compare-section > .stolon-data-cell:first-child,
+.stolon-compare-note > .stolon-data-cell:first-child { grid-column: 1 / -1; }
+.stolon-compare-section > .stolon-data-cell + .stolon-data-cell,
+.stolon-compare-note > .stolon-data-cell + .stolon-data-cell { display: none; }
+.stolon-compare-section {
+    font-size: var(--stolon-font-small);
+    text-transform: uppercase;
+}
+.stolon-compare-section .stolon-compare-section-text { opacity: 0.7; }
+
+/* A note row, a dimmed line of detail across every column that wraps rather than cut off */
+/* Example: <div class="stolon-data-row stolon-compare-note" role="row"><div class="stolon-data-cell" role="cell"><span class="stolon-compare-note-text">Changed because the source has a new overview.</span></div></div> */
+.stolon-compare-note > .stolon-data-cell:first-child { white-space: normal; overflow-wrap: anywhere; }
+.stolon-compare-note .stolon-compare-note-text { opacity: 0.7; }

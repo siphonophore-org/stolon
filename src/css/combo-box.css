@@ -1,0 +1,32 @@
+/* Text input wrapper with a floating results dropdown */
+/* Example: <div class="stolon-combo"><input class="stolon-edit-input" /><div class="stolon-combo-dropdown" hidden></div></div> */
+.stolon-combo {
+    position: relative;
+    width: 100%;
+}
+
+/* Floating list of options on the stolon-float surface, fixed to the viewport and as wide as the input, placed by the typeahead under the input, or above it with no room */
+/* Example: <div class="stolon-combo-dropdown stolon-float"><div class="stolon-combo-option">value</div></div> */
+.stolon-combo-dropdown {
+    position: fixed;
+    width: var(--stolon-combo-width, auto);
+    max-width: calc(100vw - 2 * var(--stolon-gap-narrow));
+    max-height: calc(var(--stolon-field-height) * 6);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.stolon-combo-dropdown[hidden] { display: none; }
+
+/* One option row that tints in the accent on hover or when active */
+/* Example: <div class="stolon-combo-option active">value</div> */
+.stolon-combo-option {
+    padding: calc(var(--stolon-gap-narrow) / 2) var(--stolon-pad-small);
+    cursor: pointer;
+    font-size: var(--stolon-field-font);
+    line-height: var(--stolon-line-medium);
+}
+.stolon-combo-option:hover,
+.stolon-combo-option.active {
+    background: var(--stolon-wash);
+    color: var(--stolon-accent);
+}

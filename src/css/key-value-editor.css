@@ -1,0 +1,15 @@
+/* Editor of key and value rows, a Repeater of two text fields, with column labels and an add button */
+/* Example: <div class="stolon-repeater stolon-repeater-layout-inline stolon-kv-editor"><div class="stolon-repeater-head stolon-kv-head"><span>Key</span><span>Value</span></div><div class="stolon-repeater-rows stolon-kv-rows"></div></div> */
+.stolon-kv-editor { min-width: 0; }
+
+/* Column labels over the key and value columns, the repeater's head, hidden while the editor is narrow */
+/* Example: <div class="stolon-repeater-head stolon-kv-head"><span>Key</span><span>Value</span></div> */
+.stolon-kv-head { min-width: 0; }
+
+/* Rows of a key cell, a value cell, and a remove button, the repeater's rows, which stack while the editor is narrow */
+/* Example: <div class="stolon-repeater-rows stolon-kv-rows"><div class="stolon-kv-row"><div class="stolon-field-cell stolon-kv-key"></div><div class="stolon-field-cell stolon-kv-value"></div></div></div> */
+.stolon-kv-rows { min-width: 0; }
+
+/* Sentence shown while there is no row */
+/* Example: <div class="stolon-list-empty outside stolon-kv-empty">No headers.</div> */
+/* It is built as the list's own empty sentence, stolon-list-empty outside */

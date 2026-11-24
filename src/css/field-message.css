@@ -1,0 +1,30 @@
+/* Message under a field with an icon and a sentence, in the color of its state */
+/* Example: <div class="stolon-field-message stolon-icon-text error" aria-live="polite"><span class="material-icons" aria-hidden="true">error</span><span class="stolon-field-message-text">Enter a number.</span></div> */
+
+/* A message with a state sits a little below its field */
+.stolon-field-message.error,
+.stolon-field-message.warn,
+.stolon-field-message.success,
+.stolon-field-message.info { margin-top: var(--stolon-gap-narrow); }
+
+/* The color of each message state, one rule for the field message, the status line, and the toast's icon */
+/* Example: <div class="stolon-status-text stolon-icon-text error"><span class="material-icons" aria-hidden="true">error</span><span>Could not save.</span></div> */
+.stolon-field-message.error, .stolon-status-text.error, .stolon-toast.error > .material-icons { color: var(--stolon-red-fg); }
+.stolon-field-message.warn, .stolon-status-text.warn, .stolon-toast.warn > .material-icons { color: var(--stolon-orange-fg); }
+.stolon-field-message.success, .stolon-status-text.success, .stolon-toast.success > .material-icons { color: var(--stolon-green-fg); }
+.stolon-field-message.info, .stolon-status-text.info, .stolon-toast.info > .material-icons { color: var(--stolon-blue-fg); }
+
+/* Red border on a field that an error message describes */
+/* Example: <input type="text" aria-invalid="true" aria-describedby="msg"> */
+.pluginConfigurationPage input[aria-invalid="true"],
+.stolon-dialog input[aria-invalid="true"],
+.pluginConfigurationPage textarea[aria-invalid="true"],
+.stolon-dialog textarea[aria-invalid="true"],
+.pluginConfigurationPage select[aria-invalid="true"],
+.stolon-dialog select[aria-invalid="true"] { border-color: var(--stolon-error); }
+.pluginConfigurationPage input[aria-invalid="true"]:not([disabled]):not([hidden]),
+.stolon-dialog input[aria-invalid="true"]:not([disabled]):not([hidden]),
+.pluginConfigurationPage textarea[aria-invalid="true"]:not([disabled]):not([hidden]),
+.stolon-dialog textarea[aria-invalid="true"]:not([disabled]):not([hidden]),
+.pluginConfigurationPage select[aria-invalid="true"]:not([disabled]):not([hidden]),
+.stolon-dialog select[aria-invalid="true"]:not([disabled]):not([hidden]) { border-color: var(--stolon-error) !important; }

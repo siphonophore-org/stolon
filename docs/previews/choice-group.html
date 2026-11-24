@@ -1,0 +1,27 @@
+<!-- title: Choice Group -->
+<div class="stolon-choice-group" id="modeChoices" role="radiogroup" aria-label="Direction">
+    <label class="stolon-choice">
+        <input type="radio" name="serverMode" value="Pull" />
+        <span class="stolon-choice-name">Pull</span>
+        <span class="stolon-choice-text">Read from this server on a schedule.</span>
+    </label>
+    <label class="stolon-choice">
+        <input type="radio" name="serverMode" value="Push" />
+        <span class="stolon-choice-name">Push</span>
+        <span class="stolon-choice-text">Send changes made here as they happen.</span>
+    </label>
+    <label class="stolon-choice">
+        <input type="radio" name="serverMode" value="Both" />
+        <span class="stolon-choice-name">Both</span>
+        <span class="stolon-choice-text">Pull and push together.</span>
+    </label>
+</div>
+<span id="modeStatus" class="stolon-status-text"></span>
+<script type="module">
+const base = await window.__baseReady;
+const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
+const mode = base.createChoiceGroup(document.getElementById('modeChoices'), {
+    onChange: (value) => shared.setStatus('modeStatus', 'Chose ' + value + '.', false, { timeout: 0 })
+});
+mode.set('Pull');
+</script>

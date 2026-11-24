@@ -1,0 +1,17 @@
+/* Button that clips and anchors a progress bar along its bottom edge */
+/* Example: <button class="stolon-btn-progress-host"><span>Run</span><div class="stolon-progress-bar stolon-btn-progress"></div></button> */
+.stolon-btn-progress-host { position: relative; overflow: hidden; }
+
+/* Progress fill on an accent or red button, in the text color of that fill so it stays visible */
+/* Example: <button class="stolon-button primary stolon-btn-progress-host"><div class="stolon-progress-bar stolon-btn-progress"></div></button> */
+.stolon-button.primary .stolon-btn-progress,
+.stolon-button.destructive .stolon-btn-progress { background: rgba(255, 255, 255, 0.7); }
+@supports (color: color-mix(in srgb, red, blue)) {
+    .stolon-button.primary .stolon-btn-progress,
+    .stolon-button.destructive .stolon-btn-progress { background: color-mix(in srgb, var(--stolon-on-accent) 70%, transparent); }
+}
+
+/* A small button never draws the bar, since it is too short, and shows a pie beside it instead */
+/* Example: <button class="stolon-button small"><span>Run</span></button><span class="stolon-ring stolon-ring-pie stolon-btn-progress-pie"></span> */
+.stolon-button.small .stolon-btn-progress { display: none; }
+.stolon-btn-progress-pie { margin-left: var(--stolon-gap-narrow); }
