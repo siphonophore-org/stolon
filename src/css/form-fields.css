@@ -184,6 +184,17 @@
     margin: var(--stolon-gap-narrow) 0 var(--stolon-gap-wide) 0 !important;
 }
 
+/* A description that ends a field container leaves the gap below to the container, so the two never stack into a double gap */
+/* Example: <div class="checkboxContainer checkboxContainer-withDescription"><label class="emby-checkbox-label"></label><div class="fieldDescription checkboxFieldDescription">Uses less data.</div></div> */
+.pluginConfigurationPage .inputContainer > .fieldDescription:last-child,
+.pluginConfigurationPage .selectContainer > .fieldDescription:last-child,
+.pluginConfigurationPage .checkboxContainer > .fieldDescription:last-child,
+.stolon-dialog .inputContainer > .fieldDescription:last-child,
+.stolon-dialog .selectContainer > .fieldDescription:last-child,
+.stolon-dialog .checkboxContainer > .fieldDescription:last-child {
+    margin-bottom: 0 !important;
+}
+
 /* Field label with a small gap above its control, as a plain label or as inputLabel and selectLabel */
 /* Example: <div class="selectContainer"><label class="selectLabel">Mode</label><select is="emby-select"></select></div> */
 .pluginConfigurationPage .inputContainer > label,
