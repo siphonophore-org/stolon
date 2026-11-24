@@ -1,0 +1,14 @@
+<!-- title: Web Client Shell -->
+<p>The bar, user menu, and drawer, drawn by Stolon. The web client's stylesheets are not here, so a style block stands in for its dark theme, and the content looks plain. Below 900px the bar gives way to the drawer.</p>
+<iframe id="page" title="Web client shell" style="display: block; width: 100%; height: 420px; border: 0; border-radius: 8px;"></iframe>
+<template id="content">
+<style>body { background: #101010; color: rgba(255, 255, 255, 0.87); font-family: sans-serif; }</style>
+<div class="padded-left padded-right">
+<h1>Things</h1>
+<p>The plugin's content goes here, in the web client's own markup.</p>
+</div>
+</template>
+<script type="module">
+await window.__baseReady;
+window.__gallery.webClientShell({ frame: document.getElementById('page'), content: document.getElementById('content'), server: 'Den', mark: 'Things', markIcon: 'inventory_2' });
+</script>

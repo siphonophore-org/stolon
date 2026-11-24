@@ -13,7 +13,7 @@ namespace Siphonophore.Stolon;
 
 /// <summary>
 /// Checks a web client shell page against the installed web client at startup. It warns about any class the page uses that the web client
-/// no longer has, and about a web client that changed since the plugin last saw it, the cue to run the parity check.
+/// lacks, and about a web client that changed since the plugin last saw it, the cue to run the parity check.
 /// </summary>
 /// <remarks>
 /// The shell's markup is a copy of the web client's, styled by the web client's own stylesheets. An update that renames a class leaves that
@@ -54,7 +54,7 @@ public static partial class WebClientCheck
     ];
 
     /// <summary>
-    /// Runs the check in the background and logs what it finds: a warning for each class the web client no longer has, a warning when the
+    /// Runs the check in the background and logs what it finds: a warning for each class the web client lacks, a warning when the
     /// web client changed since the last start, and a warning when its details page template lacks a part, so Stolon's copy stands in.
     /// A plugin calls it once from its startup service, and it never throws.
     /// </summary>
@@ -229,7 +229,7 @@ public static partial class WebClientCheck
             if (missing.Count > 0)
             {
                 logger.LogWarning(
-                    "The {Page} uses classes this web client no longer has, so parts of it may look off until the plugin is updated: {Classes}",
+                    "The {Page} uses classes this web client lacks, so parts of it may look off until the plugin is updated: {Classes}",
                     name,
                     FormatUtilities.SanitizeForLog(string.Join(", ", missing), 4000));
             }
