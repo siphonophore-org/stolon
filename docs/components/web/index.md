@@ -199,6 +199,8 @@ The CSS is written to survive the desktop app's Qt WebEngine and older TV webvie
 | [Empty State](empty-state.md) | Placeholders for empty regions |
 | [Status Page](status-page.md) | A standalone themed card page |
 | [User Page](user-page.md) | A whole page a plugin hosts for regular users, with its cards, fields, steps, and finished state |
+| [Web Client Shell](web-client-shell.md) | A hosted page in the web client's own look, with its app bar, user menu, and drawer |
+| [Web Client Markup](web-client-markup.md) | Builders of the web client's own markup, such as cards, dialogs, and fields, for a page in the shell |
 | [Toast](toast.md) | Stacked transient messages |
 | [Banner](banner.md) | A callout with a Dismiss button |
 | [Status Dot](status-dot.md) | A round status color with a name |

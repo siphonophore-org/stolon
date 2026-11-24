@@ -2,7 +2,7 @@
 
 Standalone pages that a plugin serves outside the dashboard, such as invite links, public download pages, and "page not found".
 
-A page that regular users open from a link, such as an invite or a device setup page, is a `HostedPage` in the [User Page](../web/user-page.md) frame. A short message, such as "page not found", renders through `StatusPage`, which fills the embedded `status` template. `PublicPage` adds the response headers and the favicon that those pages need.
+A page that regular users open from a link, such as an invite or a device setup page, is a `HostedPage` in the [User Page](../web/user-page.md) frame. A page for signed in viewers that should look like Jellyfin itself, such as a request page, is a `HostedPage` in the [Web Client Shell](../web/web-client-shell.md). A short message, such as "page not found", renders through `StatusPage`, which fills the embedded `status` template. `PublicPage` adds the response headers and the favicon that those pages need.
 
 ## HostedPage
 
@@ -117,6 +117,115 @@ What a `HostedPage` serves inside its frame, read once on first use. `HostedPage
 * Missing content throws `InvalidOperationException` on the first request, with the name it looked for.
 * The fragment fills its `{{KEY}}` tokens in one pass from the values `Serve` takes. A token with no value stays as written.
 
+## HostedPageFrame
+
+The frame a `HostedPage` is drawn in. `UserPage` is the default, Stolon's own look from the `page` template, which needs no signed in viewer, such as an invite page. `WebClient` is the [Web Client Shell](../web/web-client-shell.md) from the `webclient` template, which loads the installed web client's stylesheets and fonts and draws its app bar, user menu, and drawer, so a page for signed in viewers looks like Jellyfin itself.
+
+```csharp
+private static readonly HostedPage Page = new("myplugin", HostedPageAccess.User, HostedPageContent.Resource(typeof(Plugin).Assembly, "Web.things.html"))
+{
+    Frame = HostedPageFrame.WebClient,
+    Mark = "Things",
+    MarkIcon = "inventory_2",
+    Translations = "MyPlugin/Translations",
+    DetailsTemplate = true,
+    Manifest = "things/manifest.webmanifest"
+};
+
+[HttpGet]
+[AllowAnonymous]
+[Produces("text/html")]
+public ContentResult Things() => Page.Serve(this);
+```
+
+* In the shell, `Mark` and `MarkIcon` name the page's own entry among the libraries in the bar and the drawer. A menu link in the web client's `config.json` that points at the page takes its place.
+* `DetailsTemplate` writes the web client's details page template into the page, for `adoptDetailsTemplate`. See [WebClientDetailsTemplate](#webclientdetailstemplate).
+* `Manifest` links a web app manifest, so a browser offers to install the page. See [WebClientApp](#webclientapp).
+* The access rules are the same in both frames. A signed out viewer of a `User` page gets the sign in card under the bar.
+
+**Gotchas**
+
+* The stylesheets are found from the web client's `index.html`, by what the numbered ones hold, and by the names of the search, details, and list route stylesheets. They are kept until `index.html` changes. Without a web client the shell links none, and the page shows Stolon's bar on the browser's plain styles.
+* The server's custom CSS and the viewer's own are added by the page script after the content, so they win. See [Themes and Custom CSS](../web/web-client-shell.md#themes-and-custom-css).
+
+## WebClientDetailsTemplate
+
+The web client's details page template, `src/controllers/itemDetails/index.html` in jellyfin-web, read from the installed web client so a page lays out an item's details with the web client's own markup. Any item fits it, such as a movie, a show, or a person. `Load` gives the installed template when it has every part the page fills in, and Stolon's copy from jellyfin-web 12.4 otherwise. `HostedPage` calls it when `DetailsTemplate` is set.
+
+```csharp
+var html = WebClientDetailsTemplate.Load(paths.WebPath);
+```
+
+**Gotchas**
+
+* The web client ships the template as a string in a script chunk. It is decoded, never run, and cut down to plain markup: no scripts, no handlers, no script addresses, and only an allowed set of elements and attributes.
+* `Missing` lists the parts a template lacks, as `.class` and `#id`. `WebClientCheck` logs them at startup.
+* The answer is kept until the web client's `index.html` changes.
+
+## WebClientCheck
+
+Checks a web client shell page against the installed web client at startup. It warns about each class the page uses that the web client lacks, since a renamed class leaves that part unstyled, and about a web client that changed since the plugin last started, the cue to run the [parity check](../web/web-client-shell.md#the-parity-check). Stolon's own shell and markup classes are always checked.
+
+```csharp
+public sealed class WebClientCheckService(IServerApplicationPaths paths, ILogger<WebClientCheckService> logger) : IHostedService
+{
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _ = WebClientCheck.RunAsync(paths, logger, "things page", EmbeddedPage(), ["thingCard"], checkDetailsTemplate: true, cancellationToken);
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+}
+```
+
+| Finding | Level |
+| :--- | :--- |
+| A class the web client lacks | Warning |
+| The web client changed since the last start | Warning |
+| No details page template, or one that lacks a part, so Stolon's copy stands in | Warning |
+| The web client could not be read | Warning |
+| How many classes it checked, or no web client to check | Debug |
+
+**Gotchas**
+
+* `markup` is the plugin's own page and scripts. The check reads their `class="..."` attributes. A class built from parts, such as `'button-' + type`, is invisible to it, so pass it in `classes`.
+* Material UI's classes, which the web client builds at runtime, and Stolon's own `stolon-` classes are never reported.
+* The build last seen is kept in `stolon-webclient-<page>.json` in the plugin configuration folder. The first start only notes it.
+* It runs on a background task, reads every stylesheet and script of the web client, and never throws.
+
+## WebClientApp
+
+Lets a browser install a web client shell page as an app. `Manifest` writes the web app manifest, with the page's folder as its start and scope, and `ServiceWorker` writes a worker that keeps the page for an offline start, serves versioned assets from its cache, and loads Stolon's [web push script](notifications.md#webpushworker) so the app shows notifications.
+
+```csharp
+private static readonly string AppManifest = WebClientApp.Manifest(
+    "Jellyfin Things", "Things", "Things for Jellyfin",
+    [new WebClientAppIcon("icons/192.png", "192x192"), new WebClientAppIcon("icons/512.png", "512x512"), new WebClientAppIcon("icons/maskable.png", "512x512", "maskable")]);
+
+[HttpGet("manifest.webmanifest")]
+[AllowAnonymous]
+public ContentResult AppManifestFile() => WebClientApp.ServeManifest(Response, AppManifest);
+
+[HttpGet("sw.js")]
+[AllowAnonymous]
+public ContentResult Worker() => WebClientApp.ServeWorker(Response, WebClientApp.ServiceWorker("things"));
+
+[HttpGet("push-worker.js")]
+[AllowAnonymous]
+public ContentResult PushWorker() => WebPushWorker.Serve(Response);
+```
+
+**Gotchas**
+
+* Serve the manifest and the worker beside the page, so their relative addresses and the worker's scope are the page's folder.
+* The cache prefix holds lowercase letters, digits, and hyphens, and names the worker's caches, so two plugins' apps never clear each other's.
+* Pass `null` as the push worker for an app with no notifications. The page registers the worker itself, as in [Web Push](../../Notifications.md#web-push).
+
+## WebClientAppIcon
+
+One icon of a web app manifest: its address relative to the manifest, its size, its purpose, `any` or `maskable`, and its type, `image/png` by default.
+
 ## TemplateLoader
 
 Loads an embedded HTML template by name and fills `{{KEY}}` tokens in one pass.
@@ -143,6 +252,7 @@ var html = TemplateLoader.Fill("status", new Dictionary<string, string>
 * Key matching follows the dictionary's comparer.
 * The `status` template uses `TITLE`, `HEADING`, `MESSAGE`, `SPINNER`, `BUTTON`, and `CONTENT`.
 * The `page` template, which `HostedPage` fills, uses `LANGUAGE`, `ROOT`, `TITLE`, `FAVICON`, `ICONS`, `STYLESHEET`, `COLUMN`, `ACCESS`, `SERVER`, `MARK`, `CONTENT`, `SCRIPT`, and `OPTIONS`.
+* The `webclient` template, which `HostedPage` fills for the shell, uses `LANGUAGE`, `ROOT`, `SERVER_ID`, `TITLE`, `FAVICON`, `MANIFEST`, `WEB_CLIENT`, `FONTS`, `STYLESHEET`, `ACCESS`, `ACCESS_CHECK`, `MARK`, `MARK_ICON`, `LOGO`, `SERVER`, `CONTENT`, `DETAILS`, `SCRIPT`, and `OPTIONS`. The `webclient-details` template is Stolon's copy of the details page.
 
 ## StatusPage
 

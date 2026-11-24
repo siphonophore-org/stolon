@@ -119,6 +119,16 @@ export class FakeElement extends FakeNode {
         return siblings[siblings.indexOf(this) + 1] || null;
     }
     remove() { if (this.parentNode) this.parentNode.removeChild(this); }
+    get firstChild() { return this.children[0] || null; }
+    // A copy with the same tag, class, attributes, and text, and copies of the children when deep.
+    cloneNode(deep) {
+        var copy = new FakeElement(this.ownerDocument, this.tagName);
+        copy.className = this.className;
+        copy.attributes = Object.assign({}, this.attributes);
+        copy._text = this._text;
+        if (deep) this.children.forEach(function (c) { copy.appendChild(c.cloneNode(true)); });
+        return copy;
+    }
     getBoundingClientRect() { return this._rect || { top: 100, left: 100, right: 160, bottom: 120, width: 60, height: 20 }; }
     get type() { return this.attributes.type || (this.tagName === 'INPUT' ? 'text' : (this.tagName === 'BUTTON' ? 'submit' : undefined)); }
     set type(v) { this.attributes.type = v; }

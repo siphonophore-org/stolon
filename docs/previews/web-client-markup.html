@@ -1,0 +1,27 @@
+<!-- title: Web Client Markup -->
+<p>The markup each builder returns. The web client's stylesheets draw it, and they are not here, so the preview shows the markup as text.</p>
+<label for="builder">Builder</label>
+<select id="builder"></select>
+<pre id="markup" style="white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--stolon-mono); font-size: var(--stolon-font-small);"></pre>
+<script type="module">
+const base = await window.__baseReady;
+const samples = {
+    webCard: () => base.webCard({ title: 'Example Movie', type: 'Movie', secondary: '2010', indicator: { icon: 'check', title: 'Played' } }),
+    webMenuItem: () => base.webMenuItem(base.webIcon('Settings'), 'Settings', 'web/#/mypreferencesmenu'),
+    webConfirmDialogFooter: () => base.webConfirmDialogFooter('Delete', 'delete'),
+    webCheckbox: () => base.webCheckbox({ id: 'season1' }, 'Season 1', 'In the library', true, true),
+    webSelectField: () => base.webSelectField('sort', 'Sort by', [{ value: 'name', text: 'Name' }, { value: 'date', text: 'Date added' }]),
+    webEmptyState: () => base.webEmptyState('Nothing here', 'Add one to start.')
+};
+const select = document.getElementById('builder');
+const out = document.getElementById('markup');
+Object.keys(samples).forEach(function (name) {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    select.appendChild(option);
+});
+function show() { out.textContent = samples[select.value]().replace(/></g, '>\n<'); }
+select.addEventListener('change', show);
+show();
+</script>

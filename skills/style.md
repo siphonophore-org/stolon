@@ -275,6 +275,7 @@ Icons come from the Material Icons font that Jellyfin's dashboard loads, drawn t
 | Searches | `search` |
 | Shows or hides a secret | `visibility`, `visibility_off` |
 | Separates the levels of a trail, and opens a record from its row | `chevron_right` |
+| Scrolls a row of cards back or on, in the web client's markup | `chevron_left`, `chevron_right` |
 | Marks a toggle that is on | `check` |
 | Opens a row for editing | `edit` |
 | A rising or falling trend, a sort direction, and the folder above | `arrow_upward`, `arrow_downward` |

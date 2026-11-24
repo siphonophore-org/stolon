@@ -36,8 +36,24 @@ public enum HostedPageAccess
 }
 
 /// <summary>
-/// A page a plugin serves at a root path of the server, such as <c>/invites/{code}</c>, in the user page frame from the <c>page</c> template.
-/// It is declared once, with the plugin's prefix, who may open it, and its content, and a controller action serves it.
+/// The frame a hosted page is drawn in.
+/// </summary>
+public enum HostedPageFrame
+{
+    /// <summary>The user page frame from the <c>page</c> template, Stolon's own look, which needs no signed in viewer.</summary>
+    UserPage,
+
+    /// <summary>
+    /// The web client shell from the <c>webclient</c> template, which loads the installed web client's stylesheets and fonts and draws its
+    /// app bar, user menu, and drawer, so the page looks like Jellyfin itself.
+    /// </summary>
+    WebClient
+}
+
+/// <summary>
+/// A page a plugin serves at a root path of the server, such as <c>/invites/{code}</c>, in the user page frame from the <c>page</c> template,
+/// or in the web client shell from the <c>webclient</c> template. It is declared once, with the plugin's prefix, who may open it, and its
+/// content, and a controller action serves it.
 /// </summary>
 /// <remarks>
 /// The page links the plugin's shared Stolon CSS and JS, the web client's favicon and icon font, and a base address
@@ -90,6 +106,25 @@ public sealed class HostedPage
 
     /// <summary>Gets a value indicating whether the page uses the wide column, for content set side by side such as a QR code beside its steps.</summary>
     public bool Wide { get; init; }
+
+    /// <summary>
+    /// Gets the frame the page is drawn in. <see cref="HostedPageFrame.UserPage"/> is the default. <see cref="HostedPageFrame.WebClient"/>
+    /// suits a page for signed in viewers, since its bar shows their libraries and user menu. In the shell the mark and its icon name
+    /// the page's own entry among the libraries.
+    /// </summary>
+    public HostedPageFrame Frame { get; init; }
+
+    /// <summary>
+    /// Gets a value indicating whether a web client shell page carries the web client's details page template, for
+    /// <c>adoptDetailsTemplate</c>. It is the installed web client's own when it has every part, and Stolon's copy otherwise.
+    /// </summary>
+    public bool DetailsTemplate { get; init; }
+
+    /// <summary>
+    /// Gets the address of the page's web app manifest, relative to the server root, such as <c>myplugin/manifest.webmanifest</c>, or
+    /// <c>null</c> for none. A web client shell page links it, so a browser offers to install the page as an app.
+    /// </summary>
+    public string? Manifest { get; init; }
 
     /// <summary>
     /// Gets the users a <see cref="HostedPageAccess.SelectedUsers"/> page admits, read again on every check so a change to the plugin's
@@ -204,7 +239,18 @@ public sealed class HostedPage
         context.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'self'";
 
         var assets = WebClientAssets.For(paths?.WebPath);
-        var html = Render(context.Request.Path, host?.FriendlyName, StolonTranslations.RequestLanguage(context.Request), assets.FaviconHref, assets.IconFace, values);
+        var language = StolonTranslations.RequestLanguage(context.Request);
+        var html = Frame == HostedPageFrame.WebClient
+            ? RenderShell(
+                context.Request.Path,
+                host?.FriendlyName,
+                host?.SystemId,
+                language,
+                assets.FaviconHref,
+                WebClientAssets.Shell(paths?.WebPath),
+                DetailsTemplate ? WebClientDetailsTemplate.Load(paths?.WebPath) : null,
+                values)
+            : Render(context.Request.Path, host?.FriendlyName, language, assets.FaviconHref, assets.IconFace, values);
         return new ContentResult { Content = html, ContentType = "text/html; charset=utf-8", StatusCode = StatusCodes.Status200OK };
     }
 
@@ -244,13 +290,9 @@ public sealed class HostedPage
     /// <returns>The document.</returns>
     internal string Render(PathString path, string? serverName, string language, string? faviconHref, string iconFace, IReadOnlyDictionary<string, string>? values)
     {
-        var encoded = new Dictionary<string, string>(StringComparer.Ordinal);
-        if (values is not null)
+        if (Frame == HostedPageFrame.WebClient)
         {
-            foreach (var pair in values)
-            {
-                encoded[pair.Key] = WebUtility.HtmlEncode(pair.Value);
-            }
+            return RenderShell(path, serverName, null, language, faviconHref, WebClientAssets.Shell(null), null, values);
         }
 
         var server = string.IsNullOrWhiteSpace(serverName) ? "Jellyfin" : serverName;
@@ -274,10 +316,80 @@ public sealed class HostedPage
             ["SERVER"] = WebUtility.HtmlEncode(server),
             ["MARK"] = mark,
             ["COLUMN"] = Wide ? " stolon-wide" : string.Empty,
-            ["OPTIONS"] = string.IsNullOrEmpty(Translations) ? string.Empty : "{ translations: '" + StringUtilities.EscapeJsString(Translations) + "' }",
-            ["CONTENT"] = TemplateLoader.FillText(_content.Html, encoded)
+            ["OPTIONS"] = ScriptOptions(),
+            ["CONTENT"] = TemplateLoader.FillText(_content.Html, Encode(values))
         });
     }
+
+    /// <summary>
+    /// Renders the whole document in the web client shell.
+    /// </summary>
+    /// <param name="path">The request path, without the server's base path.</param>
+    /// <param name="serverName">The server's name, or <c>null</c> when it is not known.</param>
+    /// <param name="serverId">The server's id, whose stored sign-in and theme the page reads, or <c>null</c>.</param>
+    /// <param name="language">The page's language.</param>
+    /// <param name="faviconHref">The web client's favicon, relative to the web folder, or <c>null</c>.</param>
+    /// <param name="shell">What the shell links from the web client.</param>
+    /// <param name="details">The details page template, or <c>null</c> for none.</param>
+    /// <param name="values">Values for the content's tokens, encoded here.</param>
+    /// <returns>The document.</returns>
+    internal string RenderShell(PathString path, string? serverName, string? serverId, string language, string? faviconHref, WebClientShellAssets shell, string? details, IReadOnlyDictionary<string, string>? values)
+    {
+        ArgumentNullException.ThrowIfNull(shell);
+        var server = string.IsNullOrWhiteSpace(serverName) ? "Jellyfin" : serverName;
+        var web = new StringBuilder();
+        if (shell.IndexStyle.Length > 0)
+        {
+            web.Append("<style>").Append(shell.IndexStyle.Replace("</", "<\\/", StringComparison.Ordinal)).Append("</style>\n");
+        }
+
+        foreach (var href in shell.Stylesheets)
+        {
+            web.Append("<link rel=\"stylesheet\" href=\"web/").Append(WebUtility.HtmlEncode(href)).Append("\" />\n");
+        }
+
+        return TemplateLoader.Fill("webclient", new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["LANGUAGE"] = WebUtility.HtmlEncode(language),
+            ["ROOT"] = RootFor(path),
+            ["SERVER_ID"] = WebUtility.HtmlEncode(serverId ?? string.Empty),
+            ["ACCESS"] = AccessName(Access),
+            ["ACCESS_CHECK"] = WebUtility.HtmlEncode(AccessCheck ?? string.Empty),
+            ["TITLE"] = WebUtility.HtmlEncode(Title ?? server),
+            ["FAVICON"] = faviconHref is null ? string.Empty : "<link rel=\"icon\" href=\"web/" + WebUtility.HtmlEncode(faviconHref) + "\" />",
+            ["MANIFEST"] = string.IsNullOrEmpty(Manifest) ? string.Empty : "<link rel=\"manifest\" href=\"" + WebUtility.HtmlEncode(Manifest) + "\" />",
+            ["WEB_CLIENT"] = web.ToString().TrimEnd(),
+            ["FONTS"] = shell.Fonts.Length == 0 ? string.Empty : "<style>" + shell.Fonts.Replace("</", "<\\/", StringComparison.Ordinal) + "</style>",
+            ["STYLESHEET"] = WebUtility.HtmlEncode(SharedPage("css")),
+            ["SCRIPT"] = StringUtilities.EscapeJsString(SharedPage("js")),
+            ["SERVER"] = WebUtility.HtmlEncode(server),
+            ["LOGO"] = shell.LogoHref is null ? string.Empty : "<img src=\"web/" + WebUtility.HtmlEncode(shell.LogoHref) + "\" alt=\"\" />",
+            ["MARK"] = WebUtility.HtmlEncode(Mark ?? string.Empty),
+            ["MARK_ICON"] = WebUtility.HtmlEncode(MarkIcon ?? string.Empty),
+            ["DETAILS"] = details is null ? string.Empty : "<template id=\"stolon-shell-details\">" + details + "</template>",
+            ["OPTIONS"] = ScriptOptions(),
+            ["CONTENT"] = TemplateLoader.FillText(_content.Html, Encode(values))
+        });
+    }
+
+    // Each value HTML encoded, for the content's tokens.
+    private static Dictionary<string, string> Encode(IReadOnlyDictionary<string, string>? values)
+    {
+        var encoded = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (values is not null)
+        {
+            foreach (var pair in values)
+            {
+                encoded[pair.Key] = WebUtility.HtmlEncode(pair.Value);
+            }
+        }
+
+        return encoded;
+    }
+
+    // The options the page script starts with.
+    private string ScriptOptions() =>
+        string.IsNullOrEmpty(Translations) ? string.Empty : "{ translations: '" + StringUtilities.EscapeJsString(Translations) + "' }";
 
     // The value the page script reads from data-stolon-access.
     private static string AccessName(HostedPageAccess access) => access switch

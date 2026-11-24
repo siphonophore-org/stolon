@@ -4,7 +4,7 @@
 // Each docs/previews/<name>.html is one snippet, the markup and a module script that calls the real Stolon
 // API. This script wraps every snippet in docs/previews/_shell.html and writes the page to
 // docs/assets/previews/<name>.html, next to a copy of the bundle (dist/stolon.*) and of the shared
-// Jellyfin stubs (docs/previews/_stubs.js), and of the status and user page templates (src/templates/status.html, page.html). The output is not committed. mkdocs copies it into the site.
+// Jellyfin stubs (docs/previews/_stubs.js), and of the status, user page, and web client shell templates (src/templates/status.html, page.html, webclient.html). The output is not committed. mkdocs copies it into the site.
 //
 // A snippet may start with these comments, and nothing else on its first lines:
 //   <!-- title: Badge -->          the page title, the file name when absent
@@ -40,6 +40,7 @@ await copyFile(path.join(source, '_stubs.js'), path.join(out, 'base', 'jellyfin-
 // template, which the User Page previews fill the way HostedPage.Render does.
 await copyFile(path.join(root, 'src', 'templates', 'status.html'), path.join(out, 'base', 'status.html'));
 await copyFile(path.join(root, 'src', 'templates', 'page.html'), path.join(out, 'base', 'page.html'));
+await copyFile(path.join(root, 'src', 'templates', 'webclient.html'), path.join(out, 'base', 'webclient.html'));
 
 // Reads and removes the leading <!-- key: value --> comments of a snippet.
 function takeMeta(text) {

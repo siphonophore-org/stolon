@@ -1,6 +1,6 @@
 // Stubs of the Jellyfin dashboard globals (Dashboard, ApiClient) with mock users and mock paged rows.
 // The docs preview shell and the gallery both load this before the bundle, so they share one set of mock data.
-// Names that a preview snippet may use: window.__gallery (svg, rect, userPage) and window.__galleryData (USERS, ITEMS, COLORS, STATUSES, MEDIA).
+// Names that a preview snippet may use: window.__gallery (svg, rect, userPage, webClientShell) and window.__galleryData (USERS, ITEMS, COLORS, STATUSES, MEDIA).
 (function () {
     function svg(w, h, bg, label) {
         var s = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '">' +
@@ -57,7 +57,51 @@
             frame.srcdoc = html;
         });
     }
-    window.__gallery = { svg: svg, rect: rect, userPage: userPage };
+    // Fills the web client shell template the way HostedPage.RenderShell does, with no web client stylesheets, and answers the
+    // shell's calls with a signed in viewer, so the bar, the user menu, and the drawer fill. It shows in a frame of a fixed height.
+    // Options: content (the template element), frame (the iframe), server, mark, markIcon.
+    function webClientShell(options) {
+        var encode = function (value) { return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
+        var answers = {
+            'System/Info/Public': { Id: 'preview', ServerName: options.server || 'Jellyfin', Version: '12.4.0' },
+            'Users/Me': { Id: 'u1', Name: 'Alice', Policy: { IsAdministrator: true } },
+            'web/config.json': { menuLinks: [] },
+            'UserViews?userId=u1': { Items: [{ Id: 'm', Name: 'Movies', CollectionType: 'movies' }, { Id: 't', Name: 'Shows', CollectionType: 'tvshows' }, { Id: 'a', Name: 'Music', CollectionType: 'music' }, { Id: 'b', Name: 'Books', CollectionType: 'books' }] },
+            'QuickConnect/Enabled': true
+        };
+        // The frame's own fetch and storage answer for a server, so the preview writes nothing to the site's storage.
+        var stub = '<script>(function () { var answers = ' + JSON.stringify(answers) + ';'
+            + 'window.fetch = function (url) { var key = String(url); var found = Object.prototype.hasOwnProperty.call(answers, key);'
+            + 'return Promise.resolve({ ok: found, status: found ? 200 : 404, json: function () { return Promise.resolve(found ? answers[key] : null); } }); };'
+            + 'var read = Storage.prototype.getItem; Storage.prototype.getItem = function (key) {'
+            + 'return key === "jellyfin_credentials" ? JSON.stringify({ Servers: [{ Id: "preview", AccessToken: "' + 'a'.repeat(32) + '", UserId: "u1" }] }) : read.call(this, key); }; })();<\/script>';
+        return fetch('./base/webclient.html').then(function (r) { return r.text(); }).then(function (template) {
+            var values = {
+                LANGUAGE: 'en-us',
+                ROOT: './',
+                SERVER_ID: 'preview',
+                ACCESS: 'user',
+                ACCESS_CHECK: '',
+                TITLE: encode(options.mark || 'Jellyfin'),
+                FAVICON: '',
+                MANIFEST: '',
+                WEB_CLIENT: '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-icons-iconfont@6.7.0/dist/material-design-icons.min.css" />',
+                FONTS: '',
+                STYLESHEET: './base/stolon.css',
+                SCRIPT: './base/stolon.js',
+                SERVER: encode(options.server || 'Jellyfin'),
+                LOGO: '',
+                MARK: encode(options.mark || ''),
+                MARK_ICON: encode(options.markIcon || ''),
+                DETAILS: '',
+                OPTIONS: '',
+                CONTENT: options.content.innerHTML
+            };
+            var html = template.replace(/\{\{(\w+)\}\}/g, function (all, key) { return key in values ? values[key] : all; }).replace('<head>', '<head>' + stub);
+            options.frame.srcdoc = html;
+        });
+    }
+    window.__gallery = { svg: svg, rect: rect, userPage: userPage, webClientShell: webClientShell };
 
     var COLORS = ['#0088cc', '#9b59b6', '#5cb85c', '#f0ad4e', '#d9534f', '#3498db'];
     var USERS = [

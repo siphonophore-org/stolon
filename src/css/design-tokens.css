@@ -109,6 +109,38 @@
     --stolon-pink-fg: var(--stolon-pink); --stolon-pink-bg: rgba(224, 96, 158, 0.2); --stolon-pink-soft: rgba(224, 96, 158, 0.12); --stolon-pink-edge: rgba(224, 96, 158, 0.4);
     --stolon-gray-fg: var(--stolon-gray); --stolon-gray-bg: rgba(145, 152, 161, 0.2); --stolon-gray-soft: rgba(145, 152, 161, 0.12); --stolon-gray-edge: rgba(145, 152, 161, 0.4);
 
+    /* The web client shell's measures, as the web client's Material UI bar, menus, and drawer draw them. The unit is Material UI's
+       spacing, and the bar, buttons, avatar, and icons are its sizes. */
+    --stolon-shell-unit: 8px;
+    --stolon-shell-bar: 48px;
+    --stolon-shell-button: 46px;
+    --stolon-shell-avatar: 40px;
+    --stolon-shell-icon: 24px;
+    --stolon-shell-icon-bar: 22px;
+    --stolon-shell-icon-small: 20px;
+    --stolon-shell-font: 1rem;
+    --stolon-shell-font-small: 0.875rem;
+    --stolon-shell-font-title: 1.25rem;
+    --stolon-shell-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --stolon-shell-layer-drawer: 1200;
+    --stolon-shell-layer-menu: 1300;
+    --stolon-shell-shadow-menu: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    --stolon-shell-shadow-drawer: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12);
+    --stolon-shell-scrim: rgba(0, 0, 0, 0.5);
+    /* The shell's colors, from the palette the web client's theme sets, which the shell's script writes for each theme. */
+    --stolon-shell-bar-bg: var(--jf-palette-AppBar-defaultBg, #202020);
+    --stolon-shell-hover: var(--jf-palette-action-hover, rgba(255, 255, 255, 0.08));
+    --stolon-shell-focus: var(--jf-palette-action-focus, rgba(255, 255, 255, 0.12));
+    --stolon-shell-divider: var(--jf-palette-divider, rgba(255, 255, 255, 0.12));
+    --stolon-shell-icon-color: var(--jf-palette-action-active, #fff);
+    --stolon-shell-text-secondary: var(--jf-palette-text-secondary, rgba(255, 255, 255, 0.7));
+    --stolon-shell-avatar-bg: var(--jf-palette-primary-dark, rgb(0, 114, 154));
+    --stolon-shell-selected: rgba(0, 164, 220, 0.2);
+    /* Material UI's paper overlays at elevations 1, 8, and 16, which only its dark themes have. The shell's script sets them per theme. */
+    --stolon-shell-overlay-1: none;
+    --stolon-shell-overlay-8: none;
+    --stolon-shell-overlay-16: none;
+
     /* Discord's dark theme, for the Notify Preview's Discord post only, so it looks as Discord shows it in any Jellyfin theme. */
     --stolon-discord-bg: #313338;
     --stolon-discord-embed: #2b2d31;

@@ -57,9 +57,10 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `FileNameSanitizer` | Makes a string a safe cross-platform file name. | [Files and Paths](files-and-paths.md#filenamesanitizer) |
 | `FormatUtilities` | Formats byte counts and makes text safe for a log. | [Text and Formatting](text-and-formatting.md#formatutilities) |
 | `HashUtilities` | Short SHA-256 fingerprints and the full SHA-256 hex of a string. | [Text and Formatting](text-and-formatting.md#hashutilities) |
-| `HostedPage` | Serves a user page at a root path of the server, for anyone, signed in users, or administrators. | [Pages and Templates](pages-and-templates.md#hostedpage) |
+| `HostedPage` | Serves a page at a root path of the server, in the user page frame or the web client shell, for anyone, signed in users, or administrators. | [Pages and Templates](pages-and-templates.md#hostedpage) |
 | `HostedPageAccess` | Who may open a hosted page. | [Pages and Templates](pages-and-templates.md#hostedpageaccess) |
 | `HostedPageContent` | What a hosted page serves, a template or an embedded fragment. | [Pages and Templates](pages-and-templates.md#hostedpagecontent) |
+| `HostedPageFrame` | The frame a hosted page is drawn in, the user page or the web client shell. | [Pages and Templates](pages-and-templates.md#hostedpageframe) |
 | `HttpResult` | The status and body that `StolonHttp` returns. | [HTTP and Resilience](http-and-resilience.md#httpresult) |
 | `HttpRetry` | Names the statuses worth asking again and reads Retry-After. | [HTTP and Resilience](http-and-resilience.md#httpretry) |
 | `INotifyHeldStore` | The plugin's store for Jellyfin messages that wait for a device. | [Notifications](notifications.md#inotifyheldstore) |
@@ -104,6 +105,10 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `ThrottledReadStream` | A read through stream held to the rate of a `SpeedBucket`. | [Streams and Throttling](streams-and-throttling.md#throttledreadstream) |
 | `UrlUtilities` | Reads text as an absolute http or https URL. | [Security and Secrets](security-and-secrets.md#urlutilities) |
 | `UtcTime` | Formats and parses stored times as UTC. | [Text and Formatting](text-and-formatting.md#utctime) |
+| `WebClientApp` | The manifest and service worker that install a web client shell page as an app. | [Pages and Templates](pages-and-templates.md#webclientapp) |
+| `WebClientAppIcon` | One icon of a web app manifest. | [Pages and Templates](pages-and-templates.md#webclientappicon) |
+| `WebClientCheck` | Warns at startup about classes the web client lacks, and about a changed web client. | [Pages and Templates](pages-and-templates.md#webclientcheck) |
+| `WebClientDetailsTemplate` | The web client's details page template, with Stolon's copy when the web client has none. | [Pages and Templates](pages-and-templates.md#webclientdetailstemplate) |
 | `WebPushEncryption` | Encrypts a web push as RFC 8291 sets out. | [Notifications](notifications.md#webpushencryption) |
 | `WebPushKeys` | The VAPID key pair that signs every web push. | [Notifications](notifications.md#webpushkeys) |
 | `WebPushSubscription` | One browser signed up for a user's web push. | [Notifications](notifications.md#webpushsubscription) |

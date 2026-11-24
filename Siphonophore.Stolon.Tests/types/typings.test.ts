@@ -233,6 +233,38 @@ B.setUserPageMessage(view, 'error', 'That username is taken.');
 // @ts-expect-error A message state is one of the four names.
 B.setUserPageMessage(view, 'danger', 'No.');
 
+// The web client shell and its markup.
+var shellSession: Promise<B.WebClientShellSession | null> = B.startWebClientShell({ translations: 'MyPlugin/Translations', menuItems: [{ text: 'Alerts', icon: 'Notifications', select: function () { return undefined; } }] });
+shellSession.then(function (s) { if (s) { s.toast.show('Saved.', 'Undo', function () { return undefined; }); s.destroy(); } });
+var look: B.WebClientLook = B.applyWebClientLook({ userId: 'u1', themes: [{ id: 'dark', default: true }], storage: null });
+var palette: string = B.WEB_CLIENT_PALETTES.dark['--jf-palette-primary-main'];
+var webButton: B.WebOverlayButton = { action: 'request', icon: 'add', title: 'Request' };
+var markup: string = B.webCssUrl('a.jpg') + B.WEB_SPINNER + B.webEmptyState('Nothing', 'Add one.') + B.webSecondaryText('Line') + B.webNoResultsText('x')
+    + B.webRaisedButton('r', 'Retry') + B.webBlockButton('b', 'Go', 'submit') + B.webIcon(Object.keys(B.WEB_ICONS)[0]) + B.webLibraryIcon({ Id: 'a', CollectionType: 'movies' })
+    + B.webLibraryRoute({ Id: 'a' }) + String(B.webUserViewsShown(4, 800)) + B.webNavButton('web/', '', 'Movies', true) + B.webNavMoreButton()
+    + B.webMenuItem('', 'Settings', 'web/') + B.webMenuDivider() + B.webDrawerList(B.webDrawerItem('web/', '', 'Home'), true, 'Libraries')
+    + B.WEB_FORM_DIALOG.box + B.WEB_CONFIRM_DIALOG.footer + B.webConfirmDialogWidth(800) + B.webFormDialogFooter('Save') + B.webConfirmDialogFooter('Delete', 'delete')
+    + B.webCancelDialogFooter('Send') + B.webActionsDialogFooter([{ id: 'a', text: 'A' }]) + B.webConfirmDialogBody('Sure?')
+    + B.webFilterPopover('f', 'Filters', B.webFilterAccordion('g', 'Genres', B.webFilterCheckbox({ 'data-value': 'x' }, 'Drama', true)) + B.webResetFiltersButton('r', 'Reset filters'))
+    + B.webSelectField('s', 'Sort', [{ value: 'a', text: 'A' }]) + B.webSelectOptions([]) + B.webTextareaField({ id: 't', label: 'Note', maxLength: 10, descriptions: [{ text: 'x', id: 'y' }] })
+    + B.webFieldDescription('x') + B.WEB_CHECKBOX_LIST + B.webCheckboxListContainer('Seasons', 'box', 'Loading') + B.webCheckbox({ id: 'c' }, 'One', null, true)
+    + B.webSettingsCheckbox('n', 'Notify', 'nd') + B.webLinkButton({ id: 'all' }, 'Select all') + B.webPaperList('')
+    + B.webCard({ title: 'Film', shape: B.WEB_CARD_GRID, buttons: [webButton], indicator: { icon: 'check', title: 'Played' } }) + B.webCardImage(null, 'Film')
+    + String(B.webDefaultColorIndex('Film')) + B.webDefaultCardIcon('Movie') + B.webIndicator(null) + B.webProgressBar(0.5)
+    + B.webPosterCard(B.WEB_CARD_ROW, null, 'Poster') + B.webPlaceholderCards(2) + B.webPlaceholderGrid(2) + B.webPlaceholderLines(2) + B.webPlaceholderRow(2)
+    + B.webScrollButtons('row') + B.webCardSection({ id: 'row', title: 'Row', inner: '', scroll: true }) + B.webSearchSuggestions([{ href: '#', text: 'A' }])
+    + B.webDetailGrid('Movies', '') + B.webChildrenGrid('') + B.webBdi('Name') + B.webMediaInfoItem('x') + B.webOfficialRating('PG') + B.webStarRating(7)
+    + B.webCriticRating(80) + B.webInfoRow('') + B.webDetailButton(null, 'info', 'Info') + B.webDetailLinkButton('#', 'link', 'Link') + B.webFavoriteButton('f', false)
+    + B.webMediaInfoContent(B.webMediaInfoSource('File', B.webMediaInfoStream('Video', B.webMediaInfoAttribute('Codec', 'h264'))))
+    + B.webDetailsGroupItem('Genres', B.webPersonLinks([{ href: '#', name: 'A' }]), true) + B.webExternalLinks([{ href: '#', text: 'IMDb' }]);
+var adopted: boolean = B.adoptDetailsTemplate(view);
+B.webFillDetailSection(view, 'cast', 'Cast', markup);
+var toaster: B.WebToasterHandle = B.createWebToaster(view);
+// @ts-expect-error A card needs its title.
+B.webCard({ image: 'a.jpg' });
+// @ts-expect-error A menu entry needs its text.
+B.startWebClientShell({ menuItems: [{ icon: 'star' }] });
+
 var thumbColumn: B.TableColumn<Row> = { key: 'name', label: 'Name', image: function () { return function () { return Promise.resolve(new Blob()); }; } };
 
-export { page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn };
+export { page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn, shellSession, look, palette, markup, adopted, toaster };

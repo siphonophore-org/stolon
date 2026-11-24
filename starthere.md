@@ -65,6 +65,7 @@ These commands matter to a contributor. The CI column says which workflow runs e
 | `scripts/pack.sh` | Local only | Bundles and packs a local package, versioned as the next release with a dev suffix, so a plugin can test unreleased work. |
 | `npm run strings` | Local only | Runs `scripts/fetch-jellyfin-strings.mjs`, which the bundle also runs. `--force` fetches again. |
 | `npm run strings:bump -- <tag>` | Local only | Runs `scripts/bump-jellyfin.mjs`, which moves `jellyfin.json` to another Jellyfin release and lists the keys that changed. See [skills/release.md](skills/release.md#move-to-another-jellyfin-release). |
+| `scripts/web-client-parity.js` | Local only | Pasted into the browser console on a signed in `/web/`, it compares a plugin's web client shell page with the web client side by side. See the Web Client Shell page on the docs site. |
 
 ## Verify Before Done
 
