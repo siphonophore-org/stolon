@@ -310,9 +310,22 @@ Icons come from the Material Icons font that Jellyfin's dashboard loads, drawn t
 * Every component works at phone width. Check each new or changed component in the [gallery](testing.md#the-gallery) at desktop width, about 1280px, at tablet width, 768px, and at phone width, 375px.
 * Never set a width in pixels on a field. Let it fill its container.
 * **Two window breakpoints, never a new one.** `max-width: 768px` is tablet and below, and `max-width: 600px` is a phone, where a filter panel opens as a dialog and wide grids stack. A new rule uses one of these two.
-* **A component's own layout follows its own width,** measured with a ResizeObserver, not the window. It turns compact when its contents no longer fit side by side, worked out from what it holds, such as a repeater's fields or a table's number columns, or at 480px for a two-part layout such as a QR code beside its buttons.
+* **A component's own layout follows its own width,** measured with `fitWidth` in `lib/fit.ts`, never the window. It turns compact when its contents no longer fit side by side, worked out from what it holds, such as a repeater's fields or a table's number columns, or at 480px for a two-part layout such as a QR code beside its buttons.
 * **A ResizeObserver does not run in a background tab.** A component also measures once on the next tick after it is built, so it starts in the right layout.
 * A dialog on a touch screen never focuses a text field automatically.
+
+### When Space Runs Out
+
+Every component gives way in the same order as its width shrinks. It takes the next step only when the one before is not enough.
+
+1. **Short labels never wrap.** A badge, tag, pill, status pill, or button stays on one line at full size.
+2. **Secondary text shortens first,** with an ellipsis and the full text in its tooltip. The main title shortens last.
+3. **Optional parts drop,** least important first, such as an address before a city.
+4. **Labels turn into icons,** keeping the label as the tooltip and the accessible name.
+5. **The end control moves under the text,** such as a row's aside or a card's actions. It never covers the text.
+6. **Only then does the content scroll,** inside its own frame and as one piece, never the page.
+
+`scripts/check-layout.mjs` loads every preview at 320, 480, and 800px and fails on a page that scrolls sideways, a part past the edge, a short label on two lines, or text drawn over text. Run it after `scripts/build-previews.mjs` with `PLAYWRIGHT_CORE` and `CHROMIUM` set when playwright-core is not installed.
 
 ## Accessibility
 
@@ -385,7 +398,7 @@ Run every new or changed component through this list.
 * [ ] Its sizes, spacing, rounding, shadows, and colors are tokens.
 * [ ] Placed beside a field, a button, or a row, it is the same height and lines up.
 * [ ] Icons are centered on the first line of their text, and headings line up with their values.
-* [ ] Nothing spills out of its frame at tablet or phone width, and no text is shrunk to fit.
+* [ ] Nothing spills out of its frame at tablet or phone width, no text is shrunk to fit, and `scripts/check-layout.mjs` passes.
 * [ ] Every mark on screen carries information.
 * [ ] It takes a named color or a hex code wherever it takes a color, through the color core, and never relies on color alone.
 * [ ] It uses the accent only for interaction and selection, and status colors only for states.

@@ -1,3 +1,4 @@
+import { fitWidth } from './lib/fit.js';
 import { make, listen, runAll, toText } from './lib/dom.js';
 import { applyColor } from './lib/color.js';
 import { buildChart, svgEl, seriesColor, formatValue } from './lib/chart.js';
@@ -277,15 +278,9 @@ export function createPieChart(options?: PieChartOptions): PieChartHandle {
     paintSelection();
 
     // The legend sits beside the pie while the chart is wide enough for both, and under it when it is not.
-    function fit(): void {
-        var width = root.clientWidth || 0;
-        root.classList.toggle('stolon-compact', !!width && width < COMPACT_WIDTH);
-    }
-    if (typeof ResizeObserver !== 'undefined') {
-        var watch = new ResizeObserver(fit);
-        watch.observe(root);
-        cleanups.push(function () { watch.disconnect(); });
-    }
+    var fitter = fitWidth(root, function (width) { return width < COMPACT_WIDTH; });
+    var fit = fitter.check;
+    cleanups.push(fitter.stop);
     var tick = setTimeout(fit, 0);
     cleanups.push(function () { clearTimeout(tick); });
 

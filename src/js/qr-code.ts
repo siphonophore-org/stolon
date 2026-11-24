@@ -1,3 +1,4 @@
+import { fitWidth } from './lib/fit.js';
 import { make, icon, iconButton, listen, runAll, toText, nextId, fill } from './lib/dom.js';
 import { openDialog } from './dialog.js';
 import type { DialogHandle } from './dialog.js';
@@ -159,16 +160,7 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
             side.appendChild(field.element);
         }
     }
-    var fit = function (): void {
-        var width = root.clientWidth || 0;
-        root.classList.toggle('stolon-compact', !inline && !!width && width < 480);
-    };
-    if (!inline && typeof ResizeObserver !== 'undefined') {
-        var watch = new ResizeObserver(fit);
-        watch.observe(root);
-        cleanups.push(function () { watch.disconnect(); });
-    }
-    setTimeout(fit, 0);
+    if (!inline) cleanups.push(fitWidth(root, function (width) { return width < 480; }).stop);
 
     function draw(): void {
         frame.innerHTML = '';

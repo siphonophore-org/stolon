@@ -1,3 +1,4 @@
+import { fitWidth } from './lib/fit.js';
 import { make, icon, iconButton, listen, runAll, idOf, fill, toText } from './lib/dom.js';
 import { createFieldGroup } from './lib/field-control.js';
 import type { FieldSpec, FieldGroupHandle } from './lib/field-control.js';
@@ -568,19 +569,13 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
     drawSort(opts.sort || null);
 
     // A table too narrow for its number columns at full width turns compact: narrower number columns and icon headings.
-    function fit(): void {
-        var ends = shown().filter(function (c) { return narrow(c) && !c.width; }).length;
-        var width = root.clientWidth || 0;
-        root.classList.toggle('stolon-compact', !!width && width < ends * 100 + 240);
-    }
-    if (typeof ResizeObserver !== 'undefined') {
-        var watch = new ResizeObserver(fit);
-        watch.observe(root);
-        cleanups.push(function () { watch.disconnect(); });
-    } else {
-        cleanups.push(listen(window, 'resize', fit));
-    }
-    fit();
+    // A number column given its own width counts too, so a wide heading still turns into its icon.
+    var fitter = fitWidth(root, function (width) {
+        var ends = shown().filter(narrow).length;
+        return width < ends * 100 + 240;
+    });
+    var fit = fitter.check;
+    cleanups.push(fitter.stop);
 
     function setColumnHidden(key: string, hidden: boolean): void {
         if (!columnOf(key) || !!hiddenKeys[key] === !!hidden) return;

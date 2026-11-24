@@ -1,3 +1,4 @@
+import { fitWidth } from './lib/fit.js';
 import { make, listen, runAll, fillAll, toText, applyFieldSize } from './lib/dom.js';
 import { createRowSet, rowLabel, moveButtons, refocusAfterMove } from './lib/row-editor.js';
 import type { RowSetRow } from './lib/row-editor.js';
@@ -321,18 +322,7 @@ export function buildRepeater(options: RepeaterOptions, parts: RepeaterParts | n
     if (!card) {
         // Each field needs room for a short value, and a toggle only the room of its box.
         var needed = fields.reduce(function (sum, f) { return sum + (f.type === 'toggle' ? 48 : 160); }, 0) + 80;
-        var fit = function (): void {
-            var width = root.clientWidth || 0;
-            root.classList.toggle('stolon-compact', !!width && width < needed);
-        };
-        if (typeof ResizeObserver !== 'undefined') {
-            var watch = new ResizeObserver(fit);
-            watch.observe(root);
-            cleanups.push(function () { watch.disconnect(); });
-        } else {
-            cleanups.push(listen(window, 'resize', fit));
-        }
-        fit();
+        cleanups.push(fitWidth(root, function (width) { return width < needed; }).stop);
     }
 
     setValue(opts.value);
