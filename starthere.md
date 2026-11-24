@@ -57,7 +57,8 @@ These commands matter to a contributor. The CI column says which workflow runs e
 | `dotnet pack Siphonophore.Stolon.csproj -c Release -o nupkg` | build | Packs the package. |
 | `node scripts/build-page-script.mjs` | Local only | Writes the standalone page script from `src/js/lib/page-script.ts` into `src/StolonPageScript.cs`. `--check` fails when the C# is out of date, and the JS tests check the same. |
 | `bash scripts/check-package.sh nupkg/<package>.nupkg` | build, release | Checks the package holds every file the targets load, at its path, and every Jellyfin language file. |
-| `node scripts/build-previews.mjs` | docs | Builds the live preview pages from `docs/previews/`, for the docs site and the gallery. Run it after the bundle. |
+| `node scripts/check-layout.mjs` | layout | Loads every preview at 320, 480, and 800px and fails on a page that scrolls sideways, a part past the edge, a short label on two lines, or text drawn over text. Run it after the previews. |
+| `node scripts/build-previews.mjs` | docs, layout | Builds the live preview pages from `docs/previews/`, for the docs site and the gallery. Run it after the bundle. |
 | `mkdocs build --strict` | docs | Builds the docs site and fails on any warning, such as a broken link. Run it after the previews. |
 | `npm run typecheck` | Local only | Type checks `src/js` without the bundle. The bundle runs the same check. |
 | `scripts/gallery.sh` | Local only | Bundles and serves the gallery on port 8080, or the port given as its argument. |
@@ -104,7 +105,7 @@ Explain what you would change, why, and what it risks. Wait for an answer before
 | `jellyfin.json` | The Jellyfin version every package version starts with, and the jellyfin-web and jellyfin tags the strings come from. |
 | `strings/` | Stolon's own strings, built into every plugin: `en-us.json` with the `Stolon.` keys, and `jellyfin.json` with the Jellyfin strings Stolon's components use. Packed under `strings/`. |
 | `scripts/` | Bundle, pack, gallery, preview, docs, check, Jellyfin strings fetch, and Jellyfin bump scripts. |
-| `.github/workflows/` | `build.yaml`, which bundles, checks, tests, and packs every push and pull request to `main` that changes more than Markdown, `release.yaml`, which runs the same checks and tests before it packs and publishes, and `docs.yaml`, which bundles, checks the docs, builds the previews, and publishes the site. |
+| `.github/workflows/` | `build.yaml`, which bundles, checks, tests, and packs every push and pull request to `main` that changes more than Markdown, `release.yaml`, which runs the same checks and tests before it packs and publishes, `docs.yaml`, which bundles, checks the docs, builds the previews, and publishes the site, `layout.yaml`, which runs the layout check, and `scan-codeql.yaml`, which scans the C# and the TypeScript with CodeQL. |
 | `Siphonophore.Stolon.Tests/` | The xUnit tests, the JS tests in `js/`, the gallery in `gallery/`, the golden bundle in `golden/`, the typings test in `types/`, and `Fixtures/`. |
 | `docs/` | The docs site pages, built with MkDocs. The home page, the usage page, the releasing page, and the Components section, with one page per web component in `components/web/` and the C# pages in `components/csharp/`. |
 | `docs/previews/` | The live preview snippets, the shared shell, and the Jellyfin stubs. Built into `docs/assets/previews/`, which is not committed. |

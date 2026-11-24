@@ -20,6 +20,7 @@ Test each behavior at the lowest layer that can prove it. Go up a layer only for
 | Typings | The shipped typings accept good calls and reject bad ones | `scripts/check-types.sh` | Seconds |
 | Docs | Every page's Reference matches the code, and every component has a page and preview | `scripts/build-docs.mjs --check` | Seconds |
 | Docs site | The previews build, and the site builds with no broken link or warning | `scripts/build-previews.mjs`, then `mkdocs build --strict`, both run by `docs.yaml` | Seconds |
+| Layout | No preview scrolls sideways, spills past the edge, wraps a short label, or draws text over text at 320, 480, or 800px | `scripts/check-layout.mjs`, run by `layout.yaml` | A minute |
 | Gallery | Every component looks right in a real browser at desktop, tablet, and phone width | `scripts/gallery.sh` | Minutes |
 | Consumer build | A plugin still builds and works against a local pack | `scripts/pack.sh` | Minutes |
 
@@ -45,6 +46,8 @@ There is no Docker pool, no integration suite, and no matrix. Stolon has no runn
 4. The C# tests.
 
 `docs.yaml` runs its own order. It bundles, runs `scripts/build-docs.mjs --check`, builds the previews, and runs `mkdocs build --strict`.
+
+`layout.yaml` bundles, builds the previews, installs Chromium, and runs `scripts/check-layout.mjs`. `scan-codeql.yaml` scans the C# and the TypeScript with CodeQL on every change and once a week.
 
 ## Layout
 

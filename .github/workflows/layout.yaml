@@ -1,0 +1,58 @@
+name: '🧭 Check Layout'
+
+# Loads every preview page in Chromium at 320, 480, and 800px and fails on a page that scrolls sideways, a part
+# past the edge, a short label on two lines, or text drawn over text. See scripts/check-layout.mjs.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/css/**'
+      - 'src/js/**'
+      - 'src/templates/**'
+      - 'docs/previews/**'
+      - 'scripts/**'
+      - '.github/workflows/layout.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/css/**'
+      - 'src/js/**'
+      - 'src/templates/**'
+      - 'docs/previews/**'
+      - 'scripts/**'
+      - '.github/workflows/layout.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  layout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Bundle shared assets
+        run: bash scripts/bundle.sh
+
+      - name: Build previews
+        run: node scripts/build-previews.mjs
+
+      # Chromium comes from playwright-core, installed for this job only so the repository keeps two dev tools.
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright-core@1.49.1
+          npx playwright-core install --with-deps chromium
+
+      - name: Check layout
+        run: node scripts/check-layout.mjs
