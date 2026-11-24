@@ -328,7 +328,7 @@ Every component gives way in the same order as its width shrinks. It takes the n
 5. **The end control moves under the text,** such as a row's aside or a card's actions. It never covers the text.
 6. **Only then does the content scroll,** inside its own frame and as one piece, never the page.
 
-`scripts/check-layout.mjs` loads every preview at 320, 480, and 800px and fails on a page that scrolls sideways, a part past the edge, a short label on two lines, or text drawn over text. Run it after `scripts/build-previews.mjs` with `PLAYWRIGHT_CORE` and `CHROMIUM` set when playwright-core is not installed.
+`scripts/check-layout.mjs` loads every preview at ten widths from 320px phones to 1440px desktops and fails on a page that scrolls sideways, a part past the edge, a short label on two lines, or text drawn over text. Run it after `scripts/build-previews.mjs` with `PLAYWRIGHT_CORE` and `CHROMIUM` set when playwright-core is not installed.
 
 ## Accessibility
 

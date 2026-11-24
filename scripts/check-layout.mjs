@@ -19,7 +19,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pages = path.join(root, 'docs', 'assets', 'previews');
-const WIDTHS = [320, 480, 800];
+// Phones, large phones, small and large tablets, laptops, and desktops, so every layout is seen on its way from wide to narrow.
+const WIDTHS = [320, 375, 414, 480, 600, 768, 900, 1024, 1280, 1440];
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png' };
 
 const corePath = process.env.PLAYWRIGHT_CORE || path.join(root, 'node_modules', 'playwright-core', 'index.mjs');

@@ -1,6 +1,6 @@
 name: '🧭 Check Layout'
 
-# Loads every preview page in Chromium at 320, 480, and 800px and fails on a page that scrolls sideways, a part
+# Loads every preview page in Chromium at ten widths from 320px phones to 1440px desktops and fails on a page that scrolls sideways, a part
 # past the edge, a short label on two lines, or text drawn over text. See scripts/check-layout.mjs.
 
 on:

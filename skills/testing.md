@@ -20,7 +20,7 @@ Test each behavior at the lowest layer that can prove it. Go up a layer only for
 | Typings | The shipped typings accept good calls and reject bad ones | `scripts/check-types.sh` | Seconds |
 | Docs | Every page's Reference matches the code, and every component has a page and preview | `scripts/build-docs.mjs --check` | Seconds |
 | Docs site | The previews build, and the site builds with no broken link or warning | `scripts/build-previews.mjs`, then `mkdocs build --strict`, both run by `docs.yaml` | Seconds |
-| Layout | No preview scrolls sideways, spills past the edge, wraps a short label, or draws text over text at 320, 480, or 800px | `scripts/check-layout.mjs`, run by `layout.yaml` | A minute |
+| Layout | No preview scrolls sideways, spills past the edge, wraps a short label, or draws text over text at any of ten widths from 320px to 1440px | `scripts/check-layout.mjs`, run by `layout.yaml` | A few minutes |
 | Gallery | Every component looks right in a real browser at desktop, tablet, and phone width | `scripts/gallery.sh` | Minutes |
 | Consumer build | A plugin still builds and works against a local pack | `scripts/pack.sh` | Minutes |
 

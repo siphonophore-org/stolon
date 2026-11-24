@@ -57,7 +57,7 @@ These commands matter to a contributor. The CI column says which workflow runs e
 | `dotnet pack Siphonophore.Stolon.csproj -c Release -o nupkg` | build | Packs the package. |
 | `node scripts/build-page-script.mjs` | Local only | Writes the standalone page script from `src/js/lib/page-script.ts` into `src/StolonPageScript.cs`. `--check` fails when the C# is out of date, and the JS tests check the same. |
 | `bash scripts/check-package.sh nupkg/<package>.nupkg` | build, release | Checks the package holds every file the targets load, at its path, and every Jellyfin language file. |
-| `node scripts/check-layout.mjs` | layout | Loads every preview at 320, 480, and 800px and fails on a page that scrolls sideways, a part past the edge, a short label on two lines, or text drawn over text. Run it after the previews. |
+| `node scripts/check-layout.mjs` | layout | Loads every preview at ten widths from 320px phones to 1440px desktops and fails on a page that scrolls sideways, a part past the edge, a short label on two lines, or text drawn over text. Run it after the previews. |
 | `node scripts/build-previews.mjs` | docs, layout | Builds the live preview pages from `docs/previews/`, for the docs site and the gallery. Run it after the bundle. |
 | `mkdocs build --strict` | docs | Builds the docs site and fails on any warning, such as a broken link. Run it after the previews. |
 | `npm run typecheck` | Local only | Type checks `src/js` without the bundle. The bundle runs the same check. |
