@@ -486,8 +486,8 @@ input.stolon-check-row-input:disabled { opacity: 0.4; cursor: default; }
 .pluginConfigurationPage form,
 .pluginConfigurationPage .readOnlyContent { max-width: none; }
 
-/* A lone field keeps a readable width on a full-width page. A field in a row of fields still shares the row. */
+/* A field fills its section, so fields, section headings, and Save line up at one width. */
 /* Example: <div class="inputContainer"><label for="host">Host</label><input is="emby-input" id="host"></div> */
 .pluginConfigurationPage .inputContainer,
 .pluginConfigurationPage .selectContainer,
-.pluginConfigurationPage .stolon-field { max-width: var(--stolon-field-max); }
+.pluginConfigurationPage .stolon-field { max-width: none; }

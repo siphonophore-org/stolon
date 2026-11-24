@@ -101,7 +101,7 @@ Never use color alone. A badge always has a word, and a dot always has a `title`
 
 * There are two spacings. `--stolon-gap-wide` (24px) sits between components, such as one field row and the next, and under a title. `--stolon-gap-narrow` (12px) sits inside a component, such as a label and its field, a field and its hint, and the items or buttons in a group. Every gap and margin in the kit is one of them.
 * The size scale is `--stolon-size-small`, `--stolon-size-medium`, and `--stolon-size-large` (24, 32, and 40px tall), with the matching `--stolon-font-*`, `--stolon-pad-*`, `--stolon-icon-*`, and `--stolon-line-*` line heights. Fields read it through `--stolon-field-height`, `--stolon-field-font`, and `--stolon-field-pad`, which default to medium.
-* A config page uses the whole width of the screen. Stolon lifts the 54em cap Jellyfin puts on a form, so tables, card grids, and the tool shell reach the end of the page. A lone field stops at `--stolon-field-max` (800px) so a text box stays easy to read, and a field in a row of fields shares the row.
+* A config page uses the whole width of the screen. Stolon lifts the 54em cap Jellyfin puts on a form, so tables, card grids, and the tool shell reach the end of the page. A field fills its section, so fields, section headings, and Save line up at one width, and a field in a row of fields shares the row.
 * `--stolon-chevron-primary` (24px) and `--stolon-chevron-secondary` (18px) are the two chevron sizes.
 * `--stolon-mono` is a mono stack for paths, ids, addresses, and code. The `stolon-mono` class applies it. See [Utility Classes](utility-classes.md).
 * `--stolon-sans` is the web client's font stack, for a [User Page](user-page.md) only, since every other page inherits Jellyfin's font.

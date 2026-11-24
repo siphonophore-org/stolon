@@ -54,9 +54,6 @@
     /* The web client's font stack, for a user page that loads no Jellyfin theme. Every other page inherits Jellyfin's font. */
     --stolon-sans: "Noto Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-    /* The widest a lone field grows on a page that uses the whole width, so a text box stays easy to read. */
-    --stolon-field-max: calc(var(--stolon-size-large) * 20);
-
     /* The size scale every field, button, pill, badge, and tag takes, as small, medium, or large. Medium matches a text field. */
     --stolon-size-small: 24px;
     --stolon-size-medium: 32px;
