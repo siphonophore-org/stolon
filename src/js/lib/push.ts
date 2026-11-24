@@ -126,7 +126,9 @@ function sameKey(sub: PushSubscription, key: Uint8Array): boolean {
  * @param text the base64url text
  */
 export function urlBase64Bytes(text: string): Uint8Array {
-    var clean = String(text || '').trim().replace(/=+$/, '');
+    // The padding comes off with a loop, since a pattern for trailing = runs slowly on text full of them.
+    var clean = String(text || '').trim();
+    while (clean.charAt(clean.length - 1) === '=') clean = clean.slice(0, -1);
     if (!/^[A-Za-z0-9_-]*$/.test(clean)) return new Uint8Array(0);
     var base64 = clean.replace(/-/g, '+').replace(/_/g, '/');
     while (base64.length % 4) base64 += '=';

@@ -1,8 +1,8 @@
-<img src="https://raw.githubusercontent.com/siphonophore-org/siphonophore/main/brand/stolon/logo.svg" alt="Stolon" width="96" align="left">
+<img src="https://raw.githubusercontent.com/siphonophore-org/siphonophore/main/brand/stolon/banner.svg" alt="Stolon: Part of the Siphonophore project" width="100%">
+
+# Stolon
 
 Shared configuration page components and C# helpers for Jellyfin plugins, delivered as the `Siphonophore.Stolon` NuGet package on GitHub Packages. The source and assets are compiled into each plugin at build time, so a plugin stays a single DLL with nothing extra to ship.
-
-<br clear="left">
 
 ## Documentation
 
@@ -22,4 +22,3 @@ Usage, translations, every C# helper, every web component, and how a release wor
 
 The translations a plugin inherits come from [Jellyfin](https://jellyfin.org): the web client's strings from [jellyfin-web](https://github.com/jellyfin/jellyfin-web) and the server's from [jellyfin](https://github.com/jellyfin/jellyfin), written by Jellyfin's translators on [Weblate](https://translate.jellyfin.org). Stolon takes them from the Jellyfin release named in `jellyfin.json` and ships them under their own license, the GNU General Public License v2.0 or later, in the package's `jellyfin/LICENSE`.
 
-<a href="https://github.com/siphonophore-org"><img src="https://raw.githubusercontent.com/siphonophore-org/siphonophore/main/brand/siphonophore/banner.svg" alt="Part of the Siphonophore project" width="100%"></a>

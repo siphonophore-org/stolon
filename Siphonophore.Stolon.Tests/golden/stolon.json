@@ -217,7 +217,7 @@
     "lib/chips": 830,
     "lib/class-names": 167,
     "lib/clock": 1145,
-    "lib/color": 3931,
+    "lib/color": 3939,
     "lib/combo-aria": 1035,
     "lib/data-view": 4771,
     "lib/dialog": 7010,
@@ -229,7 +229,7 @@
     "lib/message": 200,
     "lib/popover": 2130,
     "lib/pressed-group": 1286,
-    "lib/push": 3578,
+    "lib/push": 3624,
     "lib/qr": 5849,
     "lib/row-editor": 3301,
     "lib/selection": 1936,
@@ -238,7 +238,7 @@
     "lib/thumb": 3234,
     "lib/typeahead": 4394,
     "lib/users": 1549,
-    "lib/validate": 9241,
+    "lib/validate": 9259,
     "lib/world-shapes": 52811,
     "line-chart": 1155,
     "list": 8751,
@@ -291,7 +291,7 @@
     "tool-shell": 3150,
     "tooltip": 1745,
     "translations": 3392,
-    "tree-view": 7478,
+    "tree-view": 7548,
     "usage-meter": 3074,
     "user-multi-selector": 1196,
     "user-page": 4208,
@@ -299,5 +299,5 @@
     "web-push": 731,
     "world-map": 6255
   },
-  "bytes": 521344
+  "bytes": 521486
 }

@@ -108,7 +108,8 @@ export function parseColor(text: unknown): Rgba | null {
             a: h.length === 8 ? Math.round(parseInt(h.slice(6, 8), 16) / 255 * 100) / 100 : 1
         };
     }
-    var m = /^rgba?\(\s*(\d{1,3})\s*[,\s]\s*(\d{1,3})\s*[,\s]\s*(\d{1,3})\s*(?:[,/]\s*([\d.]+%?)\s*)?\)$/.exec(t);
+    // Each separator is a comma with any spaces around it, or spaces alone, so no run of spaces can match two ways.
+    var m = /^rgba?\(\s*(\d{1,3})(?:\s*,\s*|\s+)(\d{1,3})(?:\s*,\s*|\s+)(\d{1,3})(?:\s*[,/]\s*([\d.]+%?))?\s*\)$/.exec(t);
     if (!m) return null;
     var rgb = [m[1], m[2], m[3]].map(Number);
     if (rgb.some(function (n) { return n > 255; })) return null;

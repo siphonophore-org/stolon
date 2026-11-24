@@ -243,7 +243,8 @@ export function createTreeView(options?: TreeViewOptions): TreeViewHandle {
     function focusRow(id: string): void {
         active = id;
         draw();
-        var el = root.querySelector<HTMLElement>('[data-id="' + id.replace(/"/g, '\\"') + '"]');
+        // The row is found by comparing ids, not by building a selector from one, so no id can break the selector.
+        var el = Array.prototype.slice.call(root.querySelectorAll('[data-id]')).filter(function (row: HTMLElement) { return row.getAttribute('data-id') === id; })[0] as HTMLElement | undefined;
         if (el) el.focus();
     }
 

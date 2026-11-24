@@ -120,7 +120,9 @@ function currentMessages(): Required<ValidationMessages> {
 
 var SKIPPED_TYPES = ['hidden', 'button', 'submit', 'reset', 'image', 'file', 'search'];
 var TYPED = ['number', 'url', 'email', 'time', 'date'];
-var URL_TEXT = /^[a-z][a-z0-9+.-]*:\/\/[^\s/?#]+\S*$/i;
+// The host runs up to the first /, ?, or #, and anything after starts with one of them, so no two parts can match the
+// same characters and a long address never makes the test slow.
+var URL_TEXT = /^[a-z][a-z0-9+.-]*:\/\/[^\s/?#]+(?:[/?#]\S*)?$/i;
 var EMAIL_TEXT = /^[^\s@]+@[^\s@]+$/;
 var TIME_TEXT = /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d(\.\d+)?)?$/;
 var DATE_TEXT = /^(\d{4,})-(\d{2})-(\d{2})$/;
@@ -239,7 +241,7 @@ export function validateValue(value: string, rules: ValidationRules, options?: V
         var low = num(rules.min);
         var high = num(rules.max);
         var step = rules.step === 'any' ? null : num(rules.step);
-        if (n === null || !/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(text.trim())) problem = m.number;
+        if (n === null || !/^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[-+]?\d+)?$/i.test(text.trim())) problem = m.number;
         else if ((low !== null && n < low) || (high !== null && n > high)) {
             if (low !== null && high !== null) problem = fill(named ? m.rangeNoun : m.range);
             else if (low !== null) problem = fill(named ? m.minNoun : m.min);
