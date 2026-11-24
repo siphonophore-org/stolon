@@ -73,6 +73,7 @@ public sealed class NotifyHeldWatcher : IHostedService, IDisposable
         }
         catch (OperationCanceledException)
         {
+            // The server is stopping, so the held messages wait for the next start.
         }
         catch (Exception ex)
         {

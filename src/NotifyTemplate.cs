@@ -85,6 +85,7 @@ public static partial class NotifyTemplate
         }
         catch (JsonException)
         {
+            // A body that is not JSON is filled as plain text below.
         }
 
         return (Filled(null), false);
