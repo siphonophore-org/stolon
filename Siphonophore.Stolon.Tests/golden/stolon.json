@@ -145,8 +145,11 @@
     "setFieldState",
     "setTabs",
     "setTooltip",
+    "setUserPageMessage",
     "shiftDays",
+    "showUserPageView",
     "snapTime",
+    "startUserPage",
     "subscribeWebPush",
     "textOn",
     "titleCase",
@@ -162,7 +165,7 @@
   ],
   "components": {
     "access-schedule": 5593,
-    "audio-player": 3730,
+    "audio-player": 3734,
     "avatar-stack": 1490,
     "avatar": 2998,
     "badge": 850,
@@ -230,7 +233,7 @@
     "lib/qr": 5849,
     "lib/row-editor": 3301,
     "lib/selection": 1936,
-    "lib/stolon-text": 11233,
+    "lib/stolon-text": 11480,
     "lib/text-case": 3309,
     "lib/thumb": 3234,
     "lib/typeahead": 4394,
@@ -257,7 +260,7 @@
     "preview-frame": 3922,
     "progress-ring": 1504,
     "prompt-dialog": 2491,
-    "qr-code": 6246,
+    "qr-code": 6329,
     "record-list": 2797,
     "relative-time": 3034,
     "repeater": 5963,
@@ -291,9 +294,10 @@
     "tree-view": 7478,
     "usage-meter": 3074,
     "user-multi-selector": 1196,
+    "user-page": 4208,
     "user-selector": 1529,
     "web-push": 731,
     "world-map": 6255
   },
-  "bytes": 516752
+  "bytes": 521344
 }

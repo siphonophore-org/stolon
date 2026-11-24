@@ -20,6 +20,7 @@ export interface QrCodeOptions {
     dialogTitle?: string;
     label?: string;
     showValue?: boolean;
+    showActions?: boolean;
     fileName?: string;
     copyImageText?: string;
     downloadText?: string;
@@ -103,6 +104,7 @@ function qrPaths(grid: boolean[][]): { dots: string; eyes: string } {
  *   dialogTitle    : the inline dialog's title (default 'QR code')
  *   label          : the code's accessible name (default 'QR code for' and the text)
  *   showValue      : false hides the Copy Field under the code (default true)
+ *   showActions    : false hides Copy image and Download, for a page that offers its own download (default true)
  *   fileName       : the name of the downloaded PNG (default 'qr-code.png')
  *   copyImageText  : the copy button's label (default 'Copy image')
  *   downloadText   : the download button's label (default 'Download')
@@ -172,7 +174,9 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
         message.element.hidden = !tooLong;
         if (showBtn) showBtn.disabled = !grid;
         frame.hidden = !grid;
-        actions.hidden = !grid;
+        actions.hidden = !grid || opts.showActions === false;
+        // With nothing beside it, the side would add an empty gap under the code.
+        side.hidden = message.element.hidden && actions.hidden && !field;
         frame.setAttribute('aria-label', opts.label || fill(stolonText('Stolon.QrCodeFor'), value));
         if (!grid) return;
         var n = grid.length + QUIET * 2;

@@ -193,3 +193,5 @@ export { webPushState, subscribeWebPush, unsubscribeWebPush, webPushText, webPus
 export type * from './web-push.js';
 export type { ChartSeries } from './lib/chart.js';
 export type { ThumbSource } from './lib/thumb.js';
+export { startUserPage, showUserPageView, setUserPageMessage } from './user-page.js';
+export type * from './user-page.js';

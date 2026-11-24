@@ -198,6 +198,7 @@ The CSS is written to survive the desktop app's Qt WebEngine and older TV webvie
 | [Unsaved Indicator](unsaved-indicator.md) | A fading dirty flag |
 | [Empty State](empty-state.md) | Placeholders for empty regions |
 | [Status Page](status-page.md) | A standalone themed card page |
+| [User Page](user-page.md) | A whole page a plugin hosts for regular users, with its cards, fields, steps, and finished state |
 | [Toast](toast.md) | Stacked transient messages |
 | [Banner](banner.md) | A callout with a Dismiss button |
 | [Status Dot](status-dot.md) | A round status color with a name |

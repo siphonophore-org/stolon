@@ -131,6 +131,17 @@ test('showValue false leaves out the copy field', function () {
     assert.equal(createQrCode({ value: 'a', showValue: false }).element.querySelector('.stolon-copy-field'), null);
 });
 
+test('showActions false hides Copy image and Download while the code shows', function () {
+    var qr = createQrCode({ value: 'a', showActions: false });
+    assert.equal(qr.element.querySelector('.stolon-qr-code-frame').hidden, false);
+    assert.equal(qr.element.querySelector('.stolon-qr-code-actions').hidden, true);
+    qr.setValue('b');
+    assert.equal(qr.element.querySelector('.stolon-qr-code-actions').hidden, true);
+    assert.equal(createQrCode({ value: 'a' }).element.querySelector('.stolon-qr-code-actions').hidden, false);
+    assert.equal(createQrCode({ value: 'a', showActions: false, showValue: false }).element.querySelector('.stolon-qr-code-side').hidden, true);
+    assert.equal(createQrCode({ value: 'a', showActions: false }).element.querySelector('.stolon-qr-code-side').hidden, false);
+});
+
 test('inline draws the text with a QR button beside Copy that opens the full code in a dialog', function () {
     var qr = createQrCode({ value: 'https://example.com', layout: 'inline' });
     assert.ok(qr.element.classList.contains('stolon-inline'));

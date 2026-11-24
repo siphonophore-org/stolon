@@ -1,0 +1,69 @@
+<!-- title: User Page Invite -->
+<iframe id="page" title="Invite page" style="display: block; width: 100%; height: 560px; border: 0; border-radius: 8px;"></iframe>
+<template id="content">
+<div id="steps"></div>
+<section class="stolon-user-page-card" data-stolon-view="form">
+<h1 class="stolon-user-page-title">Create your account</h1>
+<p class="stolon-user-page-lead">Ana invited you to watch on Den. Choose a username and a password.</p>
+<form class="stolon-user-page-form" id="form" data-code="{{CODE}}" novalidate>
+<div class="stolon-user-page-field">
+<label for="username">Username</label>
+<input id="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+</div>
+<div class="stolon-user-page-field">
+<label for="password">Password</label>
+<input id="password" type="password" autocomplete="new-password" required />
+<span class="stolon-user-page-hint">At least 8 characters.</span>
+</div>
+<div class="stolon-user-page-field">
+<label for="confirm">Confirm password</label>
+<input id="confirm" type="password" autocomplete="new-password" required />
+</div>
+<div id="message" class="stolon-user-page-message" hidden></div>
+<div class="stolon-user-page-actions">
+<button class="raised stolon-button stolon-primary stolon-large stolon-fill" type="submit">Create account</button>
+</div>
+</form>
+</section>
+<section class="stolon-user-page-card stolon-user-page-done" data-stolon-view="done" data-stolon-state="success" hidden>
+<span class="stolon-user-page-done-icon"><span class="material-icons" aria-hidden="true">check_circle</span></span>
+<h1 class="stolon-user-page-title" id="welcome">Welcome</h1>
+<p class="stolon-user-page-lead">Your account is ready. Sign in with your new username and password.</p>
+<div class="stolon-user-page-actions">
+<a class="raised stolon-button stolon-primary stolon-large stolon-fill" href="web/">Go to sign in</a>
+</div>
+</section>
+<script type="module">
+// A plugin imports its own bundle, './web/configurationpage?name=myplugin_stolon.js'.
+const base = await import('./base/stolon.js');
+await base.startUserPage();
+const steps = base.createStepper({ steps: [{ id: 'form', label: 'Account' }, { id: 'done', label: 'Sign in' }] });
+document.getElementById('steps').appendChild(steps.element);
+const message = document.getElementById('message');
+
+function finish(name) {
+    document.getElementById('welcome').textContent = 'Welcome, ' + name;
+    steps.setValue('done');
+    base.showUserPageView('done');
+}
+
+document.getElementById('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    if (!name) { base.setUserPageMessage(message, 'error', 'Enter a username.'); return; }
+    if (password.length < 8) { base.setUserPageMessage(message, 'error', 'Use at least 8 characters.'); return; }
+    if (password !== document.getElementById('confirm').value) { base.setUserPageMessage(message, 'error', 'The passwords do not match.'); return; }
+    base.setUserPageMessage(message, 'info', '');
+    // A plugin posts to its API here, such as fetch('MyPlugin/Invites/' + code + '/Redeem'), relative to the server root.
+    finish(name);
+});
+
+if (new URLSearchParams(window.parent.location.search).get('state') === 'done') finish('Sam');
+if (new URLSearchParams(window.parent.location.search).get('state') === 'error') base.setUserPageMessage(message, 'error', 'That username is taken.');
+</script>
+</template>
+<script type="module">
+await window.__baseReady;
+window.__gallery.userPage({ frame: document.getElementById('page'), content: document.getElementById('content'), title: 'Invite', values: { CODE: 'k2x9' }, server: 'Den', mark: 'Invite', markIcon: 'person_add' });
+</script>

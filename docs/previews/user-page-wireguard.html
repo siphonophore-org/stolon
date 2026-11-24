@@ -1,0 +1,77 @@
+<!-- title: User Page WireGuard -->
+<iframe id="page" title="WireGuard setup page" style="display: block; width: 100%; height: 720px; border: 0; border-radius: 8px;"></iframe>
+<template id="content">
+<section class="stolon-user-page-card">
+<h1 class="stolon-user-page-title">Set up {{DEVICE}}</h1>
+<p class="stolon-user-page-lead">This tunnel lets the device reach Den from anywhere. Keep this page to yourself, since the code holds the device's key.</p>
+</section>
+<div class="stolon-user-page-split">
+<section class="stolon-user-page-card">
+<h2 class="stolon-user-page-subtitle">Scan or download</h2>
+<div id="qr"></div>
+<div class="stolon-user-page-actions">
+<button class="raised stolon-button stolon-primary stolon-large stolon-fill" type="button" id="download"><span class="material-icons" aria-hidden="true">download</span><span>Download config</span></button>
+</div>
+</section>
+<section class="stolon-user-page-card" id="setup">
+<h2 class="stolon-user-page-subtitle">Add the tunnel</h2>
+<div class="stolon-pill-group" role="group" aria-label="Platform" id="platforms">
+<button type="button" class="stolon-pill" data-value="phone">Phone</button>
+<button type="button" class="stolon-pill" data-value="desktop">Computer</button>
+<button type="button" class="stolon-pill" data-value="linux">Linux</button>
+</div>
+<ol class="stolon-user-page-steps" data-stolon-view="phone">
+<li>Install WireGuard from the App Store or Google Play.</li>
+<li>Tap the plus button, then Scan from QR code.</li>
+<li>Scan the code on this page and name the tunnel.</li>
+<li>Turn the tunnel on, then open Jellyfin.</li>
+</ol>
+<ol class="stolon-user-page-steps" data-stolon-view="desktop" hidden>
+<li>Install WireGuard from wireguard.com.</li>
+<li>Download the config from this page.</li>
+<li>Choose Import tunnel from file and pick the config.</li>
+<li>Select Activate, then open Jellyfin.</li>
+</ol>
+<ol class="stolon-user-page-steps" data-stolon-view="linux" hidden>
+<li>Install the wireguard-tools package.</li>
+<li>Download the config and move it to /etc/wireguard/den.conf.</li>
+<li>Run wg-quick up den, then open Jellyfin.</li>
+</ol>
+</section>
+</div>
+<script type="module">
+// A plugin imports its own bundle, './web/configurationpage?name=myplugin_stolon.js', and reads the config from its API.
+const base = await import('./base/stolon.js');
+await base.startUserPage();
+const config = [
+    '[Interface]',
+    'PrivateKey = yAnz5TF+lXXJte14tji3zlMNq+hd2rYUIgJBgB3fBmk=',
+    'Address = 10.8.0.2/32',
+    'DNS = 10.8.0.1',
+    '',
+    '[Peer]',
+    'PublicKey = xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=',
+    'AllowedIPs = 10.8.0.0/24',
+    'Endpoint = den.example.com:51820',
+    'PersistentKeepalive = 25'
+].join('\n');
+const qr = base.createQrCode({ value: config, label: 'WireGuard config', showValue: false, showActions: false });
+document.getElementById('qr').appendChild(qr.element);
+document.getElementById('download').addEventListener('click', function () {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([config], { type: 'text/plain' }));
+    link.download = 'den.conf';
+    link.click();
+    URL.revokeObjectURL(link.href);
+});
+const setup = document.getElementById('setup');
+const platforms = base.createPillGroup(document.getElementById('platforms'), {
+    onChange: function (value) { if (value) base.showUserPageView(value, setup); else platforms.set('phone'); }
+});
+platforms.set('phone');
+</script>
+</template>
+<script type="module">
+await window.__baseReady;
+window.__gallery.userPage({ frame: document.getElementById('page'), content: document.getElementById('content'), values: { DEVICE: "Ana's phone" }, title: 'WireGuard', server: 'Den', mark: 'WireGuard', markIcon: 'vpn_key', wide: true });
+</script>

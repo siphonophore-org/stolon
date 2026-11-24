@@ -75,7 +75,7 @@ The values live only in `design-tokens.css`. This table is for reading, and a ru
 
 ## Type
 
-* **The page's font, always.** Stolon inherits Jellyfin's font family and never sets its own, except `--stolon-mono` for code, ids, paths, hex codes, and raw errors.
+* **The page's font, always.** Stolon inherits Jellyfin's font family and never sets its own, except `--stolon-mono` for code, ids, paths, hex codes, and raw errors, and `--stolon-sans`, the web client's stack, on a user page, which loads no Jellyfin theme.
 * **Text sizes come from the scale.** A control's text is its size's `--stolon-font-*`. Secondary lines, hints, captions, and tile labels are `--stolon-font-small`. Nothing writes an `em` or pixel text size.
 * **Weight says rank, in two steps.** 600 marks a name or title the eye should land on, such as a row's title, a card's name, or a large checkbox's label. Everything else is the normal weight. A heading inside a component never goes heavier than 600.
 * **Small labels over values are uppercase.** A table heading, a definition list's column label, and a subsection title are `--stolon-font-small`, uppercase, and dimmed, so they read as labels and never as values.
@@ -175,7 +175,9 @@ Color carries meaning in Stolon, so it is never decoration. Every color a reader
 | `--stolon-<color>-fg`, `--stolon-<color>-bg`, `--stolon-<color>-soft`, `--stolon-<color>-edge` | Each palette color as text and marks, as a badge or tag fill at 20%, as a callout or row tint at 12%, and as that tint's edge at 40% |
 | `--stolon-custom`, `--stolon-custom-on` | A hex color, set on the element by the color core, with the text color that reads on it |
 | `--stolon-shadow-float`, `--stolon-shadow-dialog` | The two shadows, black at an alpha |
+| `--stolon-page-bg` | The page behind a user page, which loads no Jellyfin theme. Follows the theme's background color |
 | `--stolon-mono` | Not a color, but kept with them: the font for code, ids, paths, hex codes, and raw errors |
+| `--stolon-sans` | Not a color either: the web client's font stack, for a user page only |
 | `--stolon-discord-*` | Discord's dark theme, for the Notify Preview's Discord post only, so it looks as Discord shows it in any theme |
 
 ### The Named Colors

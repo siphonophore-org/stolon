@@ -225,6 +225,14 @@ B.subscribeWebPush({ publicKey: 'key' });
 // @ts-expect-error A state is one of the six names.
 B.webPushText('maybe');
 
+// User pages that a plugin hosts.
+var viewer: Promise<B.UserPageSession | null> = B.startUserPage({ translations: 'MyPlugin/Translations', signInText: 'Sign in' });
+viewer.then(function (s) { return s ? s.request('MyPlugin/Devices', { method: 'POST' }) : null; });
+B.showUserPageView('done');
+B.setUserPageMessage(view, 'error', 'That username is taken.');
+// @ts-expect-error A message state is one of the four names.
+B.setUserPageMessage(view, 'danger', 'No.');
+
 var thumbColumn: B.TableColumn<Row> = { key: 'name', label: 'Name', image: function () { return function () { return Promise.resolve(new Blob()); }; } };
 
-export { page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText };
+export { page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer };

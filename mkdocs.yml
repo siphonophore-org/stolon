@@ -142,6 +142,7 @@ nav:
               - Unsaved Indicator: components/web/unsaved-indicator.md
               - Empty State: components/web/empty-state.md
               - Status Page: components/web/status-page.md
+              - User Page: components/web/user-page.md
               - Toast: components/web/toast.md
               - Banner: components/web/banner.md
               - Status Dot: components/web/status-dot.md

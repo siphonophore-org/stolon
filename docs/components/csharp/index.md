@@ -57,6 +57,9 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `FileNameSanitizer` | Makes a string a safe cross-platform file name. | [Files and Paths](files-and-paths.md#filenamesanitizer) |
 | `FormatUtilities` | Formats byte counts and makes text safe for a log. | [Text and Formatting](text-and-formatting.md#formatutilities) |
 | `HashUtilities` | Short SHA-256 fingerprints and the full SHA-256 hex of a string. | [Text and Formatting](text-and-formatting.md#hashutilities) |
+| `HostedPage` | Serves a user page at a root path of the server, for anyone, signed in users, or administrators. | [Pages and Templates](pages-and-templates.md#hostedpage) |
+| `HostedPageAccess` | Who may open a hosted page. | [Pages and Templates](pages-and-templates.md#hostedpageaccess) |
+| `HostedPageContent` | What a hosted page serves, a template or an embedded fragment. | [Pages and Templates](pages-and-templates.md#hostedpagecontent) |
 | `HttpResult` | The status and body that `StolonHttp` returns. | [HTTP and Resilience](http-and-resilience.md#httpresult) |
 | `HttpRetry` | Names the statuses worth asking again and reads Retry-After. | [HTTP and Resilience](http-and-resilience.md#httpretry) |
 | `INotifyHeldStore` | The plugin's store for Jellyfin messages that wait for a device. | [Notifications](notifications.md#inotifyheldstore) |
@@ -130,6 +133,6 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 4. In the service registrator, call `AddPluginSecretProtector(name)` and `AddActivityLogger()` as needed. See [ServiceCollectionExtensions](plugin-and-tasks.md#servicecollectionextensions).
 5. Derive tasks from `PluginScheduledTask`.
 6. Own the dispose of any `ActivitySummary` you create, so waiting events are written on shutdown.
-7. For standalone pages, serve `StatusPage.Render` output with `PublicPage.ApplyHardeningHeaders` and a sibling `favicon.ico` route.
+7. For standalone pages, serve `StatusPage.Render` output with `PublicPage.ApplyHardeningHeaders` and a sibling `favicon.ico` route. For a user page, declare a `HostedPage` and serve it from a controller action.
 8. For translations, add `Localization/en-us.json` and the `JellyfinString` items, and an endpoint that returns `StolonTranslations.Serve`. See [Translations](../../Translations.md).
 9. For notifications, call `AddBaseNotifier()` and register the plugin's stores. See [Notifications](../../Notifications.md).

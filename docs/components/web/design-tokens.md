@@ -12,6 +12,7 @@ These follow the live Jellyfin web client theme and fall back to the dark theme 
 | `--stolon-accent-hover` | The accent a little darker, for hover on accent buttons |
 | `--stolon-border` | The standard 1px line color, a share of the text color. Field, card, and divider borders |
 | `--stolon-surface` | The raised surface behind inputs, cards, rows, and dropdowns, from `--jf-palette-background-paper` |
+| `--stolon-page-bg` | The page behind a [User Page](user-page.md), from `--jf-palette-background-default` |
 | `--stolon-fg` | The theme text color. A wash on an element that fades its own text |
 | `--stolon-on-accent` | Text on an accent or status fill. It is fixed white, since the fill never follows the theme text color |
 | `--stolon-on-warning` | Text on a light status fill such as green, orange, yellow, gray, and blue, where white is too faint. It is a fixed dark gray |
@@ -101,7 +102,8 @@ Never use color alone. A badge always has a word, and a dot always has a `title`
 * There are two spacings. `--stolon-gap-wide` (16px) sits between components, such as one field row and the next, and under a title. `--stolon-gap-narrow` (8px) sits inside a component, such as a label and its field, a field and its hint, and the items or buttons in a group. Every gap and margin in the kit is one of them.
 * The size scale is `--stolon-size-small`, `--stolon-size-medium`, and `--stolon-size-large` (24, 32, and 40px tall), with the matching `--stolon-font-*`, `--stolon-pad-*`, `--stolon-icon-*`, and `--stolon-line-*` line heights. Fields read it through `--stolon-field-height`, `--stolon-field-font`, and `--stolon-field-pad`, which default to medium.
 * `--stolon-chevron-primary` (24px) and `--stolon-chevron-secondary` (18px) are the two chevron sizes.
-* `--stolon-mono` is the only font token, a mono stack for paths, ids, addresses, and code. The `stolon-mono` class applies it. See [Utility Classes](utility-classes.md).
+* `--stolon-mono` is a mono stack for paths, ids, addresses, and code. The `stolon-mono` class applies it. See [Utility Classes](utility-classes.md).
+* `--stolon-sans` is the web client's font stack, for a [User Page](user-page.md) only, since every other page inherits Jellyfin's font.
 * `--stolon-radius-small`, `--stolon-radius-medium`, `--stolon-radius-large`, and `--stolon-radius-round` (4, 6, 8, and 999px) are the corner radii.
 * `--stolon-shadow-float` and `--stolon-shadow-dialog` are the two shadows, and `--stolon-layer-float` (1000) and `--stolon-layer-dialog` (10000) are the two stacking layers.
 * There are no other typography or spacing tokens. Text inherits the page font.

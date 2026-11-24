@@ -40,7 +40,7 @@ A plugin references the `Siphonophore.Stolon` package at one version. Nothing is
 | :--- | :--- | :--- |
 | C# helpers | `src/*.cs` is compiled into the plugin, so each plugin stays one DLL and builds them under its own analyzers | `build/Siphonophore.Stolon.targets` |
 | CSS and JS | The bundles are embedded as `<RootNamespace>.Configuration.stolon.css` and `.js`, and `GetSharedPages("myplugin")` in `src/PluginBase.cs` serves them as `myplugin_stolon.css` and `myplugin_stolon.js` | `build/Siphonophore.Stolon.targets` |
-| Templates | `src/templates/*.html` is embedded for `TemplateLoader` and `StatusPage` | `build/Siphonophore.Stolon.targets` |
+| Templates | `src/templates/*.html` is embedded for `TemplateLoader`, `StatusPage`, and `HostedPage` | `build/Siphonophore.Stolon.targets` |
 | Typings | `stolon.d.ts` is copied to the plugin's `obj/` for its editor, and never reaches the assembly | `build/Siphonophore.Stolon.targets` |
 | Translations | The `StolonBuildTranslations` task checks `Localization/*.json` and the `JellyfinString` items against the Jellyfin strings in `jellyfin/`, then embeds one `Stolon.Translations.<language>.json` per language with Stolon's own strings from `strings/`, the casing list as `Stolon.Casing.json`, and compiles `TranslationKeys` | `build/Siphonophore.Stolon.Translations.targets`, `tasks/` |
 

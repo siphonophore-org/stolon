@@ -5,6 +5,8 @@
     --stolon-accent-hover: #0088cc;
     --stolon-border: #555;
     --stolon-surface: var(--jf-palette-background-paper, #181818);
+    /* The page behind everything, for a user page that loads no Jellyfin theme. Follows the theme's background color. */
+    --stolon-page-bg: var(--jf-palette-background-default, #101010);
     /* The theme text color, for a wash on an element that fades its own color, where currentColor is already faded. */
     --stolon-fg: var(--jf-palette-text-primary, #fff);
     /* Text on an accent or status fill. It stays white in every theme, since the fill never follows the theme text color. */
@@ -49,6 +51,8 @@
     --stolon-warning: var(--stolon-orange);
 
     --stolon-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    /* The web client's font stack, for a user page that loads no Jellyfin theme. Every other page inherits Jellyfin's font. */
+    --stolon-sans: "Noto Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
     /* The size scale every field, button, pill, badge, and tag takes, as small, medium, or large. Medium matches a text field. */
     --stolon-size-small: 24px;

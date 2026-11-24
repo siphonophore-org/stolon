@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="{{LANGUAGE}}">
+<head>
+<meta charset="utf-8" />
+<!-- base, the server root relative to this page, so every address below and in the content works under any base path -->
+<base href="{{ROOT}}" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="referrer" content="no-referrer" />
+<title>{{TITLE}}</title>
+<!-- favicon -->
+{{FAVICON}}
+<!-- icons, the web client's Material Icons face -->
+{{ICONS}}
+<!-- styles, the plugin's shared Stolon CSS -->
+<link rel="stylesheet" href="{{STYLESHEET}}" />
+</head>
+<body class="stolon-user-page{{COLUMN}}" data-stolon-access="{{ACCESS}}">
+<!-- header -->
+<header class="stolon-user-page-header">
+<a class="stolon-user-page-server" href="web/">{{SERVER}}</a>
+{{MARK}}
+</header>
+<!-- column -->
+<main class="stolon-user-page-column">
+<!-- gate, where the page script asks the viewer to sign in -->
+<div class="stolon-user-page-gate" hidden></div>
+<!-- content -->
+<div class="stolon-user-page-content">
+{{CONTENT}}
+</div>
+</main>
+<!-- script, the plugin's shared Stolon JS, which checks the viewer -->
+<script type="module">
+import { startUserPage } from '{{SCRIPT}}';
+startUserPage({{OPTIONS}});
+</script>
+</body>
+</html>
