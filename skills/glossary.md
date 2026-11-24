@@ -283,7 +283,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Secret protector | Encrypts credentials at rest with Data Protection | `SecretProtector` | Vault, encryptor |
 | Public page | A standalone page a plugin serves outside the dashboard | `PublicPage`, `StatusPage` | Landing page |
 | Hosted page | A user page a plugin serves at a root path of the server, declared once with its prefix, access, and content | `HostedPage`, `HostedPageContent` | Route page, custom page |
-| Access | Who may open a hosted page, anyone, any signed in user, or administrators | `HostedPageAccess`, `data-stolon-access` | Permission, role |
+| Access | Who may open a hosted page, anyone, any signed in user, administrators, or the users a plugin selects | `HostedPageAccess`, `data-stolon-access` | Permission, role |
 | Circuit breaker | Stops calls to a service after repeated failures, for a cooldown | `CircuitBreaker` | Throttle |
 | Backoff | A pause that grows with each failure of one record | `BackoffPolicy`, `BackoffState` | Delay, cooldown |
 | Retry | Repeating an operation after a transient fault | `RetryPolicy` | Reattempt |

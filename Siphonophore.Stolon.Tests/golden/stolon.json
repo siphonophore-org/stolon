@@ -233,7 +233,7 @@
     "lib/qr": 5849,
     "lib/row-editor": 3301,
     "lib/selection": 1936,
-    "lib/stolon-text": 11480,
+    "lib/stolon-text": 11582,
     "lib/text-case": 3309,
     "lib/thumb": 3234,
     "lib/typeahead": 4394,
@@ -294,10 +294,10 @@
     "tree-view": 7548,
     "usage-meter": 3074,
     "user-multi-selector": 1196,
-    "user-page": 4208,
+    "user-page": 4681,
     "user-selector": 1529,
     "web-push": 731,
     "world-map": 6255
   },
-  "bytes": 521486
+  "bytes": 522061
 }

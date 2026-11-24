@@ -69,13 +69,14 @@ Every address in the content is relative to the server root, since the page sets
 
 * `stolon-wide` on the body widens the header and the column, for a split. `HostedPage.Wide` sets it.
 * `data-stolon-state` on `stolon-user-page-done` colors the icon: `success` green, `info` blue, `warn` orange, and `error` red.
-* `data-stolon-access` on the body is `anyone`, `user`, or `administrator`. On the last two the content stays hidden until `startUserPage` sets `data-stolon-ready`.
+* `data-stolon-access` on the body is `anyone`, `user`, `administrator`, or `selected`. On all but `anyone` the content stays hidden until `startUserPage` sets `data-stolon-ready`.
+* `data-stolon-access-check` on a `selected` page is the plugin's access check. `startUserPage` asks it after sign in, unless the viewer is an administrator, and turns away a viewer it refuses.
 * `data-stolon-view` names a view for `showUserPageView`. One view shows and the rest hide.
 * A QR Code on the page is dark on white, since some scanners cannot read light on dark.
 
 ## Gotchas
 
-* The check in the browser only decides what the page shows. The plugin's API enforces access with `[Authorize]` or `[Authorize(Policy = HostedPage.AdministratorPolicy)]`.
+* The check in the browser only decides what the page shows. The plugin's API enforces access with `[Authorize]`, `[Authorize(Policy = HostedPage.AdministratorPolicy)]`, or `HostedPage.AllowsAsync` for selected users.
 * `startUserPage` reads the sign-in the web client stored in this browser. A viewer signed in on another device, or in another browser, gets the sign in card.
 * The first call to `startUserPage` starts the check, and the template calls it after the content's scripts. Pass the options from the content's script, or through `HostedPage.Translations`.
 * A link to `#part` resolves against the server root, since the page sets its base there. Scroll from a script instead.
@@ -97,6 +98,7 @@ Starts a user page that HostedPage serves. It loads the plugin's translations, a
 | `signInText` | <code>string</code> | the sign in button's label (default 'Sign in') |
 | `signInMessage` | <code>string</code> | the sentence for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.') |
 | `deniedMessage` | <code>string</code> | the sentence for a viewer who is not an administrator (default 'Only administrators can open this page.') |
+| `notSelectedMessage` | <code>string</code> | the sentence for a viewer a selected users page does not list (default 'This page is for selected people. Ask your server's administrator for access.') |
 | `unreachableMessage` | <code>string</code> | the sentence when the server does not answer (default 'Could not reach the server.') |
 | `backText` | <code>string</code> | the button's label when signing in would not help (default 'Back to Jellyfin') |
 

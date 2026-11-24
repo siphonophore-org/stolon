@@ -29,6 +29,7 @@ function server(options) {
             if (auth === 'MediaBrowser Token="' + GOOD + '"') return reply(200, { Id: 'u1', Name: 'Ana', Policy: { IsAdministrator: !!options.admin } });
             return reply(401, null);
         }
+        if (url === 'MyPlugin/Access') return reply(options.listed ? 204 : 403, null);
         return reply(200, { url: url });
     };
 }
@@ -126,6 +127,29 @@ test('an administrator page opens for an administrator', async function () {
     server({ admin: true });
     var session = await startUserPage();
     assert.equal(session.user.Policy.IsAdministrator, true);
+});
+
+test('a selected users page turns away a viewer the plugin does not list', async function () {
+    var parts = page('selected');
+    document.body.setAttribute('data-stolon-access-check', 'MyPlugin/Access');
+    server({ listed: false });
+    var session = await startUserPage();
+    assert.equal(session, null);
+    assert.equal(parts.gate.querySelector('.stolon-user-page-done').getAttribute('data-stolon-state'), 'warn');
+    assert.equal(parts.gate.querySelector('.stolon-user-page-lead').textContent, "This page is for selected people. Ask your server's administrator for access.");
+    assert.equal(calls[calls.length - 1].auth, 'MediaBrowser Token="' + GOOD + '"');
+});
+
+test('a selected users page opens for a listed viewer, and an administrator skips the check', async function () {
+    page('selected');
+    document.body.setAttribute('data-stolon-access-check', 'MyPlugin/Access');
+    server({ listed: true });
+    assert.equal((await startUserPage()).access, 'selected');
+    resetUserPage();
+    calls = [];
+    server({ admin: true, listed: false });
+    assert.ok(await startUserPage());
+    assert.ok(calls.every(function (c) { return c.url !== 'MyPlugin/Access'; }));
 });
 
 test('a server that does not answer shows the unreachable card', async function () {

@@ -5,7 +5,7 @@ import { loadTranslations } from './translations.js';
 import { createSpinner } from './spinner.js';
 
 /** Who may open a user page, as HostedPage writes it into data-stolon-access. */
-export type UserPageAccess = 'anyone' | 'user' | 'administrator';
+export type UserPageAccess = 'anyone' | 'user' | 'administrator' | 'selected';
 
 /** The signed in viewer, as Jellyfin's Users/Me answers. */
 export interface UserPageUser {
@@ -20,6 +20,7 @@ export interface UserPageOptions {
     signInText?: string;
     signInMessage?: string;
     deniedMessage?: string;
+    notSelectedMessage?: string;
     unreachableMessage?: string;
     backText?: string;
 }
@@ -71,7 +72,7 @@ export function storedTokens(serverId: string | null, storage?: Storage | null):
  */
 export function pageAccess(body?: HTMLElement | null): UserPageAccess {
     var value = (body || document.body).getAttribute('data-stolon-access');
-    return value === 'user' || value === 'administrator' ? value : 'anyone';
+    return value === 'user' || value === 'administrator' || value === 'selected' ? value : 'anyone';
 }
 
 /** Forgets the started check, for tests. Internal to the web components. */
@@ -128,6 +129,7 @@ function showGate(state: UserPageMessageState, message: string, linkText: string
  *   signInText         : the sign in button's label (default 'Sign in')
  *   signInMessage      : the sentence for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.')
  *   deniedMessage      : the sentence for a viewer who is not an administrator (default 'Only administrators can open this page.')
+ *   notSelectedMessage : the sentence for a viewer a selected users page does not list (default 'This page is for selected people. Ask your server's administrator for access.')
  *   unreachableMessage : the sentence when the server does not answer (default 'Could not reach the server.')
  *   backText           : the button's label when signing in would not help (default 'Back to Jellyfin')
  * }
@@ -170,9 +172,24 @@ export function startUserPage(options?: UserPageOptions): Promise<UserPageSessio
                                     showGate('warn', opts.deniedMessage || stolonText('Stolon.AdminOnly'), back);
                                     return null;
                                 }
-                                if (gate) { clear(gate); gate.hidden = true; }
-                                body.setAttribute('data-stolon-ready', '');
-                                return session(access, serverId, user, tokens[index]);
+                                var admitted = function (): UserPageSession {
+                                    if (gate) { clear(gate); gate.hidden = true; }
+                                    body.setAttribute('data-stolon-ready', '');
+                                    return session(access, serverId, user, tokens[index]);
+                                };
+                                // A selected users page asks the plugin whether the list names the viewer. The plugin's API checks
+                                // the same list, so a page with no access check still keeps its data from anyone else.
+                                var check = body.getAttribute('data-stolon-access-check') || '';
+                                var admin = !!(user && user.Policy && user.Policy.IsAdministrator);
+                                if (access !== 'selected' || admin || !check) return admitted();
+                                return fetch(check, { headers: { Authorization: authHeader(tokens[index]) } }).then(function (c) {
+                                    if (c.status === 403) {
+                                        showGate('warn', opts.notSelectedMessage || stolonText('Stolon.SelectedOnly'), back);
+                                        return null;
+                                    }
+                                    if (!c.ok) throw new Error('HTTP ' + c.status);
+                                    return admitted();
+                                });
                             });
                         });
                 }

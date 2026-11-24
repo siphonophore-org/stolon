@@ -2,8 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Authentication;
 using System.Text;
+using System.Threading.Tasks;
+using Jellyfin.Data;
+using Jellyfin.Database.Implementations.Enums;
 using MediaBrowser.Controller;
+using MediaBrowser.Controller.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +26,13 @@ public enum HostedPageAccess
     User,
 
     /// <summary>Administrators only. The page's API calls carry <c>[Authorize(Policy = HostedPage.AdministratorPolicy)]</c>.</summary>
-    Administrator
+    Administrator,
+
+    /// <summary>
+    /// The signed in users the plugin names in <see cref="HostedPage.AllowedUsers"/>, and every administrator. The page's API calls carry
+    /// <c>[Authorize]</c> and check <see cref="HostedPage.AllowsAsync"/>.
+    /// </summary>
+    SelectedUsers
 }
 
 /// <summary>
@@ -79,6 +90,96 @@ public sealed class HostedPage
 
     /// <summary>Gets a value indicating whether the page uses the wide column, for content set side by side such as a QR code beside its steps.</summary>
     public bool Wide { get; init; }
+
+    /// <summary>
+    /// Gets the users a <see cref="HostedPageAccess.SelectedUsers"/> page admits, read again on every check so a change to the plugin's
+    /// settings applies at once, such as <c>() =&gt; Plugin.Instance.Configuration.InviteManagers</c>. Administrators are always admitted.
+    /// With no list, the page admits administrators only.
+    /// </summary>
+    public Func<IEnumerable<Guid>>? AllowedUsers { get; init; }
+
+    /// <summary>
+    /// Gets the address of the plugin's access check, relative to the server root, such as <c>MyPlugin/Invites/Access</c>, or <c>null</c> for none.
+    /// The action answers with <see cref="CheckAccessAsync"/>. On a <see cref="HostedPageAccess.SelectedUsers"/> page the script asks it after
+    /// sign in, and shows a viewer who is not on the list a message in place of the content.
+    /// </summary>
+    public string? AccessCheck { get; init; }
+
+    /// <summary>
+    /// Says whether a user may open the page and use its API. Anyone admits everyone, User any signed in user, Administrator administrators,
+    /// and SelectedUsers administrators and the users in <see cref="AllowedUsers"/>.
+    /// </summary>
+    /// <param name="userId">The user, or <see cref="Guid.Empty"/> for a caller who is not signed in or signed in with an API key.</param>
+    /// <param name="isAdministrator">Whether the user is an administrator.</param>
+    /// <returns><c>true</c> when the user is admitted.</returns>
+    public bool Allows(Guid userId, bool isAdministrator)
+    {
+        if (Access == HostedPageAccess.Anyone)
+        {
+            return true;
+        }
+
+        if (userId == Guid.Empty)
+        {
+            return false;
+        }
+
+        return Access switch
+        {
+            HostedPageAccess.User => true,
+            HostedPageAccess.Administrator => isAdministrator,
+            _ => isAdministrator || Listed(userId)
+        };
+    }
+
+    /// <summary>
+    /// Says whether the caller of a controller action may use the page's API, from Jellyfin's own reading of the request's token.
+    /// An API key names no user, so it is admitted only on an Anyone page.
+    /// </summary>
+    /// <param name="controller">The controller whose request is checked.</param>
+    /// <param name="authorization">Jellyfin's authorization context.</param>
+    /// <returns><c>true</c> when the caller is admitted.</returns>
+    public async Task<bool> AllowsAsync(ControllerBase controller, IAuthorizationContext authorization)
+    {
+        ArgumentNullException.ThrowIfNull(controller);
+        ArgumentNullException.ThrowIfNull(authorization);
+        if (Access == HostedPageAccess.Anyone)
+        {
+            return true;
+        }
+
+        AuthorizationInfo info;
+        try
+        {
+            info = await authorization.GetAuthorizationInfo(controller.Request).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is AuthenticationException or SecurityException)
+        {
+            return false;
+        }
+
+        if (info.IsApiKey || info.User is null)
+        {
+            return false;
+        }
+
+        return Allows(info.UserId, info.User.HasPermission(PermissionKind.IsAdministrator));
+    }
+
+    /// <summary>
+    /// Answers the page's access check: 204 for a caller the page admits, and 403 for anyone else. The action carries <c>[Authorize]</c>,
+    /// so a caller who is not signed in gets Jellyfin's own 401 first.
+    /// </summary>
+    /// <param name="controller">The controller whose request is checked.</param>
+    /// <param name="authorization">Jellyfin's authorization context.</param>
+    /// <returns>The answer.</returns>
+    public async Task<IActionResult> CheckAccessAsync(ControllerBase controller, IAuthorizationContext authorization)
+    {
+        ArgumentNullException.ThrowIfNull(controller);
+        return await AllowsAsync(controller, authorization).ConfigureAwait(false)
+            ? controller.NoContent()
+            : controller.StatusCode(StatusCodes.Status403Forbidden);
+    }
 
     /// <summary>
     /// Serves the page from a controller action, with the hardening headers, in the language the request asks for.
@@ -164,6 +265,7 @@ public sealed class HostedPage
             ["LANGUAGE"] = WebUtility.HtmlEncode(language),
             ["ROOT"] = RootFor(path),
             ["ACCESS"] = AccessName(Access),
+            ["ACCESS_CHECK"] = WebUtility.HtmlEncode(AccessCheck ?? string.Empty),
             ["TITLE"] = WebUtility.HtmlEncode(Title ?? server),
             ["FAVICON"] = faviconHref is null ? string.Empty : "<link rel=\"icon\" href=\"web/" + WebUtility.HtmlEncode(faviconHref) + "\" />",
             ["ICONS"] = iconFace.Length == 0 ? string.Empty : "<style>" + iconFace.Replace("</", "<\\/", StringComparison.Ordinal) + "</style>",
@@ -182,8 +284,12 @@ public sealed class HostedPage
     {
         HostedPageAccess.User => "user",
         HostedPageAccess.Administrator => "administrator",
+        HostedPageAccess.SelectedUsers => "selected",
         _ => "anyone"
     };
+
+    // Whether the plugin's list names the user. A missing list names nobody, and one that fails to load fails the request, so it never admits.
+    private bool Listed(Guid userId) => AllowedUsers?.Invoke()?.Contains(userId) ?? false;
 
     // The address of a shared Stolon page, relative to the base address.
     private string SharedPage(string extension) => "./web/configurationpage?name=" + Uri.EscapeDataString(Prefix + "_stolon." + extension);

@@ -54,6 +54,40 @@ A browser that opens a link sends no Jellyfin token, since the web client keeps 
 | `Anyone` | `[AllowAnonymous]` | `[AllowAnonymous]`, with the plugin's own checks such as a code and a rate limit | Shows the content at once |
 | `User` | `[AllowAnonymous]` | `[Authorize]` | Shows the content to a signed in viewer, and a sign in card to anyone else |
 | `Administrator` | `[AllowAnonymous]` | `[Authorize(Policy = HostedPage.AdministratorPolicy)]` | Shows the content to an administrator, and a card that turns away anyone else |
+| `SelectedUsers` | `[AllowAnonymous]` | `[Authorize]`, then `HostedPage.AllowsAsync` | Asks the plugin's access check, then shows the content to a listed viewer or an administrator, and a card that turns away anyone else |
+
+### Selected Users
+
+A `SelectedUsers` page is for the people the plugin names in its own settings, such as the users who may send invites. Administrators are always admitted. `AllowedUsers` reads the list on every check, so a change to the settings applies at once.
+
+```csharp
+private static readonly HostedPage Page = new("myplugin", HostedPageAccess.SelectedUsers, HostedPageContent.Resource(typeof(Plugin).Assembly, "Web.invites.html"))
+{
+    AllowedUsers = () => Plugin.Instance!.Configuration.InviteManagers,
+    AccessCheck = "MyPlugin/Invites/Access"
+};
+
+[HttpGet("Access")]
+[Authorize]
+public Task<IActionResult> Access() => Page.CheckAccessAsync(this, _authorization);
+
+[HttpGet("Mine")]
+[Authorize]
+public async Task<IActionResult> Mine()
+{
+    if (!await Page.AllowsAsync(this, _authorization))
+    {
+        return Forbid();
+    }
+
+    return Ok(_invites.ListFor(User));
+}
+```
+
+* `AccessCheck` is the address of an action that answers with `CheckAccessAsync`: 204 for a viewer the page admits and 403 for anyone else. The page script asks it after sign in and shows a viewer who is not listed a card in place of the content.
+* Every API call the page makes checks `AllowsAsync` itself. The access check only decides what the page shows.
+* `Allows(userId, isAdministrator)` is the same rule for code that already knows the user.
+* An API key names no user, so a `SelectedUsers` page refuses it. With no `AllowedUsers`, the page admits administrators only.
 
 The page script, `startUserPage`, reads the sign-in the web client stored for this server, checks it with `Users/Me`, and gives the plugin's script a session that calls the API as the viewer. See [User Page](../web/user-page.md).
 
@@ -68,7 +102,7 @@ The page script, `startUserPage`, reads the sign-in the web client stored for th
 
 ## HostedPageAccess
 
-Who may open a `HostedPage`: `Anyone`, `User` for any signed in user, or `Administrator`. The page writes it on its body as `data-stolon-access`, and the page script checks it. See [Access](#access) for the attribute each one takes.
+Who may open a `HostedPage`: `Anyone`, `User` for any signed in user, `Administrator`, or `SelectedUsers` for the users the plugin lists and every administrator. The page writes it on its body as `data-stolon-access`, and the page script checks it. See [Access](#access) for the attribute each one takes.
 
 ## HostedPageContent
 

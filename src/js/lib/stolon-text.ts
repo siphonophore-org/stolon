@@ -264,6 +264,7 @@ export var BASE_TEXT = {
     'Stolon.SelectOneFile': 'Select one file.',
     'Stolon.SelectRow': 'Select row',
     'Stolon.SelectValue': 'Select {value}',
+    'Stolon.SelectedOnly': "This page is for selected people. Ask your server's administrator for access.",
     'Stolon.SeriesNumber': 'Series {value}',
     'Stolon.ServerUnreachable': 'Could not reach the server.',
     'Stolon.SetupProgress': 'Setup progress',

@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Authentication;
+using System.Threading.Tasks;
 using MediaBrowser.Controller;
+using MediaBrowser.Controller.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
@@ -73,6 +76,7 @@ public sealed class HostedPageTests : IDisposable
     [InlineData(HostedPageAccess.Anyone, "anyone")]
     [InlineData(HostedPageAccess.User, "user")]
     [InlineData(HostedPageAccess.Administrator, "administrator")]
+    [InlineData(HostedPageAccess.SelectedUsers, "selected")]
     public void Render_WritesTheAccess(HostedPageAccess access, string expected)
     {
         var html = Content(access).Render(new PathString("/x"), null, "en-us", null, string.Empty, null);
@@ -210,6 +214,88 @@ public sealed class HostedPageTests : IDisposable
         Assert.Equal("no-referrer", context.Response.Headers["Referrer-Policy"]);
         Assert.Equal("nosniff", context.Response.Headers["X-Content-Type-Options"]);
         Assert.Equal("frame-ancestors 'self'", context.Response.Headers["Content-Security-Policy"]);
+    }
+
+    /// <summary>
+    /// A selected users page writes its access check address, encoded, for the page script.
+    /// True: the script asks the plugin whether the viewer is on the list.
+    /// False: a viewer who is not listed would see the page until its first API call fails.
+    /// </summary>
+    [Fact]
+    public void Render_WritesTheAccessCheck()
+    {
+        var page = new HostedPage("myplugin", HostedPageAccess.SelectedUsers, HostedPageContent.Template("status")) { AccessCheck = "MyPlugin/Access?a=1&b=2" };
+
+        var html = page.Render(new PathString("/x"), null, "en-us", null, string.Empty, null);
+
+        Assert.Contains("data-stolon-access-check=\"MyPlugin/Access?a=1&amp;b=2\"", html, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Each access admits the users it names, and no one else. Administrators are always in a selected users list, a caller with no user
+    /// is admitted only by an Anyone page, and a selected users page with no list admits administrators only.
+    /// True: a page and its API turn away everyone the plugin did not pick.
+    /// False: a selected users page would open to any signed in user, or shut out an administrator.
+    /// </summary>
+    [Fact]
+    public void Allows_FollowsTheAccess()
+    {
+        var listed = Guid.NewGuid();
+        var other = Guid.NewGuid();
+        var selected = new HostedPage("p", HostedPageAccess.SelectedUsers, HostedPageContent.Template("status")) { AllowedUsers = () => new[] { listed } };
+        var unlisted = new HostedPage("p", HostedPageAccess.SelectedUsers, HostedPageContent.Template("status"));
+
+        Assert.True(Content(HostedPageAccess.Anyone).Allows(Guid.Empty, false));
+        Assert.True(Content(HostedPageAccess.User).Allows(other, false));
+        Assert.False(Content(HostedPageAccess.User).Allows(Guid.Empty, false));
+        Assert.False(Content(HostedPageAccess.Administrator).Allows(other, false));
+        Assert.True(Content(HostedPageAccess.Administrator).Allows(other, true));
+        Assert.True(selected.Allows(listed, false));
+        Assert.False(selected.Allows(other, false));
+        Assert.True(selected.Allows(other, true));
+        Assert.False(selected.Allows(Guid.Empty, true));
+        Assert.False(unlisted.Allows(listed, false));
+        Assert.True(unlisted.Allows(listed, true));
+    }
+
+    /// <summary>
+    /// A selected users page reads its list on every check.
+    /// True: adding or removing someone in the plugin's settings applies at once.
+    /// False: a change would wait for a restart.
+    /// </summary>
+    [Fact]
+    public void Allows_ReadsTheListEachTime()
+    {
+        var user = Guid.NewGuid();
+        var list = new List<Guid>();
+        var page = new HostedPage("p", HostedPageAccess.SelectedUsers, HostedPageContent.Template("status")) { AllowedUsers = () => list };
+
+        Assert.False(page.Allows(user, false));
+        list.Add(user);
+        Assert.True(page.Allows(user, false));
+    }
+
+    /// <summary>
+    /// The API check refuses a caller Jellyfin cannot name: an API key, or a token Jellyfin rejects. An Anyone page asks nothing.
+    /// True: a selected users page's API serves only the people on its list.
+    /// False: an API key or a revoked token would pass the list.
+    /// </summary>
+    [Fact]
+    public async Task AllowsAsync_RefusesCallersWithNoUser()
+    {
+        var listed = Guid.NewGuid();
+        var page = new HostedPage("p", HostedPageAccess.SelectedUsers, HostedPageContent.Template("status")) { AllowedUsers = () => new[] { listed } };
+        var controller = new PageController { ControllerContext = new ControllerContext { HttpContext = new DefaultHttpContext() } };
+        var apiKey = Substitute.For<IAuthorizationContext>();
+        apiKey.GetAuthorizationInfo(Arg.Any<HttpRequest>()).Returns(new AuthorizationInfo { IsApiKey = true });
+        var rejected = Substitute.For<IAuthorizationContext>();
+        rejected.GetAuthorizationInfo(Arg.Any<HttpRequest>()).Returns<AuthorizationInfo>(_ => throw new AuthenticationException("revoked"));
+
+        Assert.False(await page.AllowsAsync(controller, apiKey));
+        Assert.False(await page.AllowsAsync(controller, rejected));
+        Assert.True(await Content(HostedPageAccess.Anyone).AllowsAsync(controller, rejected));
+        var answer = await page.CheckAccessAsync(controller, apiKey);
+        Assert.Equal(StatusCodes.Status403Forbidden, Assert.IsType<StatusCodeResult>(answer).StatusCode);
     }
 
     /// <summary>
