@@ -380,7 +380,7 @@
     "time-range-field": 2751,
     "timeline": 2170,
     "toast": 2804,
-    "tool-app": 6291,
+    "tool-app": 6364,
     "tool-shell": 4004,
     "tooltip": 1745,
     "translations": 3392,
@@ -394,5 +394,5 @@
     "web-push": 731,
     "world-map": 6264
   },
-  "bytes": 597153
+  "bytes": 597226
 }

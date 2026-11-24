@@ -47,6 +47,7 @@ refreshTools(view);                   // read the tool list again, such as after
 * A tool gets `viewshow` each time it opens, `viewbeforehide` before it is left, and `viewhide` once it is. A `viewbeforehide` the tool cancels, such as for unsaved changes, keeps it open. The host page's own events reach the open tool.
 * The sidebar's top row is the fold button with the plugin's `name` beside it. It folds the sidebar to its icons, and the name hides while folded. The choice is kept per browser under `storageKey`.
 * A tool still loading is shown only once it is ready, and the last tool chosen wins.
+* A tool that leaves the list while it is on screen hands over to the first tool.
 
 ## Gotchas
 

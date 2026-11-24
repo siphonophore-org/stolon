@@ -276,9 +276,11 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
         if (detail.key) void show(String(detail.key), detail.param ? String(detail.param) : undefined);
     }
 
+    // Reads the tools again. A tool on screen that left the list hands over to the first tool.
     function readTools(): void {
         shell.setTools(shellTools(), current === null ? undefined : current);
         mark(current);
+        if (current !== null && !toolOf(current) && tools().length) void show(tools()[0].key);
     }
 
     function onShow(): void {
