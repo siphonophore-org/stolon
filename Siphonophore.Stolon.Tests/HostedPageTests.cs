@@ -322,6 +322,20 @@ public sealed class HostedPageTests : IDisposable
     }
 
     /// <summary>
+    /// The user page frame names the server logo for its screens, under web/, and names none when there is none.
+    /// True: the sign in screen shows the server's own logo.
+    /// False: it would show no logo, or Stolon's own.
+    /// </summary>
+    [Fact]
+    public void Render_NamesTheServerLogo()
+    {
+        var page = Content(HostedPageAccess.User);
+
+        Assert.Contains("data-stolon-logo=\"web/banner-light.1.png\"", page.Render(new PathString("/x"), null, "en-us", null, string.Empty, null, false, "banner-light.1.png"), StringComparison.Ordinal);
+        Assert.Contains("data-stolon-logo=\"\"", page.Render(new PathString("/x"), null, "en-us", null, string.Empty, null), StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// The administrator policy names Jellyfin's own.
     /// True: an administrator page's API refuses anyone else.
     /// False: the attribute would name a policy Jellyfin does not have and fail every call.

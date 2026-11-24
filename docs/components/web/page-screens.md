@@ -47,7 +47,7 @@ Classes: `stolon-screen` for every screen, with `stolon-sign-in`, `stolon-unauth
 * The web client's storage, `jellyfin_credentials` and `_deviceId2` in local storage, is not a public API. If a Jellyfin update changes it, the viewer signs in on the page again.
 * Jellyfin lists the page's sign in under its devices as `Jellyfin Web` on the viewer's platform.
 * **Forgot password** opens the web client's own reset page.
-* The screens show the web client's touch icon over the heading, and hide it when the web client has none.
+* The screens show the server logo the web client's login page shows. In the web client shell it is the web client's own logo element, so the viewer's theme picks the logo and the server's custom CSS replaces it as it does on `/web/`. On a user page it is the logo file named in the web client's dark theme, read on every page load, and it hides when there is none.
 
 ## Reference
 
@@ -118,7 +118,7 @@ The screen for an address or an item that does not exist.
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-screen` | A screen in place of a page's content, sign in, unauthorized, or not found: the server's mark, a heading, a sentence, and its body in a narrow centered column |
-| `stolon-screen-logo` | The server's mark at the top of a screen, hidden when the web client has none |
+| `stolon-screen-logo` | The server's logo at the top of a screen. In the web client frame the web client's own logo element, whose image its theme and custom CSS set, centered over the heading. In the user page frame the logo file from the web client's theme, hidden when there is none |
 | `stolon-screen-title` | A screen's heading and its sentence |
 | `stolon-screen-body` | A screen's form and buttons, a field gap apart and as wide as the column |
 | `stolon-sign-in-remember` | Remember me under the password, its box and text on one line |

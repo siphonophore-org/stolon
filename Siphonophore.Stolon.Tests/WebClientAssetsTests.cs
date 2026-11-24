@@ -102,4 +102,30 @@ public sealed class WebClientAssetsTests : IDisposable
 
         Assert.Equal("favicon.b.ico", WebClientAssets.For(_dir).FaviconHref);
     }
+
+    /// <summary>
+    /// The server logo is the one the dark theme names, read on each call, and never a file outside the web client.
+    /// True: a logo the server replaced in the web client shows on the sign in screen, at once.
+    /// False: the screen would show Stolon's own image, or one a crafted theme points outside the web folder.
+    /// </summary>
+    [Fact]
+    public void BannerHref_FollowsTheDarkTheme()
+    {
+        var theme = Path.Join(_dir, "themes", "dark");
+        Directory.CreateDirectory(theme);
+        File.WriteAllText(Path.Join(_dir, "banner-light.1.png"), "x");
+        File.WriteAllText(Path.Join(_dir, "logo-custom.png"), "x");
+        File.WriteAllText(Path.Join(theme, "theme.css"), ".a{color:red}.pageTitleWithDefaultLogo{background-image:url(../../banner-light.1.png)}");
+
+        Assert.Equal("banner-light.1.png", WebClientAssets.BannerHref(_dir));
+
+        File.WriteAllText(Path.Join(theme, "theme.css"), ".pageTitleWithDefaultLogo { margin: 0; background-image: url('../../logo-custom.png') }");
+        Assert.Equal("logo-custom.png", WebClientAssets.BannerHref(_dir));
+
+        File.WriteAllText(Path.Join(theme, "theme.css"), ".pageTitleWithDefaultLogo{background-image:url(../../../outside.png)}");
+        Assert.Null(WebClientAssets.BannerHref(_dir));
+        File.WriteAllText(Path.Join(theme, "theme.css"), ".pageTitleWithDefaultLogo{background-image:url(https://example.com/x.png)}");
+        Assert.Null(WebClientAssets.BannerHref(_dir));
+        Assert.Null(WebClientAssets.BannerHref(Path.Join(_dir, "missing")));
+    }
 }

@@ -131,12 +131,22 @@ function clientHeader(client: string, version: string): string {
         + '", DeviceId="' + encodeURIComponent(deviceId()) + '", Version="' + encodeURIComponent(version) + '"';
 }
 
-// The screen's frame: the server's mark, a heading, a sentence, then the body. Text is always set as text.
+// The server's logo, as the web client's login page draws it. In the web client frame it is the web client's own logo element,
+// so the viewer's theme picks the logo and the server's custom CSS replaces it as it does on /web/. In the user page frame,
+// which has no Jellyfin stylesheets, it is the logo file HostedPage read from the web client's theme, or nothing.
+function serverLogo(web: boolean): HTMLElement {
+    if (web) return make('div', 'pageTitle pageTitleWithLogo pageTitleWithDefaultLogo stolon-screen-logo', { 'aria-hidden': 'true' });
+    var src = document.body ? document.body.getAttribute('data-stolon-logo') || '' : '';
+    var logo = make('img', 'stolon-screen-logo', { src: src, alt: '', decoding: 'async' }) as HTMLImageElement;
+    if (!src) logo.hidden = true;
+    logo.onerror = function () { logo.hidden = true; };
+    return logo;
+}
+
+// The screen's frame: the server's logo, a heading, a sentence, then the body. Text is always set as text.
 function frame(title: string, message: string | null, web: boolean): { element: HTMLElement; body: HTMLElement; text: HTMLElement | null } {
     var section = make('section', 'stolon-screen' + (web ? ' stolon-screen-web' : ' stolon-user-page-card'), { role: 'region', 'aria-label': title });
-    var logo = make('img', 'stolon-screen-logo', { src: 'web/favicons/touchicon.png', alt: '', decoding: 'async' }) as HTMLImageElement;
-    logo.onerror = function () { logo.hidden = true; };
-    section.appendChild(logo);
+    section.appendChild(serverLogo(web));
     section.appendChild(make('h1', 'stolon-screen-title' + (web ? ' sectionTitle' : ' stolon-user-page-title'), null, title));
     var text = message ? make('p', 'stolon-screen-text' + (web ? ' secondaryText' : ' stolon-user-page-lead'), null, message) : null;
     if (text) section.appendChild(text);

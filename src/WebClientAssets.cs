@@ -221,6 +221,58 @@ internal static partial class WebClientAssets
     }
 
     /// <summary>
+    /// Finds the server logo the web client's login page shows, read from the dark theme's own stylesheet, so a logo the server
+    /// replaced in the web client is the one found. Read on every call, so a change applies at once.
+    /// </summary>
+    /// <param name="webPath">The web client's folder.</param>
+    /// <returns>The logo's address relative to the web folder, or <c>null</c> when the web client or its logo is missing.</returns>
+    internal static string? BannerHref(string? webPath)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(webPath) || !Directory.Exists(webPath))
+            {
+                return null;
+            }
+
+            var root = Path.GetFullPath(webPath);
+            var themeFolder = Path.Join(root, "themes", "dark");
+            var theme = Path.Join(themeFolder, "theme.css");
+            if (!File.Exists(theme))
+            {
+                return null;
+            }
+
+            var match = BannerPattern().Match(File.ReadAllText(theme));
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            var href = match.Groups[1].Value.Trim();
+            if (!IsRelative(href))
+            {
+                return null;
+            }
+
+            var query = href.IndexOf('?', StringComparison.Ordinal);
+            var file = Path.GetFullPath(Path.Join(themeFolder, (query < 0 ? href : href[..query]).Replace('/', Path.DirectorySeparatorChar)));
+            var rootPrefix = root.EndsWith(Path.DirectorySeparatorChar) ? root : root + Path.DirectorySeparatorChar;
+            return file.StartsWith(rootPrefix, StringComparison.Ordinal) && File.Exists(file)
+                ? file[rootPrefix.Length..].Replace(Path.DirectorySeparatorChar, '/')
+                : null;
+        }
+        catch (IOException)
+        {
+            return null;
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Picks the mark the web client's app bar shows, its transparent icon, or its touch icon when it has none.
     /// </summary>
     /// <param name="root">The web client's folder, as a full path.</param>
@@ -321,6 +373,10 @@ internal static partial class WebClientAssets
         && !href.StartsWith('/')
         && !href.StartsWith('#')
         && !href.Contains(':', StringComparison.Ordinal);
+
+    // The logo rule in a theme: the background image of the default logo, up to the end of its block, never past it.
+    [GeneratedRegex(@"\.pageTitleWithDefaultLogo\s*\{[^}]*?background-image:\s*url\(\s*['""]?([^'"")]+)")]
+    private static partial Regex BannerPattern();
 
     [GeneratedRegex("rel=\"(?:shortcut )?icon\"[^>]*href=\"([^\"]+)\"", RegexOptions.IgnoreCase)]
     private static partial Regex IconLinkPattern();

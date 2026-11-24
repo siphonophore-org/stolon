@@ -334,7 +334,7 @@
     "number-unit-field": 3170,
     "ordered-list": 1968,
     "overflow-menu": 3720,
-    "page-screens": 12234,
+    "page-screens": 12472,
     "paginated-table": 10726,
     "pagination": 3991,
     "pie-chart": 6308,
@@ -385,5 +385,5 @@
     "web-push": 731,
     "world-map": 6264
   },
-  "bytes": 589557
+  "bytes": 589795
 }

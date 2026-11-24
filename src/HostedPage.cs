@@ -262,7 +262,7 @@ public sealed class HostedPage
                 DetailsTemplate && !notFound ? WebClientDetailsTemplate.Load(paths?.WebPath) : null,
                 values,
                 notFound)
-            : Render(context.Request.Path, host?.FriendlyName, language, assets.FaviconHref, assets.IconFace, values, notFound);
+            : Render(context.Request.Path, host?.FriendlyName, language, assets.FaviconHref, assets.IconFace, values, notFound, WebClientAssets.BannerHref(paths?.WebPath));
         return new ContentResult { Content = html, ContentType = "text/html; charset=utf-8", StatusCode = notFound ? StatusCodes.Status404NotFound : StatusCodes.Status200OK };
     }
 
@@ -300,8 +300,9 @@ public sealed class HostedPage
     /// <param name="iconFace">The icon face CSS, or empty.</param>
     /// <param name="values">Values for the content's tokens, encoded here.</param>
     /// <param name="notFound">True to draw the not found screen in place of the content.</param>
+    /// <param name="bannerHref">The server logo the web client's login page shows, relative to the web folder, or <c>null</c>.</param>
     /// <returns>The document.</returns>
-    internal string Render(PathString path, string? serverName, string language, string? faviconHref, string iconFace, IReadOnlyDictionary<string, string>? values, bool notFound = false)
+    internal string Render(PathString path, string? serverName, string language, string? faviconHref, string iconFace, IReadOnlyDictionary<string, string>? values, bool notFound = false, string? bannerHref = null)
     {
         if (Frame == HostedPageFrame.WebClient)
         {
@@ -330,6 +331,7 @@ public sealed class HostedPage
             ["SERVER"] = WebUtility.HtmlEncode(server),
             ["MARK"] = mark,
             ["COLUMN"] = Wide ? " stolon-wide" : string.Empty,
+            ["LOGO_HREF"] = bannerHref is null ? string.Empty : WebUtility.HtmlEncode("web/" + bannerHref),
             ["OPTIONS"] = ScriptOptions(),
             ["CONTENT"] = notFound ? string.Empty : TemplateLoader.FillText(_content.Html, Encode(values))
         });

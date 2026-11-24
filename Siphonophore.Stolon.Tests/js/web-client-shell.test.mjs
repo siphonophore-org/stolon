@@ -217,6 +217,8 @@ test('a signed out viewer of a user page gets the sign in card and no bar entrie
     assert.ok(screen.querySelector('.inputContainer input.emby-input#stolonSignInUser'));
     assert.ok(screen.querySelector('button.raised.button-submit.block.emby-button'));
     assert.equal(screen.querySelector('.stolon-user-page-field'), null);
+    // The logo is the web client's own element, so its theme and the server's custom CSS draw it.
+    assert.ok(screen.querySelector('div.pageTitleWithLogo.pageTitleWithDefaultLogo.stolon-screen-logo'));
     assert.equal(parts.avatar.hidden, true);
     assert.equal(parts.drawerButton.hidden, true);
     assert.equal(parts.nav.hidden, true);

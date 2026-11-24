@@ -13,14 +13,17 @@
 }
 .stolon-screen.stolon-screen-web { padding: var(--stolon-gap-wide) 0; }
 
-/* The server's mark at the top of a screen, hidden when the web client has none */
-/* Example: <img class="stolon-screen-logo" src="web/favicons/touchicon.png" alt=""> */
+/* The server's logo at the top of a screen. In the web client frame the web client's own logo element, whose image its theme and custom CSS set, centered over the heading. In the user page frame the logo file from the web client's theme, hidden when there is none */
+/* Example: <div class="pageTitle pageTitleWithLogo pageTitleWithDefaultLogo stolon-screen-logo" aria-hidden="true"></div> */
 .stolon-screen-logo {
     align-self: center;
-    width: calc(var(--stolon-size-large) * 2);
-    height: calc(var(--stolon-size-large) * 2);
+    box-sizing: border-box;
+    max-width: 100%;
+    height: calc(var(--stolon-size-large) * 1.5);
+    margin: 0 0 var(--stolon-gap-narrow);
     object-fit: contain;
 }
+div.stolon-screen-logo { width: calc(var(--stolon-size-large) * 8); background-position: center; }
 .stolon-screen-logo[hidden] { display: none; }
 
 /* A screen's heading and its sentence */

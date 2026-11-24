@@ -120,6 +120,7 @@ test('the session calls the API as the viewer', async function () {
 
 test('a viewer with no sign-in gets the sign in screen and the content stays hidden', async function () {
     var parts = page('user');
+    document.body.setAttribute('data-stolon-logo', 'web/banner-light.1.png');
     globalThis.localStorage = storage([]);
     server({ disclaimer: 'Family use only.' });
     startUserPage();
@@ -132,6 +133,7 @@ test('a viewer with no sign-in gets the sign in screen and the content stays hid
     assert.equal(screen.querySelector('#stolonSignInUser').getAttribute('autocomplete'), 'username');
     assert.equal(screen.querySelector('#stolonSignInPassword').getAttribute('autocomplete'), 'current-password');
     assert.equal(screen.querySelector('.stolon-sign-in-disclaimer').textContent, 'Family use only.');
+    assert.equal(screen.querySelector('img.stolon-screen-logo').getAttribute('src'), 'web/banner-light.1.png');
 });
 
 test('signing in with the form continues the page as the viewer and keeps the sign in for the web client', async function () {
