@@ -94,7 +94,7 @@ The outer layout of a page that holds several tools. A wide shell lists the tool
 | `stolon-tool-shell-title` | Heading over a tool's content in the page heading size, cut with an ellipsis |
 | `stolon-tool-shell-switcher` | Title menu button that lists every tool, shown in place of the sidebar on a narrow shell, its text in line with the content's edge |
 | `stolon-tool-shell-fold.stolon-menu-item` | Button atop the sidebar that folds it to its icons and back, drawn as a sidebar entry so its icon lines up with theirs |
-| `stolon-tool-shell-name` | The plugin's name beside the fold button, in the weight of a heading |
+| `stolon-tool-shell-name` | The plugin's name beside the fold button, in capitals in the weight of a heading |
 | `stolon-tool-shell.stolon-folded` | A folded sidebar, one large control wide, each entry a square with its icon centered and its name on hover |
 
 <!-- reference:end -->

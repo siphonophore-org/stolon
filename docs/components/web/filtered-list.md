@@ -151,6 +151,7 @@ The List with a search, filters, a sort, a summary line, selection, and actions.
 | `stolon-filtered-pill-count` | A row of pills, one per choice and an All pill, each with its count |
 | `stolon-filtered-action` | A button beside the search or on the bar of selected items, hidden while its visible test says no |
 | `stolon-filtered-selectbar` | The bar over a list with multiple selection: the select all, the count of selected items, and the bulk actions, washed while it carries actions |
+| `stolon-filtered-selectall` | The select all box lines up with the row checkboxes under it, which sit at the row padding inside the list's border. Only the box moves, so a count or action that wraps to a line of its own keeps the bar's padding |
 | `stolon-filtered-checked` | An item that a checkbox leads, when the item's render did not place the checkbox itself. The checkbox sits on the row's center line, where a media card centers its artwork too |
 | `stolon-filtered-summary` | The line under the controls that says how many items show out of how many |
 

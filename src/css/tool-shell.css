@@ -79,9 +79,9 @@
 /* Example: <button type="button" class="stolon-menu-item stolon-icon-text stolon-tool-shell-item stolon-tool-shell-fold" aria-label="Collapse sidebar" aria-expanded="true"><span class="material-icons" aria-hidden="true">menu_open</span></button> */
 .stolon-tool-shell-fold.stolon-menu-item { margin-bottom: var(--stolon-gap-narrow); }
 
-/* The plugin's name beside the fold button, in the weight of a heading */
+/* The plugin's name beside the fold button, in capitals in the weight of a heading */
 /* Example: <span class="stolon-menu-label stolon-tool-shell-name">Zooid</span> */
-.stolon-tool-shell-name { font-weight: 600; }
+.stolon-tool-shell-name { font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
 
 /* A folded sidebar, one large control wide, each entry a square with its icon centered and its name on hover */
 /* Example: <div class="stolon-tool-shell stolon-folded"><nav class="stolon-tool-shell-nav"></nav></div> */

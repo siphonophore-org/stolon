@@ -87,11 +87,11 @@
     border-radius: var(--stolon-radius-small);
 }
 .stolon-filtered-selectbar.stolon-actions.stolon-active { background: var(--stolon-accent-wash); }
-/* The select all box lines up with the row checkboxes under it, which sit at the row padding inside the list's border */
+/* The select all box lines up with the row checkboxes under it, which sit at the row padding inside the list's border. Only the box moves, so a count or action that wraps to a line of its own keeps the bar's padding */
 /* Example: <div class="stolon-filtered-selectbar"><label class="stolon-check-row stolon-filtered-selectall"><input type="checkbox" class="stolon-check-row-input"></label></div> */
-.stolon-filtered-selectbar,
-.stolon-filtered-selectbar.stolon-actions { padding-left: calc(var(--stolon-pad-medium) + 1px - var(--stolon-gap-narrow)); }
 .stolon-filtered-selectall { flex: 0 0 auto; user-select: none; }
+.stolon-filtered-selectbar.stolon-actions > .stolon-filtered-selectall { margin-left: calc(var(--stolon-pad-medium) + 1px - var(--stolon-gap-narrow) * 2); }
+.stolon-filtered-selectbar:not(.stolon-actions) > .stolon-filtered-selectall { margin-left: calc(var(--stolon-pad-medium) + 1px - var(--stolon-gap-narrow)); }
 .stolon-filtered-selected { opacity: 0.7; font-variant-numeric: tabular-nums; }
 .stolon-filtered-bulk { display: flex; flex-wrap: wrap; gap: var(--stolon-gap-narrow); }
 /* The reload row button at the end of the selection bar, whose icon turns while onReload runs */
