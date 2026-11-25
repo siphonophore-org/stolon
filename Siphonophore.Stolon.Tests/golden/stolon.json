@@ -324,7 +324,7 @@
     "lib/qr": 5849,
     "lib/row-editor": 3301,
     "lib/selection": 1936,
-    "lib/stolon-text": 13094,
+    "lib/stolon-text": 13129,
     "lib/text-case": 3325,
     "lib/thumb": 3240,
     "lib/typeahead": 4407,
@@ -342,7 +342,7 @@
     "number-unit-field": 3170,
     "ordered-list": 1968,
     "overflow-menu": 3720,
-    "page-screens": 12472,
+    "page-screens": 12563,
     "paginated-table": 10726,
     "pagination": 3991,
     "pie-chart": 6308,
@@ -394,5 +394,5 @@
     "web-push": 731,
     "world-map": 6264
   },
-  "bytes": 599317
+  "bytes": 599443
 }

@@ -65,7 +65,7 @@ The sign in screen, copied from the web client's own login page: user and passwo
 | :--- | :--- | :--- |
 | `serverId` (required) | <code>string</code> | the server's id, which the answer must match (required) |
 | `serverName` | <code>string &#124; null</code> | the server's name, kept with the sign in [optional] |
-| `title` | <code>string</code> | the heading (default 'Please sign in') |
+| `title` | <code>string</code> | the heading (default 'Sign in to' the server's name, or 'Please sign in' without one) |
 | `message` | <code>string</code> | the sentence under it (default none) |
 | `client` | <code>string</code> | the client name Jellyfin shows in its devices list (default 'Jellyfin Web') |
 | `version` | <code>string</code> | the client version (default '1.0') |

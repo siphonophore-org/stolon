@@ -128,7 +128,7 @@ test('a viewer with no sign-in gets the sign in screen and the content stays hid
     assert.equal(document.body.hasAttribute('data-stolon-ready'), false);
     assert.equal(parts.gate.hidden, false);
     var screen = parts.gate.querySelector('.stolon-sign-in');
-    assert.equal(screen.querySelector('.stolon-screen-title').textContent, 'Please sign in');
+    assert.equal(screen.querySelector('.stolon-screen-title').textContent, 'Sign in to Den');
     assert.equal(screen.querySelector('.stolon-screen-text').textContent, 'Sign in to Jellyfin to open this page.');
     assert.equal(screen.querySelector('#stolonSignInUser').getAttribute('autocomplete'), 'username');
     assert.equal(screen.querySelector('#stolonSignInPassword').getAttribute('autocomplete'), 'current-password');

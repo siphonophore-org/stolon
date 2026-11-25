@@ -186,7 +186,7 @@ function field(id: string, label: string, type: string, autocomplete: string, we
  * @param options {
  *   serverId   : the server's id, which the answer must match (required)
  *   serverName : the server's name, kept with the sign in [optional]
- *   title      : the heading (default 'Please sign in')
+ *   title      : the heading (default 'Sign in to' the server's name, or 'Please sign in' without one)
  *   message    : the sentence under it (default none)
  *   client     : the client name Jellyfin shows in its devices list (default 'Jellyfin Web')
  *   version    : the client version (default '1.0')
@@ -199,7 +199,8 @@ export function createSignIn(options: SignInOptions): ScreenHandle {
     var web = inWebClientFrame();
     var client = opts.client || 'Jellyfin Web';
     var version = opts.version || '1.0';
-    var parts = frame(opts.title || stolonText('HeaderPleaseSignIn'), opts.message || null, web);
+    var title = opts.title || (opts.serverName ? stolonText('Stolon.SignInTo').replace('{0}', opts.serverName) : stolonText('HeaderPleaseSignIn'));
+    var parts = frame(title, opts.message || null, web);
     var root = parts.element;
     root.classList.add('stolon-sign-in');
 

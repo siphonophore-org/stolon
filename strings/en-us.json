@@ -230,6 +230,7 @@
   "Stolon.ShowingCount": "Showing {0} of {1}",
   "Stolon.ShowingFirst": "Showing the first {shown} of {total}.",
   "Stolon.SignInExpired": "Your sign in expired. Sign in again.",
+  "Stolon.SignInTo": "Sign in to {0}",
   "Stolon.SignInToOpen": "Sign in to Jellyfin to open this page.",
   "Stolon.Song": "Song",
   "Stolon.SparklineSummary": "from {first} to {last}, low {low}, high {high}",
