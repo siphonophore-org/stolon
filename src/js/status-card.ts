@@ -20,6 +20,7 @@ export interface StatusCardOptions {
     sparklineColor?: string;
     dots?: StatusCardDot[] | null;
     segments?: StatusCardSegment[] | null;
+    bars?: StatusCardSegment[] | null;
     href?: string;
     onClick?(event: MouseEvent): void;
 }
@@ -46,6 +47,7 @@ export interface StatusCardHandle extends ComponentHandle {
     setSparkline(values: Array<number | null | undefined> | null): void;
     setDots(dots: StatusCardDot[] | null): void;
     setSegments(segments: StatusCardSegment[] | null): void;
+    setBars(bars: StatusCardSegment[] | null): void;
     destroy(): void;
 }
 
@@ -87,10 +89,11 @@ function setLine(el: HTMLElement, text: string): void {
  *   sparklineColor : status color name or hex code of the line (default the accent)
  *   dots        : array of { color, label }, a row of status dots in the sparkline's place, such as one per server, each named by its label [optional]
  *   segments    : array of { label, value, color }, a bar in the sparkline's place split into parts by value, such as rows by state. A bar whose values add to 0 is an empty track [optional]
+ *   bars        : array of { label, value, color }, a small column chart in the sparkline's place, one column per entry as tall as its share of the largest. A column of 0 is a faint stub [optional]
  *   href        : address the card links to, which makes the card a link [optional]
  *   onClick     : function(event) called on a click, which makes the card a button when there is no href [optional]
  * }
- * @returns { element, getValue, setValue, setStatus, setDetail, setSparkline, setDots, setSegments, destroy }. setValue(value, label) replaces the value and, when given, its label. setStatus(label, color) replaces the pill.
+ * @returns { element, getValue, setValue, setStatus, setDetail, setSparkline, setDots, setSegments, setBars, destroy }. setValue(value, label) replaces the value and, when given, its label. setStatus(label, color) replaces the pill.
  * The icon is hidden from assistive tech, so a linked card is named by its title, status, value, and detail.
  */
 export function createStatusCard(options?: StatusCardOptions): StatusCardHandle {
@@ -183,6 +186,22 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
         setExtra(slot);
     }
 
+    // A small column chart, one column per entry, each as tall as its share of the largest, named as a whole.
+    function setBars(bars: StatusCardSegment[] | null): void {
+        if (!bars || !bars.length) { setExtra(null); return; }
+        var most = bars.reduce(function (max: number, part: StatusCardSegment): number { return Math.max(max, Number(part.value) || 0); }, 0);
+        var names = bars.map(function (part: StatusCardSegment): string { return toText(part.label) + ' ' + (Number(part.value) || 0); }).join(', ');
+        var chart = make('span', 'stolon-status-card-columns', { role: 'img', 'aria-label': names, title: names });
+        bars.forEach(function (part: StatusCardSegment): void {
+            var value = Math.max(0, Number(part.value) || 0);
+            var column = make('span', 'stolon-status-card-column' + (value ? '' : ' stolon-zero'), { title: toText(part.label) + ' ' + value });
+            applyColor(column, part.color, 'blue');
+            column.style.setProperty('--stolon-status-share', (most ? value / most * 100 : 0).toFixed(3) + '%');
+            chart.appendChild(column);
+        });
+        setExtra(chart);
+    }
+
     setLine(titleEl, toText(options.title));
     setStatus(options.status || '', options.statusColor);
     setValue(options.value, options.valueLabel || '');
@@ -190,6 +209,7 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
     setSparkline(options.sparkline || null);
     if (options.dots) setDots(options.dots);
     else if (options.segments) setSegments(options.segments);
+    else if (options.bars) setBars(options.bars);
     if (options.onClick) cleanups.push(listen(root, 'click', options.onClick));
 
     return {
@@ -201,6 +221,7 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
         setSparkline: setSparkline,
         setDots: setDots,
         setSegments: setSegments,
+        setBars: setBars,
         destroy: function (): void {
             runAll(cleanups);
             if (spark) spark.destroy();

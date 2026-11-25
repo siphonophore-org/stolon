@@ -142,3 +142,15 @@ test('segments that add to 0 leave an empty track', function () {
     assert.ok(card.element.querySelector('.stolon-status-card-bar'));
     assert.equal(card.element.querySelectorAll('.stolon-status-card-bar-part').length, 0);
 });
+
+test('bars draw a column per entry, sized to the largest, with a faint stub for 0', function () {
+    var card = createStatusCard({ title: 'Queue', bars: [{ label: 'Pending', value: 4, color: 'orange' }, { label: 'Sent', value: 1, color: 'blue' }, { label: 'Failed', value: 0, color: 'red' }] });
+    var chart = card.element.querySelector('.stolon-status-card-columns');
+    assert.equal(chart.getAttribute('aria-label'), 'Pending 4, Sent 1, Failed 0');
+    var columns = chart.querySelectorAll('.stolon-status-card-column');
+    assert.equal(columns.length, 3);
+    assert.equal(columns[0].style.getPropertyValue('--stolon-status-share'), '100.000%');
+    assert.equal(columns[1].style.getPropertyValue('--stolon-status-share'), '25.000%');
+    assert.ok(columns[2].classList.contains('stolon-zero'));
+    assert.ok(columns[2].classList.contains('stolon-red'));
+});

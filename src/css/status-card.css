@@ -131,6 +131,33 @@ button.stolon-status-card { width: 100%; }
 .stolon-status-card-bar-part.stolon-yellow { background: var(--stolon-yellow-fg); }
 .stolon-status-card-bar-part.stolon-custom { background: var(--stolon-custom); }
 
+/* Small column chart under a status card's value in the sparkline's place, a sparkline tall, one column per entry as tall as its share of the largest */
+/* Example: <span class="stolon-status-card-columns" role="img" aria-label="Pending 3, Sent 1"><span class="stolon-status-card-column stolon-orange" style="--stolon-status-share: 100%"></span><span class="stolon-status-card-column stolon-blue" style="--stolon-status-share: 33%"></span></span> */
+.stolon-status-card-columns {
+    display: flex;
+    align-items: flex-end;
+    align-self: stretch;
+    gap: calc(var(--stolon-gap-narrow) / 2);
+    height: var(--stolon-line-large);
+    margin-top: var(--stolon-gap-narrow);
+}
+.stolon-status-card-column {
+    flex: 1 1 0;
+    min-width: 0;
+    height: max(2px, var(--stolon-status-share, 0%));
+    border-radius: 2px 2px 0 0;
+    background: var(--stolon-accent);
+}
+.stolon-status-card-column.stolon-zero { height: 2px; opacity: 0.35; }
+.stolon-status-card-column.stolon-green { background: var(--stolon-green-fg); }
+.stolon-status-card-column.stolon-red { background: var(--stolon-red-fg); }
+.stolon-status-card-column.stolon-orange { background: var(--stolon-orange-fg); }
+.stolon-status-card-column.stolon-purple { background: var(--stolon-purple-fg); }
+.stolon-status-card-column.stolon-blue { background: var(--stolon-blue-fg); }
+.stolon-status-card-column.stolon-gray { background: var(--stolon-gray-fg); }
+.stolon-status-card-column.stolon-yellow { background: var(--stolon-yellow-fg); }
+.stolon-status-card-column.stolon-custom { background: var(--stolon-custom); }
+
 /* Quiet detail line of a status card, dimmed, cut with an ellipsis, and titled with its full text */
 /* Example: <span class="stolon-status-card-detail" title="Media at 82%">Media at 82%</span> */
 .stolon-status-card-detail {
