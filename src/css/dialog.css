@@ -61,6 +61,17 @@
 .stolon-modal-context { margin-top: var(--stolon-gap-wide); }
 .stolon-modal-context:empty { display: none; }
 
+/* A full dialog's item context, the artwork beside the item's name and a dimmed line */
+/* Example: <div class="stolon-modal-item"><span class="stolon-thumb stolon-modal-item-thumb stolon-portrait"></span><div class="stolon-modal-item-text"><div class="stolon-modal-item-title">Charade (1963).mkv</div><div class="stolon-modal-item-subtitle">Movies</div></div></div> */
+.stolon-modal-item { display: flex; align-items: center; gap: var(--stolon-gap-wide); min-width: 0; }
+.stolon-modal-item-thumb { width: calc(var(--stolon-size-large) * 1.25); height: calc(var(--stolon-size-large) * 1.875); border-radius: var(--stolon-radius-small); }
+.stolon-modal-item-thumb.stolon-wide { width: calc(var(--stolon-size-large) * 3); height: calc(var(--stolon-size-large) * 1.6875); }
+.stolon-modal-item-thumb.stolon-square { width: calc(var(--stolon-size-large) * 1.5); height: calc(var(--stolon-size-large) * 1.5); }
+.stolon-modal-item-thumb.stolon-round { width: calc(var(--stolon-size-large) * 1.5); height: calc(var(--stolon-size-large) * 1.5); border-radius: var(--stolon-radius-round); }
+.stolon-modal-item-text { min-width: 0; }
+.stolon-modal-item-title { font-weight: 600; overflow-wrap: anywhere; }
+.stolon-modal-item-subtitle { opacity: 0.7; overflow-wrap: anywhere; }
+
 /* Dialog links in the accent color, except a link styled as a button */
 /* Example: <p>See <a href="https://example.com">the guide</a>.</p> */
 .stolon-dialog a:not(.raised):not(.emby-button):not([is="emby-linkbutton"]) { color: var(--stolon-accent); }

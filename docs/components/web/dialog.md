@@ -14,7 +14,7 @@ A modal for an alert or a confirmation, at one of two fixed sizes, that never sc
 ## Usage
 
 ```js
-import { openDialog } from './configurationpage?name=myplugin_stolon.js';
+import { openDialog, createDialogItem } from './configurationpage?name=myplugin_stolon.js';
 
 openDialog({
     title: 'Sync paused',
@@ -25,7 +25,7 @@ openDialog({
 openDialog({
     title: 'Delete Charade',
     subtitle: 'The file goes from this server and stops syncing.',
-    context: posterAndName,
+    context: createDialogItem({ image: posterUrl, title: 'Charade (1963).mkv', subtitle: 'Movies' }),
     buttons: [
         { text: 'Cancel', className: 'stolon-button stolon-secondary', value: 'cancel' },
         { text: 'Delete', className: 'stolon-button stolon-destructive', value: 'delete' }
@@ -57,7 +57,7 @@ The markup of each size:
 </div>
 ```
 
-Classes: `stolon-dialog`, `stolon-dialog-content`, with the size modifiers `stolon-compact` and `stolon-full`, `stolon-modal-title`, `stolon-modal-description`, `stolon-modal-subtitle`, `stolon-modal-context`, `stolon-modal-field`, `stolon-modal-field-label`, `stolon-modal-button-row`, `stolon-modal-button`.
+Classes: `stolon-dialog`, `stolon-dialog-content`, with the size modifiers `stolon-compact` and `stolon-full`, `stolon-modal-title`, `stolon-modal-description`, `stolon-modal-subtitle`, `stolon-modal-context`, `stolon-modal-item`, `stolon-modal-item-thumb`, `stolon-modal-item-text`, `stolon-modal-item-title`, `stolon-modal-item-subtitle`, `stolon-modal-field`, `stolon-modal-field-label`, `stolon-modal-button-row`, `stolon-modal-button`.
 
 ## Writing a Dialog
 
@@ -69,6 +69,7 @@ Classes: `stolon-dialog`, `stolon-dialog-content`, with the size modifiers `stol
 * `size` is `compact` or `full`. With no size, a dialog with a `context` is full, and any other is compact.
 * Compact is the title, the `description`, and the buttons, 420px wide at most. Full is the title, the `subtitle`, the `context`, and the buttons, 560px at most. Both take the screen's width less its margin on a phone.
 * `description` and `subtitle` are text. `context` is a node, or a string of HTML, so escape data in it.
+* `createDialogItem({ image, imageShape, title, subtitle })` builds the usual context: the item's artwork, in a frame with a placeholder icon until it loads, beside its name and a dimmed line. `image` is an address or a function returning an address, a Blob, or a promise of one, and `imageShape` is `portrait` (default), `wide`, `square`, or `round`.
 * The panel never scrolls. What does not fit is cut off, so content that might not fit belongs in a sidecar.
 * A dialog has no close button. Escape and a backdrop `mousedown` dismiss it, asking `beforeClose` first, and `dismissable: false` turns both off.
 * `ariaLabel` names a dialog with no `title`. Without it the name is the description or subtitle, else "Dialog".
@@ -123,6 +124,19 @@ Opens a modal for an alert or a confirmation, at one of two fixed sizes, that ne
 | `dismiss` | <code>(): void</code> |
 | `setTitle` | <code>(text: string): void</code> |
 
+### `createDialogItem`
+
+<code>function createDialogItem(opts?: DialogItemOptions): HTMLElement</code>
+
+Builds the usual context of a full dialog: the artwork of the item it acts on beside its name and a dimmed line, such as a poster beside the file a confirm deletes. The artwork is a frame with a placeholder icon until the image loads.
+
+| Option | Type | What it does |
+| :--- | :--- | :--- |
+| `image` | <code>ThumbSource &#124; null</code> | an address, or a function returning an address, a Blob, or a promise of one [optional] |
+| `imageShape` | <code>'portrait' &#124; 'wide' &#124; 'square' &#124; 'round'</code> | 'portrait' (default), 'wide', 'square', or 'round' |
+| `title` | <code>string</code> | the item's name, as text [optional] |
+| `subtitle` | <code>string</code> | a dimmed line under it, as text [optional] |
+
 | Type | What it is |
 | :--- | :--- |
 | `DialogButton` | One button. icon is a Material icon name drawn before the text, action gets close, dismiss, and the clicked button, and without it a click closes with value. |
@@ -138,6 +152,7 @@ Opens a modal for an alert or a confirmation, at one of two fixed sizes, that ne
 | `stolon-modal-description` | The sentence under a compact dialog's title |
 | `stolon-modal-subtitle` | The line under a full dialog's title |
 | `stolon-modal-context` | A full dialog's context, such as a poster and the name of what is deleted |
+| `stolon-modal-item` | A full dialog's item context, the artwork beside the item's name and a dimmed line |
 | `stolon-modal-field` | Field block with a label inside a dialog or a sidecar |
 | `stolon-modal-field-label` | Dimmed label above such a field |
 | `stolon-modal-button-row` | A dialog's row of equal width buttons |

@@ -38,7 +38,7 @@ export { createUserSelector } from './user-selector.js';
 export type * from './user-selector.js';
 export { createUserMultiSelector } from './user-multi-selector.js';
 export type * from './user-multi-selector.js';
-export { openDialog } from './dialog.js';
+export { openDialog, createDialogItem } from './dialog.js';
 export type * from './dialog.js';
 export { bindSidecar } from './bound-sidecar.js';
 export type * from './bound-sidecar.js';

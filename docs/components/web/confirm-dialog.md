@@ -29,7 +29,7 @@ confirmDialog('Its links stop playing. Downloaded files stay.', {
 
 * `opts` is `{ title, confirmText, cancelText, destructive, context, typeToConfirm, typeLabel, mismatchText }`. The buttons default to "Confirm" and "Cancel", and there is no default title, so pass one.
 * The message is text, written as it is, never as HTML.
-* `context` is a node or a string of HTML shown under the message, such as a poster and the name of what is deleted. It makes the dialog full, with the message as its subtitle.
+* `context` is a node or a string of HTML shown under the message, such as a poster and the name of what is deleted from [`createDialogItem`](dialog.md#states-and-modifiers). It makes the dialog full, with the message as its subtitle.
 * `destructive` makes the confirm button `stolon-button stolon-destructive`. Otherwise it is `stolon-button stolon-primary`. A destructive confirm is never focused first, so Cancel takes focus and Enter cannot confirm by accident.
 * It resolves `true` only for the confirm button. Escape, the backdrop, and Cancel resolve `false`. It never rejects.
 

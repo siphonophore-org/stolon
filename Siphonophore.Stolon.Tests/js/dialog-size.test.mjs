@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { installFakeDom } from './fake-dom.mjs';
 
 var dom = installFakeDom();
-var { openDialog, confirmDialog, promptSidecar, openEditorSidecar } = await import('../../src/js/index.js');
+var { openDialog, confirmDialog, promptSidecar, openEditorSidecar, createDialogItem } = await import('../../src/js/index.js');
 
 beforeEach(function () {
     dom = installFakeDom();
@@ -33,6 +33,21 @@ test('a full dialog is the title, the subtitle, the context, and the buttons, an
     var odd = openDialog({ title: 'C', size: 'huge' });
     assert.equal(panel().classList.contains('stolon-compact'), true);
     odd.close();
+});
+
+test('createDialogItem draws the artwork beside the name and a dimmed line, as a full dialog\'s context', function () {
+    var item = createDialogItem({ image: 'poster.jpg', title: 'Charade (1963).mkv', subtitle: 'Movies' });
+    assert.equal(item.className, 'stolon-modal-item');
+    var thumb = item.querySelector('.stolon-modal-item-thumb');
+    assert.ok(thumb.classList.contains('stolon-portrait'));
+    assert.equal(item.querySelector('.stolon-modal-item-title').textContent, 'Charade (1963).mkv');
+    assert.equal(item.querySelector('.stolon-modal-item-subtitle').textContent, 'Movies');
+    var plain = createDialogItem({ title: 'Den', imageShape: 'round' });
+    assert.equal(plain.querySelector('.stolon-modal-item-thumb'), null);
+    confirmDialog('It goes from this server.', { title: 'Delete file', context: item });
+    assert.equal(panel().classList.contains('stolon-full'), true);
+    assert.equal(panel().querySelector('.stolon-modal-context .stolon-modal-item'), item);
+    dom.document.key('Escape');
 });
 
 test('a dialog never scrolls, and its sizes are fixed widths', function () {

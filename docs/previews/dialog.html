@@ -16,10 +16,7 @@ shared.bindClick('btnCompact', () => base.openDialog({
 }));
 // A full dialog's context is fed in, here a poster and the name of what is deleted.
 shared.bindClick('btnFull', () => {
-    const context = document.createElement('div');
-    context.style.cssText = 'display: flex; gap: 12px; align-items: center;';
-    context.innerHTML = '<div style="width: 48px; height: 72px; border-radius: 4px; background: #444;"></div>' +
-        '<div><div style="font-weight: 600;">Charade (1963).mkv</div><div style="opacity: .7;">Movies, 1.2 GB</div></div>';
+    const context = base.createDialogItem({ title: 'Charade (1963).mkv', subtitle: 'Movies, 1.2 GB', image: () => null });
     base.openDialog({
         title: 'Delete Charade',
         subtitle: 'The file goes from this server and stops syncing.',

@@ -60,6 +60,7 @@
     "createDataTable",
     "createDateRangePicker",
     "createDefinitionList",
+    "createDialogItem",
     "createDivider",
     "createDurationField",
     "createFieldMessage",
@@ -282,7 +283,7 @@
     "data-table": 14919,
     "date-range-picker": 4126,
     "definition-list": 2767,
-    "dialog": 1870,
+    "dialog": 2469,
     "divider": 449,
     "duration-field": 3558,
     "editor-sidecar": 2221,
@@ -394,5 +395,5 @@
     "web-push": 731,
     "world-map": 6264
   },
-  "bytes": 600672
+  "bytes": 601288
 }

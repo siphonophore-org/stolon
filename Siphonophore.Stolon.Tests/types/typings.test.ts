@@ -64,6 +64,7 @@ B.openDialog({ title: 'Delete Charade', subtitle: 'The file goes from every serv
 // @ts-expect-error a dialog is compact or full
 B.openDialog({ title: 'Title', size: 'large' });
 B.openSidecar({ title: 'Charade', size: 'large', buttons: [{ text: 'Save' }] });
+B.confirmDialog('It goes from this server.', { title: 'Delete file', context: B.createDialogItem({ image: 'poster.jpg', imageShape: 'portrait', title: 'Charade', subtitle: 'Movies' }) });
 B.sidecarOpener(function (row: { name: string }) { return { title: row.name }; });
 B.bindSidecar('sidecarId', {});
 B.confirmDialog('Remove it?').then(function (yes: boolean) { return yes; });

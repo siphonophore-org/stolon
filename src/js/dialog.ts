@@ -1,6 +1,8 @@
 import { createModalShell, dialogButtonRow } from './lib/dialog.js';
 import type { ModalShell, AutofocusTarget, ReturnFocusTarget } from './lib/dialog.js';
 import { make, nextId } from './lib/dom.js';
+import { buildThumb, SHAPE_ICONS } from './lib/thumb.js';
+import type { ThumbSource } from './lib/thumb.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
 
@@ -134,4 +136,36 @@ export function openDialog(opts?: DialogOptions): DialogHandle {
             }
         }
     };
+}
+
+/** What createDialogItem takes: the artwork, its shape, and the two lines beside it. */
+export interface DialogItemOptions {
+    image?: ThumbSource | null;
+    imageShape?: 'portrait' | 'wide' | 'square' | 'round';
+    title?: string;
+    subtitle?: string;
+}
+
+/**
+ * Builds the usual context of a full dialog: the artwork of the item it acts on beside its name and a dimmed line, such as a
+ * poster beside the file a confirm deletes. The artwork is a frame with a placeholder icon until the image loads.
+ *
+ * @param opts {
+ *   image      : an address, or a function returning an address, a Blob, or a promise of one [optional]
+ *   imageShape : 'portrait' (default), 'wide', 'square', or 'round'
+ *   title      : the item's name, as text [optional]
+ *   subtitle   : a dimmed line under it, as text [optional]
+ * }
+ * @returns the element, for openDialog's or confirmDialog's context
+ */
+export function createDialogItem(opts?: DialogItemOptions): HTMLElement {
+    opts = opts || {};
+    var shape: 'portrait' | 'wide' | 'square' | 'round' = opts.imageShape === 'wide' || opts.imageShape === 'square' || opts.imageShape === 'round' ? opts.imageShape : 'portrait';
+    var root = make('div', 'stolon-modal-item');
+    if (opts.image) root.appendChild(buildThumb({ src: opts.image, icon: SHAPE_ICONS[shape], className: 'stolon-modal-item-thumb stolon-' + shape }).element);
+    var text = make('div', 'stolon-modal-item-text');
+    if (opts.title) text.appendChild(make('div', 'stolon-modal-item-title', null, opts.title));
+    if (opts.subtitle) text.appendChild(make('div', 'stolon-modal-item-subtitle', null, opts.subtitle));
+    root.appendChild(text);
+    return root;
 }
