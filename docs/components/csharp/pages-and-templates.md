@@ -225,6 +225,7 @@ public ContentResult PushWorker() => WebPushWorker.Serve(Response);
 * Serve the manifest and the worker beside the page, so their relative addresses and the worker's scope are the page's folder.
 * The cache prefix holds lowercase letters, digits, and hyphens, and names the worker's caches, so two plugins' apps never clear each other's.
 * Pass `null` as the push worker for an app with no notifications. The page registers the worker itself, as in [Web Push](../../Notifications.md#web-push).
+* The worker keeps navigation preload off. On a cold start WebKit asks for a preloaded page and again for the worker's own, and can pair one answer's `Content-Security-Policy` with the other's body, so a page whose scripts carry a nonce opens blank.
 
 ## WebClientAppIcon
 

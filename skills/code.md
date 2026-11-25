@@ -234,6 +234,7 @@ Several helpers guard security for every plugin. A change to one is a [stop and 
 * `DatabaseSchema` runs SQL with fixed text and an integer. Never put a caller's value into SQL text.
 * Never put a secret or a user's data in a URL.
 * `StatusPage` encodes its values, and its `content` argument is raw. Document that wherever you pass markup to it.
+* The app worker from `WebClientApp.ServiceWorker` keeps navigation preload off. A page whose CSP carries a per response script nonce breaks under preload on iOS, since WebKit can pair one answer's header with another's body on a cold start and every script is refused. Keep preload off while any page uses a nonce.
 
 ## Tests
 

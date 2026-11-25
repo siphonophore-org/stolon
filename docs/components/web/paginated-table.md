@@ -76,7 +76,7 @@ Classes: `stolon-table-wrapper`, `stolon-table-controls`, `stolon-table-search`,
 * The footer reads "1 item", "N items", "Showing X of N items" while more remain, or "X/N items" in Load more mode.
 * Until the first answer the rows say "Loading", and with no rows they say the `emptyState` message. A next page shows "Loading" under the rows.
 * `stolon-table-loading` goes on the host element while the first page loads. The rows drop to 60 percent opacity and take no pointer events, and the search and filters stay usable.
-* At 768px and below the toolbar stacks. At 600px and below a row wraps: the first column keeps at least 60 percent of the width, and the other columns move to the next line, with the status cell at the end.
+* At 768px and below the toolbar stacks. At 600px and below the checkbox, the first column, and the status badge share one line, the first column's text clipping to fit, and any other columns move to full lines beneath.
 * `size` is `small`, `medium` (default), or `large`, and sizes its fields on the [size scale](design-tokens.md).
 
 ## Gotchas
