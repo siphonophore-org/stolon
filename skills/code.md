@@ -33,7 +33,7 @@ Stolon is a set of base components and cores, with thin variations on top. A var
 | Popover core, `lib/popover.ts`, and `.stolon-float` | Overflow Menu, which the Tool Shell's title menu is built on, Filter Panel, Help Hint, Tooltip, the typeahead dropdown, and the chart tooltip |
 | Typeahead core, `lib/typeahead.ts` | Combo Box, Chip Select, and Media Picker |
 | Pressed group core, `lib/pressed-group.ts` | Pill Group, the Schedule Picker's days, the Inherit Field, the Date Range Picker's presets, the Filtered List's pills, the World Map's layers, and the Folder Picker and Preview Frame toggles |
-| Dialog core, `lib/dialog.ts` | `createModalShell`, which `openDialog` and the Detail Drawer are built on, and `bindModalBehavior`, which Bound Dialog is built on. Confirm Dialog, with its typed confirm, Prompt Dialog, Editor Dialog, Filter Panel, Folder Picker, Preview Frame, and the QR Code, whose inline layout opens the code in a dialog, are built on `openDialog` |
+| Dialog core, `lib/dialog.ts` | `createModalShell`, which `openDialog` and `openSidecar` are built on, and `bindModalBehavior`, which Bound Sidecar is built on. Confirm Dialog, with its typed confirm, is built on `openDialog`. Prompt Sidecar, Editor Sidecar, the Filter Panel on a phone, Folder Picker, Preview Frame's zoom, and the QR Code's inline layout are built on `openSidecar` |
 | Message core, `lib/message.ts` | Field Message, Status Text, Banner, and Toast. Save Bar is built on the status line |
 | Card core, `lib/card.ts` | Count Cards and the Filtered List's filter cards |
 | Chart core, `lib/chart.ts` | Bar Chart, Line Chart, Pie Chart, and Sparkline. A radial chart, such as the pie, sets `radial` for a square plot with no axes. QR Code draws with its `svgEl` |
@@ -41,7 +41,7 @@ Stolon is a set of base components and cores, with thin variations on top. A var
 | Thumb core, `lib/thumb.ts` | Avatar, Media Card, Media Picker, Chip Select, Checkbox List rows, Paginated Table, Tree View, Image Picker, and Preview Frame. A source may be an address or a function that returns an address, a Blob, or a promise of one |
 | Validation core, `lib/validate.ts` | Every input. See [Validation](#validation) |
 | Color core, `lib/color.ts` | Every component that takes a status name or a hex code |
-| Badge core, `lib/badge.ts` | `makeBadge` and `badgeColor`, used by the shared bag, Checkbox List, Collapsible Section, Definition List, Detail Drawer, Matrix Grid, Media Card, Overflow Menu, Sortable Card List, and Status Card |
+| Badge core, `lib/badge.ts` | `makeBadge` and `badgeColor`, used by the shared bag, Checkbox List, Collapsible Section, Definition List, Sidecar, Matrix Grid, Media Card, Overflow Menu, Sortable Card List, and Status Card |
 | Chips core, `lib/chips.ts` | Chip Select, Tag Input, and Media Picker |
 | Balance core, `lib/balance.ts` | Balanced Rows, List, Filtered List, Choice Group, Count Cards, and the Status Card grid |
 | Canvas core, `lib/canvas.ts` | Image Picker and QR Code |
@@ -77,7 +77,7 @@ Every input validates through the validation core, `lib/validate.ts`. Its rules 
 
 * `bindFieldAdornments` binds the core on every ruled field under a root, and on the ones added later. `createConfigPage` calls it on the page, so a plain config page field validates with no code.
 * A component that builds its own inputs binds each with `bindValidation`, or builds them with the field control core, which does it.
-* A form checks every field with `validateAll` before it saves, as the Save Bar and the Prompt Dialog do.
+* A form checks every field with `validateAll` before it saves, as the Save Bar and the Prompt Sidecar do.
 * A component never writes its own range check, required check, or error markup.
 
 ### Shared Helpers

@@ -93,7 +93,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Task progress button | A button that turns into a live progress display for a Jellyfin scheduled task | `shared.pollTaskProgress`, `stolon-btn-progress-host` | Progress button, task button |
 | Check grid | Checkboxes laid out in as many columns as fit | `stolon-check-grid` | Checkbox grid, check columns |
 | Code block | A monospace code editor textarea, or a read only block for a preview | `stolon-code` | Code editor, pre block |
-| Edit input | A compact input on the surface color, at the field height, that the Combo Box, the Chip Select, and the dialog text boxes build with | `stolon-edit-input` | Inline input, small input |
+| Edit input | A compact input on the surface color, at the field height, that the Combo Box, the Chip Select, and the dialog and sidecar text boxes build with | `stolon-edit-input` | Inline input, small input |
 | Form fields | Jellyfin's own field containers, restyled so every field on a config page or in a dialog shares one surface, border, focus ring, chevron, and left edge, with no kit class | `.pluginConfigurationPage`, `.stolon-dialog` | Form theme, field skin |
 | Field | A compact label over its control | `stolon-field` | Form item, input group |
 | Field row | Several fields side by side on one line | `stolon-field-row` | Form row, inline fields |
@@ -112,8 +112,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Unsaved indicator | A small dot and text that fades in to flag unsaved changes, in a heading or a label | `stolon-unsaved` | Dirty flag, change marker |
 | Utility classes | Small classes for visibility, fonts, and text color | `stolon-sr-only`, `stolon-mono`, `stolon-ok`, `stolon-bad` | Helper classes, utilities |
 | Config page | A plugin settings page inside the Jellyfin dashboard | `pluginConfigurationPage` | Settings screen |
-| Dialog | A modal over the page | `stolon-dialog`, `openDialog` | Modal, popup |
-| Editor dialog | A dialog that edits one record with Remove, Cancel, and Done | `openEditorDialog` | Record dialog |
+| Dialog | A modal for an alert or a confirmation, compact or full, that never scrolls and has no close button | `stolon-dialog`, `openDialog` | Modal, popup |
+| Editor sidecar | A sidecar that edits one record with Delete, Cancel, and Save | `openEditorSidecar` | Editor dialog, record dialog |
 | Collapsible | A section whose header shows and hides its body, with an optional icon tile, subtitle, and aside in its header. `initCollapsibles` binds the ones already in a page's markup | `stolon-collapsible-section`, `createCollapsibleSection`, `initCollapsibles` | Accordion |
 | Collapsible badge | The badge or status dot in a Collapsible's header, between its title and its chevron, set or removed after it is built | `setCollapsibleBadge` | Header tag, header chip |
 | Fixed panel | A Collapsible that never collapses, a framed block with the same header slots | `createCollapsibleSection({ collapsible: false })` | Card, locked section |
@@ -163,7 +163,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Relative time cell | A render function for a Data Table column or a Filtered List that draws a live Relative Time from each row | `renderRelative` | Time column, ago column |
 | Avatar stack | A row of overlapping avatars that folds the rest into a +N bubble | `createAvatarStack` | Face pile |
 | QR code | A QR code of a short text with Copy Image and Download | `createQrCode` | Barcode |
-| Inline QR code | A QR Code drawn as a Copy Field, with a QR button that opens the full code in a dialog | `createQrCode({ layout: 'inline' })` | QR link, QR popup |
+| Inline QR code | A QR Code drawn as a Copy Field, with a QR button that opens the full code in a sidecar | `createQrCode({ layout: 'inline' })` | QR link, QR popup |
 | Audio player | A Play and Pause button, a seek slider, and the time | `createAudioPlayer` | Media player |
 | Preview frame | A frame that shows an image made by an async render, on the thumb core | `createPreviewFrame` | Image preview, render box |
 | World map | A map that shades each country by its counts in up to six layers | `createWorldMap` | Choropleth, globe |
@@ -198,7 +198,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Access schedule | A list of weekly time windows, each a day and a start and end hour, in Jellyfin's AccessSchedule shape | `createAccessSchedule` | Time limits, parental schedule |
 | Mapping table | A table that pairs each source with one target picked from a select | `createMappingTable` | Mapper, link table, pairing grid |
 | File picker | A click or drop area that returns chosen files | `createFilePicker` | Uploader, dropzone |
-| Folder picker | A server path field with a dialog that browses the server's folders | `createFolderPicker` | Directory browser, path chooser |
+| Folder picker | A server path field with a sidecar that browses the server's folders | `createFolderPicker` | Directory browser, path chooser |
 | Image picker | A frame that previews a chosen image and returns its data | `createImagePicker` | Image uploader, avatar upload |
 | Definition list | Read-only label and value pairs, beside each other or in `columns`, with meta and note lines and an optional route arrow | `createDefinitionList` | Details list, info grid |
 | Log viewer | A scrolling monospace output area | `createLogViewer` | Console, terminal |
@@ -208,10 +208,10 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Save bar | A Save button with a status line above it | `createSaveBar` | Action bar, footer |
 | Confirm dialog | A dialog that asks before an action, with a button that repeats the verb | `confirmDialog` | Alert, yes no dialog |
 | Typed confirm | A Confirm dialog that enables its button only once the reader types the asked text | `typeToConfirm`, `typedMatches` | Type to confirm |
-| Prompt dialog | A small form in a dialog that resolves to its values, or null when cancelled | `promptDialog` | Input dialog |
-| Detail drawer | A dialog that slides in from the right edge with a header, a body that scrolls, and an optional footer | `openDetailDrawer` | Side panel, sheet, flyout |
-| Drawer opener | A function that opens a Detail Drawer for an item, and swaps in the next item's content while the drawer stays open, for a list's `onOpen` | `detailDrawerOpener` | Drawer factory, open handler |
-| Bound dialog | A dialog bound to markup already on the page | `bindDialog` | Static modal |
+| Prompt sidecar | A small form in a sidecar that resolves to its values, or null when cancelled | `promptSidecar` | Prompt dialog, input dialog |
+| Sidecar | A panel that slides in from the trailing edge for inputs and the details of a selected item, with its header and shelf pinned and its body scrolling | `stolon-sidecar`, `openSidecar` | Detail drawer, side panel, sheet, flyout |
+| Sidecar opener | A function that opens a Sidecar for an item, and swaps in the next item's content while the sidecar stays open, for a list's `onOpen` | `sidecarOpener` | Drawer opener |
+| Bound sidecar | A sidecar bound to markup already on the page | `bindSidecar` | Bound dialog, static modal |
 | Setup checklist | A setup page as numbered collapsible steps with a summary of how many are done | `createSetupChecklist` | Wizard, onboarding |
 
 ## Cores
@@ -231,7 +231,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Popover core | The placement, closing, and Escape handling of every floating panel | `anchorPopover`, `lib/popover.ts` | Dropdown helper |
 | Typeahead core | A text input with a floating list of results that the Combo Box, the Chip Select, and the Media Picker share | `bindTypeahead`, `lib/typeahead.ts` | Autocomplete helper |
 | Pressed group core | A group of on and off buttons, single or many, that may clear on a second click | `bindPressedGroup`, `lib/pressed-group.ts` | Toggle group helper |
-| Dialog core | The modal shell, focus, stacking, scroll lock, and button row every dialog shares | `createModalShell`, `lib/dialog.ts` | Modal base |
+| Dialog core | The modal shell, focus, stacking, scroll lock, and button row every dialog and sidecar shares | `createModalShell`, `lib/dialog.ts` | Modal base |
 | Message core | The state icons and the dismiss button every message shares | `MESSAGE_ICONS`, `dismissButton`, `lib/message.ts` | Alert helper |
 | Card core | The count over a label, colored by status, that count cards and filter cards share | `buildCard`, `lib/card.ts` | Tile helper |
 | Chart core | The frame, scale, axes, legend, tooltip, and hidden table of numbers every chart shares | `buildChart`, `lib/chart.ts` | Chart engine |

@@ -142,7 +142,7 @@ test('showActions false hides Copy image and Download while the code shows', fun
     assert.equal(createQrCode({ value: 'a', showActions: false }).element.querySelector('.stolon-qr-code-side').hidden, false);
 });
 
-test('inline draws the text with a QR button beside Copy that opens the full code in a dialog', function () {
+test('inline draws the text with a QR button beside Copy that opens the full code in a sidecar', function () {
     var qr = createQrCode({ value: 'https://example.com', layout: 'inline' });
     assert.ok(qr.element.classList.contains('stolon-inline'));
     assert.equal(qr.element.querySelector('.stolon-qr-code-frame'), null, 'no code on the page');
@@ -151,9 +151,9 @@ test('inline draws the text with a QR button beside Copy that opens the full cod
     assert.equal(btn.getAttribute('aria-label'), 'Show QR code');
     assert.equal(btn.disabled, false);
     var dialog = qr.open();
-    assert.ok(dialog, 'open returns the dialog');
-    assert.ok(dialog.content.querySelector('.stolon-qr-code-dialog .stolon-qr-code-frame svg'), 'the dialog holds the code');
-    assert.equal(dialog.content.querySelector('.stolon-copy-field'), null, 'the dialog leaves out the text it came from');
+    assert.ok(dialog, 'open returns the sidecar');
+    assert.ok(dialog.content.querySelector('.stolon-qr-code-sidecar .stolon-qr-code-frame svg'), 'the sidecar holds the code');
+    assert.equal(dialog.content.querySelector('.stolon-copy-field'), null, 'the sidecar leaves out the text it came from');
     dialog.close();
     qr.destroy();
 });

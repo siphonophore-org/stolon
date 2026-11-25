@@ -1,6 +1,6 @@
 # Edit Input
 
-A compact input on the surface color, at the field height. The [Combo Box](combo-box.md), the [Chip Select](chip-select.md), and the text boxes of the [Confirm Dialog](confirm-dialog.md) and the [Prompt Dialog](prompt-dialog.md) build with it.
+A compact input on the surface color, at the field height. The [Combo Box](combo-box.md), the [Chip Select](chip-select.md), and the text boxes of the [Confirm Dialog](confirm-dialog.md) and the [Prompt Sidecar](prompt-sidecar.md) build with it.
 
 ## Decision
 

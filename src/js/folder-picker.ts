@@ -1,6 +1,6 @@
 import { make, icon, nextId, listen, runAll, has, applyFieldSize, addToken, toText } from './lib/dom.js';
-import { openDialog } from './dialog.js';
-import type { DialogHandle } from './dialog.js';
+import { openSidecar } from './sidecar.js';
+import type { SidecarHandle } from './sidecar.js';
 import { createFieldMessage } from './field-message.js';
 import { bindPressedGroup } from './lib/pressed-group.js';
 import { createList } from './list.js';
@@ -39,7 +39,7 @@ export interface FolderPickerOptions {
     onChange?(value: string): void;
 }
 
-/** What createFolderPicker returns. browse opens the dialog, and input is the path field. */
+/** What createFolderPicker returns. browse opens the sidecar, and input is the path field. */
 export interface FolderPickerHandle extends ComponentHandle {
     input: HTMLInputElement;
     getValue(): string;
@@ -82,16 +82,16 @@ function apiParent(path: string): Promise<string | null> {
 }
 
 /**
- * A text field for a server path with a Browse button. Browse opens a dialog that lists the server's drives, then a folder's subfolders, with a row to go up a level, an editable path, and a Select button that writes the path to the field.
+ * A text field for a server path with a Browse button. Browse opens a sidecar that lists the server's drives, then a folder's subfolders, with a row to go up a level, an editable path, and a Select button that writes the path to the field.
  *
  * @param options {
  *   value       : first path [optional]
  *   label       : visible label of the field [optional]
  *   placeholder : a valid example path [optional]
  *   description : sentence under the field [optional]
- *   pathLabel   : aria-label of the field without a label, and of the dialog's path field (default 'Path')
+ *   pathLabel   : aria-label of the field without a label, and of the sidecar's path field (default 'Path')
  *   browseText  : text of the browse button (default 'Browse')
- *   title       : dialog title (default 'Select a folder')
+ *   title       : sidecar title (default 'Select a folder')
  *   selectText  : text of the select button (default 'Select')
  *   cancelText  : text of the cancel button (default 'Cancel')
  *   upText      : text of the row that goes up a level (default 'Go up')
@@ -99,21 +99,21 @@ function apiParent(path: string): Promise<string | null> {
  *   emptyText   : sentence shown for a folder with nothing to list (default 'This folder is empty.')
  *   errorText   : message under the list when a folder cannot be read (default 'Could not read this folder.')
  *   includeFiles: true lists files too, so a file can be picked (default false)
- *   height      : the dialog list's height, 'auto', 'fill', a number of pixels, or a CSS length, as a List takes it (default 'auto')
- *   maxHeight   : the most the dialog list grows before it scrolls, or null for no cap (default '50vh')
+ *   height      : the sidecar list's height, 'auto', 'fill', a number of pixels, or a CSS length, as a List takes it (default 'auto')
+ *   maxHeight   : the most the sidecar list grows before it scrolls, or null for no cap (default '50vh')
  *   size        : 'small', 'medium', or 'large' for its fields (default 'medium')
  *   listFolders : function(path, includeFiles) returning entries { Name, Path, Type }, or a promise of them, where '' is the top level (default the Jellyfin Environment routes) [optional]
  *   parentPath  : function(path) returning the path above, or '' or null for the top level (default Environment/ParentPath, or the path's text when listFolders is given) [optional]
  *   onChange    : function(value) called when the path changes by typing or Select [optional]
  * }
- * @returns { element, input, getValue, setValue, browse, setHeight, setSize, destroy }. browse() opens the dialog at the field's path, or at the top level when the field is empty.
+ * @returns { element, input, getValue, setValue, browse, setHeight, setSize, destroy }. browse() opens the sidecar at the field's path, or at the top level when the field is empty.
  */
 export function createFolderPicker(options?: FolderPickerOptions): FolderPickerHandle {
     options = options || {};
     var cleanups: Array<() => void> = [];
     var includeFiles = !!options.includeFiles;
     var pathLabel = options.pathLabel || stolonText('LabelPath');
-    var dialog: DialogHandle | null = null;
+    var sidecar: SidecarHandle | null = null;
     var listHeight: ListHeight = options.height === undefined ? 'auto' : options.height;
     var listMax: number | string | null | undefined = options.maxHeight === undefined ? '50vh' : options.maxHeight;
     var folderList: ListHandle<FolderEntry | null> | null = null;
@@ -166,7 +166,7 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
     }
 
     function browse(): void {
-        if (dialog) return;
+        if (sidecar) return;
         var current = '';
         var request = 0;
         var body = make('div', 'stolon-folder-picker-browser');
@@ -176,7 +176,7 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
         var inner: Array<() => void> = [];
 
         function selectButton(): HTMLButtonElement | null {
-            return dialog ? dialog.element.querySelector<HTMLButtonElement>('.stolon-folder-picker-select') : null;
+            return sidecar ? sidecar.element.querySelector<HTMLButtonElement>('.stolon-folder-picker-select') : null;
         }
 
         function reflectSelect(): void {
@@ -257,12 +257,12 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
             // Focus leaves with the removed row, so it waits in the path field until the rows return.
             if (focusRows) pathInput.focus();
             return list(current).then(function (entries) {
-                if (mine !== request || !dialog) return;
+                if (mine !== request || !sidecar) return;
                 folders.setLoading(false);
                 rows.removeAttribute('aria-busy');
                 draw(Array.isArray(entries) ? entries : [], focusRows);
             }, function () {
-                if (mine !== request || !dialog) return;
+                if (mine !== request || !sidecar) return;
                 folders.setLoading(false);
                 rows.removeAttribute('aria-busy');
                 draw([], false);
@@ -274,9 +274,9 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
         function goUp(): void {
             var from = current;
             parentOf(from).then(function (parent) {
-                if (current === from && dialog) go(parent || '', true);
+                if (current === from && sidecar) go(parent || '', true);
             }, function () {
-                if (current === from && dialog) go(textParent(from), true);
+                if (current === from && sidecar) go(textParent(from), true);
             });
         }
 
@@ -294,10 +294,10 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
         }));
         inner.push(listen(pathInput, 'input', reflectSelect));
 
-        dialog = openDialog({
+        sidecar = openSidecar({
             title: options!.title || stolonText('Stolon.SelectFolder'),
             body: body,
-            className: 'stolon-folder-picker-dialog',
+            className: 'stolon-folder-picker-sidecar',
             buttons: [
                 { text: options!.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close, dismiss) { dismiss(); } },
                 { text: options!.selectText || stolonText('Select'), className: 'stolon-button stolon-primary stolon-folder-picker-select', action: function (close) { choose(close); } }
@@ -308,7 +308,7 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
                 files.destroy();
                 folders.destroy();
                 folderList = null;
-                dialog = null;
+                sidecar = null;
                 request++;
                 if (browseButton.isConnected) browseButton.focus();
             }
@@ -335,7 +335,7 @@ export function createFolderPicker(options?: FolderPickerOptions): FolderPickerH
         },
         destroy: function () {
             runAll(cleanups);
-            if (dialog) dialog.close();
+            if (sidecar) sidecar.close();
         }
     };
 }

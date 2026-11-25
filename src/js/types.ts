@@ -69,7 +69,7 @@ export interface ChangeTrackerOptions {
     savedText?: string;
 }
 
-/** An editor dialog whose unsaved edits count as the page's, such as one from openEditorDialog. */
+/** An editor whose unsaved edits count as the page's, such as one from openEditorSidecar. */
 export interface UnsavedEditor {
     isDirty(): boolean;
     close(): void;

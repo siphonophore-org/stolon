@@ -30,7 +30,7 @@ Classes: `stolon-preview-frame`, with the `stolon-busy` modifier, and the parts 
 * `update()` renders once its inputs stop changing for `delay` (300 milliseconds), and `refresh()` renders at once. A render that finishes after a newer one starts is dropped.
 * `stolon-busy` is on the root while it renders, with the status line "Rendering…" (`renderingText`). An empty result shows "No preview." (`emptyText`), and a failure shows "Could not render the preview." (`errorText`).
 * `background` is `dark` (default), `light`, or `checker`, chosen from the pills, whose labels `darkText`, `lightText`, and `checkerText` replace. `getValue` and `setValue` read and set it. `backgrounds: false` hides the choice. The dark and light backgrounds are the theme's surface and text colors.
-* The stage is a button named "Zoom" (`zoomText`) and the label, which opens a large dialog titled by the label. `label` is the image's alt text, "Preview" by default. `zoom: false` makes it a plain frame.
+* The stage is a button named "Zoom" (`zoomText`) and the label, which opens a large [Sidecar](sidecar.md) titled by the label. `label` is the image's alt text, "Preview" by default. `zoom: false` makes it a plain frame.
 
 ## Gotchas
 
@@ -46,12 +46,12 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createPreviewFrame(options?: PreviewFrameOptions): PreviewFrameHandle</code>
 
-A frame that shows an image made by an async render, such as a generated poster, built on the thumb core. While it renders it shows the spinner and a status line, and a failed render shows a message under it. update renders again once its inputs stop changing for the delay. A pressed group picks a dark, light, or checkered background, and a click on the image opens it larger in a dialog.
+A frame that shows an image made by an async render, such as a generated poster, built on the thumb core. While it renders it shows the spinner and a status line, and a failed render shows a message under it. update renders again once its inputs stop changing for the delay. A pressed group picks a dark, light, or checkered background, and a click on the image opens it larger in a sidecar.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `render` | <code>(): PreviewResult &#124; PromiseLike&lt;PreviewResult&gt;</code> | function() returning an address, a Blob, or a canvas, or a promise of one [optional] |
-| `label` | <code>string</code> | the image's alt text and the zoom dialog's title (default 'Preview') |
+| `label` | <code>string</code> | the image's alt text and the zoom sidecar's title (default 'Preview') |
 | `delay` | <code>number</code> | milliseconds update waits for its inputs to settle (default 300) |
 | `background` | <code>PreviewBackground</code> | 'dark', 'light', or 'checker' (default 'dark') |
 | `backgrounds` | <code>boolean</code> | false hides the background choice (default true) |

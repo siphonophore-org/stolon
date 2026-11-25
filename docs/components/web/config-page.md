@@ -51,7 +51,7 @@ The page handle holds `view`, `shared`, `addCleanup(fn)`, `createPoller(fn, ms, 
 * `beforeunload` shows the browser warning while something is unsaved.
 * `viewhide` removes the listener, closes open editor dialogs, runs every cleanup, and then runs `onHide`.
 * `tabs` may be a function that returns the array. It runs each time the tabs are shown. Tabs are set only when `tabs` and `tabsKey` are both given.
-* An open editor dialog counts as unsaved when it is passed to `openEditorDialog` as `page`.
+* An open editor sidecar counts as unsaved when it is passed to `openEditorSidecar` as `page`.
 
 ## Gotchas
 

@@ -173,7 +173,7 @@ These files test one concern across many components. Add to the one that matches
 | `race.test.mjs` | A slow search answer never overwrites a newer one or reopens a closed dropdown | A component waits on an async answer |
 | `labels.test.mjs` | The default labels a caller can replace | A component adds or changes a default label |
 | `missing.test.mjs` | Helpers that had no tests | A helper with no home file gets its first test |
-| `kit.test.mjs` | Dialog focus, the Tab trap, and Escape across Dialog, Bound Dialog, and Editor Dialog, and the bundle entry | A change touches focus or Escape in a dialog |
+| `kit.test.mjs` | Focus, the Tab trap, and Escape across Dialog, Sidecar, Bound Sidecar, and Editor Sidecar, and the bundle entry | A change touches focus or Escape in a dialog or sidecar |
 | `core.test.mjs` | The config page, the shared bag, and the browser helpers | A change touches one of those |
 | `display.test.mjs` | Breadcrumbs, Stepper, Banner, Divider, Avatar, User Chip, Progress Ring, Timeline, and Status Dot | A change touches one of those display components |
 | `fields.test.mjs` | Number Unit Field, Slider Field, and Schedule Picker | A change touches one of those fields |

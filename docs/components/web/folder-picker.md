@@ -52,7 +52,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createFolderPicker(options?: FolderPickerOptions): FolderPickerHandle</code>
 
-A text field for a server path with a Browse button. Browse opens a dialog that lists the server's drives, then a folder's subfolders, with a row to go up a level, an editable path, and a Select button that writes the path to the field.
+A text field for a server path with a Browse button. Browse opens a sidecar that lists the server's drives, then a folder's subfolders, with a row to go up a level, an editable path, and a Select button that writes the path to the field.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -60,9 +60,9 @@ A text field for a server path with a Browse button. Browse opens a dialog that 
 | `label` | <code>string</code> | visible label of the field [optional] |
 | `placeholder` | <code>string</code> | a valid example path [optional] |
 | `description` | <code>string</code> | sentence under the field [optional] |
-| `pathLabel` | <code>string</code> | aria-label of the field without a label, and of the dialog's path field (default 'Path') |
+| `pathLabel` | <code>string</code> | aria-label of the field without a label, and of the sidecar's path field (default 'Path') |
 | `browseText` | <code>string</code> | text of the browse button (default 'Browse') |
-| `title` | <code>string</code> | dialog title (default 'Select a folder') |
+| `title` | <code>string</code> | sidecar title (default 'Select a folder') |
 | `selectText` | <code>string</code> | text of the select button (default 'Select') |
 | `cancelText` | <code>string</code> | text of the cancel button (default 'Cancel') |
 | `upText` | <code>string</code> | text of the row that goes up a level (default 'Go up') |
@@ -70,8 +70,8 @@ A text field for a server path with a Browse button. Browse opens a dialog that 
 | `emptyText` | <code>string</code> | sentence shown for a folder with nothing to list (default 'This folder is empty.') |
 | `errorText` | <code>string</code> | message under the list when a folder cannot be read (default 'Could not read this folder.') |
 | `includeFiles` | <code>boolean</code> | true lists files too, so a file can be picked (default false) |
-| `height` | <code>ListHeight</code> | the dialog list's height, 'auto', 'fill', a number of pixels, or a CSS length, as a List takes it (default 'auto') |
-| `maxHeight` | <code>number &#124; string &#124; null</code> | the most the dialog list grows before it scrolls, or null for no cap (default '50vh') |
+| `height` | <code>ListHeight</code> | the sidecar list's height, 'auto', 'fill', a number of pixels, or a CSS length, as a List takes it (default 'auto') |
+| `maxHeight` | <code>number &#124; string &#124; null</code> | the most the sidecar list grows before it scrolls, or null for no cap (default '50vh') |
 | `size` | <code>'small' &#124; 'medium' &#124; 'large'</code> | 'small', 'medium', or 'large' for its fields (default 'medium') |
 | `listFolders` | <code>(path: string, includeFiles: boolean): FolderEntry[] &#124; PromiseLike&lt;FolderEntry[]&gt;</code> | function(path, includeFiles) returning entries { Name, Path, Type }, or a promise of them, where '' is the top level (default the Jellyfin Environment routes) [optional] |
 | `parentPath` | <code>(path: string): string &#124; null &#124; PromiseLike&lt;string &#124; null&gt;</code> | function(path) returning the path above, or '' or null for the top level (default Environment/ParentPath, or the path's text when listFolders is given) [optional] |

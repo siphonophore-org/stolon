@@ -33,13 +33,13 @@
 /* A narrow QR code stacks: the code the full width, then the buttons and the text under it at the same width */
 /* Example: <div class="stolon-qr-code stolon-compact"></div> */
 .stolon-qr-code.stolon-compact,
-.stolon-qr-code.stolon-qr-code-dialog { flex-direction: column; align-items: stretch; }
+.stolon-qr-code.stolon-qr-code-sidecar { flex-direction: column; align-items: stretch; }
 .stolon-qr-code.stolon-compact > .stolon-qr-code-frame,
-.stolon-qr-code.stolon-qr-code-dialog > .stolon-qr-code-frame { width: 100%; }
+.stolon-qr-code.stolon-qr-code-sidecar > .stolon-qr-code-frame { width: 100%; }
 
 /* The code in its dialog: stacked, a code-sized column centered in the dialog */
-/* Example: <div class="stolon-qr-code stolon-compact stolon-qr-code-dialog"></div> */
-.stolon-qr-code.stolon-qr-code-dialog { width: calc(var(--stolon-size-large) * 8); max-width: 100%; margin: 0 auto; }
+/* Example: <div class="stolon-qr-code stolon-compact stolon-qr-code-sidecar"></div> */
+.stolon-qr-code.stolon-qr-code-sidecar { width: calc(var(--stolon-size-large) * 8); max-width: 100%; margin: 0 auto; }
 
 /* An inline QR code: its whole text as a wrapped Copy Field with a QR button beside Copy that opens the code in a dialog */
 /* Example: <div class="stolon-qr-code stolon-inline"><div class="stolon-copy-field stolon-wrap"><input type="text" readonly hidden><div class="stolon-copy-field-text stolon-mono" role="textbox" aria-readonly="true" tabindex="0">https://example.com</div><button class="stolon-row-btn stolon-copy-button"></button><button class="stolon-row-btn stolon-qr-code-open" aria-label="Show QR Code"><span class="material-icons">qr_code_2</span></button></div></div> */

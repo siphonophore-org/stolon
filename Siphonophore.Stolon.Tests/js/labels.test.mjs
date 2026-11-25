@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { installFakeDom, all } from './fake-dom.mjs';
 
 var dom = installFakeDom();
-var { openEditorDialog, promptDialog, createCheckboxList, createUserMultiSelector, createSearchField, createPagination, createTranslations, createStringList, createNotifyPreview, createToolShell } = await import('../../src/js/index.js');
+var { openEditorSidecar, promptSidecar, createCheckboxList, createUserMultiSelector, createSearchField, createPagination, createTranslations, createStringList, createNotifyPreview, createToolShell } = await import('../../src/js/index.js');
 var { setCurrentTranslations } = await import('../../src/js/lib/stolon-text.js');
 
 beforeEach(function () {
@@ -16,23 +16,23 @@ function buttonTexts() {
     return all(dom.document, '.stolon-modal-button').map(function (b) { return b.textContent; });
 }
 
-test('openEditorDialog labels Cancel and Done by default and takes cancelText and doneText', function () {
-    var plain = openEditorDialog({ title: 'Edit', isNew: true });
-    assert.deepEqual(buttonTexts(), ['Cancel', 'Done']);
+test('openEditorSidecar labels Cancel and Save by default and takes cancelText and saveText', function () {
+    var plain = openEditorSidecar({ title: 'Edit', isNew: true });
+    assert.deepEqual(buttonTexts(), ['Cancel', 'Save']);
     plain.close();
 
-    var custom = openEditorDialog({ title: 'Edit', isNew: true, cancelText: 'Discard', doneText: 'Apply' });
+    var custom = openEditorSidecar({ title: 'Edit', isNew: true, cancelText: 'Discard', saveText: 'Apply' });
     assert.deepEqual(buttonTexts(), ['Discard', 'Apply']);
     custom.close();
 });
 
-test('promptDialog submits with Done by default and submitText overrides it', async function () {
-    var first = promptDialog([{ name: 'a', label: 'A' }], { title: 'Name' });
-    assert.deepEqual(buttonTexts(), ['Cancel', 'Done']);
+test('promptSidecar submits with Save by default and submitText overrides it', async function () {
+    var first = promptSidecar([{ name: 'a', label: 'A' }], { title: 'Name' });
+    assert.deepEqual(buttonTexts(), ['Cancel', 'Save']);
     dom.document.querySelectorAll('.stolon-modal-button')[0].click();
     assert.equal(await first, null);
 
-    var second = promptDialog([{ name: 'a', label: 'A' }], { title: 'Name', submitText: 'Create', cancelText: 'Back' });
+    var second = promptSidecar([{ name: 'a', label: 'A' }], { title: 'Name', submitText: 'Create', cancelText: 'Back' });
     assert.deepEqual(buttonTexts(), ['Back', 'Create']);
     dom.document.querySelectorAll('.stolon-modal-button')[0].click();
     await second;
@@ -70,15 +70,15 @@ test('a default label with no translation stays in US English, in sentence case'
     setCurrentTranslations(createTranslations({ Search: 'Suchen' }, 'de'));
     var list = createStringList({});
     assert.equal(list.element.querySelector('input').getAttribute('aria-label'), 'New item');
-    var dialog = openEditorDialog({ title: 'Edit', isNew: true });
-    assert.deepEqual(buttonTexts(), ['Cancel', 'Done']);
+    var dialog = openEditorSidecar({ title: 'Edit', isNew: true });
+    assert.deepEqual(buttonTexts(), ['Cancel', 'Save']);
     dialog.close();
 });
 
 test('a Jellyfin string Stolon uses reads from the translations, such as Cancel', function () {
-    setCurrentTranslations(createTranslations({ ButtonCancel: 'Abbrechen', 'Stolon.Done': 'Fertig' }, 'de'));
-    var dialog = openEditorDialog({ title: 'Edit', isNew: true });
-    assert.deepEqual(buttonTexts(), ['Abbrechen', 'Fertig']);
+    setCurrentTranslations(createTranslations({ ButtonCancel: 'Abbrechen', Save: 'Speichern' }, 'de'));
+    var dialog = openEditorSidecar({ title: 'Edit', isNew: true });
+    assert.deepEqual(buttonTexts(), ['Abbrechen', 'Speichern']);
     dialog.close();
 });
 

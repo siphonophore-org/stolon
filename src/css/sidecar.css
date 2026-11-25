@@ -1,0 +1,120 @@
+/* A sidecar's overlay, whose panel docks to the trailing edge of the window at full height */
+/* Example: <div class="stolon-dialog stolon-sidecar stolon-medium"><div class="stolon-dialog-content stolon-sidecar-panel stolon-medium"></div></div> */
+.stolon-dialog.stolon-sidecar {
+    justify-content: flex-end;
+    align-items: stretch;
+    padding: 0;
+}
+
+/* The sidecar panel, 560px wide or 800px when large, that slides in from the trailing edge, with its header and shelf pinned and its body scrolling between them */
+/* Example: <div class="stolon-dialog-content stolon-sidecar-panel stolon-medium"><div class="stolon-sidecar-head"></div><div class="stolon-sidecar-body"></div></div> */
+.stolon-dialog-content.stolon-sidecar-panel {
+    --stolon-dialog-pad: calc(var(--stolon-pad-large) * 1.5);
+    display: flex;
+    flex-direction: column;
+    width: 560px;
+    max-width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    overflow: hidden;
+    border-width: 0;
+    border-inline-start-width: 1px;
+    border-radius: 0;
+    border-start-start-radius: var(--stolon-radius-large);
+    border-end-start-radius: var(--stolon-radius-large);
+    animation: stolon-sidecar-in 0.2s ease-out;
+}
+.stolon-dialog-content.stolon-sidecar-panel.stolon-large { width: 800px; }
+[dir="rtl"] .stolon-dialog-content.stolon-sidecar-panel { animation-name: stolon-sidecar-in-rtl; }
+@keyframes stolon-sidecar-in {
+    from { transform: translateX(100%); }
+    to { transform: none; }
+}
+@keyframes stolon-sidecar-in-rtl {
+    from { transform: translateX(-100%); }
+    to { transform: none; }
+}
+@media (max-width: 600px) {
+    /* On a phone the sidecar fills the screen, clear of the notch and the home bar. */
+    .stolon-dialog-content.stolon-sidecar-panel,
+    .stolon-dialog-content.stolon-sidecar-panel.stolon-large {
+        --stolon-dialog-pad: var(--stolon-gap-wide);
+        width: 100%;
+        border: 0;
+        border-radius: 0;
+    }
+    .stolon-sidecar-head { padding-top: calc(var(--stolon-pad-medium) + env(safe-area-inset-top)); }
+    .stolon-sidecar-shelf { padding-bottom: calc(var(--stolon-pad-medium) + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .stolon-dialog-content.stolon-sidecar-panel { animation: none; }
+}
+
+/* The pinned header, the title with its badge and subtitle, and the close button at the end */
+/* Example: <div class="stolon-sidecar-head"><div class="stolon-sidecar-heading"><div class="stolon-sidecar-title-row"><h2 class="stolon-sidecar-title">Movies</h2></div><p class="stolon-sidecar-subtitle">Library</p></div><button type="button" class="stolon-row-btn stolon-dialog-close" title="Close" aria-label="Close"><span class="material-icons" aria-hidden="true">close</span></button></div> */
+.stolon-sidecar-head {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--stolon-gap-narrow);
+    padding: var(--stolon-pad-medium) var(--stolon-dialog-pad);
+    border-bottom: 1px solid var(--stolon-border);
+}
+.stolon-sidecar-heading { flex: 1 1 auto; min-width: 0; }
+.stolon-sidecar-title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
+    min-height: var(--stolon-size-small);
+}
+
+/* The sidecar title */
+/* Example: <h2 class="stolon-sidecar-title">Movies</h2> */
+.stolon-sidecar-title { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.stolon-sidecar-title[hidden] { display: none; }
+
+/* The badge beside the sidecar title */
+/* Example: <span class="stolon-badge stolon-green stolon-sidecar-badge">Synced</span> */
+.stolon-sidecar-badge { flex: 0 0 auto; }
+
+/* The dimmed line under the sidecar title */
+/* Example: <p class="stolon-sidecar-subtitle">Library</p> */
+.stolon-sidecar-subtitle {
+    margin: calc(var(--stolon-gap-narrow) / 2) 0 0;
+    opacity: 0.7;
+    overflow-wrap: anywhere;
+}
+.stolon-sidecar-subtitle[hidden] { display: none; }
+
+/* The body, the only part that scrolls */
+/* Example: <div class="stolon-sidecar-body"></div> */
+.stolon-sidecar-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--stolon-gap-wide) var(--stolon-dialog-pad);
+}
+
+/* The pinned shelf of buttons, Delete at the start and Cancel and Save at the end, hidden when it has no buttons */
+/* Example: <div class="stolon-sidecar-shelf"><button class="raised stolon-modal-button stolon-button stolon-secondary">Cancel</button><button class="raised stolon-modal-button stolon-button stolon-primary">Save</button></div> */
+.stolon-sidecar-shelf {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--stolon-gap-narrow);
+    padding: var(--stolon-pad-medium) var(--stolon-dialog-pad);
+    border-top: 1px solid var(--stolon-border);
+}
+.stolon-sidecar-shelf:empty,
+.stolon-sidecar-shelf[hidden] { display: none; }
+.stolon-sidecar-shelf .stolon-modal-button { flex: none; min-width: 7em; }
+/* The destructive buttons sit at the start and the rest at the end, however many of each */
+.stolon-sidecar-shelf .stolon-modal-button.stolon-button.stolon-destructive + .stolon-modal-button:not(.stolon-destructive) { margin-inline-start: auto; }
+@media (max-width: 600px) {
+    .stolon-sidecar-shelf { flex-wrap: wrap; row-gap: var(--stolon-gap-narrow); }
+    .stolon-sidecar-shelf .stolon-modal-button { flex: 1 1 auto; }
+    .stolon-sidecar-shelf .stolon-modal-button.stolon-button.stolon-destructive { order: 1; }
+    .stolon-sidecar-shelf .stolon-modal-button.stolon-button.stolon-destructive + .stolon-modal-button:not(.stolon-destructive) { margin-inline-start: 0; }
+}

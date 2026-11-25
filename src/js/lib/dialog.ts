@@ -1,7 +1,7 @@
 // dialog.ts
-// The modal shell, focus, stacking, scroll lock, and button row helpers that every dialog shares. None of them is exported from the bundle.
+// The modal shell, focus, stacking, scroll lock, and button row helpers that every dialog and sidecar shares. None of them is exported from the bundle.
 
-import type { DialogOptions, DialogButton } from '../dialog.js';
+import type { DialogButton } from '../dialog.js';
 import { listen, runAll, iconButton, icon } from './dom.js';
 import { stolonText } from './stolon-text.js';
 
@@ -61,8 +61,14 @@ function focusContainer(container: HTMLElement): void {
     container.focus();
 }
 
-/** Focuses opts.autofocus, else the first visible body field, else a footer button that is not destructive, else the close button, else the container. */
-export function focusFirst(container: HTMLElement, opts?: Pick<DialogOptions, 'autofocus'>): void {
+/** Where focus goes on open: an element or a selector within the panel, or false for the panel itself. */
+export type AutofocusTarget = HTMLElement | string | false | null;
+
+/** Where focus goes on close when the control that opened the panel is gone. */
+export type ReturnFocusTarget = HTMLElement | string | (() => HTMLElement | string | null) | null;
+
+/** Focuses opts.autofocus, else the first visible body field, else a button that is not destructive, else the close button, else the container. */
+export function focusFirst(container: HTMLElement, opts?: { autofocus?: AutofocusTarget }): void {
     opts = opts || {};
     var touch: boolean = coarsePointer();
     function safe(el: HTMLElement): boolean { return !(el.classList && el.classList.contains('stolon-button') && el.classList.contains('stolon-destructive')); }
@@ -76,7 +82,7 @@ export function focusFirst(container: HTMLElement, opts?: Pick<DialogOptions, 'a
             return;
         }
     }
-    var body: HTMLElement | null = container.querySelector<HTMLElement>('.stolon-modal-body');
+    var body: HTMLElement | null = container.querySelector<HTMLElement>('.stolon-modal-context, .stolon-sidecar-body');
     var field: HTMLElement | undefined = focusables(body).filter(safe)[0];
     if (field) {
         // On a touch screen the first field waits for a tap instead of falling through to a button.
@@ -84,7 +90,7 @@ export function focusFirst(container: HTMLElement, opts?: Pick<DialogOptions, 'a
         else focusContainer(container);
         return;
     }
-    var choice: HTMLElement | undefined = focusables(container.querySelector('.stolon-modal-button-row')).filter(usable)[0]
+    var choice: HTMLElement | undefined = focusables(container.querySelector('.stolon-modal-button-row, .stolon-sidecar-shelf')).filter(usable)[0]
         || focusables(container).filter(function (el: HTMLElement): boolean { return el.classList.contains('stolon-dialog-close'); })[0]
         || focusables(container).filter(usable)[0];
     if (choice) choice.focus();
@@ -97,14 +103,14 @@ export function escapeClaimed(e: Event): boolean {
 }
 
 /** Returns focus to the control that opened the dialog, else opts.returnFocus, else the first visible heading of the config page or the page itself. */
-export function restoreFocus(previouslyFocused: HTMLElement | null, opts?: Pick<DialogOptions, 'returnFocus'>): void {
+export function restoreFocus(previouslyFocused: HTMLElement | null, opts?: { returnFocus?: ReturnFocusTarget }): void {
     function tryFocus(el: HTMLElement | null): boolean {
         if (!el || !el.focus || !el.isConnected || !isVisible(el)) return false;
         try { el.focus(); } catch (e) { return false; }
         return document.activeElement === el;
     }
     if (tryFocus(previouslyFocused)) return;
-    var target: DialogOptions['returnFocus'] = opts && opts.returnFocus;
+    var target: ReturnFocusTarget | undefined = opts && opts.returnFocus;
     if (typeof target === 'function') { try { target = target(); } catch (e) { target = null; } }
     if (typeof target === 'string') target = document.querySelector<HTMLElement>(target);
     if (tryFocus(target as HTMLElement)) return;
@@ -139,8 +145,12 @@ function lockScroll(on: boolean): void {
     }
 }
 
-/** What bindModalBehavior takes. onDismiss closes the dialog once beforeClose agrees, and autofocus and returnFocus work as in openDialog. */
-export interface ModalBehaviorOptions extends Pick<DialogOptions, 'autofocus' | 'returnFocus' | 'dismissable' | 'beforeClose'> {
+/** What bindModalBehavior takes. onDismiss closes the panel once beforeClose agrees, and autofocus and returnFocus work as in openDialog. */
+export interface ModalBehaviorOptions {
+    autofocus?: AutofocusTarget;
+    returnFocus?: ReturnFocusTarget;
+    dismissable?: boolean;
+    beforeClose?(): boolean | PromiseLike<boolean | void>;
     onDismiss(): void;
 }
 
@@ -227,8 +237,12 @@ export function bindModalBehavior(overlay: HTMLElement, content: HTMLElement, op
     };
 }
 
-/** What createModalShell takes. overlayClass and contentClass add a variation's own classes beside stolon-dialog and stolon-dialog-content. */
-export interface ModalShellOptions extends Pick<DialogOptions, 'size' | 'className' | 'dismissable' | 'closeButton' | 'beforeClose' | 'autofocus' | 'returnFocus' | 'onClose'> {
+/** What createModalShell takes. size is the size modifier on both elements, closeButton adds the close button, and overlayClass and contentClass add a variation's own classes beside stolon-dialog and stolon-dialog-content. */
+export interface ModalShellOptions extends Omit<ModalBehaviorOptions, 'onDismiss'> {
+    size: string;
+    className?: string;
+    closeButton?: boolean;
+    onClose?(value: unknown): void;
     overlayClass?: string;
     contentClass?: string;
 }
@@ -245,14 +259,14 @@ export interface ModalShell {
 }
 
 /**
- * Builds the overlay, the dialog panel, and its corner close button, with the modal behavior bound, for every dialog Stolon opens.
- * The caller fills the panel, then calls show.
+ * Builds the overlay and the panel, with the modal behavior bound, for every dialog and sidecar Stolon opens. The close button is
+ * built only when closeButton is true, and the caller places it. The caller fills the panel, then calls show.
  *
- * @param opts { size, className, dismissable, closeButton, beforeClose, autofocus, returnFocus, onClose as openDialog, overlayClass, contentClass }
+ * @param opts { size, className, dismissable, closeButton, beforeClose, autofocus, returnFocus, onClose, overlayClass, contentClass }
  * @returns { overlay, content, closeButton, show, close, dismiss, isOpen }.
  */
 export function createModalShell(opts: ModalShellOptions): ModalShell {
-    var size: string = opts.size === 'small' || opts.size === 'large' ? opts.size : 'medium';
+    var size: string = opts.size;
     var overlay = document.createElement('div');
     // The size on the overlay lets the phone layout match without :has(), which older engines lack.
     overlay.className = 'stolon-dialog stolon-' + size + (opts.overlayClass ? ' ' + opts.overlayClass : '');
@@ -283,9 +297,8 @@ export function createModalShell(opts: ModalShellOptions): ModalShell {
     }
 
     var closeButton: HTMLButtonElement | null = null;
-    if (opts.closeButton !== false && opts.dismissable !== false) {
+    if (opts.closeButton === true && opts.dismissable !== false) {
         closeButton = iconButton('stolon-row-btn stolon-dialog-close', 'close', stolonText('ButtonClose'));
-        content.appendChild(closeButton);
     }
 
     return {
@@ -305,17 +318,18 @@ export function createModalShell(opts: ModalShellOptions): ModalShell {
 }
 
 /**
- * Builds the footer row of dialog buttons. A button with an action gets close, dismiss, and itself, and one without closes with its value.
+ * Builds a row of buttons, a dialog's button row or a sidecar's shelf. A button with an action gets close, dismiss, and itself, and one without closes with its value.
  *
  * @param buttons the button specs, as openDialog takes them
- * @param close closes the dialog with a value
+ * @param close closes the panel with a value
  * @param dismiss closes it as Escape does, asking beforeClose first
- * @returns the stolon-modal-button-row, or null when there are no buttons
+ * @param rowClass the row's class (default stolon-modal-button-row)
+ * @returns the row, or null when there are no buttons
  */
-export function dialogButtonRow(buttons: DialogButton[] | null | undefined, close: (value?: unknown) => void, dismiss: () => void): HTMLDivElement | null {
+export function dialogButtonRow(buttons: DialogButton[] | null | undefined, close: (value?: unknown) => void, dismiss: () => void, rowClass?: string): HTMLDivElement | null {
     if (!buttons || !buttons.length) return null;
     var row = document.createElement('div');
-    row.className = 'stolon-modal-button-row';
+    row.className = rowClass || 'stolon-modal-button-row';
     buttons.forEach(function (spec: DialogButton): void {
         var btn = document.createElement('button');
         btn.type = 'button';

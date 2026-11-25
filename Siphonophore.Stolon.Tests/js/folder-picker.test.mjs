@@ -37,7 +37,7 @@ function build(extra) {
     return { picker: picker, changes: changes, calls: calls, browse: picker.element.querySelector('.stolon-folder-picker-browse') };
 }
 
-function dialog() { return dom.document.querySelector('.stolon-dialog'); }
+function dialog() { return dom.document.querySelector('.stolon-sidecar'); }
 function names() { return all(dialog(), '.stolon-folder-picker-name').map(function (n) { return n.textContent; }); }
 function entry(text) { return all(dialog(), '.stolon-folder-picker-entry').filter(function (b) { return b.textContent.indexOf(text) !== -1 && b.querySelector('.stolon-folder-picker-name').textContent === text; })[0]; }
 function pathField() { return dialog().querySelector('.stolon-folder-picker-path'); }
@@ -61,11 +61,11 @@ test('the field has the default labels, and label, placeholder, and description 
     assert.equal(ui.picker.getValue(), '/media');
 });
 
-test('Browse with an empty field opens the dialog at the top level with the default title and buttons', async function () {
+test('Browse with an empty field opens the sidecar at the top level with the default title and buttons', async function () {
     var ui = build();
     ui.browse.click();
     assert.ok(dialog());
-    assert.equal(dialog().querySelector('.stolon-modal-title').textContent, 'Select a folder');
+    assert.equal(dialog().querySelector('.stolon-sidecar-title').textContent, 'Select a folder');
     assert.ok(button('Cancel'));
     assert.equal(selectButton().textContent, 'Select');
     var loading = dialog().querySelector('.stolon-folder-picker-list .stolon-list-loading');
@@ -284,7 +284,7 @@ test('every dialog label can be replaced', async function () {
     assert.equal(ui.browse.textContent, 'Find');
     assert.equal(ui.picker.input.getAttribute('aria-label'), 'Folder Path');
     ui.browse.click();
-    assert.equal(dialog().querySelector('.stolon-modal-title').textContent, 'Pick a Folder');
+    assert.equal(dialog().querySelector('.stolon-sidecar-title').textContent, 'Pick a Folder');
     assert.equal(dialog().querySelector('.stolon-list-loading').textContent, 'Reading');
     assert.equal(pathField().getAttribute('aria-label'), 'Folder Path');
     assert.equal(selectButton().textContent, 'Use');

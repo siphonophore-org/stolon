@@ -1,4 +1,4 @@
-<!-- title: Prompt Dialog -->
+<!-- title: Prompt Sidecar -->
 <!-- min-height: 420 -->
 <button type="button" id="btnNew" class="raised stolon-button stolon-secondary"><span>New Record</span></button>
 <span id="promptStatus" class="stolon-status-text"></span>
@@ -6,12 +6,12 @@
 const base = await window.__baseReady;
 const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
 shared.bindClick('btnNew', () => {
-    base.promptDialog(
+    base.promptSidecar(
         [
             { name: 'label', label: 'Label', value: 'My record' },
             { name: 'mode', label: 'Mode', type: 'select', options: [{ value: 'a', label: 'A' }, { value: 'b', label: 'B' }] }
         ],
-        { title: 'New Record', submitText: 'Create' }
+        { title: 'New record', submitText: 'Create' }
     ).then((values) => shared.setStatus('promptStatus', values ? JSON.stringify(values) : 'Cancelled.', !values, { timeout: 0 }));
 });
 </script>

@@ -1,7 +1,7 @@
-<!-- title: Detail Drawer -->
+<!-- title: Sidecar -->
 <!-- min-height: 520 -->
 <div id="table"></div>
-<p class="fieldDescription">Select a row to open its details. Previous and Next swap the content without closing the drawer.</p>
+<p class="fieldDescription">Select a row to open its details. Previous and Next swap the content without closing the sidecar.</p>
 <script type="module">
 const base = await window.__baseReady;
 const rows = [
@@ -11,8 +11,8 @@ const rows = [
     { id: 4, name: 'Home Videos', kind: 'Folder', items: 96, size: '88 GB', state: 'Synced', peer: 'Den' }
 ];
 const stepTo = (row, by) => rows[(rows.indexOf(row) + by + rows.length) % rows.length];
-// One opener serves the table, and while its drawer is open it swaps the content in place.
-const show = base.detailDrawerOpener((row) => ({
+// One opener serves the table, and while its sidecar is open it swaps the content in place.
+const show = base.sidecarOpener((row) => ({
     title: row.name,
     subtitle: row.kind + ' on ' + row.peer,
     badge: { label: row.state, color: row.state },
@@ -25,9 +25,8 @@ const show = base.detailDrawerOpener((row) => ({
     buttons: [
         { text: 'Previous', action: () => show(stepTo(row, -1)) },
         { text: 'Next', action: () => show(stepTo(row, 1)) },
-        { text: 'Done', className: 'stolon-button stolon-primary' }
     ]
-}), { size: 'small' });
+}));
 const table = base.createDataTable({
     columns: [{ key: 'name', label: 'Name' }, { key: 'kind', label: 'Kind' }, { key: 'state', label: 'State' }, { key: 'peer', label: 'Server' }],
     rows,

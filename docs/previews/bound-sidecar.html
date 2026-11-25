@@ -1,0 +1,30 @@
+<!-- title: Bound Sidecar -->
+<!-- min-height: 400 -->
+<div id="itemDetailSidecar" class="stolon-dialog stolon-sidecar stolon-hidden">
+    <div class="stolon-dialog-content stolon-sidecar-panel stolon-medium" role="dialog" aria-modal="true" aria-labelledby="sidecarTitle">
+        <div class="stolon-sidecar-head">
+            <div class="stolon-sidecar-heading"><div class="stolon-sidecar-title-row"><h2 id="sidecarTitle" class="stolon-sidecar-title">Item detail</h2></div></div>
+            <button type="button" class="stolon-row-btn stolon-dialog-close" title="Close" aria-label="Close"><span class="material-icons" aria-hidden="true">close</span></button>
+        </div>
+        <div id="sidecarContent" class="stolon-sidecar-body"></div>
+        <div class="stolon-sidecar-shelf">
+            <button type="button" id="btnSidecarSave" class="raised stolon-modal-button stolon-button stolon-primary">Save</button>
+        </div>
+    </div>
+</div>
+<button type="button" id="btnDetail" class="raised stolon-button stolon-primary"><span>Open detail</span></button>
+<span id="boundStatus" class="stolon-status-text"></span>
+<script type="module">
+const base = await window.__baseReady;
+const view = document.getElementById('view');
+const shared = base.createShared(view, 'preview-plugin', 'Preview');
+const detail = base.bindSidecar('itemDetailSidecar', {
+    root: view,
+    onClose: (value) => shared.setStatus('boundStatus', 'Closed with ' + (value || 'a dismissal') + '.', false, { timeout: 0 })
+});
+shared.bindClick('btnSidecarSave', () => detail.close('saved'));
+shared.bindClick('btnDetail', () => {
+    document.getElementById('sidecarContent').textContent = 'The page filled this body before it opened the sidecar.';
+    detail.open();
+});
+</script>

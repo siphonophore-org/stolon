@@ -33,8 +33,8 @@ test('typedMatches needs the exact text, case and spaces included', function () 
 
 test('a typed confirm shows a labelled field and keeps the confirm button off until the text matches', function () {
     confirmDialog('Delete the database?', { title: 'Delete Database', confirmText: 'Delete', destructive: true, typeToConfirm: 'Database' });
-    var input = dom.document.querySelector('.stolon-modal-body input');
-    var label = dom.document.querySelector('.stolon-modal-body label');
+    var input = dom.document.querySelector('.stolon-modal-context input');
+    var label = dom.document.querySelector('.stolon-modal-context label');
     assert.equal(label.textContent, 'Type Database to confirm.');
     assert.equal(label.getAttribute('for'), input.id);
     assert.equal(confirmButton().textContent, 'Delete');
@@ -49,7 +49,7 @@ test('a typed confirm shows a labelled field and keeps the confirm button off un
 
 test('Enter confirms only once the text matches, and a mismatch shows an error under the field', async function () {
     var result = confirmDialog('Delete?', { typeToConfirm: 'Database' });
-    var input = dom.document.querySelector('.stolon-modal-body input');
+    var input = dom.document.querySelector('.stolon-modal-context input');
     input.focus();
     type(input, 'database');
     dom.document.key('Enter');
@@ -65,8 +65,8 @@ test('Enter confirms only once the text matches, and a mismatch shows an error u
 
 test('the label and the mismatch text can be replaced, and Cancel resolves false', async function () {
     var result = confirmDialog('Delete?', { typeToConfirm: 'den', typeLabel: 'Enter {value} below.', mismatchText: 'Not the same.' });
-    var input = dom.document.querySelector('.stolon-modal-body input');
-    assert.equal(dom.document.querySelector('.stolon-modal-body label').textContent, 'Enter den below.');
+    var input = dom.document.querySelector('.stolon-modal-context input');
+    assert.equal(dom.document.querySelector('.stolon-modal-context label').textContent, 'Enter den below.');
     input.focus();
     type(input, 'x');
     dom.document.key('Enter');
@@ -77,7 +77,7 @@ test('the label and the mismatch text can be replaced, and Cancel resolves false
 
 test('a confirm with no typeToConfirm has no field and its button starts on', async function () {
     var result = confirmDialog('Sure?');
-    assert.equal(dom.document.querySelector('.stolon-modal-body input'), null);
+    assert.equal(dom.document.querySelector('.stolon-modal-context input'), null);
     assert.equal(confirmButton().disabled, false);
     confirmButton().click();
     assert.equal(await result, true);

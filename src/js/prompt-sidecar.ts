@@ -1,11 +1,11 @@
-import { openDialog } from './dialog.js';
-import type { DialogHandle } from './dialog.js';
+import { openSidecar } from './sidecar.js';
+import type { SidecarHandle } from './sidecar.js';
 import { bindValidation, validateAll } from './lib/validate.js';
 import type { ValidationHandle } from './lib/validate.js';
 import { stolonText } from './lib/stolon-text.js';
 
-/** One field in a prompt dialog. A select reads options as value and label pairs, and required and validate check it through the validation core. */
-export interface PromptDialogField {
+/** One field in a prompt sidecar. A select reads options as value and label pairs, and required and validate check it through the validation core. */
+export interface PromptSidecarField {
     name: string;
     label?: string;
     description?: string;
@@ -19,21 +19,22 @@ export interface PromptDialogField {
     validate?(value: string): string | null | undefined;
 }
 
-/** What promptDialog takes, the title and the two button labels. */
-export interface PromptDialogOptions {
+/** What promptSidecar takes, the title, an optional subtitle, and the two button labels. */
+export interface PromptSidecarOptions {
     title?: string;
+    subtitle?: string;
     submitText?: string;
     cancelText?: string;
 }
 
 /**
- * Opens a small form that resolves to a { name: value } map, or to null when cancelled. Done checks every field through
+ * Opens a form in a sidecar that resolves to a { name: value } map, or to null when cancelled. Save checks every field through
  * the validation core and stays open while one is invalid, with focus on the first.
  *
  * @param fields [{ name, label, description, type, value, placeholder, required, min, max, options, validate }], where type is text, number, password, textarea, or select (default text), a select reads options as [{ value, label }], description is a sentence under the field, and validate(value) returns an error sentence or an empty value
- * @param opts { title, submitText (default 'Done'), cancelText (default 'Cancel') } [optional]
+ * @param opts { title, subtitle, submitText (default 'Save'), cancelText (default 'Cancel') } [optional]
  */
-export function promptDialog(fields: PromptDialogField[], opts?: PromptDialogOptions): Promise<Record<string, string> | null> {
+export function promptSidecar(fields: PromptSidecarField[], opts?: PromptSidecarOptions): Promise<Record<string, string> | null> {
     opts = opts || {};
     fields = fields || [];
     return new Promise<Record<string, string> | null>(function (resolve): void {
@@ -43,7 +44,7 @@ export function promptDialog(fields: PromptDialogField[], opts?: PromptDialogOpt
         var form: HTMLDivElement = document.createElement('div');
         var controls: Record<string, HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> = {};
         var checks: ValidationHandle[] = [];
-        fields.forEach(function (f: PromptDialogField): void {
+        fields.forEach(function (f: PromptSidecarField): void {
             var wrap = document.createElement('div');
             wrap.className = 'stolon-modal-field';
             if (f.label) {
@@ -97,13 +98,13 @@ export function promptDialog(fields: PromptDialogField[], opts?: PromptDialogOpt
             return out;
         }
 
-        var handle: DialogHandle = openDialog({
+        var handle: SidecarHandle = openSidecar({
             title: opts.title || '',
-            size: 'small',
+            subtitle: opts.subtitle,
             body: form,
             buttons: [
                 { text: opts.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close): void { close(null); } },
-                { text: opts.submitText || stolonText('Stolon.Done'), className: 'stolon-button stolon-primary', action: function (close): void { submit(close); } }
+                { text: opts.submitText || stolonText('Save'), className: 'stolon-button stolon-primary', action: function (close): void { submit(close); } }
             ],
             onClose: function (value: Record<string, string> | null): void {
                 checks.forEach(function (c) { c.destroy(); });

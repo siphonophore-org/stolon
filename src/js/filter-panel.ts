@@ -1,8 +1,8 @@
 import { make, icon, nextId, listen, runAll, clear, fill, has, viewport } from './lib/dom.js';
 import { makeCheck, makeCheckRow } from './lib/check.js';
 import { anchorPopover } from './lib/popover.js';
-import { openDialog } from './dialog.js';
-import type { DialogHandle } from './dialog.js';
+import { openSidecar } from './sidecar.js';
+import type { SidecarHandle } from './sidecar.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
 
@@ -34,7 +34,7 @@ export interface FilterPanelOptions {
     countLabel?: string;
     countOneLabel?: string;
     applyOnChange?: boolean;
-    asDialog?: boolean;
+    asSidecar?: boolean;
     onChange?(value: FilterPanelValue): void;
 }
 
@@ -51,7 +51,7 @@ export interface FilterPanelHandle extends ComponentHandle {
 }
 
 /**
- * A Filter button with a count of the filters on, which opens a panel of filter groups. The panel is a popover under the button, or a dialog on a screen under 600px wide or with asDialog.
+ * A Filter button with a count of the filters on, which opens a panel of filter groups. The panel is a popover under the button, or a sidecar on a screen under 600px wide or with asSidecar.
  *
  * @param options {
  *   groups        : array of { name, label, single, options: [{ value, label }] } [optional]
@@ -63,7 +63,7 @@ export interface FilterPanelHandle extends ComponentHandle {
  *   countLabel    : end of the button's aria-label while filters are on, where {value} is the count (default '{value} filters on')
  *   countOneLabel : the same while one filter is on (default '{value} filter on')
  *   applyOnChange : apply each change at once, or with false only on Done (default true)
- *   asDialog      : always open as a dialog (default false)
+ *   asSidecar     : always open as a sidecar (default false)
  *   onChange      : function(value) called each time the picked values apply [optional]
  * }
  * @returns { element, getValue, setValue, setGroups, open, close, isOpen, destroy }, where element is the button.
@@ -76,8 +76,8 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
     var buttonText: string = options.buttonText || stolonText('Filter');
     var title: string = options.title || stolonText('Filters');
     var cleanups: Array<() => void> = [];
-    var mode: 'none' | 'popover' | 'dialog' = 'none';
-    var dialog: DialogHandle | null = null;
+    var mode: 'none' | 'popover' | 'sidecar' = 'none';
+    var sidecar: SidecarHandle | null = null;
 
     var button = make('button', 'raised stolon-button stolon-filter-button', { type: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false' });
     button.appendChild(icon('filter_list'));
@@ -216,10 +216,10 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
         draft = copy(value);
         sync();
         button.setAttribute('aria-expanded', 'false');
-        if (mode === 'dialog') {
-            var d = dialog;
+        if (mode === 'sidecar') {
+            var d = sidecar;
             mode = 'none';
-            dialog = null;
+            sidecar = null;
             if (d) d.close();
         } else {
             mode = 'none';
@@ -239,14 +239,13 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
         first.focus();
     }
 
-    function openAsDialog(): void {
-        mode = 'dialog';
+    function openAsSidecar(): void {
+        mode = 'sidecar';
         button.focus();
-        dialog = openDialog({
+        sidecar = openSidecar({
             title: title,
             body: body,
-            size: 'small',
-            className: 'stolon-filter-dialog',
+            className: 'stolon-filter-sidecar',
             returnFocus: button,
             buttons: [
                 { text: options!.clearText || stolonText('Stolon.Clear'), className: 'stolon-button stolon-secondary stolon-filter-clear', action: function (): void { clearAll(); } },
@@ -254,7 +253,7 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
             ],
             onClose: function (): void {
                 // A dismiss by Escape, the backdrop, or the close button drops the pending changes.
-                if (mode === 'dialog') { dialog = null; finish(false, false); }
+                if (mode === 'sidecar') { sidecar = null; finish(false, false); }
             }
         });
     }
@@ -264,7 +263,7 @@ export function createFilterPanel(options?: FilterPanelOptions): FilterPanelHand
         draft = copy(value);
         sync();
         button.setAttribute('aria-expanded', 'true');
-        if (options!.asDialog || viewport().width < 600) openAsDialog();
+        if (options!.asSidecar || viewport().width < 600) openAsSidecar();
         else openPopover();
     }
 

@@ -64,7 +64,8 @@ Several components are built from a smaller one and inherit its look and behavio
 | [Checkbox List](checkbox-list.md) | [User Multi Selector](user-multi-selector.md) |
 | [Checkbox](checkbox.md) | The box of every Stolon checkbox: the Repeater's and Matrix Grid's toggle fields, the Filtered List's row checks and select all, the Filter Panel, the Tree View, the Inherit Field, and the Log Viewer |
 | [Repeater](repeater.md) | [Key Value Editor](key-value-editor.md) and [Rule Builder](rule-builder.md) |
-| [Dialog](dialog.md) | [Confirm Dialog](confirm-dialog.md), [Prompt Dialog](prompt-dialog.md), [Editor Dialog](editor-dialog.md), [Bound Dialog](bound-dialog.md), and [Detail Drawer](detail-drawer.md) |
+| [Dialog](dialog.md) | [Confirm Dialog](confirm-dialog.md) |
+| [Sidecar](sidecar.md) | [Editor Sidecar](editor-sidecar.md), [Prompt Sidecar](prompt-sidecar.md), and [Bound Sidecar](bound-sidecar.md) |
 | [Field Message](field-message.md) | The error line and the validation of every Stolon field and editor |
 | [Field Adornments](field-adornments.md) | The arrows and picker icons of the [Number Unit Field](number-unit-field.md), [Color Picker](color-picker.md), [Duration Field](duration-field.md), [Time Range Field](time-range-field.md), and [Date Range Picker](date-range-picker.md) |
 
@@ -211,12 +212,12 @@ The CSS is written to survive the desktop app's Qt WebEngine and older TV webvie
 
 | Component | What it is |
 | :--- | :--- |
-| [Detail Drawer](detail-drawer.md) | A panel from the right edge with the details of a row |
-| [Dialog](dialog.md) | A modal with a title, a body, and buttons |
+| [Dialog](dialog.md) | A compact or full modal for an alert or a confirmation, which never scrolls |
 | [Confirm Dialog](confirm-dialog.md) | A yes or no question that resolves to a boolean |
-| [Prompt Dialog](prompt-dialog.md) | A small form that resolves to a map of values |
-| [Editor Dialog](editor-dialog.md) | The record editor a config page builds |
-| [Bound Dialog](bound-dialog.md) | Behavior for a dialog already in the page |
+| [Sidecar](sidecar.md) | A panel from the trailing edge for inputs and the details of a selected item |
+| [Editor Sidecar](editor-sidecar.md) | The record editor a config page builds |
+| [Prompt Sidecar](prompt-sidecar.md) | A small form that resolves to a map of values |
+| [Bound Sidecar](bound-sidecar.md) | Behavior for a sidecar already in the page |
 | [Overflow Menu](overflow-menu.md) | A button that opens a menu of actions |
 | [Tooltip](tooltip.md) | A hover and focus bubble for any element |
 | [Help Hint](help-hint.md) | A help icon with a bubble |

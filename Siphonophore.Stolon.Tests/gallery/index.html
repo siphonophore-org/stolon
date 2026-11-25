@@ -380,77 +380,82 @@ function html(parent, markup) {
 })();
 
 (function () {
-    const s = section('Dialogs');
+    const s = section('Dialogs and sidecars');
     const r = row(s);
-    const b1 = document.createElement('button'); b1.className = 'raised stolon-button stolon-primary'; b1.textContent = 'openDialog';
+    const b1 = document.createElement('button'); b1.className = 'raised stolon-button stolon-primary'; b1.textContent = 'Compact dialog';
     b1.onclick = () => base.openDialog({
-        title: 'A modal dialog',
-        body: '<p style="opacity:.8">Backdrop click, the close button, and Escape all close it. Focus is trapped inside.</p>',
-        buttons: [
-            { text: 'Close', className: 'stolon-button stolon-secondary', action: (close) => close() },
-            { text: 'Primary', className: 'stolon-button stolon-primary', action: (close) => close() }
-        ]
+        title: 'Sync paused',
+        description: 'Server B stopped answering. Zooid tries again in five minutes.',
+        buttons: [{ text: 'OK', className: 'stolon-button stolon-primary', action: (close) => close() }]
     });
+    const b1b = document.createElement('button'); b1b.className = 'raised stolon-button stolon-destructive'; b1b.id = 'demoFull'; b1b.textContent = 'Full dialog';
+    b1b.onclick = () => {
+        const context = document.createElement('div');
+        context.style.cssText = 'display:flex;gap:12px;align-items:center';
+        context.innerHTML = '<div style="width:48px;height:72px;border-radius:4px;background:#444"></div><div><div style="font-weight:600">Charade (1963).mkv</div><div style="opacity:.7">Movies, 1.2 GB</div></div>';
+        base.confirmDialog('The file goes from this server and stops syncing.', { title: 'Delete Charade', context: context, destructive: true, confirmText: 'Delete' })
+            .then(ok => shared.setStatus('dialogStatus', 'full confirm resolved: ' + ok, !ok, { timeout: 0 }));
+    };
     const b2 = document.createElement('button'); b2.className = 'raised stolon-button stolon-destructive'; b2.textContent = 'confirmDialog';
-    b2.onclick = () => base.confirmDialog('Delete this record? This cannot be undone.', { title: 'Delete record', destructive: true, confirmText: 'Delete' })
+    b2.onclick = () => base.confirmDialog('Its mappings and synced rows go with it. Downloaded files stay.', { title: 'Remove Server B', destructive: true, confirmText: 'Remove' })
         .then(ok => shared.setStatus('dialogStatus', 'confirm resolved: ' + ok, !ok, { timeout: 0 }));
-    const b3 = document.createElement('button'); b3.className = 'raised stolon-button stolon-secondary'; b3.textContent = 'promptDialog';
-    b3.onclick = () => base.promptDialog(
+    const b3 = document.createElement('button'); b3.className = 'raised stolon-button stolon-secondary'; b3.textContent = 'promptSidecar';
+    b3.onclick = () => base.promptSidecar(
         [{ name: 'label', label: 'Label', value: 'My record' }, { name: 'ttl', label: 'TTL (seconds)', type: 'number', value: '300' }],
         { title: 'New record', submitText: 'Create' })
         .then(vals => shared.setStatus('dialogStatus', vals ? ('prompt: ' + JSON.stringify(vals)) : 'prompt cancelled', !vals, { timeout: 0 }));
-    const b4 = document.createElement('button'); b4.className = 'raised stolon-button stolon-secondary'; b4.id = 'demoEditor'; b4.textContent = 'openEditorDialog';
+    const b4 = document.createElement('button'); b4.className = 'raised stolon-button stolon-secondary'; b4.id = 'demoEditor'; b4.textContent = 'openEditorSidecar';
     b4.onclick = () => {
         const body = document.createElement('div');
         body.innerHTML = '<div class="inputContainer"><label>Name</label><input type="text" id="demoEditorName" value="Living room"></div>' +
             '<div class="inputContainer"><label>Starts on</label><input type="date" value="2026-03-10"></div>';
         const input = body.querySelector('input');
-        base.openEditorDialog({
-            title: 'Edit Record', body: body, serialize: () => input.value, cancelText: 'Cancel',
-            onRemove: (close) => close('removed'),
-            onDone: () => true,
+        base.openEditorSidecar({
+            title: 'Edit record', body: body, serialize: () => input.value,
+            onDelete: (close) => close('deleted'),
+            onSave: () => true,
             onClose: (value) => shared.setStatus('dialogStatus', 'editor closed: ' + (value || 'dismissed'), false, { timeout: 0 })
         });
     };
-    const b5 = document.createElement('button'); b5.className = 'raised stolon-button stolon-secondary'; b5.id = 'demoWide'; b5.textContent = 'openDialog wide';
+    const b5 = document.createElement('button'); b5.className = 'raised stolon-button stolon-secondary'; b5.id = 'demoWide'; b5.textContent = 'openSidecar';
     b5.onclick = () => {
         let more = '';
-        for (let i = 1; i <= 12; i++) more += '<div class="inputContainer"><label>Field ' + i + '</label><input type="text" value="Value ' + i + '"></div>';
-        base.openDialog({
-            title: 'A Wide Dialog', size: 'large', body: more,
+        for (let i = 1; i <= 20; i++) more += '<div class="inputContainer"><label>Field ' + i + '</label><input type="text" value="Value ' + i + '"></div>';
+        base.openSidecar({
+            title: 'A long form', subtitle: 'The body scrolls, the header and shelf stay', badge: { label: 'Synced', color: 'green' }, body: more,
             buttons: [
                 { text: 'Delete', className: 'stolon-button stolon-destructive', action: (close) => close() },
-                { text: 'Cancel', className: 'stolon-button stolon-secondary', action: (close) => close() },
-                { text: 'Done', className: 'stolon-button stolon-primary', action: (close) => close() }
+                { text: 'Cancel', className: 'stolon-button stolon-secondary', action: (close, dismiss) => dismiss() },
+                { text: 'Save', className: 'stolon-button stolon-primary', action: (close) => close() }
             ]
         });
     };
-    r.appendChild(b1); r.appendChild(b2); r.appendChild(b3); r.appendChild(b4); r.appendChild(b5);
+    [b1, b1b, b2, b3, b4, b5].forEach((b) => r.appendChild(b));
     const st = document.createElement('span'); st.id = 'dialogStatus'; st.className = 'stolon-status-text'; st.style.marginTop = '8px';
     s.appendChild(st);
 })();
 
 (function () {
-    const s = section('Dialog in page markup');
+    const s = section('Sidecar in page markup');
     s.insertAdjacentHTML('beforeend',
-        '<div id="demoStaticDialog" class="stolon-dialog stolon-hidden">' +
-          '<div class="stolon-dialog-content stolon-small">' +
-            '<button type="button" class="stolon-row-btn stolon-dialog-close" title="Close" aria-label="Close"><span class="material-icons" aria-hidden="true">close</span></button>' +
-            '<h2 class="stolon-modal-title">Session log</h2>' +
-            '<div class="stolon-modal-body"><p style="opacity:.8">This markup was in the page already. Backdrop, the close button, and Escape close it.</p>' +
+        '<div id="demoStaticSidecar" class="stolon-dialog stolon-sidecar stolon-hidden">' +
+          '<div class="stolon-dialog-content stolon-sidecar-panel stolon-medium">' +
+            '<div class="stolon-sidecar-head"><div class="stolon-sidecar-heading"><div class="stolon-sidecar-title-row"><h2 class="stolon-sidecar-title">Session log</h2></div></div>' +
+            '<button type="button" class="stolon-row-btn stolon-dialog-close" title="Close" aria-label="Close"><span class="material-icons" aria-hidden="true">close</span></button></div>' +
+            '<div class="stolon-sidecar-body"><p style="opacity:.8">This markup was in the page already. The backdrop, the close button, and Escape close it.</p>' +
             '<input id="demoStaticInput" class="stolon-edit-input" placeholder="Focus starts here" /></div>' +
-            '<div class="stolon-modal-button-row"><button type="button" id="demoStaticDone" class="raised stolon-modal-button stolon-button stolon-primary">Done</button></div>' +
+            '<div class="stolon-sidecar-shelf"><button type="button" id="demoStaticDone" class="raised stolon-modal-button stolon-button stolon-primary">Save</button></div>' +
           '</div>' +
         '</div>');
     const st = document.createElement('span'); st.id = 'staticDialogStatus'; st.className = 'stolon-status-text';
-    const dialog = base.bindDialog('demoStaticDialog', {
+    const sidecar = base.bindSidecar('demoStaticSidecar', {
         root: view,
         onClose: (value) => shared.setStatus('staticDialogStatus', 'closed: ' + (value || 'dismissed'), false, { timeout: 0 })
     });
-    view.querySelector('#demoStaticDone').addEventListener('click', () => dialog.close('done'));
+    view.querySelector('#demoStaticDone').addEventListener('click', () => sidecar.close('saved'));
     const r = row(s);
     const b = document.createElement('button'); b.className = 'raised stolon-button stolon-primary'; b.id = 'demoStaticOpen'; b.textContent = 'Open';
-    b.onclick = () => dialog.open();
+    b.onclick = () => sidecar.open();
     r.appendChild(b); r.appendChild(st);
 })();
 
@@ -707,18 +712,18 @@ function html(parent, markup) {
     tip.type = 'button'; tip.className = 'raised stolon-button stolon-small'; tip.textContent = 'Tip';
     body.appendChild(tip);
     const inDialog = document.createElement('button');
-    inDialog.type = 'button'; inDialog.id = 'demoPopupDialog'; inDialog.className = 'raised stolon-button stolon-secondary'; inDialog.textContent = 'Popups in a dialog';
+    inDialog.type = 'button'; inDialog.id = 'demoPopupDialog'; inDialog.className = 'raised stolon-button stolon-secondary'; inDialog.textContent = 'Popups in a sidecar';
     inDialog.onclick = () => {
         const wrap = document.createElement('div');
         wrap.className = 'g-row';
         wrap.appendChild(base.createOverflowMenu({ items: [{ label: 'Edit', value: 'edit' }, { label: 'Remove', value: 'remove', destructive: true }] }).element);
-        wrap.appendChild(base.createHelpHint({ text: 'Escape closes this bubble first, then the dialog.' }).element);
-        const t = base.setTooltip(document.createElement('button'), 'Tooltip above the dialog.');
+        wrap.appendChild(base.createHelpHint({ text: 'Escape closes this bubble first, then the sidecar.' }).element);
+        const t = base.setTooltip(document.createElement('button'), 'Tooltip above the sidecar.');
         t.type = 'button'; t.className = 'raised stolon-button stolon-small'; t.textContent = 'Tip';
         wrap.appendChild(t);
         wrap.appendChild(base.createSearchField({ placeholder: 'alice' }).element);
         base.bindTooltips(wrap);
-        base.openDialog({ title: 'Popups', body: wrap, buttons: [{ text: 'Done', className: 'stolon-button stolon-primary' }] });
+        base.openSidecar({ title: 'Popups', body: wrap, buttons: [{ text: 'Done', className: 'stolon-button stolon-primary' }] });
     };
     s.appendChild(inDialog);
 })();
@@ -1160,7 +1165,7 @@ function html(parent, markup) {
         actions: [{ id: 'retry', label: 'Retry Errors', icon: 'refresh', onClick: () => setState(all.filter((i) => i.state === 'Errored').map((i) => i.id), 'Queued'), visible: () => all.some((i) => i.state === 'Errored') }],
         limit: 200,
         limitText: 'Showing the latest {shown} of {total}. Filter by state or server to see more.',
-        onOpen: (item) => base.openDialog({ title: item.name, body: '<p>' + base.escapeHtml(item.type + ', ' + item.state + ', ' + (detailOf(item) || 'no detail')) + '</p>', buttons: [{ text: 'Done', className: 'stolon-button stolon-primary' }] }),
+        onOpen: (item) => base.openSidecar({ title: item.name, subtitle: item.type + ', ' + item.state, body: '<p>' + base.escapeHtml(detailOf(item) || 'no detail') + '</p>' }),
         height: 420
     });
     // The servers arrive after the first load, as Server Sync's peer pills do.

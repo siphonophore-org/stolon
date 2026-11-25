@@ -21,7 +21,7 @@ import { stolonText } from './lib/stolon-text.js';
  *   isDirty      : function() returning whether there are unsaved changes, so leaving the page asks first and closing the tab warns [optional]
  *   leaveMessage : the question asked before leaving with unsaved changes (default 'You have unsaved changes. Leave without saving?')
  * }
- * @returns a page handle { view, shared, addCleanup(fn), createPoller(fn, ms, opts), guardUnsaved(isDirty, message), trackEditor(dialog), untrackEditor(dialog) }.
+ * @returns a page handle { view, shared, addCleanup(fn), createPoller(fn, ms, opts), guardUnsaved(isDirty, message), trackEditor(editor), untrackEditor(editor) }.
  * guardUnsaved takes a function or a createChangeTracker tracker, and a poller from createPoller stops on viewhide.
  */
 export function createConfigPage(view: HTMLElement, opts: ConfigPageOptions): PageHandle {
@@ -30,7 +30,7 @@ export function createConfigPage(view: HTMLElement, opts: ConfigPageOptions): Pa
     var cleanups: Array<() => void> = [];
     var bound = false;
     var isDirty: (() => boolean) | null = opts.isDirty || null;
-    // Editor dialogs from openEditorDialog, whose unsaved edits count as the page.
+    // Editor sidecars from openEditorSidecar, whose unsaved edits count as the page.
     var editors: UnsavedEditor[] = [];
     var leaveMessage = opts.leaveMessage || '';
 
@@ -59,8 +59,8 @@ export function createConfigPage(view: HTMLElement, opts: ConfigPageOptions): Pa
             isDirty = dirty && typeof (dirty as { isDirty?: unknown }).isDirty === 'function' ? (dirty as { isDirty(): boolean }).isDirty : dirty as () => boolean;
             if (message) leaveMessage = message;
         },
-        trackEditor: function (dialog) { if (editors.indexOf(dialog) < 0) editors.push(dialog); },
-        untrackEditor: function (dialog) { editors = editors.filter(function (d) { return d !== dialog; }); }
+        trackEditor: function (editor) { if (editors.indexOf(editor) < 0) editors.push(editor); },
+        untrackEditor: function (editor) { editors = editors.filter(function (d) { return d !== editor; }); }
     };
 
     function runCleanups() {

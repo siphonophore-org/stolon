@@ -37,7 +37,7 @@ Parts: `stolon-filter-text`, `stolon-filter-title`, `stolon-filter-group-name`, 
 * The badge shows the count of picked values and hides at zero. The button takes `stolon-active` while any filter is on, and its `aria-label` reads "Filter, 3 filters on".
 * The defaults are "Filter" (`buttonText`), "Filters" (`title`), "Clear" (`clearText`), "Done" (`doneText`), "{value} filters on" (`countLabel`), and "{value} filter on" (`countOneLabel`).
 * `applyOnChange` (default true) applies and reports each change at once. With false, changes apply on Done, and Escape, an outside click, or leaving the panel drops them.
-* The panel is a popover under the button, or above it when there is no room. On a screen under 600px wide, or with `asDialog: true`, it opens as a [Dialog](dialog.md) with the Clear and Done buttons in its footer.
+* The panel is a popover under the button, or above it when there is no room. On a screen under 600px wide, or with `asSidecar: true`, it opens as a [Sidecar](sidecar.md) with the Clear and Done buttons on its shelf.
 * Opening moves focus to the first box. Escape and an outside click close the panel and return focus to the button, and Tab out of the popover closes it.
 * Clear unchecks every group. `setValue` and `setGroups` do not call `onChange`.
 * `onChange` reports a fresh copy of every group, so a list that filters by group name can take it as it is, and an empty array means no filter for that group.
@@ -56,7 +56,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createFilterPanel(options?: FilterPanelOptions): FilterPanelHandle</code>
 
-A Filter button with a count of the filters on, which opens a panel of filter groups. The panel is a popover under the button, or a dialog on a screen under 600px wide or with asDialog.
+A Filter button with a count of the filters on, which opens a panel of filter groups. The panel is a popover under the button, or a sidecar on a screen under 600px wide or with asSidecar.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -69,7 +69,7 @@ A Filter button with a count of the filters on, which opens a panel of filter gr
 | `countLabel` | <code>string</code> | end of the button's aria-label while filters are on, where {value} is the count (default '{value} filters on') |
 | `countOneLabel` | <code>string</code> | the same while one filter is on (default '{value} filter on') |
 | `applyOnChange` | <code>boolean</code> | apply each change at once, or with false only on Done (default true) |
-| `asDialog` | <code>boolean</code> | always open as a dialog (default false) |
+| `asSidecar` | <code>boolean</code> | always open as a sidecar (default false) |
 | `onChange` | <code>(value: FilterPanelValue): void</code> | function(value) called each time the picked values apply [optional] |
 
 | Handle member | Type |

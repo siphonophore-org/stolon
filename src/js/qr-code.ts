@@ -1,7 +1,7 @@
 import { fitWidth } from './lib/fit.js';
 import { make, icon, iconButton, listen, runAll, toText, nextId, fill } from './lib/dom.js';
-import { openDialog } from './dialog.js';
-import type { DialogHandle } from './dialog.js';
+import { openSidecar } from './sidecar.js';
+import type { SidecarHandle } from './sidecar.js';
 import { encodeQr, alignmentCenters } from './lib/qr.js';
 import { svgEl } from './lib/chart.js';
 import { canvasBlob, copyImage } from './lib/canvas.js';
@@ -17,7 +17,7 @@ export interface QrCodeOptions {
     value?: string;
     layout?: 'full' | 'inline';
     showText?: string;
-    dialogTitle?: string;
+    sidecarTitle?: string;
     label?: string;
     showValue?: boolean;
     showActions?: boolean;
@@ -33,7 +33,7 @@ export interface QrCodeOptions {
 /** What createQrCode returns. toBlob draws the code as a PNG. */
 export interface QrCodeHandle extends ComponentHandle {
     getValue(): string;
-    open(): DialogHandle | null;
+    open(): SidecarHandle | null;
     setValue(value: string | null): void;
     toBlob(): Promise<Blob | null>;
     destroy(): void;
@@ -92,16 +92,16 @@ function qrPaths(grid: boolean[][]): { dots: string; eyes: string } {
 
 /**
  * With layout 'inline' it draws only the text as a wrapped Copy Field that shows all of it, with a QR button beside Copy that opens the full code,
- * with its Copy image and Download, in a dialog. A text too long to encode disables that button and shows the message.
+ * with its Copy image and Download, in a sidecar. A text too long to encode disables that button and shows the message.
  *
  * A QR code of a short text, such as a URL, drawn as SVG in the text color on the surface in a rounded style: round dots, solid alignment patterns, and rounded finder eyes in the accent color, with Copy image and Download buttons for a PNG and the text under it as a Copy Field.
  * It encodes in byte mode at error correction level M, up to 412 bytes, and shows a message under the frame for a longer text.
  *
  * @param options {
  *   value          : the text the code holds, such as a URL [optional]
- *   layout         : 'full', the code with its buttons and text, or 'inline', the text with a QR button that opens the code in a dialog (default 'full')
+ *   layout         : 'full', the code with its buttons and text, or 'inline', the text with a QR button that opens the code in a sidecar (default 'full')
  *   showText       : the inline QR button's title and aria-label (default 'Show QR code')
- *   dialogTitle    : the inline dialog's title (default 'QR code')
+ *   sidecarTitle   : the sidecar's title (default 'QR code')
  *   label          : the code's accessible name (default 'QR code for' and the text)
  *   showValue      : false hides the Copy Field under the code (default true)
  *   showActions    : false hides Copy image and Download, for a page that offers its own download (default true)
@@ -113,7 +113,7 @@ function qrPaths(grid: boolean[][]): { dots: string; eyes: string } {
  *   tooLongText    : the message for a text too long to encode (default 'This text is too long for a QR code.')
  *   feedbackMs     : how long the feedback stays (default 1500)
  * }
- * @returns { element, getValue, setValue, toBlob, open, destroy }. toBlob resolves to a PNG of the code, or null. open shows the code in a dialog, the inline QR button's action, and returns the dialog, or null for an empty or too long text.
+ * @returns { element, getValue, setValue, toBlob, open, destroy }. toBlob resolves to a PNG of the code, or null. open shows the code in a sidecar, the inline QR button's action, and returns the sidecar, or null for an empty or too long text.
  */
 export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
     var opts = options || {};
@@ -124,7 +124,7 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
 
     var inline = opts.layout === 'inline';
     var root = make('div', 'stolon-qr-code' + (inline ? ' stolon-inline' : ''));
-    var dialog: DialogHandle | null = null;
+    var sidecar: SidecarHandle | null = null;
     var frame = make('div', 'stolon-qr-code-frame', { role: 'img' });
     var actions = make('div', 'stolon-button-row stolon-qr-code-actions');
     var copyBtn = make('button', 'raised stolon-button stolon-secondary stolon-fill stolon-qr-code-copy', { type: 'button' });
@@ -144,7 +144,7 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
     var field: CopyFieldHandle | null = null;
     var showBtn: HTMLButtonElement | null = null;
     if (inline) {
-        // Inline, the text is the component, and its QR button opens the full code in a dialog.
+        // Inline, the text is the component, and its QR button opens the full code in a sidecar.
         field = createCopyField({ value: '', label: opts.label || stolonText('Stolon.Link'), wrap: true });
         var showLabel = opts.showText || stolonText('Stolon.ShowQrCode');
         showBtn = iconButton('stolon-row-btn stolon-qr-code-open', 'qr_code_2', showLabel);
@@ -232,24 +232,23 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
         toBlob().then(function (blob) { if (blob) downloadBlob(opts.fileName || 'qr-code.png', blob); });
     }));
 
-    // The full code, its buttons, and nothing else, in a small dialog. Its own handle is destroyed when the dialog closes.
-    function open(): DialogHandle | null {
+    // The full code, its buttons, and nothing else, in a sidecar. Its own handle is destroyed when the sidecar closes.
+    function open(): SidecarHandle | null {
         if (!grid) return null;
-        if (dialog) dialog.close();
+        if (sidecar) sidecar.close();
         var full = createQrCode({
             value: value, label: opts.label, showValue: false, fileName: opts.fileName, copyImageText: opts.copyImageText,
             downloadText: opts.downloadText, copiedText: opts.copiedText, copyFailedText: opts.copyFailedText, feedbackMs: opts.feedbackMs
         });
-        full.element.classList.add('stolon-compact', 'stolon-qr-code-dialog');
-        dialog = openDialog({
-            title: opts.dialogTitle || stolonText('Stolon.QrCode'),
+        full.element.classList.add('stolon-compact', 'stolon-qr-code-sidecar');
+        sidecar = openSidecar({
+            title: opts.sidecarTitle || stolonText('Stolon.QrCode'),
             body: full.element,
-            size: 'small',
             className: 'pluginConfigurationPage',
             returnFocus: showBtn,
-            onClose: function () { full.destroy(); dialog = null; }
+            onClose: function () { full.destroy(); sidecar = null; }
         });
-        return dialog;
+        return sidecar;
     }
 
     function setValue(next: string | null): void {
@@ -267,7 +266,7 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
         toBlob: toBlob,
         open: open,
         destroy: function () {
-            if (dialog) dialog.close();
+            if (sidecar) sidecar.close();
             if (timer !== null) clearTimeout(timer);
             runAll(cleanups);
             if (field) field.destroy();

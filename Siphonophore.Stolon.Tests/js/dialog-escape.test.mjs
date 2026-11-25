@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { installFakeDom } from './fake-dom.mjs';
 
 var dom = installFakeDom();
-var { openDialog, confirmDialog, createOverflowMenu, createHelpHint, createSearchField, createStringList, createChipSelect, createShared } = await import('../../src/js/index.js');
+var { openDialog, openSidecar, confirmDialog, createOverflowMenu, createHelpHint, createSearchField, createStringList, createChipSelect, createShared } = await import('../../src/js/index.js');
 
 beforeEach(function () {
     dom = installFakeDom();
@@ -14,9 +14,9 @@ function open() {
     return dom.document.querySelectorAll('.stolon-dialog').length > 0;
 }
 
-// Opens a dialog around the element and runs prepare so the component is in its open state with focus inside.
+// Opens a sidecar around the element and runs prepare so the component is in its open state with focus inside.
 function around(element, prepare) {
-    var handle = openDialog({ title: 'Edit', body: element });
+    var handle = openSidecar({ title: 'Edit', body: element });
     prepare();
     return handle;
 }
@@ -115,23 +115,24 @@ test('a focused control that is merely expanded does not stop Escape from closin
 });
 
 test('a dialog with a title is named by it, and a dialog with no title is named by ariaLabel', function () {
-    var titled = openDialog({ title: 'Edit', body: '<p>Body.</p>' });
+    var titled = openDialog({ title: 'Edit', description: 'Body.' });
     var panel = titled.element.querySelector('.stolon-dialog-content');
     assert.equal(panel.getAttribute('aria-labelledby'), titled.element.querySelector('.stolon-modal-title').id);
     assert.equal(panel.hasAttribute('aria-label'), false);
     titled.close();
-    var named = openDialog({ ariaLabel: 'Pick a server', body: '<p>Body.</p>' });
+    var named = openDialog({ ariaLabel: 'Pick a server', description: 'Body.' });
     assert.equal(named.element.querySelector('.stolon-dialog-content').getAttribute('aria-label'), 'Pick a server');
     named.close();
 });
 
-test('a dialog with no title and no ariaLabel is named by its body text, else Dialog', function () {
-    var textual = openDialog({ body: dom.el('p', {}, []) });
+test('a dialog with no title and no ariaLabel is named by its description or subtitle, else Dialog', function () {
+    var textual = openDialog({});
     assert.equal(textual.element.querySelector('.stolon-dialog-content').getAttribute('aria-label'), 'Dialog');
     textual.close();
-    var p = dom.el('p');
-    p.textContent = 'Remove the server from the pool.';
-    var withText = openDialog({ body: p });
+    var full = openDialog({ subtitle: 'The file goes from every server.', context: dom.el('div') });
+    assert.equal(full.element.querySelector('.stolon-dialog-content').getAttribute('aria-label'), 'The file goes from every server.');
+    full.close();
+    var withText = openDialog({ description: 'Remove the server from the pool.' });
     assert.equal(withText.element.querySelector('.stolon-dialog-content').getAttribute('aria-label'), 'Remove the server from the pool.');
     withText.close();
 });
@@ -153,9 +154,11 @@ test('confirmDialog with no title is named by its message, truncated, and with a
     assert.equal(await titled, false);
 });
 
-test('confirmDialog with html strips the tags for its name', function () {
-    confirmDialog('<p>Remove <b>this</b> server.</p>', { html: true });
-    assert.equal(dom.document.querySelector('.stolon-dialog-content').getAttribute('aria-label'), 'Remove this server.');
+test('confirmDialog writes its message as text, so markup in it is not rendered', function () {
+    confirmDialog('Remove <b>this</b> server.');
+    var description = dom.document.querySelector('.stolon-modal-description');
+    assert.equal(description.textContent, 'Remove <b>this</b> server.');
+    assert.equal(description.querySelector('b'), null);
 });
 
 test('confirmDialog buttons default to Cancel and Confirm, are replaceable, and Escape resolves false', async function () {

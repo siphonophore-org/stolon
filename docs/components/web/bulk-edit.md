@@ -8,7 +8,7 @@ Inline editing blocks. A bordered bulk edit toolbar sits above a table, and tabl
 | :--- | :--- |
 | Editing several selected rows at once | Bulk Edit Bar |
 | Editing one row in place | Edit Row |
-| A record with many fields | [Editor Dialog](editor-dialog.md) |
+| A record with many fields | [Editor Sidecar](editor-sidecar.md) |
 
 ## Usage
 

@@ -7,7 +7,7 @@ var dom = installFakeDom();
 var { validateValue, readRules, bindValidation, validateAll, validationOf } = await import('../../src/js/lib/validate.js');
 var { bindFieldAdornments, adornField } = await import('../../src/js/field-adornments.js');
 var { createSaveBar } = await import('../../src/js/save-bar.js');
-var { promptDialog } = await import('../../src/js/prompt-dialog.js');
+var { promptSidecar } = await import('../../src/js/prompt-sidecar.js');
 var { createColorPicker } = await import('../../src/js/color-picker.js');
 var { createSchedulePicker } = await import('../../src/js/schedule-picker.js');
 
@@ -198,8 +198,8 @@ test('the save bar refuses to save while its form is invalid', async function ()
     assert.equal(saved, 1);
 });
 
-test('the prompt dialog shows a description, and stays open while a required or validated field is invalid', async function () {
-    var answer = promptDialog([
+test('the prompt sidecar shows a description, and stays open while a required or validated field is invalid', async function () {
+    var answer = promptSidecar([
         { name: 'name', label: 'Name', required: true, description: 'Shown on the card.' },
         { name: 'port', type: 'number', min: 1, max: 9, validate: function (v) { return v === '5' ? 'Not 5.' : ''; } }
     ]);

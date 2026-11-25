@@ -59,17 +59,22 @@ resizable.setColumnWidth('name', '20px');
 B.createChoiceGroup(view, {});
 B.createCopyField({});
 B.createDefinitionList({});
+B.openDialog({ title: 'Remove Server B', description: 'Its mappings go with it.', size: 'compact' });
+B.openDialog({ title: 'Delete Charade', subtitle: 'The file goes from every server.', context: document.createElement('div'), size: 'full' });
+// @ts-expect-error a dialog is compact or full
 B.openDialog({ title: 'Title', size: 'large' });
-B.bindDialog('dialogId', {});
+B.openSidecar({ title: 'Charade', size: 'large', buttons: [{ text: 'Save' }] });
+B.sidecarOpener(function (row: { name: string }) { return { title: row.name }; });
+B.bindSidecar('sidecarId', {});
 B.confirmDialog('Remove it?').then(function (yes: boolean) { return yes; });
-B.openEditorDialog({});
-B.openEditorDialog({ actions: [{ text: 'Duplicate', icon: 'content_copy', onClick: function (handle, button) { handle.markClean(); button.disabled = true; } }, { text: 'Send', variant: 'primary', onClick: function () {} }] });
+B.openEditorSidecar({});
+B.openEditorSidecar({ actions: [{ text: 'Duplicate', icon: 'content_copy', onClick: function (handle, button) { handle.markClean(); button.disabled = true; } }, { text: 'Send', variant: 'primary', onClick: function () {} }] });
 // @ts-expect-error an action needs its onClick
-B.openEditorDialog({ actions: [{ text: 'Duplicate' }] });
+B.openEditorSidecar({ actions: [{ text: 'Duplicate' }] });
 // @ts-expect-error an action's variant is one of the button variants
-B.openEditorDialog({ actions: [{ text: 'Duplicate', variant: 'loud', onClick: function () {} }] });
+B.openEditorSidecar({ actions: [{ text: 'Duplicate', variant: 'loud', onClick: function () {} }] });
 B.createCopyField({ value: 'https://example.com', wrap: true });
-B.promptDialog([{ name: 'name', value: '' }]);
+B.promptSidecar([{ name: 'name', value: '' }]);
 B.createDivider({});
 B.createFieldMessage({});
 B.setFieldState(input, 'error', 'Required.');

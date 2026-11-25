@@ -1,17 +1,16 @@
-import { escapeHtml } from './browser-helpers.js';
 import { openDialog } from './dialog.js';
 import type { DialogHandle } from './dialog.js';
 import { setFieldState } from './field-message.js';
 import { make, nextId, fill } from './lib/dom.js';
 import { stolonText } from './lib/stolon-text.js';
 
-/** What confirmDialog takes. html treats the message as HTML instead of text, and typeToConfirm asks for that exact text before the confirm button turns on. */
+/** What confirmDialog takes. context makes it a full dialog, and typeToConfirm asks for that exact text before the confirm button turns on. */
 export interface ConfirmDialogOptions {
     title?: string;
     confirmText?: string;
     cancelText?: string;
     destructive?: boolean;
-    html?: boolean;
+    context?: string | Node;
     typeToConfirm?: string;
     typeLabel?: string;
     mismatchText?: string;
@@ -29,16 +28,19 @@ export function typedMatches(typed: unknown, wanted: unknown): boolean {
 }
 
 /**
- * Opens a yes or no dialog that resolves to true when confirmed and false otherwise. With typeToConfirm it is a typed confirm,
- * whose confirm button stays off until the field holds that exact text, and Enter confirms only then.
+ * Opens a yes or no dialog that resolves to true when confirmed and false otherwise. It is compact, the title and the message
+ * under it, unless it has a context or a typed confirm, which make it full, with the message as the subtitle over the context.
+ * The title names the action and what it acts on, such as 'Remove Server B', and the message says what follows from it, never
+ * the title again as a question. With typeToConfirm the confirm button stays off until the field holds that exact text, and
+ * Enter confirms only then.
  *
- * @param message body text, or HTML when opts.html is true
+ * @param message the description, or the subtitle of a full dialog, as text
  * @param opts {
- *   title         : the dialog title, which names the action [optional]
+ *   title         : the dialog title, which names the action and what it acts on [optional]
  *   confirmText   : the confirm button label (default 'Confirm')
  *   cancelText    : the cancel button label (default 'Cancel')
  *   destructive   : true makes the confirm button destructive (default false)
- *   html          : true treats the message as HTML (default false)
+ *   context       : HTML or a node shown under the message, such as a poster and the name of what is deleted, which makes the dialog full [optional]
  *   typeToConfirm : text the reader must type exactly before confirming, such as the name of what is deleted [optional]
  *   typeLabel     : the field's label, where {value} is the text to type (default 'Type {value} to confirm.')
  *   mismatchText  : the error under the field when Enter is pressed before it matches (default 'The text does not match.')
@@ -51,25 +53,29 @@ export function confirmDialog(message: string, opts?: ConfirmDialogOptions): Pro
         var settled: boolean = false;
         function done(value: boolean): void { if (!settled) { settled = true; resolve(value); } }
 
-        var html: string = opts!.html ? message : '<p>' + escapeHtml(message) + '</p>';
-        var body: string | HTMLElement = html;
+        var full: boolean = opts!.context != null || !!wanted;
+        var context: HTMLElement | null = null;
         var input: HTMLInputElement | null = null;
-        if (wanted) {
-            body = make('div');
-            body.innerHTML = html;
+        if (full) {
+            context = make('div');
+            if (opts!.context instanceof Node) context.appendChild(opts!.context);
+            else if (typeof opts!.context === 'string') context.innerHTML = opts!.context;
+        }
+        if (wanted && context) {
             var field = make('div', 'stolon-modal-field');
             input = make('input', 'stolon-edit-input', { type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false' });
             input.id = nextId('typed-confirm');
             field.appendChild(make('label', 'stolon-modal-field-label', { for: input.id }, fill(opts!.typeLabel || stolonText('Stolon.TypeToConfirm'), wanted)));
             field.appendChild(input);
-            body.appendChild(field);
+            context.appendChild(field);
         }
 
         var handle: DialogHandle = openDialog({
+            size: full ? 'full' : 'compact',
             title: opts!.title,
-            ariaLabel: opts!.html ? String(message).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : String(message),
-            size: 'small',
-            body: body,
+            description: full ? undefined : String(message || ''),
+            subtitle: full ? String(message || '') : undefined,
+            context: context || undefined,
             buttons: [
                 { text: opts!.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close): void { close(false); } },
                 {

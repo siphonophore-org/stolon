@@ -6,8 +6,9 @@ import { installFakeDom, all } from './fake-dom.mjs';
 
 var dom = installFakeDom();
 var { openDialog } = await import('../../src/js/dialog.js');
-var { bindDialog } = await import('../../src/js/bound-dialog.js');
-var { openEditorDialog } = await import('../../src/js/editor-dialog.js');
+var { openSidecar } = await import('../../src/js/sidecar.js');
+var { bindSidecar } = await import('../../src/js/bound-sidecar.js');
+var { openEditorSidecar } = await import('../../src/js/editor-sidecar.js');
 var { generateGuid } = await import('../../src/js/browser-helpers.js');
 var { escapeHtml } = await import('../../src/js/index.js');
 
@@ -40,15 +41,15 @@ test('focusFirst skips hidden controls and lands on the first visible field', fu
         dom.el('input', { type: 'text', style: { display: 'none' } }),
         visible
     ]);
-    var handle = openDialog({ title: 'Edit', body: body });
+    var handle = openSidecar({ title: 'Edit', body: body });
     assert.equal(dom.document.activeElement, visible);
     handle.close();
 });
 
-test('focusFirst never picks a destructive button, preferring Cancel in the footer', function () {
+test('focusFirst never picks a destructive button, preferring Cancel in the button row', function () {
     var handle = openDialog({
-        title: 'Remove?',
-        body: '<p>Sure?</p>',
+        title: 'Remove Server B',
+        description: 'Its mappings go with it.',
         buttons: [
             { text: 'Remove', className: 'stolon-button stolon-destructive' },
             { text: 'Cancel', className: 'stolon-button stolon-secondary' }
@@ -60,14 +61,14 @@ test('focusFirst never picks a destructive button, preferring Cancel in the foot
 
 test('focusFirst skips a destructive button in the body too', function () {
     var keep = dom.el('button', { type: 'button' });
-    var handle = openDialog({ body: bodyWith([dom.el('button', { type: 'button', class: 'stolon-button stolon-destructive' }), keep]) });
+    var handle = openSidecar({ body: bodyWith([dom.el('button', { type: 'button', class: 'stolon-button stolon-destructive' }), keep]) });
     assert.equal(dom.document.activeElement, keep);
     handle.close();
 });
 
 test('on a touch screen a text field is not focused; the panel is', function () {
     dom.setCoarse(true);
-    var handle = openDialog({ title: 'Edit', body: bodyWith([dom.el('input', { type: 'text' })]), size: 'large' });
+    var handle = openSidecar({ title: 'Edit', body: bodyWith([dom.el('input', { type: 'text' })]), size: 'large' });
     var panel = handle.element.querySelector('.stolon-dialog-content');
     assert.equal(dom.document.activeElement, panel);
     assert.equal(panel.getAttribute('tabindex'), '-1');
@@ -76,11 +77,11 @@ test('on a touch screen a text field is not focused; the panel is', function () 
 
 test('autofocus picks the element asked for, and false focuses the panel', function () {
     var second = dom.el('input', { type: 'text', class: 'second' });
-    var handle = openDialog({ body: bodyWith([dom.el('input', { type: 'text' }), second]), autofocus: '.second' });
+    var handle = openSidecar({ body: bodyWith([dom.el('input', { type: 'text' }), second]), autofocus: '.second' });
     assert.equal(dom.document.activeElement, second);
     handle.close();
 
-    handle = openDialog({ body: bodyWith([dom.el('input', { type: 'text' })]), autofocus: false });
+    handle = openSidecar({ body: bodyWith([dom.el('input', { type: 'text' })]), autofocus: false });
     assert.equal(dom.document.activeElement, handle.element.querySelector('.stolon-dialog-content'));
     handle.close();
 });
@@ -88,7 +89,7 @@ test('autofocus picks the element asked for, and false focuses the panel', funct
 test('the Tab trap ignores hidden controls, so Tab from the last visible one wraps to the first', function () {
     var first = dom.el('input', { type: 'text' });
     var last = dom.el('input', { type: 'text' });
-    var handle = openDialog({ body: bodyWith([first, last, dom.el('input', { type: 'text', class: 'stolon-hidden' })]), closeButton: false });
+    var handle = openSidecar({ body: bodyWith([first, last, dom.el('input', { type: 'text', class: 'stolon-hidden' })]), dismissable: false });
     last.focus();
     var e = dom.document.key('Tab');
     assert.ok(e.defaultPrevented);
@@ -97,7 +98,7 @@ test('the Tab trap ignores hidden controls, so Tab from the last visible one wra
 });
 
 test('aria-labelledby is set only while a title is shown', function () {
-    var handle = openDialog({ body: '<p>x</p>' });
+    var handle = openDialog({ description: 'x' });
     var panel = handle.element.querySelector('.stolon-dialog-content');
     assert.equal(panel.hasAttribute('aria-labelledby'), false);
     handle.setTitle('Named');
@@ -111,24 +112,24 @@ test('focus goes to returnFocus when the opener is gone at close', function () {
     var opener = dom.document.body.appendChild(dom.el('button', { type: 'button' }));
     var fallback = dom.document.body.appendChild(dom.el('button', { type: 'button', id: 'add' }));
     opener.focus();
-    var handle = openDialog({ body: '<p>x</p>', returnFocus: '#add' });
+    var handle = openDialog({ description: 'x', returnFocus: '#add' });
     dom.document.body.removeChild(opener);
     handle.close();
     assert.equal(dom.document.activeElement, fallback);
 });
 
-test('bindDialog adds dialog semantics and Escape on a confirm above it closes only the confirm', function () {
-    var content = dom.el('div', { class: 'stolon-dialog-content' }, [dom.el('h2', { class: 'stolon-modal-title' }), dom.el('input', { type: 'text' })]);
-    var overlay = dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-hidden', id: 'ed' }, [content]));
+test('bindSidecar adds dialog semantics and Escape on a confirm above it closes only the confirm', function () {
+    var content = dom.el('div', { class: 'stolon-dialog-content stolon-sidecar-panel' }, [dom.el('h2', { class: 'stolon-sidecar-title' }), dom.el('input', { type: 'text' })]);
+    var overlay = dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-sidecar stolon-hidden', id: 'ed' }, [content]));
     var closes = 0;
-    var bound = bindDialog('ed', { onClose: function () { closes++; } });
+    var bound = bindSidecar('ed', { onClose: function () { closes++; } });
     assert.equal(content.getAttribute('role'), 'dialog');
     assert.equal(content.getAttribute('aria-modal'), 'true');
     assert.ok(content.getAttribute('aria-labelledby'));
 
     bound.open();
     var confirmClosed = false;
-    openDialog({ body: '<p>Sure?</p>', onClose: function () { confirmClosed = true; } });
+    openDialog({ description: 'Sure?', onClose: function () { confirmClosed = true; } });
     dom.document.key('Escape');
     assert.equal(confirmClosed, true);
     assert.equal(bound.isOpen(), true);
@@ -140,22 +141,22 @@ test('bindDialog adds dialog semantics and Escape on a confirm above it closes o
     assert.ok(overlay.classList.contains('stolon-hidden'));
 });
 
-test('openEditorDialog disables Done while onDone is pending and re-enables it on failure', async function () {
+test('openEditorSidecar disables Save while onSave is pending and re-enables it on failure', async function () {
     var reject;
     var calls = 0;
     var unhandled = 0;
     function onUnhandled() { unhandled++; }
     process.on('unhandledRejection', onUnhandled);
-    var handle = openEditorDialog({
+    var handle = openEditorSidecar({
         title: 'Edit',
         isNew: true,
-        onDone: function () { calls++; return new Promise(function (res, rej) { reject = rej; }); }
+        onSave: function () { calls++; return new Promise(function (res, rej) { reject = rej; }); }
     });
-    var done = all(handle.element, '.stolon-modal-button').filter(function (b) { return b.textContent === 'Done'; })[0];
+    var done = all(handle.element, '.stolon-modal-button').filter(function (b) { return b.textContent === 'Save'; })[0];
     done.click();
     assert.equal(done.disabled, true);
     done.click();
-    assert.equal(calls, 1, 'a second click while saving must not call onDone again');
+    assert.equal(calls, 1, 'a second click while saving must not call onSave again');
     reject(new Error('save failed'));
     await new Promise(function (r) { setTimeout(r, 0); });
     assert.equal(done.disabled, false);
@@ -164,20 +165,20 @@ test('openEditorDialog disables Done while onDone is pending and re-enables it o
     handle.close();
 });
 
-test('openEditorDialog draws extra actions in the footer between Remove and Cancel, in button order', function () {
+test('openEditorSidecar draws extra actions on the shelf between Delete and Cancel, in button order', function () {
     var seen = [];
-    var handle = openEditorDialog({
+    var handle = openEditorSidecar({
         title: 'Edit Invite',
-        onRemove: function () {},
+        onDelete: function () {},
         actions: [
             { text: 'Duplicate', icon: 'content_copy', onClick: function (h, btn) { seen.push([h, btn]); } },
             { text: 'Send', variant: 'primary', onClick: function () {} },
             { text: 'Revoke', variant: 'destructive', onClick: function () {} }
         ]
     });
-    var row = handle.element.querySelector('.stolon-modal-button-row');
+    var row = handle.element.querySelector('.stolon-sidecar-shelf');
     var buttons = all(row, '.stolon-modal-button');
-    assert.deepEqual(buttons.map(function (b) { return b.textContent; }), ['Remove', 'Revoke', 'content_copyDuplicate', 'Send', 'Cancel', 'Done']);
+    assert.deepEqual(buttons.map(function (b) { return b.textContent; }), ['Delete', 'Revoke', 'content_copyDuplicate', 'Send', 'Cancel', 'Save']);
     var duplicate = buttons[2];
     assert.ok(duplicate.classList.contains('stolon-button'));
     assert.ok(duplicate.classList.contains('stolon-secondary'), 'an action is secondary by default');
@@ -194,24 +195,24 @@ test('openEditorDialog draws extra actions in the footer between Remove and Canc
     handle.close();
 });
 
-test('openEditorDialog with no actions keeps Remove, Cancel, and Done', function () {
-    var handle = openEditorDialog({ title: 'Edit', onRemove: function () {} });
-    assert.deepEqual(all(handle.element, '.stolon-modal-button').map(function (b) { return b.textContent; }), ['Remove', 'Cancel', 'Done']);
+test('openEditorSidecar with no actions keeps Delete, Cancel, and Save', function () {
+    var handle = openEditorSidecar({ title: 'Edit', onDelete: function () {} });
+    assert.deepEqual(all(handle.element, '.stolon-modal-button').map(function (b) { return b.textContent; }), ['Delete', 'Cancel', 'Save']);
     handle.close();
 });
 
-test('bindDialog leaves semantics alone when the overlay already carries the role', function () {
-    var content = dom.el('div', { class: 'stolon-dialog-content' });
-    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-hidden', id: 'm', role: 'dialog', 'aria-modal': 'true' }, [content]));
-    bindDialog('m');
+test('bindSidecar leaves semantics alone when the overlay already carries the role', function () {
+    var content = dom.el('div', { class: 'stolon-dialog-content stolon-sidecar-panel' });
+    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-sidecar stolon-hidden', id: 'm', role: 'dialog', 'aria-modal': 'true' }, [content]));
+    bindSidecar('m');
     assert.equal(content.hasAttribute('role'), false);
 });
 
-test('an in-page dialog hidden by style does not count as the top one', function () {
-    var content = dom.el('div', { class: 'stolon-dialog-content' }, [dom.el('input', { type: 'text' })]);
-    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-hidden', id: 'a' }, [content]));
-    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog', style: { display: 'none' } }));
-    var bound = bindDialog('a');
+test('an in-page sidecar hidden by style does not count as the top one', function () {
+    var content = dom.el('div', { class: 'stolon-dialog-content stolon-sidecar-panel' }, [dom.el('input', { type: 'text' })]);
+    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-sidecar stolon-hidden', id: 'a' }, [content]));
+    dom.document.body.appendChild(dom.el('div', { class: 'stolon-dialog stolon-sidecar', style: { display: 'none' } }));
+    var bound = bindSidecar('a');
     bound.open();
     dom.document.key('Escape');
     assert.equal(bound.isOpen(), false);

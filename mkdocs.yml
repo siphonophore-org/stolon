@@ -151,12 +151,12 @@ nav:
               - Banner: components/web/banner.md
               - Status Dot: components/web/status-dot.md
           - Dialogs and Menus:
-              - Detail Drawer: components/web/detail-drawer.md
               - Dialog: components/web/dialog.md
               - Confirm Dialog: components/web/confirm-dialog.md
-              - Prompt Dialog: components/web/prompt-dialog.md
-              - Editor Dialog: components/web/editor-dialog.md
-              - Bound Dialog: components/web/bound-dialog.md
+              - Sidecar: components/web/sidecar.md
+              - Editor Sidecar: components/web/editor-sidecar.md
+              - Prompt Sidecar: components/web/prompt-sidecar.md
+              - Bound Sidecar: components/web/bound-sidecar.md
               - Overflow Menu: components/web/overflow-menu.md
               - Tooltip: components/web/tooltip.md
               - Help Hint: components/web/help-hint.md

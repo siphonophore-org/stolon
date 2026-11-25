@@ -230,15 +230,15 @@ test('moving focus out of the popover closes it without taking focus back', func
     assert.equal(dom.document.activeElement, other);
 });
 
-test('a narrow screen opens a Stolon dialog with the title, the groups, and Clear and Done', function () {
+test('a narrow screen opens a sidecar with the title, the groups, and Clear and Done', function () {
     globalThis.innerWidth = 375;
     var ui = build();
     ui.button.click();
-    var overlay = dom.document.querySelector('.stolon-dialog');
+    var overlay = dom.document.querySelector('.stolon-sidecar');
     assert.ok(overlay);
     assert.equal(panel(), null);
-    assert.equal(overlay.querySelector('.stolon-modal-title').textContent, 'Filters');
-    assert.ok(overlay.querySelector('.stolon-filter-dialog'));
+    assert.equal(overlay.querySelector('.stolon-sidecar-title').textContent, 'Filters');
+    assert.ok(overlay.querySelector('.stolon-filter-sidecar'));
     assert.equal(all(overlay, '.stolon-filter-group').length, 2);
     assert.equal(overlay.querySelector('.stolon-filter-clear').textContent, 'Clear');
     assert.equal(overlay.querySelector('.stolon-filter-done').textContent, 'Done');
@@ -247,29 +247,29 @@ test('a narrow screen opens a Stolon dialog with the title, the groups, and Clea
     overlay.querySelector('.stolon-filter-clear').click();
     assert.deepEqual(ui.filter.getValue().status, []);
     overlay.querySelector('.stolon-filter-done').click();
-    assert.equal(dom.document.querySelector('.stolon-dialog'), null);
+    assert.equal(dom.document.querySelector('.stolon-sidecar'), null);
     assert.equal(ui.filter.isOpen(), false);
     assert.equal(dom.document.activeElement, ui.button);
 });
 
-test('asDialog opens a dialog on a wide screen, and Escape there drops pending changes and returns focus', function () {
-    var ui = build({ asDialog: true, applyOnChange: false });
+test('asSidecar opens a sidecar on a wide screen, and Escape there drops pending changes and returns focus', function () {
+    var ui = build({ asSidecar: true, applyOnChange: false });
     ui.filter.open();
-    assert.ok(dom.document.querySelector('.stolon-dialog'));
+    assert.ok(dom.document.querySelector('.stolon-sidecar'));
     toggle('kind', 'show', true);
     dom.document.key('Escape');
-    assert.equal(dom.document.querySelector('.stolon-dialog'), null);
+    assert.equal(dom.document.querySelector('.stolon-sidecar'), null);
     assert.equal(ui.filter.isOpen(), false);
     assert.deepEqual(ui.filter.getValue().kind, []);
     assert.deepEqual(ui.changes, []);
     assert.equal(dom.document.activeElement, ui.button);
 });
 
-test('a dialog applies pending changes on Done, and opening again after it uses the popover', function () {
-    var ui = build({ asDialog: true, applyOnChange: false });
+test('a sidecar applies pending changes on Done, and opening again after it uses the popover', function () {
+    var ui = build({ asSidecar: true, applyOnChange: false });
     ui.filter.open();
     toggle('kind', 'show', true);
-    dom.document.querySelector('.stolon-dialog .stolon-filter-done').click();
+    dom.document.querySelector('.stolon-sidecar .stolon-filter-done').click();
     assert.deepEqual(ui.changes, [{ status: [], kind: ['show'] }]);
     ui.filter.close();
     var wide = build();
@@ -279,12 +279,12 @@ test('a dialog applies pending changes on Done, and opening again after it uses 
     wide.filter.close();
     globalThis.innerWidth = 375;
     wide.filter.open();
-    assert.ok(dom.document.querySelector('.stolon-dialog .stolon-filter-groups'));
+    assert.ok(dom.document.querySelector('.stolon-sidecar .stolon-filter-groups'));
     wide.filter.close();
     globalThis.innerWidth = 1024;
     wide.filter.open();
     assert.ok(panel().querySelector('.stolon-filter-groups'));
-    assert.equal(dom.document.querySelector('.stolon-dialog'), null);
+    assert.equal(dom.document.querySelector('.stolon-sidecar'), null);
 });
 
 test('setValue keeps only known groups and options and does not report a change', function () {
@@ -351,10 +351,10 @@ test('destroy closes the panel and removes every listener', function () {
     assert.equal((body.listeners.change || []).length, 0);
 });
 
-test('destroy closes an open dialog', function () {
-    var ui = build({ asDialog: true });
+test('destroy closes an open sidecar', function () {
+    var ui = build({ asSidecar: true });
     ui.filter.open();
     ui.filter.destroy();
-    assert.equal(dom.document.querySelector('.stolon-dialog'), null);
+    assert.equal(dom.document.querySelector('.stolon-sidecar'), null);
     assert.equal((dom.document.listeners.keydown || []).length, 0);
 });

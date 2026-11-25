@@ -296,6 +296,13 @@ Icons come from the Material Icons font that Jellyfin's dashboard loads, drawn t
 * **A transient message is a live region.** A toast and a status line are `role="status"`, and only an error is `role="alert"`.
 * **Progress that is neither success nor failure,** such as "Checking…", takes the info state, never the success state.
 
+## Dialogs and Sidecars
+
+* **A dialog is for an alert or a confirmation, nothing else.** It comes in two fixed sizes and never scrolls. Compact is a title, a description, and buttons. Full is a title, a subtitle, a context the page feeds in, such as a poster and the name of what is deleted, and buttons. A dialog has no close button.
+* **Everything else is a sidecar.** Inputs, a record editor, a picker, and the details of a selected item slide in from the trailing edge. Its header, the title and the close button, and its shelf of buttons stay pinned while the body scrolls. The shelf is hidden with no buttons, and its usual buttons are Delete at the start and Cancel and Save at the end. On a phone it fills the screen.
+* **Content that might scroll goes in a sidecar.** If a dialog's text or context could ever outgrow it, it is a sidecar.
+* **A title names the action and what it acts on,** such as "Remove Den" or "Delete Charade". The description says what follows from it. Never repeat the title as a question, such as "Remove server" over "Remove this server?".
+
 ## Behavior
 
 * **Options are plain data.** What a component shows and how it looks is a string, number, boolean, array, or object of those. A callback only reports a change or supplies behavior.
@@ -312,11 +319,11 @@ Icons come from the Material Icons font that Jellyfin's dashboard loads, drawn t
 
 * Every component works at phone width. Check each new or changed component in the [gallery](testing.md#the-gallery) at desktop width, about 1280px, at tablet width, 768px, and at phone width, 375px.
 * Never set a width in pixels on a field. Let it fill its container.
-* **Two window breakpoints, never a new one.** `max-width: 768px` is tablet and below, and `max-width: 600px` is a phone, where a filter panel opens as a dialog and wide grids stack. A new rule uses one of these two.
+* **Two window breakpoints, never a new one.** `max-width: 768px` is tablet and below, and `max-width: 600px` is a phone, where a filter panel opens as a sidecar and wide grids stack. A new rule uses one of these two.
 * **A page uses the whole width.** Stolon lifts Jellyfin's 54em cap on a form, so lists, tables, card grids, and the tool shell run to the end of the page with no gap after them. A lone field stops at `--stolon-field-max` so it stays easy to read.
 * **A component's own layout follows its own width,** measured with `fitWidth` in `lib/fit.ts`, never the window. It turns compact when its contents no longer fit side by side, worked out from what it holds, such as a repeater's fields or a table's number columns, or at 480px for a two-part layout such as a QR code beside its buttons.
 * **A ResizeObserver does not run in a background tab.** A component also measures once on the next tick after it is built, so it starts in the right layout.
-* A dialog on a touch screen never focuses a text field automatically.
+* A dialog or sidecar on a touch screen never focuses a text field automatically.
 
 ### When Space Runs Out
 

@@ -4,7 +4,7 @@ import { bindPressedGroup } from './lib/pressed-group.js';
 import { debounce } from './browser-helpers.js';
 import { createSpinner } from './spinner.js';
 import { createFieldMessage } from './field-message.js';
-import { openDialog } from './dialog.js';
+import { openSidecar } from './sidecar.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
 
@@ -44,11 +44,11 @@ var BACKGROUNDS: PreviewBackground[] = ['dark', 'light', 'checker'];
 
 /**
  * A frame that shows an image made by an async render, such as a generated poster, built on the thumb core. While it renders it shows the spinner and a status line, and a failed render shows a message under it.
- * update renders again once its inputs stop changing for the delay. A pressed group picks a dark, light, or checkered background, and a click on the image opens it larger in a dialog.
+ * update renders again once its inputs stop changing for the delay. A pressed group picks a dark, light, or checkered background, and a click on the image opens it larger in a sidecar.
  *
  * @param options {
  *   render        : function() returning an address, a Blob, or a canvas, or a promise of one [optional]
- *   label         : the image's alt text and the zoom dialog's title (default 'Preview')
+ *   label         : the image's alt text and the zoom sidecar's title (default 'Preview')
  *   delay         : milliseconds update waits for its inputs to settle (default 300)
  *   background    : 'dark', 'light', or 'checker' (default 'dark')
  *   backgrounds   : false hides the background choice (default true)
@@ -159,7 +159,7 @@ export function createPreviewFrame(options?: PreviewFrameOptions): PreviewFrameH
             if (!url) return;
             var body = make('div', 'stolon-preview-frame-zoom stolon-' + background);
             body.appendChild(make('img', 'stolon-preview-frame-zoom-image', { src: url, alt: label }));
-            openDialog({ title: label, body: body, size: 'large' });
+            openSidecar({ title: label, body: body, size: 'large' });
         }));
     }
 

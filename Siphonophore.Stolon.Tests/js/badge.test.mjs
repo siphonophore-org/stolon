@@ -9,7 +9,7 @@ import { installFakeDom, all } from './fake-dom.mjs';
 var root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 var dom = installFakeDom();
 var kit = await import('../../src/js/index.js');
-var { BADGE_STATES, createShared, createSortableCardList, openDialog, createHelpHint, placeholderHint, bindPlaceholders } = kit;
+var { BADGE_STATES, createShared, createSortableCardList, openDialog, openSidecar, createHelpHint, placeholderHint, bindPlaceholders } = kit;
 var { badgeColor, makeBadge, badgeHtml, classBadgeHtml } = await import('../../src/js/lib/badge.js');
 var { statusDotHtml } = await import('../../src/js/status-dot.js');
 var { setCollapsed } = await import('../../src/js/collapsible-section.js');
@@ -148,9 +148,12 @@ test('bindPlaceholders opens and closes the list through the shared collapsible 
     assert.ok(hint.classList.contains('stolon-collapsed'));
 });
 
-test('the dialog close button is a row button built by iconButton', function () {
-    var handle = openDialog({ title: 'Edit' });
-    var btn = handle.element.querySelector('.stolon-dialog-close');
+test('the sidecar close button is a row button built by iconButton, and a dialog has none', function () {
+    var dialog = openDialog({ title: 'Remove Server B', description: 'Its mappings go with it.' });
+    assert.equal(dialog.element.querySelector('.stolon-dialog-close'), null);
+    dialog.close();
+    var handle = openSidecar({ title: 'Edit' });
+    var btn = handle.element.querySelector('.stolon-sidecar-head > .stolon-dialog-close');
     assert.equal(btn.className, 'stolon-row-btn stolon-dialog-close');
     assert.equal(btn.getAttribute('type'), 'button');
     assert.equal(btn.getAttribute('title'), 'Close');

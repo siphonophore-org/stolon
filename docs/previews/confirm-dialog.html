@@ -1,24 +1,24 @@
 <!-- title: Confirm Dialog -->
 <!-- min-height: 360 -->
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <button type="button" id="btnRemove" class="raised stolon-button stolon-destructive"><span>Remove Server</span></button>
-    <button type="button" id="btnDelete" class="raised stolon-button stolon-destructive"><span>Delete Database</span></button>
+    <button type="button" id="btnRemove" class="raised stolon-button stolon-destructive"><span>Remove server</span></button>
+    <button type="button" id="btnDelete" class="raised stolon-button stolon-destructive"><span>Delete database</span></button>
 </div>
 <span id="confirmStatus" class="stolon-status-text"></span>
 <script type="module">
 const base = await window.__baseReady;
 const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
 shared.bindClick('btnRemove', () => {
-    base.confirmDialog('Remove this server? Its links stop playing.', {
-        title: 'Remove Server',
+    base.confirmDialog('Its links stop playing. Downloaded files stay.', {
+        title: 'Remove Den',
         confirmText: 'Remove',
         destructive: true
     }).then((confirmed) => shared.setStatus('confirmStatus', confirmed ? 'Removed.' : 'Kept.', !confirmed, { timeout: 0 }));
 });
 // A typed confirm keeps Delete off until the field holds the exact text.
 shared.bindClick('btnDelete', () => {
-    base.confirmDialog('This deletes the sync database and every link in it. It cannot be undone.', {
-        title: 'Delete Database',
+    base.confirmDialog('Every link in it goes, and this cannot be undone.', {
+        title: 'Delete the sync database',
         confirmText: 'Delete',
         destructive: true,
         typeToConfirm: 'Database'
