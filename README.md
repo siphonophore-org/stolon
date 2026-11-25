@@ -2,6 +2,10 @@
 
 Shared configuration page components and C# helpers for Jellyfin plugins, delivered as the `Siphonophore.Stolon` NuGet package on GitHub Packages. The source and assets are compiled into each plugin at build time, so a plugin stays a single DLL with nothing extra to ship.
 
+## The Name
+
+A [stolon](https://en.wikipedia.org/wiki/Stolon) is "a horizontal connection between parts of an organism." Stolon is the part every Siphonophore plugin shares, the connection that holds them together.
+
 ## Documentation
 
 Usage, translations, every C# helper, every web component, and how a release works are covered in the **[Stolon documentation](https://siphonophore-org.github.io/stolon/)**.
