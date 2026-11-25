@@ -2,6 +2,8 @@ import { make, icon, toText, listen, runAll } from './lib/dom.js';
 import { makeBadge, badgeColor } from './lib/badge.js';
 import { balanceRows } from './lib/balance.js';
 import { createSparkline } from './sparkline.js';
+import { createStatusDot } from './status-dot.js';
+import { applyColor } from './lib/color.js';
 import type { SparklineHandle } from './sparkline.js';
 import type { ComponentHandle } from './types.js';
 
@@ -16,8 +18,23 @@ export interface StatusCardOptions {
     valueLabel?: string;
     sparkline?: Array<number | null | undefined> | null;
     sparklineColor?: string;
+    dots?: StatusCardDot[] | null;
+    segments?: StatusCardSegment[] | null;
     href?: string;
     onClick?(event: MouseEvent): void;
+}
+
+/** One dot in a status card's row of dots, such as one server and its health. */
+export interface StatusCardDot {
+    color?: string;
+    label?: string;
+}
+
+/** One part of a status card's bar, such as the rows in one state. */
+export interface StatusCardSegment {
+    label?: string;
+    value: number;
+    color?: string;
 }
 
 /** What createStatusCard returns. getValue returns the value as given. */
@@ -27,6 +44,8 @@ export interface StatusCardHandle extends ComponentHandle {
     setStatus(label: string, color?: string): void;
     setDetail(text: string): void;
     setSparkline(values: Array<number | null | undefined> | null): void;
+    setDots(dots: StatusCardDot[] | null): void;
+    setSegments(segments: StatusCardSegment[] | null): void;
     destroy(): void;
 }
 
@@ -66,10 +85,12 @@ function setLine(el: HTMLElement, text: string): void {
  *   valueLabel  : small text after the value, such as 'items' [optional]
  *   sparkline   : numbers drawn as a small line under the value, through createSparkline, named by the title [optional]
  *   sparklineColor : status color name or hex code of the line (default the accent)
+ *   dots        : array of { color, label }, a row of status dots in the sparkline's place, such as one per server, each named by its label [optional]
+ *   segments    : array of { label, value, color }, a bar in the sparkline's place split into parts by value, such as rows by state. A bar whose values add to 0 is an empty track [optional]
  *   href        : address the card links to, which makes the card a link [optional]
  *   onClick     : function(event) called on a click, which makes the card a button when there is no href [optional]
  * }
- * @returns { element, getValue, setValue, setStatus, setDetail, setSparkline, destroy }. setValue(value, label) replaces the value and, when given, its label. setStatus(label, color) replaces the pill.
+ * @returns { element, getValue, setValue, setStatus, setDetail, setSparkline, setDots, setSegments, destroy }. setValue(value, label) replaces the value and, when given, its label. setStatus(label, color) replaces the pill.
  * The icon is hidden from assistive tech, so a linked card is named by its title, status, value, and detail.
  */
 export function createStatusCard(options?: StatusCardOptions): StatusCardHandle {
@@ -90,6 +111,8 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
     var detailEl = make('span', 'stolon-status-card-detail');
     var value: unknown = options.value;
     var spark: SparklineHandle | null = null;
+    // The row of dots or the bar, which takes the sparkline's place.
+    var extra: HTMLElement | null = null;
 
     head.appendChild(iconEl);
     valueRow.appendChild(numberEl);
@@ -125,11 +148,48 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
         root.insertBefore(spark.element, detailEl);
     }
 
+    function setExtra(next: HTMLElement | null): void {
+        if (extra && extra.parentNode) extra.parentNode.removeChild(extra);
+        extra = next;
+        if (extra) root.insertBefore(extra, detailEl);
+    }
+
+    // A row of status dots, each named by its label for a screen reader and on hover.
+    function setDots(dots: StatusCardDot[] | null): void {
+        if (!dots || !dots.length) { setExtra(null); return; }
+        var row = make('span', 'stolon-status-card-dots');
+        dots.forEach(function (dot: StatusCardDot): void { row.appendChild(createStatusDot({ color: dot.color, label: dot.label }).element); });
+        setExtra(row);
+    }
+
+    // A bar split into parts by value, named as a whole by each part's label and value.
+    function setSegments(segments: StatusCardSegment[] | null): void {
+        if (!segments) { setExtra(null); return; }
+        var total = segments.reduce(function (sum: number, part: StatusCardSegment): number { return sum + Math.max(0, Number(part.value) || 0); }, 0);
+        var names = segments.map(function (part: StatusCardSegment): string { return toText(part.label) + ' ' + (Number(part.value) || 0); }).join(', ');
+        var slot = make('span', 'stolon-status-card-meter', { role: 'img', 'aria-label': names, title: names });
+        var bar = make('span', 'stolon-progress stolon-status-card-bar');
+        if (total > 0) {
+            segments.forEach(function (part: StatusCardSegment): void {
+                var value = Math.max(0, Number(part.value) || 0);
+                if (!value) return;
+                var fill = make('span', 'stolon-progress-bar stolon-status-card-bar-part');
+                applyColor(fill, part.color, 'blue');
+                fill.style.setProperty('--stolon-status-share', (value / total * 100).toFixed(3) + '%');
+                bar.appendChild(fill);
+            });
+        }
+        slot.appendChild(bar);
+        setExtra(slot);
+    }
+
     setLine(titleEl, toText(options.title));
     setStatus(options.status || '', options.statusColor);
     setValue(options.value, options.valueLabel || '');
     setLine(detailEl, toText(options.detail));
     setSparkline(options.sparkline || null);
+    if (options.dots) setDots(options.dots);
+    else if (options.segments) setSegments(options.segments);
     if (options.onClick) cleanups.push(listen(root, 'click', options.onClick));
 
     return {
@@ -139,6 +199,8 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
         setStatus: setStatus,
         setDetail: function (text: string): void { setLine(detailEl, toText(text)); },
         setSparkline: setSparkline,
+        setDots: setDots,
+        setSegments: setSegments,
         destroy: function (): void {
             runAll(cleanups);
             if (spark) spark.destroy();

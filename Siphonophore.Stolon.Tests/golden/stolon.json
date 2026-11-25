@@ -368,7 +368,7 @@
     "sortable-card-list": 6902,
     "sparkline": 1713,
     "spinner": 576,
-    "status-card": 3078,
+    "status-card": 4325,
     "status-dot": 1129,
     "status-text": 1046,
     "stepper": 2935,
@@ -394,5 +394,5 @@
     "web-push": 731,
     "world-map": 6264
   },
-  "bytes": 597325
+  "bytes": 598572
 }

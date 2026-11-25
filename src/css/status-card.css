@@ -98,6 +98,39 @@ button.stolon-status-card { width: 100%; }
 /* Example: <span class="stolon-sparkline stolon-status-card-sparkline" role="img" aria-label="Syncs, from 3 to 12, low 3, high 12"></span> */
 .stolon-status-card-sparkline { margin-top: var(--stolon-gap-narrow); }
 
+/* Row of status dots under a status card's value in the sparkline's place, a sparkline tall, such as one dot per server */
+/* Example: <span class="stolon-status-card-dots"><span class="stolon-dot stolon-green" role="img" title="Alpha" aria-label="Alpha"></span></span> */
+.stolon-status-card-dots {
+    display: flex;
+    align-self: stretch;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--stolon-gap-narrow) / 2);
+    min-height: var(--stolon-line-large);
+    margin-top: var(--stolon-gap-narrow);
+}
+
+/* Bar under a status card's value in the sparkline's place, a sparkline tall, split into parts by value, such as rows by state */
+/* Example: <span class="stolon-status-card-meter" role="img" aria-label="Pending 3, Failed 1"><span class="stolon-progress stolon-status-card-bar"><span class="stolon-progress-bar stolon-status-card-bar-part stolon-orange" style="--stolon-status-share: 75%"></span></span></span> */
+.stolon-status-card-meter {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    height: var(--stolon-line-large);
+    margin-top: var(--stolon-gap-narrow);
+}
+.stolon-progress.stolon-status-card-bar { display: flex; width: 100%; height: var(--stolon-gap-narrow); }
+.stolon-status-card-bar-part { flex: 0 0 auto; width: var(--stolon-status-share, 0%); }
+.stolon-status-card-bar-part + .stolon-status-card-bar-part { border-left: 2px solid var(--stolon-surface); }
+.stolon-status-card-bar-part.stolon-green { background: var(--stolon-green-fg); }
+.stolon-status-card-bar-part.stolon-red { background: var(--stolon-red-fg); }
+.stolon-status-card-bar-part.stolon-orange { background: var(--stolon-orange-fg); }
+.stolon-status-card-bar-part.stolon-purple { background: var(--stolon-purple-fg); }
+.stolon-status-card-bar-part.stolon-blue { background: var(--stolon-blue-fg); }
+.stolon-status-card-bar-part.stolon-gray { background: var(--stolon-gray-fg); }
+.stolon-status-card-bar-part.stolon-yellow { background: var(--stolon-yellow-fg); }
+.stolon-status-card-bar-part.stolon-custom { background: var(--stolon-custom); }
+
 /* Quiet detail line of a status card, dimmed, cut with an ellipsis, and titled with its full text */
 /* Example: <span class="stolon-status-card-detail" title="Media at 82%">Media at 82%</span> */
 .stolon-status-card-detail {

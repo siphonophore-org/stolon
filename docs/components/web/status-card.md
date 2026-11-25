@@ -8,6 +8,9 @@ A bordered card on the surface color with an icon, a status pill, a bold title, 
 | :--- | :--- |
 | The state of each part of a plugin, such as one card per tool on a dashboard | `createStatusCardGrid` |
 | A headline number with a label, such as a count of items | `value` and `valueLabel` |
+| A trend over time under the number | `sparkline` |
+| The state of each of several things, such as each server's health | `dots` |
+| How a total splits into parts, such as rows by state | `segments` |
 | A card that opens the page it describes | `href`, or `onClick` for an in-page action |
 | A plain row of colored counts | [Count Cards](count-cards.md) |
 | A state on a row of a list or table | [Badge](badge.md) |
@@ -28,7 +31,7 @@ vpn.setStatus('Ok', 'green');
 vpn.setDetail('7 of 7 peers online');
 ```
 
-Classes: `stolon-status-cards` for the grid and `stolon-status-card` for a card, with the parts `stolon-status-card-head`, `stolon-status-card-icon`, `stolon-status-card-pill`, `stolon-status-card-title`, `stolon-status-card-value`, `stolon-status-card-detail`, and `stolon-status-card-sparkline`. A card that links or acts carries `stolon-clickable`. The card handle is `{ element, getValue, setValue, setStatus, setDetail, setSparkline, destroy }`, and the grid handle is `{ element, getCards, setCards, add, destroy }`.
+Classes: `stolon-status-cards` for the grid and `stolon-status-card` for a card, with the parts `stolon-status-card-head`, `stolon-status-card-icon`, `stolon-status-card-pill`, `stolon-status-card-title`, `stolon-status-card-value`, `stolon-status-card-detail`, `stolon-status-card-sparkline`, `stolon-status-card-dots`, `stolon-status-card-meter`, `stolon-status-card-bar`, and `stolon-status-card-bar-part`. A card that links or acts carries `stolon-clickable`. The card handle is `{ element, getValue, setValue, setStatus, setDetail, setSparkline, setDots, setSegments, destroy }`, and the grid handle is `{ element, getCards, setCards, add, destroy }`.
 
 ## States and Modifiers
 
@@ -37,8 +40,9 @@ Classes: `stolon-status-cards` for the grid and `stolon-status-card` for a card,
 * `detail` is one dimmed line. A line too long for the card ends in an ellipsis, with the full text as its tooltip. The title does the same.
 * `value` is drawn large in even width digits, with `valueLabel` small after it. Each part hides while it is empty.
 * `sparkline` is a list of numbers drawn as a [Sparkline](sparkline.md) under the value, named by the title, in the accent or `sparklineColor`.
+* `dots` is a list of `{ color, label }` drawn as a row of [Status Dots](status-dot.md) in the sparkline's place, each named by its label. `segments` is a list of `{ label, value, color }` drawn as a bar in the same place, each part as wide as its share of the total. A bar whose values add to 0 is an empty track. A card shows one of the three, and the slot is one height whichever it is, so the cards in a row line up.
 * `href` makes the card a link and `onClick` makes it a button. Either one gives the card the shared card hover and the accent focus ring.
-* `setValue(value, label)`, `setStatus(label, color)`, `setDetail(text)`, and `setSparkline(values)` change a card in place.
+* `setValue(value, label)`, `setStatus(label, color)`, `setDetail(text)`, `setSparkline(values)`, `setDots(dots)`, and `setSegments(segments)` change a card in place.
 * The grid keeps a card at least `minWidth` wide, 200 by default, and balances the rows so a wrapped row never holds one card alone. The cards in a row share one height.
 
 ## Gotchas
@@ -70,6 +74,8 @@ A bordered card on the surface color with an icon, a status pill, a bold title, 
 | `valueLabel` | <code>string</code> | small text after the value, such as 'items' [optional] |
 | `sparkline` | <code>Array&lt;number &#124; null &#124; undefined&gt; &#124; null</code> | numbers drawn as a small line under the value, through createSparkline, named by the title [optional] |
 | `sparklineColor` | <code>string</code> | status color name or hex code of the line (default the accent) |
+| `dots` | <code>StatusCardDot[] &#124; null</code> | array of { color, label }, a row of status dots in the sparkline's place, such as one per server, each named by its label [optional] |
+| `segments` | <code>StatusCardSegment[] &#124; null</code> | array of { label, value, color }, a bar in the sparkline's place split into parts by value, such as rows by state. A bar whose values add to 0 is an empty track [optional] |
 | `href` | <code>string</code> | address the card links to, which makes the card a link [optional] |
 | `onClick` | <code>(event: MouseEvent): void</code> | function(event) called on a click, which makes the card a button when there is no href [optional] |
 
@@ -80,6 +86,8 @@ A bordered card on the surface color with an icon, a status pill, a bold title, 
 | `setStatus` | <code>(label: string, color?: string): void</code> |
 | `setDetail` | <code>(text: string): void</code> |
 | `setSparkline` | <code>(values: Array&lt;number &#124; null &#124; undefined&gt; &#124; null): void</code> |
+| `setDots` | <code>(dots: StatusCardDot[] &#124; null): void</code> |
+| `setSegments` | <code>(segments: StatusCardSegment[] &#124; null): void</code> |
 | `destroy` | <code>(): void</code> |
 
 ### `createStatusCardGrid`
@@ -101,6 +109,11 @@ A grid of status cards in balanced rows, so a wrapped row never holds a single c
 | `add` | <code>(card: StatusCardOptions): StatusCardHandle</code> |
 | `destroy` | <code>(): void</code> |
 
+| Type | What it is |
+| :--- | :--- |
+| `StatusCardDot` | One dot in a status card's row of dots, such as one server and its health. |
+| `StatusCardSegment` | One part of a status card's bar, such as the rows in one state. |
+
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-status-cards` | Grid of status cards a wide space apart, laid out in balanced rows by createStatusCardGrid |
@@ -111,6 +124,8 @@ A grid of status cards in balanced rows, so a wrapped row never holds a single c
 | `stolon-status-card-title` | Bold title of a status card, cut with an ellipsis and titled with its full text |
 | `stolon-status-card-value` | Large value of a status card, such as a count, in even width digits with a small label after it |
 | `stolon-status-card-sparkline` | Sparkline under a status card's value, a narrow space below it |
+| `stolon-status-card-dots` | Row of status dots under a status card's value in the sparkline's place, a sparkline tall, such as one dot per server |
+| `stolon-status-card-meter` | Bar under a status card's value in the sparkline's place, a sparkline tall, split into parts by value, such as rows by state |
 | `stolon-status-card-detail` | Quiet detail line of a status card, dimmed, cut with an ellipsis, and titled with its full text |
 
 <!-- reference:end -->

@@ -115,3 +115,30 @@ test('the grid add appends a card, setCards replaces them, and destroy removes t
     assert.equal(grid.element.classList.contains('stolon-balanced'), false);
     assert.equal(grid.element.children.length, 0);
 });
+
+test('dots draw a row of named status dots in the sparkline place', function () {
+    var card = createStatusCard({ title: 'Servers', dots: [{ color: 'green', label: 'Alpha' }, { color: 'red', label: 'Beta' }] });
+    var dots = card.element.querySelectorAll('.stolon-status-card-dots .stolon-dot');
+    assert.equal(dots.length, 2);
+    assert.ok(dots[1].classList.contains('stolon-red'));
+    assert.equal(dots[1].getAttribute('aria-label'), 'Beta');
+    assert.equal(card.element.querySelector('.stolon-status-card-sparkline'), null);
+    card.setDots(null);
+    assert.equal(card.element.querySelector('.stolon-status-card-dots'), null);
+});
+
+test('segments split a bar by share and name every part', function () {
+    var card = createStatusCard({ title: 'Queue', segments: [{ label: 'Pending', value: 3, color: 'orange' }, { label: 'Sent', value: 0, color: 'blue' }, { label: 'Failed', value: 1, color: 'red' }] });
+    var meter = card.element.querySelector('.stolon-status-card-meter');
+    assert.equal(meter.getAttribute('aria-label'), 'Pending 3, Sent 0, Failed 1');
+    var parts = meter.querySelectorAll('.stolon-status-card-bar-part');
+    assert.equal(parts.length, 2);
+    assert.equal(parts[0].style.getPropertyValue('--stolon-status-share'), '75.000%');
+    assert.ok(parts[1].classList.contains('stolon-red'));
+});
+
+test('segments that add to 0 leave an empty track', function () {
+    var card = createStatusCard({ title: 'Queue', segments: [{ label: 'Pending', value: 0 }] });
+    assert.ok(card.element.querySelector('.stolon-status-card-bar'));
+    assert.equal(card.element.querySelectorAll('.stolon-status-card-bar-part').length, 0);
+});
