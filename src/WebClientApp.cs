@@ -112,9 +112,11 @@ public static class WebClientApp
 
         self.addEventListener('install', function () { self.skipWaiting(); });
 
+        // Navigation preload stays off. On a cold start WebKit asks for the page twice, preloaded and again, and can pair one
+        // answer's Content-Security-Policy with the other's body, so a page with a script nonce runs none of its scripts.
         self.addEventListener('activate', function (event) {
             event.waitUntil(
-                Promise.resolve(self.registration.navigationPreload && self.registration.navigationPreload.enable())
+                Promise.resolve(self.registration.navigationPreload && self.registration.navigationPreload.disable())
                     .catch(function () { return undefined; })
                     .then(function () { return caches.keys(); })
                     .then(function (keys) {
@@ -136,7 +138,7 @@ public static class WebClientApp
 
         function page(event, request) {
             return caches.open(CACHE).catch(function () { return null; }).then(function (cache) {
-                return Promise.resolve(event.preloadResponse).then(function (preloaded) { return preloaded || fetch(request); }).then(function (response) {
+                return fetch(request).then(function (response) {
                     if (cache && response.ok && (response.headers.get('Content-Type') || '').indexOf('text/html') === 0) {
                         event.waitUntil(cache.put(self.registration.scope, response.clone()).catch(function () { return undefined; }));
                     }

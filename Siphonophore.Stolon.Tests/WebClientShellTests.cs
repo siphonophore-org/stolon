@@ -332,9 +332,11 @@ public sealed class WebClientShellTests : IDisposable
     }
 
     /// <summary>
-    /// The worker names its caches after the plugin, loads the push script when asked, and refuses a prefix that could break its script.
-    /// True: two plugins' apps keep separate caches and each shows its own notifications.
-    /// False: one plugin's worker would clear another's cache, or a prefix could end the script's string.
+    /// The worker names its caches after the plugin, loads the push script when asked, refuses a prefix that could break its script,
+    /// and keeps navigation preload off.
+    /// True: two plugins' apps keep separate caches, each shows its own notifications, and an installed app opens on a cold start.
+    /// False: one plugin's worker would clear another's cache, a prefix could end the script's string, or WebKit could pair one
+    /// page answer's script nonce with another's body and open the app blank.
     /// </summary>
     [Fact]
     public void ServiceWorker_IsNamedForThePlugin()
@@ -347,6 +349,8 @@ public sealed class WebClientShellTests : IDisposable
         Assert.DoesNotContain("STOLON_CACHE_PREFIX", script, StringComparison.Ordinal);
         Assert.DoesNotContain("importScripts", WebClientApp.ServiceWorker("myplugin", null), StringComparison.Ordinal);
         Assert.Throws<ArgumentException>(() => WebClientApp.ServiceWorker("My'plugin"));
+        Assert.Contains("navigationPreload.disable()", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("preloadResponse", script, StringComparison.Ordinal);
 
         var response = new DefaultHttpContext().Response;
         Assert.Equal("text/javascript; charset=utf-8", WebClientApp.ServeWorker(response, script).ContentType);
