@@ -85,7 +85,7 @@ test('Discord markdown escapes HTML, keeps escaped characters as typed, and neve
     assert.equal(discordMarkdown('<script>x</script>'), '&lt;script&gt;x&lt;/script&gt;');
     assert.equal(discordMarkdown('\\*not italic\\* and \\[x\\]\\(https://a\\)'), '*not italic* and [x](https://a)');
     assert.equal(discordMarkdown('`code` ~~gone~~ __under__ _it_'), '<code class="stolon-notify-preview-discord-code">code</code> <s>gone</s> <u>under</u> <em>it</em>');
-    assert.doesNotMatch(discordMarkdown('[a](https://b)'), /<a /);
+    assert.doesNotMatch(discordMarkdown('[a](https://b)'), /<\s*a\b/i);
 });
 
 test('Discord writes today\'s and yesterday\'s times by the day, in the page\'s language', function () {
