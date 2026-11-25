@@ -124,11 +124,12 @@
     .stolon-table-cell.stolon-table-cell-status { flex: 0 0 calc(var(--stolon-size-large) * 2.75); }
 }
 
-/* On a phone the first column after any checkbox keeps 60% of the row and the other columns wrap beneath it */
+/* On a phone the first column after any checkbox shares one line with the status badge, its text clipping first, and the other columns wrap beneath on full lines */
 @media (max-width: 600px) {
     .stolon-table-row { flex-wrap: wrap; }
-    .stolon-table-cell { flex-basis: auto; }
+    .stolon-table-cell { flex: 1 0 100%; order: 1; }
     .stolon-table-row > .stolon-table-cell:first-child:not(.stolon-table-cell-checkbox),
-    .stolon-table-row > .stolon-table-cell-checkbox + .stolon-table-cell { flex: 1 0 60%; }
-    .stolon-table-row > .stolon-table-cell.stolon-table-cell-status { margin-left: auto; }
+    .stolon-table-row > .stolon-table-cell-checkbox + .stolon-table-cell { flex: 1 1 0; order: 0; }
+    .stolon-table-cell.stolon-table-cell-checkbox,
+    .stolon-table-cell.stolon-table-cell-status { flex: 0 0 auto; order: 0; }
 }
