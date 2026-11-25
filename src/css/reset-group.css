@@ -30,4 +30,10 @@
     flex: 1;
     margin-right: var(--stolon-gap-wide);
 }
-.stolon-reset-info .fieldDescription { margin-top: 2px; }
+/* A row's description sits right under its title and in line with it, without the page's field gaps or Jellyfin's inset */
+.pluginConfigurationPage .stolon-reset-info .fieldDescription,
+.stolon-dialog .stolon-reset-info .fieldDescription,
+.stolon-reset-info .fieldDescription {
+    margin: 2px 0 0 !important;
+    padding-left: 0;
+}
