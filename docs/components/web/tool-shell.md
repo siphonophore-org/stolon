@@ -45,7 +45,7 @@ Classes: `stolon-tool-shell`, with the parts `stolon-tool-shell-nav`, `stolon-to
 ## Gotchas
 
 * The shell draws no back link. The browser's own back button returns to the tool before.
-* The sidebar starts in line with the heading and scrolls with the page. Jellyfin clips each page, so a sidebar that stuck in place would only shift down.
+* The sidebar starts in line with the heading and stays in view under Jellyfin's app bar while the page scrolls. While a tool shell shows, the page body clips its sideways overflow in place of hiding it, so the sidebar can stay put.
 
 ## Reference
 
@@ -88,7 +88,7 @@ The outer layout of a page that holds several tools. A wide shell lists the tool
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-tool-shell` | Page of several tools, a sidebar of tools beside the current tool's heading and content, built by createToolShell |
-| `stolon-tool-shell-nav` | Sidebar that lists every tool, five large controls wide, its top in line with the tool's heading |
+| `stolon-tool-shell-nav` | Sidebar that lists every tool, five large controls wide, its top in line with the tool's heading. It stays in view under Jellyfin's 48px app bar while the page scrolls |
 | `stolon-tool-shell-item.stolon-menu-item` | One tool in the sidebar, a menu item one large control tall with its icon, name, and badge, the current one in the shared selection look |
 | `stolon-tool-shell-main` | The current tool's heading and content, which take the width beside the sidebar |
 | `stolon-tool-shell-title` | Heading over a tool's content in the page heading size, cut with an ellipsis |

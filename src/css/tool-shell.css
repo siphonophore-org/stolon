@@ -7,12 +7,19 @@
     min-width: 0;
 }
 
-/* Sidebar that lists every tool, five large controls wide, its top in line with the tool's heading */
+/* Sidebar that lists every tool, five large controls wide, its top in line with the tool's heading. It stays in view under Jellyfin's 48px app bar while the page scrolls */
 /* Example: <nav class="stolon-tool-shell-nav" aria-label="Tools"><ul class="stolon-tool-shell-list"><li class="stolon-tool-shell-entry"></li></ul></nav> */
 .stolon-tool-shell-nav {
     flex: 0 0 calc(var(--stolon-size-large) * 5);
     min-width: 0;
+    position: sticky;
+    top: 48px;
 }
+
+/* Jellyfin's body hides its sideways overflow, which makes the body the sidebar's scroll box although the document is what scrolls,
+   so the sidebar would never stay in view. While a tool shell shows, the body clips that overflow instead, which scrolls nothing */
+/* Example: <body class="dashboardDocument"><div class="page"><div class="stolon-tool-shell"></div></div></body> */
+body:has(.page:not(.hide) .stolon-tool-shell) { overflow-x: clip; overflow-y: visible; }
 .stolon-tool-shell-list {
     display: flex;
     flex-direction: column;

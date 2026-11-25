@@ -30,6 +30,9 @@
     flex: 1;
     margin-right: var(--stolon-gap-wide);
 }
+/* A row's title in the weight of a label, above its quieter description */
+.stolon-reset-info > :first-child { font-weight: 600; }
+
 /* A row's description sits right under its title and in line with it, without the page's field gaps or Jellyfin's inset */
 .pluginConfigurationPage .stolon-reset-info .fieldDescription,
 .stolon-dialog .stolon-reset-info .fieldDescription,
