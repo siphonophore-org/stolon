@@ -6,3 +6,53 @@
 <button type="button" class="raised stolon-button stolon-secondary stolon-small">
     <span class="material-icons" aria-hidden="true">delete</span><span class="stolon-sr-only">Remove the record</span>
 </button>
+<p>Last run <span class="stolon-muted">None</span></p>
+<h3 class="stolon-subsection-title">Stack</h3>
+<div class="stolon-stack" id="stack">
+    <div class="inputContainer">
+        <label for="utilHost">Host</label>
+        <input is="emby-input" type="text" id="utilHost" value="media.example.com" />
+    </div>
+    <div class="fieldDescription">The server to connect to.</div>
+    <div class="checkboxContainer checkboxContainer-withDescription">
+        <label class="emby-checkbox-label"><input type="checkbox" is="emby-checkbox" checked /><span>Use HTTPS</span></label>
+        <div class="fieldDescription checkboxFieldDescription">Sends every request encrypted.</div>
+    </div>
+    <div class="stolon-status-text" role="status"></div>
+    <div class="stolon-callout-info stolon-hidden">Hidden, so it takes no gap.</div>
+    <h3 class="stolon-subsection-title">Limits</h3>
+    <div class="selectContainer">
+        <label for="utilRate">Rate</label>
+        <select is="emby-select" id="utilRate"><option>Unlimited</option><option>10 MB/s</option></select>
+    </div>
+    <div class="stolon-item-row stolon-pending"><span class="stolon-item-row-text">Access</span><span class="stolon-badge stolon-gray">–</span></div>
+</div>
+<div class="stolon-collapsible-section">
+    <button type="button" class="stolon-collapsible-header" aria-expanded="true" data-target="utilFlow">
+        <span class="stolon-collapsible-title">A flowing section in groups</span>
+        <span class="stolon-collapsible-icon"></span>
+    </button>
+    <div id="utilFlow" class="stolon-collapsible-content stolon-flow stolon-divided">
+        <div class="stolon-stack">
+            <div class="inputContainer">
+                <label for="utilName">Name</label>
+                <input is="emby-input" type="text" id="utilName" value="Living room" />
+            </div>
+            <div class="fieldDescription">Shown on the other servers.</div>
+        </div>
+        <div class="stolon-stack stolon-narrow" id="utilMeters"></div>
+    </div>
+</div>
+<div class="stolon-button-row stolon-gap-narrow stolon-gap-above-wide">
+    <button is="emby-button" type="button" class="raised stolon-button stolon-secondary stolon-small"><span>Narrow gap</span></button>
+    <button is="emby-button" type="button" class="raised stolon-button stolon-secondary stolon-small"><span>Wide gap above</span></button>
+</div>
+<script type="module">
+const base = await window.__baseReady;
+const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
+shared.initCollapsibles();
+const GB = 1024 * 1024 * 1024;
+const meters = document.getElementById('utilMeters');
+meters.appendChild(base.createUsageMeter({ label: 'Cache', used: 12.4 * GB, total: 50 * GB, bytes: true }).element);
+meters.appendChild(base.createUsageMeter({ label: 'Backups', used: 97 * GB, total: 100 * GB, bytes: true }).element);
+</script>

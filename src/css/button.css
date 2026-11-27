@@ -77,9 +77,9 @@
     filter: brightness(0.9);
 }
 
-/* A medium or large button that spans the width it has. A small button keeps its own width */
+/* A medium or large button that spans the width it has. A small button keeps its own width, and a hidden one stays hidden */
 /* Example: <button class="raised stolon-button stolon-primary stolon-fill">Save</button> */
-.stolon-button.stolon-fill:not(.stolon-small) {
+.stolon-button.stolon-fill:not(.stolon-small):not(.stolon-hidden):not([hidden]) {
     display: flex !important;
     width: 100%;
 }
@@ -92,7 +92,7 @@
     align-items: center;
     gap: var(--stolon-gap-wide);
 }
-.stolon-button-row > .stolon-button.stolon-fill:not(.stolon-small) {
+.stolon-button-row > .stolon-button.stolon-fill:not(.stolon-small):not(.stolon-hidden):not([hidden]) {
     flex: 1 1 0;
     width: auto;
     min-width: 0;
@@ -129,3 +129,13 @@
     padding: 0 var(--stolon-field-pad) !important;
     font-size: var(--stolon-field-font) !important;
 }
+
+/* A square button that holds only an icon, its width its height at every size, such as an action on a table's bar of selected rows. It names itself with a title and an aria-label */
+/* Example: <button is="emby-button" type="button" class="raised stolon-button stolon-primary stolon-small stolon-icon-only" title="Queue" aria-label="Queue"><span class="material-icons" aria-hidden="true">playlist_add</span></button> */
+.stolon-button.stolon-icon-only {
+    width: var(--stolon-size-medium);
+    padding: 0 !important;
+}
+.stolon-button.stolon-icon-only.stolon-small { width: var(--stolon-size-small); }
+.stolon-button.stolon-icon-only.stolon-large { width: var(--stolon-size-large); }
+.stolon-button.stolon-icon-only.stolon-field-sized { width: var(--stolon-field-height); }

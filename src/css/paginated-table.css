@@ -50,9 +50,10 @@
 /* Example: <div class="stolon-table-cell stolon-table-cell-checkbox"><input class="stolon-table-row-checkbox" type="checkbox"></div> */
 .stolon-table-cell.stolon-table-cell-checkbox { flex: 0 0 auto; }
 
-/* Fixed width cell that right aligns a status badge */
+/* Cell that right aligns a status badge, at least a fixed width so most rows line up, and wider for a long status so its badge stays inside the row */
 /* Example: <div class="stolon-table-cell stolon-table-cell-status"><button class="stolon-table-status-btn"></button></div> */
-.stolon-table-cell.stolon-table-cell-status { flex: 0 0 calc(var(--stolon-size-large) * 3); text-align: right; }
+.stolon-table-cell.stolon-table-cell-status { flex: 0 1 auto; min-width: calc(var(--stolon-size-large) * 3); text-align: right; }
+.stolon-table-cell-status > .stolon-table-status-btn { max-width: 100%; }
 
 /* Checkbox that selects one row */
 /* Example: <input class="stolon-table-row-checkbox" type="checkbox"> */
@@ -120,8 +121,8 @@
 .stolon-table-thumb.stolon-round { width: calc(var(--stolon-size-medium) * 1.5); height: calc(var(--stolon-size-medium) * 1.5); border-radius: var(--stolon-radius-round); }
 
 @media (max-width: 768px) {
-    /* A fixed width, so every row's columns line up whatever its badge says. */
-    .stolon-table-cell.stolon-table-cell-status { flex: 0 0 calc(var(--stolon-size-large) * 2.75); }
+    /* A narrower least width, so most rows still line up. */
+    .stolon-table-cell.stolon-table-cell-status { min-width: calc(var(--stolon-size-large) * 2.75); }
 }
 
 /* On a phone the first column after any checkbox shares one line with the status badge, its text clipping first, and the other columns wrap beneath on full lines */
@@ -130,6 +131,6 @@
     .stolon-table-cell { flex: 1 0 100%; order: 1; }
     .stolon-table-row > .stolon-table-cell:first-child:not(.stolon-table-cell-checkbox),
     .stolon-table-row > .stolon-table-cell-checkbox + .stolon-table-cell { flex: 1 1 0; order: 0; }
-    .stolon-table-cell.stolon-table-cell-checkbox,
-    .stolon-table-cell.stolon-table-cell-status { flex: 0 0 auto; order: 0; }
+    .stolon-table-cell.stolon-table-cell-checkbox { flex: 0 0 auto; order: 0; }
+    .stolon-table-cell.stolon-table-cell-status { flex: 0 1 auto; min-width: 0; order: 0; }
 }

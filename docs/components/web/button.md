@@ -23,14 +23,15 @@ Buttons are Jellyfin's `emby-button` with the `raised` class and the `stolon-but
 </button>
 ```
 
-Classes: `stolon-button` with `stolon-primary`, `stolon-secondary`, `stolon-destructive`, or `stolon-custom`, and `stolon-small`, `stolon-large`, `stolon-fill`, or `stolon-field-sized`. `stolon-button-row` holds a row of them.
+Classes: `stolon-button` with `stolon-primary`, `stolon-secondary`, `stolon-destructive`, or `stolon-custom`, and `stolon-small`, `stolon-large`, `stolon-fill`, `stolon-field-sized`, or `stolon-icon-only`. `stolon-button-row` holds a row of them.
 
 ## States and Modifiers
 
 * `stolon-button` is an inline flex, 32px tall with an 18px icon. `small` and `large` take the 24px and 40px steps of the [size scale](design-tokens.md), with their icon sizes.
 * A `stolon-button` with no variant is muted, as `secondary` is.
 * `custom` fills the button with `--stolon-custom` and writes its text in `--stolon-custom-on`, the on accent color by default.
-* `fill` spans the width it has, unless the button is `small`. In a `stolon-button-row` the `fill` buttons share the width evenly.
+* `fill` spans the width it has, unless the button is `small`. In a `stolon-button-row` the `fill` buttons share the width evenly. A `fill` button with `stolon-hidden` or `hidden` stays hidden.
+* `icon-only` makes a square button that holds only an icon, its width its height at every size, such as an action on a table's bar of selected rows. Give it a `title` and an `aria-label`.
 * `aria-pressed="true"` fills any `stolon-button` with the accent, and `aria-pressed="false"` outlines and dims it, so a button can turn on and off.
 * `field` takes the field's height, padding, and text size, so a button on the same line as a field lines up at any size.
 * Every size and color rule is forced, so these win over the emby defaults.
@@ -54,9 +55,10 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | `stolon-button.stolon-secondary` | The muted button for a lower emphasis action |
 | `stolon-button.stolon-destructive` | The red filled button for an action that destroys data |
 | `stolon-button.stolon-custom` | A button filled with a custom color from a hex code, with black or white text, whichever reads better |
-| `stolon-button.stolon-fill` | A medium or large button that spans the width it has. A small button keeps its own width |
+| `stolon-button.stolon-fill` | A medium or large button that spans the width it has. A small button keeps its own width, and a hidden one stays hidden |
 | `stolon-button-row` | A row of buttons a wide space apart, where fill buttons share the width evenly |
 | `stolon-button.stolon-field-sized` | A button on the same line as a field, which takes the field's height, padding, and text size, so the two line up at any size |
+| `stolon-button.stolon-icon-only` | A square button that holds only an icon, its width its height at every size, such as an action on a table's bar of selected rows. It names itself with a title and an aria-label |
 
 <!-- reference:end -->
 

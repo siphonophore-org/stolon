@@ -76,6 +76,8 @@ Classes: `stolon-table-wrapper`, `stolon-table-controls`, `stolon-table-search`,
 * The footer reads "1 item", "N items", "Showing X of N items" while more remain, or "X/N items" in Load more mode.
 * Until the first answer the rows say "Loading", and with no rows they say the `emptyState` message. A next page shows "Loading" under the rows.
 * `stolon-table-loading` goes on the host element while the first page loads. The rows drop to 60 percent opacity and take no pointer events, and the search and filters stay usable.
+* The status column is at least 120px wide, 110px at 768px and below, and grows to fit a longer status, such as Ignored (Copy to Link), so its badge stays inside the row. At 600px and below it takes only its badge's width.
+* An action on the bar of selected rows that shows only an icon is a `stolon-button` with `stolon-small` and `stolon-icon-only`, named by a `title` and an `aria-label`. See [Button](button.md).
 * At 768px and below the toolbar stacks. At 600px and below the checkbox, the first column, and the status badge share one line, the first column's text clipping to fit, and any other columns move to full lines beneath.
 * `size` is `small`, `medium` (default), or `large`, and sizes its fields on the [size scale](design-tokens.md).
 
@@ -160,7 +162,7 @@ Builds a searchable, filterable, infinite scrolling table backed by an endpoint 
 | `stolon-list.stolon-rows` | A row inside a list, where the list draws the dividers |
 | `stolon-table-cell` | Single cell within a row |
 | `stolon-table-cell.stolon-table-cell-checkbox` | Narrow cell for a row checkbox |
-| `stolon-table-cell.stolon-table-cell-status` | Fixed width cell that right aligns a status badge |
+| `stolon-table-cell.stolon-table-cell-status` | Cell that right aligns a status badge, at least a fixed width so most rows line up, and wider for a long status so its badge stays inside the row |
 | `stolon-table-row-checkbox` | Checkbox that selects one row |
 | `stolon-table-item-info` | Title over sub text block for a row cell |
 | `stolon-table-item-title` | Medium weight title that clips with an ellipsis |

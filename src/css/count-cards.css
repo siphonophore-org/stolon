@@ -18,10 +18,13 @@
     background: var(--stolon-surface);
     text-align: left;
 }
-/* Large bold count at the top of a card, in the card's status color */
+/* Large bold count at the top of a card, in the card's status color, cut with an ellipsis when the card is too narrow for it */
 /* Example: <span class="stolon-card-count">5</span> */
 .stolon-card-count {
     display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 1.75em;
     font-weight: 600;
     line-height: 1.2;
@@ -58,6 +61,22 @@
 .stolon-cards.stolon-compact .stolon-card { min-width: 0; padding: var(--stolon-pad-small) var(--stolon-pad-medium); }
 .stolon-cards.stolon-compact .stolon-card-count { font-size: 1.4em; }
 .stolon-cards.stolon-compact .stolon-card-label { font-size: var(--stolon-font-small); }
+
+/* A card in balanced rows fits its column, which balanceRows sizes, whatever the card's own least width */
+/* Example: <div class="stolon-cards stolon-balanced"><div class="stolon-card"><span class="stolon-card-count">5</span></div></div> */
+.stolon-cards.stolon-balanced > .stolon-card { min-width: 0; }
+
+/* A row of cards whose values are words, such as Running, in a smaller size that wraps, so each word reads whole */
+/* Example: <div class="stolon-cards stolon-words"><div class="stolon-card stolon-green"><span class="stolon-card-count">Running</span><span class="stolon-card-label">Server</span></div></div> */
+.stolon-cards.stolon-words .stolon-card-count {
+    font-size: var(--stolon-font-large);
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+.stolon-cards.stolon-words .stolon-card-label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
 
 @media (max-width: 768px) {
     .stolon-cards { gap: var(--stolon-gap-narrow); }

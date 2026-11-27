@@ -77,7 +77,9 @@
 .pluginConfigurationPage .stolon-timeline-wrap,
 .stolon-dialog .stolon-timeline-wrap,
 .pluginConfigurationPage .stolon-stepper,
-.stolon-dialog .stolon-stepper {
+.stolon-dialog .stolon-stepper,
+.pluginConfigurationPage .stolon-stack,
+.stolon-dialog .stolon-stack {
     margin: 0 0 var(--stolon-gap-wide) 0 !important;
 }
 
@@ -205,8 +207,18 @@
 .stolon-dialog .inputLabel,
 .pluginConfigurationPage .selectLabel,
 .stolon-dialog .selectLabel {
-    display: block !important;
     margin: 0 0 var(--stolon-gap-narrow) 0 !important;
+}
+/* A label is a block over its control, unless it is hidden or empty */
+.pluginConfigurationPage .inputContainer > label:not(.stolon-hidden):not([hidden]):not(:empty),
+.stolon-dialog .inputContainer > label:not(.stolon-hidden):not([hidden]):not(:empty),
+.pluginConfigurationPage .selectContainer > label:not(.stolon-hidden):not([hidden]):not(:empty),
+.stolon-dialog .selectContainer > label:not(.stolon-hidden):not([hidden]):not(:empty),
+.pluginConfigurationPage .inputLabel:not(.stolon-hidden):not([hidden]):not(:empty),
+.stolon-dialog .inputLabel:not(.stolon-hidden):not([hidden]):not(:empty),
+.pluginConfigurationPage .selectLabel:not(.stolon-hidden):not([hidden]):not(:empty),
+.stolon-dialog .selectLabel:not(.stolon-hidden):not([hidden]):not(:empty) {
+    display: block !important;
 }
 
 /* Inputs, text areas, and selects that fill the row so every field shares one left and right edge. A checkbox or radio keeps its own size */

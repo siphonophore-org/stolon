@@ -1,16 +1,19 @@
-/* Pill that shows a short status label in a status color */
+/* Pill that shows a short status label in a status color, on one line, ending in an ellipsis only when its container is narrower than its label */
 /* Example: <span class="stolon-badge stolon-green">Active</span> */
 .stolon-badge,
 .stolon-table-status-badge {
-    display: inline-flex;
-    align-items: center;
+    display: inline-block;
     box-sizing: border-box;
+    max-width: 100%;
     height: var(--stolon-size-small);
     padding: 0 var(--stolon-pad-small);
     border-radius: var(--stolon-radius-small);
     font-size: var(--stolon-font-small);
-    line-height: 1;
+    line-height: var(--stolon-size-small);
+    vertical-align: middle;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     border: none;
 }
 .stolon-badge.stolon-green, .stolon-table-status-badge.stolon-Active, .stolon-table-status-badge.stolon-Synced, .stolon-table-status-badge.stolon-Downloaded, .stolon-table-status-badge.stolon-Completed, .stolon-table-status-badge.stolon-Enabled { background: var(--stolon-green-bg); color: var(--stolon-green-fg); }
@@ -26,5 +29,5 @@
 
 /* A badge at the medium or large size of the scale */
 /* Example: <span class="stolon-badge stolon-green stolon-medium">Synced</span> */
-.stolon-badge.stolon-medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); }
-.stolon-badge.stolon-large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); }
+.stolon-badge.stolon-medium { height: var(--stolon-size-medium); padding: 0 var(--stolon-pad-medium); font-size: var(--stolon-font-medium); line-height: var(--stolon-size-medium); }
+.stolon-badge.stolon-large { height: var(--stolon-size-large); padding: 0 var(--stolon-pad-large); font-size: var(--stolon-font-large); line-height: var(--stolon-size-large); }

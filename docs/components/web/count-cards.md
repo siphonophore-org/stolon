@@ -26,13 +26,15 @@ shared.renderCards('statusRow', [
 ]);
 ```
 
-Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`.
+Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`, and the `stolon-compact` and `stolon-words` modifiers on `stolon-cards`.
 
 ## States and Modifiers
 
 * `shared.renderCards(containerId, cards)` takes an id or element, adds `stolon-cards` to it, and fills `[{ label, count, color }]`. Count and label are set as text. A null count shows nothing. A missing element is ignored.
 * The color modifiers are `stolon-green`, `stolon-red`, `stolon-orange`, `stolon-purple`, `stolon-blue`, `stolon-gray`, `stolon-yellow`, `stolon-pink`, and `stolon-teal`. `renderCards` also takes a hex code such as `#e91e63`, drawn with the `stolon-custom` modifier.
 * The cards wrap in [Balanced Rows](balanced-rows.md), so five cards that do not fit in one row become three and two, never four and one. A card with `hidden` takes no place.
+* A card in balanced rows fits the column `balanceRows` gives it, and a count too wide for its card ends in an ellipsis.
+* `words` is for cards whose values are words, such as Running, rather than numbers. The value takes the large text size and wraps, so it reads whole.
 * `compact` makes a tighter row of small cards, with a smaller gap, padding, and label, for many counts on a phone.
 * `--stolon-balance-max` caps the cards in a row. `style="--stolon-balance-max: 4"` never shows more than four.
 * Cards in page markup are balanced by `createConfigPage`, or by `bindBalancedRows(view)` on a page built another way.
@@ -53,10 +55,12 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | :--- | :--- |
 | `stolon-cards` | Row of count cards that wraps to fit |
 | `stolon-card` | Count card in the status card's look: a large count over a quiet label on the surface color, with the count in its status color |
-| `stolon-card-count` | Large bold count at the top of a card, in the card's status color |
+| `stolon-card-count` | Large bold count at the top of a card, in the card's status color, cut with an ellipsis when the card is too narrow for it |
 | `stolon-card-label` | Quiet label under the count, cut with an ellipsis |
 | `stolon-card.stolon-green` | Status color modifiers for a card, each coloring its count and, on a filter card, its outline |
 | `stolon-cards.stolon-compact` | A tighter row of small count cards, for many counts in little room, such as on a phone |
+| `stolon-cards.stolon-balanced` | A card in balanced rows fits its column, which balanceRows sizes, whatever the card's own least width |
+| `stolon-cards.stolon-words` | A row of cards whose values are words, such as Running, in a smaller size that wraps, so each word reads whole |
 
 <!-- reference:end -->
 

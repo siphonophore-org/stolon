@@ -110,7 +110,9 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Tags | Removable chips that wrap, drawn by the Chip Select, the Tag Input, and the Placeholder Hint | `stolon-tags`, `stolon-tag` | Tokens, labels |
 | Toggle group | A wrapping row of pills for choosing any number of options, whose pressed state the page owns | `stolon-toggle` | Checkbox pills, filter chips |
 | Unsaved indicator | A small dot and text that fades in to flag unsaved changes, in a heading or a label | `stolon-unsaved` | Dirty flag, change marker |
-| Utility classes | Small classes for visibility, fonts, and text color | `stolon-sr-only`, `stolon-mono`, `stolon-ok`, `stolon-bad` | Helper classes, utilities |
+| Utility classes | Small classes for visibility, fonts, text color, and spacing | `stolon-sr-only`, `stolon-mono`, `stolon-ok`, `stolon-bad`, `stolon-muted`, `stolon-gap-below-wide` | Helper classes, utilities |
+| Stack | A column of blocks one gap apart, whose own margins give way to the gap. A section's content takes it with `stolon-flow` | `stolon-stack`, `stolon-flow` | Column, form flow, spacer |
+| Pending | The dimmed look of an element waiting for an answer, such as a row of dashes until a check answers | `stolon-pending` | Loading row, placeholder row |
 | Config page | A plugin settings page inside the Jellyfin dashboard | `pluginConfigurationPage` | Settings screen |
 | Dialog | A modal for an alert or a confirmation, compact or full, that never scrolls and has no close button | `stolon-dialog`, `openDialog` | Modal, popup |
 | Editor sidecar | A sidecar that edits one record with Delete, Cancel, and Save | `openEditorSidecar` | Editor dialog, record dialog |
