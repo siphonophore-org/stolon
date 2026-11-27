@@ -5,6 +5,8 @@ import { bindSecretField, readSecretField } from './secret-field.js';
 import { stolonText } from './lib/stolon-text.js';
 import type { ComponentHandle } from './types.js';
 import type { WebSelectOption } from './web-client-markup.js';
+import { adornField } from './field-adornments.js';
+import type { FieldAdornmentHandle } from './field-adornments.js';
 
 /** What every form field builder takes. field is written as data-field, and validate adds a rule of the caller's own to the validation core. */
 export interface FormFieldOptions {
@@ -28,6 +30,8 @@ export interface InputFieldOptions extends FormFieldOptions {
     maxLength?: number;
     pattern?: string;
     autocomplete?: string;
+    prefix?: string;
+    suffix?: string;
 }
 
 /** What createSecretField takes. stored says a secret is saved, and clearText names the button that clears it. */
@@ -69,6 +73,12 @@ export interface FormFieldHandle<V, I extends HTMLElement = HTMLElement> extends
     getValue(): V;
     setValue(value: V): void;
     destroy(): void;
+}
+
+/** What createInputField returns. setPrefix and setSuffix change the fixed text inside the box, and an empty text removes it. */
+export interface InputFieldHandle extends FormFieldHandle<string, HTMLInputElement> {
+    setPrefix(text: string | null): void;
+    setSuffix(text: string | null): void;
 }
 
 /** What createSelectField returns. setOptions fills the select again, keeping the value when it is still offered. */
@@ -157,13 +167,15 @@ function finish<V, I extends HTMLElement>(element: HTMLElement, input: I, help: 
  *   maxLength    : the most characters [optional]
  *   pattern      : a pattern the value must match [optional]
  *   autocomplete : the autocomplete hint (default 'new-password' for a password) [optional]
+ *   prefix       : fixed text inside the box before what is typed, such as 'https://', never part of the value [optional]
+ *   suffix       : fixed text inside the box after what is typed, such as '.example.com', never part of the value. A number's suffix is its unit [optional]
  *   required     : true when it must have a value (default false)
  *   disabled     : true when it cannot change (default false)
  *   validate     : function(value, input) that gives a message for an invalid value [optional]
  * }
- * @returns { element, input, help, getValue, setValue, destroy }
+ * @returns { element, input, help, getValue, setValue, setPrefix, setSuffix, destroy }. A prefix or suffix is drawn by adornField, and a screen reader hears it as the field's description.
  */
-export function createInputField(options: InputFieldOptions): FormFieldHandle<string, HTMLInputElement> {
+export function createInputField(options: InputFieldOptions): InputFieldHandle {
     var opts = options || ({} as InputFieldOptions);
     var id = opts.id || nextId('input');
     var type = opts.type || 'text';
@@ -181,9 +193,48 @@ export function createInputField(options: InputFieldOptions): FormFieldHandle<st
     element.appendChild(input);
     var help = description(opts.help, 'fieldDescription');
     if (help) element.appendChild(help);
-    return finish(element, input, help, validation(input, opts),
+    var affix = { prefix: opts.prefix || '', suffix: opts.suffix || '' };
+    var adorned: FieldAdornmentHandle | null = null;
+    // Wraps the input again with its current prefix and suffix, since the box is drawn from the input's attributes.
+    function adorn(): void {
+        if (adorned) adorned.destroy();
+        adorned = null;
+        var number = type === 'number';
+        setAffixAttribute(input, 'data-stolon-prefix', number ? '' : affix.prefix);
+        setAffixAttribute(input, 'data-stolon-suffix', number ? '' : affix.suffix);
+        if (number) setAffixAttribute(input, 'data-stolon-unit', affix.suffix);
+        if (!affix.prefix && !affix.suffix) return;
+        unwrap(input);
+        adorned = adornField(input);
+    }
+    if (affix.prefix || affix.suffix) adorn();
+    var made = finish(element, input, help, validation(input, opts),
         function () { return input.value; },
         function (value) { input.value = value === undefined || value === null ? '' : String(value); });
+    return {
+        element: made.element,
+        input: made.input,
+        help: made.help,
+        getValue: made.getValue,
+        setValue: made.setValue,
+        setPrefix: function (text) { affix.prefix = text || ''; adorn(); },
+        setSuffix: function (text) { affix.suffix = text || ''; adorn(); },
+        destroy: function () { if (adorned) adorned.destroy(); adorned = null; made.destroy(); }
+    };
+}
+
+// Sets or removes one of the attributes adornField reads.
+function setAffixAttribute(input: HTMLInputElement, name: string, value: string): void {
+    if (value) input.setAttribute(name, value);
+    else input.removeAttribute(name);
+}
+
+// Takes an input out of a box a page drew around it, such as a number's arrows, so it can be drawn again with its affix.
+function unwrap(input: HTMLInputElement): void {
+    var box = input.parentNode as HTMLElement | null;
+    if (!box || !box.classList || !box.classList.contains('stolon-adorned') || !box.parentNode) return;
+    box.parentNode.insertBefore(input, box);
+    box.parentNode.removeChild(box);
 }
 
 /**

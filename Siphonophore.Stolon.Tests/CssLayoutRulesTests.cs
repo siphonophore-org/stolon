@@ -366,4 +366,20 @@ public class CssLayoutRulesTests
         Assert.True(CssRules.Specificity(".stolon-cards.stolon-fit .stolon-card-count").CompareTo(CssRules.Specificity(".stolon-cards.stolon-compact .stolon-card-count")) >= 0);
         Assert.Equal("ellipsis", Value(RuleFor("count-cards.css", ".stolon-card-count"), "text-overflow"));
     }
+
+    /// <summary>
+    /// On a phone a record selector's action buttons share each row they wrap into, and never wrap their own labels.
+    /// True: New, Rename, Remove, Import, and Export fill two clean rows under the full width dropdown at 375 pixels.
+    /// False: the buttons keep their own widths and leave a ragged row, with Jellyfin's margins beside the gap.
+    /// </summary>
+    [Fact]
+    public void SelectorActions_FillTheirRowsOnAPhone()
+    {
+        var css = CssRules.StripComments(Sources["record-selector.css"]);
+        Assert.Contains("@media (max-width: 600px)", css, StringComparison.Ordinal);
+        var rules = CssRules.Parse(css, "record-selector.css").Where(r => r.Selectors.Contains(".stolon-selector-actions > .stolon-button")).ToList();
+        Assert.Contains(rules, r => Value(r, "flex") == "1 1 0" && Value(r, "margin") == "0 !important");
+        Assert.Equal("nowrap", Value(RuleFor("record-selector.css", ".stolon-selector-actions .stolon-button"), "white-space"));
+        Assert.Equal("100%", Value(RuleFor("record-selector.css", ".stolon-selector-dropdown"), "width"));
+    }
 }

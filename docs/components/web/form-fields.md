@@ -75,6 +75,7 @@ Read and write hand written fields with the bag: `getValue(id, fallback)`, `setV
 * An input and a checkbox carry `is="emby-input"` and `is="emby-checkbox"` as an attribute, so the web client upgrades each once it is in the page. The upgrade adds an empty label before the input, which the kit hides.
 * A select and a text area are written as the web client leaves them once upgraded, so the upgrade adds no second label or arrow. The select carries the arrow container, which the kit hides inside a config page and a dialog. The text area keeps its `rows`, 4 by default.
 * A field with a rule, such as `required`, `min`, or `pattern`, or with `validate`, is bound to the [validation core](field-message.md#validation), so a Save Bar with `form` refuses it.
+* `createInputField` takes `prefix` and `suffix`, fixed text inside the box before or after what is typed, such as a subdomain in front of `.example.com`, drawn by [Field Adornments](field-adornments.md). Neither is part of the value, and a screen reader hears it as the field's description. A number's `suffix` is its unit. `setPrefix(text)` and `setSuffix(text)` change it, and an empty text removes it.
 * `createSelectField` adds `setOptions(options, value)`, which keeps the value when it is still offered.
 * `createSecretField` is an input field bound with [`bindSecretField`](secret-field.md). Its clear button, "Clear" by default, shows while a secret is stored. `setStored(stored)` binds it again after a load, and `getValue()` gives what to post, `SECRET_KEPT` for a secret left as it was.
 * `readNumber(input)` gives a number, or null for blank or anything else. `readLines(input)` gives a text area's lines, each trimmed, with the blank ones left out.
@@ -98,7 +99,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 ### `createInputField`
 
-<code>function createInputField(options: InputFieldOptions): FormFieldHandle&lt;string, HTMLInputElement&gt;</code>
+<code>function createInputField(options: InputFieldOptions): InputFieldHandle</code>
 
 A text, number, or other input in the web client's own inputContainer, with its label above and its description under it. The input carries is="emby-input", so the web client upgrades it once it is in the page, and Stolon's form fields style it.
 
@@ -113,14 +114,13 @@ A text, number, or other input in the web client's own inputContainer, with its 
 | `maxLength` | <code>number</code> | the most characters [optional] |
 | `pattern` | <code>string</code> | a pattern the value must match [optional] |
 | `autocomplete` | <code>string</code> | the autocomplete hint (default 'new-password' for a password) [optional] |
+| `prefix` | <code>string</code> | fixed text inside the box before what is typed, such as 'https://', never part of the value [optional] |
+| `suffix` | <code>string</code> | fixed text inside the box after what is typed, such as '.example.com', never part of the value. A number's suffix is its unit [optional] |
 
 | Handle member | Type |
 | :--- | :--- |
-| `input` | <code>I</code> |
-| `help` | <code>HTMLElement &#124; null</code> |
-| `getValue` | <code>(): V</code> |
-| `setValue` | <code>(value: V): void</code> |
-| `destroy` | <code>(): void</code> |
+| `setPrefix` | <code>(text: string &#124; null): void</code> |
+| `setSuffix` | <code>(text: string &#124; null): void</code> |
 
 ### `createSecretField`
 

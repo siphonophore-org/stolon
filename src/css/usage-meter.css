@@ -16,21 +16,16 @@
 .stolon-usage-meter-label { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
 .stolon-usage-meter-text { font-size: var(--stolon-font-small); opacity: 0.7; font-variant-numeric: tabular-nums; }
 
-/* The bar, the progress bar's track a narrow gap tall, whose fills sit side by side, each as wide as its share */
+/* The badge in the head, beside the label, such as a disk's state */
+/* Example: <span class="stolon-usage-meter-badge"><span class="stolon-badge stolon-green">Healthy</span></span> */
+.stolon-usage-meter-head > .stolon-usage-meter-badge { display: inline-flex; margin-right: auto; }
+.stolon-usage-meter-badge[hidden] { display: none; }
+
+/* The bar, the progress bar's track a narrow gap tall, whose fills sit side by side, each as wide as its share, in the progress bar's colors */
 /* Example: <div class="stolon-progress stolon-usage-meter-bar"><div class="stolon-progress-bar stolon-usage-meter-fill stolon-blue" style="--stolon-usage-share: 30%"></div><div class="stolon-progress-bar stolon-usage-meter-fill stolon-green" style="--stolon-usage-share: 10%"></div></div> */
 .stolon-progress.stolon-usage-meter-bar { display: flex; height: var(--stolon-gap-narrow); }
 .stolon-usage-meter-fill { flex: 0 0 auto; width: var(--stolon-usage-share, 0%); }
 .stolon-usage-meter-fill + .stolon-usage-meter-fill { border-left: 2px solid var(--stolon-surface); }
-.stolon-usage-meter-fill.stolon-green { background: var(--stolon-green-fg); }
-.stolon-usage-meter-fill.stolon-red { background: var(--stolon-red-fg); }
-.stolon-usage-meter-fill.stolon-orange { background: var(--stolon-orange-fg); }
-.stolon-usage-meter-fill.stolon-purple { background: var(--stolon-purple-fg); }
-.stolon-usage-meter-fill.stolon-blue { background: var(--stolon-blue-fg); }
-.stolon-usage-meter-fill.stolon-gray { background: var(--stolon-gray-fg); }
-.stolon-usage-meter-fill.stolon-yellow { background: var(--stolon-yellow-fg); }
-.stolon-usage-meter-fill.stolon-pink { background: var(--stolon-pink-fg); }
-.stolon-usage-meter-fill.stolon-teal { background: var(--stolon-teal-fg); }
-.stolon-usage-meter-fill.stolon-custom { background: var(--stolon-custom); }
 
 /* A meter past its warning share turns orange, and past its danger share turns red, with its line in the same color. A segmented meter keeps its part colors and colors only the line */
 /* Example: <div class="stolon-usage-meter stolon-danger"><div class="stolon-progress stolon-usage-meter-bar"><div class="stolon-progress-bar stolon-usage-meter-fill stolon-whole"></div></div></div> */

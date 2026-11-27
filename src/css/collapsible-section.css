@@ -200,10 +200,10 @@
 
 /* A narrow section, chosen by its own width, puts its aside on a line of its own under the title */
 /* Example: <div class="stolon-collapsible-section stolon-compact"></div> */
-.stolon-collapsible-section.stolon-compact > .stolon-collapsible-header,
-.stolon-collapsible-section.stolon-compact > .stolon-collapsible-bar { flex-wrap: wrap; }
-.stolon-collapsible-section.stolon-compact > .stolon-collapsible-header > .stolon-collapsible-aside,
-.stolon-collapsible-section.stolon-compact > .stolon-collapsible-bar > .stolon-collapsible-aside {
+.stolon-collapsible-section.stolon-compact:not(.stolon-icon-aside) > .stolon-collapsible-header,
+.stolon-collapsible-section.stolon-compact:not(.stolon-icon-aside) > .stolon-collapsible-bar { flex-wrap: wrap; }
+.stolon-collapsible-section.stolon-compact:not(.stolon-icon-aside) > .stolon-collapsible-header > .stolon-collapsible-aside,
+.stolon-collapsible-section.stolon-compact:not(.stolon-icon-aside) > .stolon-collapsible-bar > .stolon-collapsible-aside {
     order: 1;
     flex: 1 1 100%;
     box-sizing: border-box;
@@ -212,8 +212,13 @@
     flex-wrap: wrap;
     margin: var(--stolon-gap-narrow) 0 0;
 }
-.stolon-collapsible-section.stolon-compact.stolon-has-tile > .stolon-collapsible-header > .stolon-collapsible-aside,
-.stolon-collapsible-section.stolon-compact.stolon-has-tile > .stolon-collapsible-bar > .stolon-collapsible-aside { padding-left: calc(var(--stolon-size-large) + var(--stolon-gap-narrow)); }
+.stolon-collapsible-section.stolon-compact.stolon-has-tile:not(.stolon-icon-aside) > .stolon-collapsible-header > .stolon-collapsible-aside,
+.stolon-collapsible-section.stolon-compact.stolon-has-tile:not(.stolon-icon-aside) > .stolon-collapsible-bar > .stolon-collapsible-aside { padding-left: calc(var(--stolon-size-large) + var(--stolon-gap-narrow)); }
+
+/* A section whose aside is icons alone, such as a Refresh icon button, keeps it beside the title at every width, set by createCollapsibleSection */
+/* Example: <div class="stolon-collapsible-section stolon-fixed stolon-panel stolon-compact stolon-icon-aside"></div> */
+.stolon-collapsible-section.stolon-icon-aside > .stolon-collapsible-header,
+.stolon-collapsible-section.stolon-icon-aside > .stolon-collapsible-bar { flex-wrap: nowrap; }
 
 /* A fixed panel, always open, whose header is a plain heading with no chevron */
 /* Example: <div class="stolon-collapsible-section stolon-fixed stolon-panel"><div class="stolon-collapsible-header"><span class="stolon-collapsible-heading"><span class="stolon-collapsible-title">Movies</span></span></div><div class="stolon-collapsible-content"></div></div> */

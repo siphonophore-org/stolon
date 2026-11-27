@@ -23,4 +23,13 @@
 }
 .stolon-selector-actions .stolon-button {
     flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    /* On a phone the buttons under the full width dropdown fill each row they wrap into, an even share of the row each. */
+    .stolon-selector-actions > .stolon-button {
+        flex: 1 1 0;
+        margin: 0 !important;
+    }
 }

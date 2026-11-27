@@ -1,4 +1,4 @@
-import { make, icon, iconButton, listen, runAll } from './lib/dom.js';
+import { make, icon, iconButton, listen, runAll, nextId, addToken, removeToken } from './lib/dom.js';
 import { bindRuledFields } from './lib/validate.js';
 import type { ValidationHandle } from './lib/validate.js';
 import { stolonText } from './lib/stolon-text.js';
@@ -19,7 +19,10 @@ var PICKER_ICONS: Record<string, string> = {
 };
 
 /** The input types adornField handles. */
-var SELECTOR = 'input[data-stolon-reveal], input[type="search"], input[data-stolon-search], input[type="number"], input[type="date"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"]';
+var SELECTOR = 'input[data-stolon-prefix], input[data-stolon-suffix], input[data-stolon-reveal], input[type="search"], input[data-stolon-search], input[type="number"], input[type="date"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="time"]';
+
+// Input types whose text a fixed prefix or suffix can sit around.
+var AFFIX_TYPES = ['', 'text', 'url', 'email', 'tel'];
 
 // Fires the events typing would, so a page listening for input or change sees a step.
 function notify(input: HTMLInputElement): void {
@@ -32,9 +35,11 @@ function notify(input: HTMLInputElement): void {
  * browser's spinner, a date or time gets its icon, which opens the browser's picker, and a search box, type search or
  * marked data-stolon-search, gets a search icon. A secret marked data-stolon-reveal gets an eye that shows and hides it, with
  * data-stolon-reveal-label and data-stolon-hide-label for its titles (default 'Show' and 'Hide'). A number marked data-stolon-unit,
- * such as data-stolon-unit="%", shows that unit dimmed inside the box before its arrows. Any other field is left as it is.
+ * such as data-stolon-unit="%", shows that unit dimmed inside the box before its arrows. A text, url, email, or tel input marked
+ * data-stolon-prefix or data-stolon-suffix, such as data-stolon-suffix=".example.com", shows that fixed text dimmed inside the box
+ * before or after what is typed. It is never part of the value, and a screen reader hears it as the field's description. Any other field is left as it is.
  *
- * @param input the number, date, time, search, or revealable secret input
+ * @param input the number, date, time, search, revealable secret, or prefixed or suffixed text input
  * @returns { destroy }, which puts the input back where it was
  */
 export function adornField(input: HTMLInputElement): FieldAdornmentHandle {
@@ -45,18 +50,26 @@ export function adornField(input: HTMLInputElement): FieldAdornmentHandle {
     var isReveal = input.hasAttribute('data-stolon-reveal');
     var parent = input.parentNode;
     var isNumber = type === 'number';
+    var prefix = input.getAttribute('data-stolon-prefix') || '';
+    var suffix = input.getAttribute('data-stolon-suffix') || '';
+    var isAffix = !isReveal && (!!prefix || !!suffix) && AFFIX_TYPES.indexOf(type) !== -1;
     var owner = parent as HTMLElement | null;
     // A search field draws its own icon and clear button, so it is left alone.
-    if (!parent || (!isNumber && !isReveal && !PICKER_ICONS[type]) || (owner && owner.classList && (owner.classList.contains('stolon-adorned') || owner.classList.contains('stolon-search')))) {
+    if (!parent || (!isNumber && !isReveal && !isAffix && !PICKER_ICONS[type]) || (owner && owner.classList && (owner.classList.contains('stolon-adorned') || owner.classList.contains('stolon-search')))) {
         return { destroy: function () { /* nothing was wrapped */ } };
     }
     var cleanups: Array<() => void> = [];
-    var kind = isReveal ? 'stolon-adorned-reveal' : isNumber ? 'stolon-adorned-number' : type === 'search' ? 'stolon-adorned-search' : 'stolon-adorned-picker';
+    var kind = isReveal ? 'stolon-adorned-reveal' : isAffix ? 'stolon-adorned-affix' : isNumber ? 'stolon-adorned-number' : type === 'search' ? 'stolon-adorned-search' : 'stolon-adorned-picker';
     var box = make('span', 'stolon-adorned ' + kind);
     parent.insertBefore(box, input);
     box.appendChild(input);
 
-    if (isReveal) {
+    if (isAffix) {
+        if (prefix) cleanups.push(addAffix(box, input, 'prefix', prefix));
+        if (suffix) cleanups.push(addAffix(box, input, 'suffix', suffix));
+        // Text typed in front of a fixed end, such as a subdomain, sits against it.
+        if (suffix && !prefix) box.classList.add('stolon-adorned-end');
+    } else if (isReveal) {
         var showLabel = input.getAttribute('data-stolon-reveal-label') || stolonText('Stolon.Show');
         var hideLabel = input.getAttribute('data-stolon-hide-label') || stolonText('Hide');
         var eye = iconButton('stolon-adorned-eye', 'visibility', showLabel);
@@ -118,9 +131,36 @@ export function adornField(input: HTMLInputElement): FieldAdornmentHandle {
     };
 }
 
+// Draws a fixed prefix or suffix inside the box, makes room for it in the input, and names it as the input's description.
+function addAffix(box: HTMLElement, input: HTMLInputElement, side: 'prefix' | 'suffix', text: string): () => void {
+    var part = make('span', 'stolon-adorned-' + side, { id: nextId('affix'), 'aria-hidden': 'true' }, text);
+    box.classList.add('stolon-adorned-with-' + side);
+    var room = '--stolon-adorned-' + side + '-room';
+    // The text's own width once it is drawn, and a guess from its length before then, such as in a closed section.
+    box.style.setProperty(room, text.length + 'ch');
+    if (side === 'prefix') box.insertBefore(part, input);
+    else box.appendChild(part);
+    addToken(input, 'aria-describedby', part.id);
+    function measure(): void {
+        var width = part.offsetWidth || 0;
+        if (width) box.style.setProperty(room, width + 'px');
+    }
+    var stop = function (): void { /* nothing to stop */ };
+    if (typeof ResizeObserver !== 'undefined') {
+        var watch = new ResizeObserver(measure);
+        watch.observe(part);
+        stop = function () { watch.disconnect(); };
+    }
+    measure();
+    return function () {
+        stop();
+        removeToken(input, 'aria-describedby', part.id);
+    };
+}
+
 /**
  * Adorns every number, date, time, and search field under a root, and the ones added later, so each shows Stolon's own up and
- * down buttons or its picker icon at the trailing end. It also binds the validation core on every field that carries a rule,
+ * down buttons or its picker icon at the trailing end, and every text field marked data-stolon-prefix or data-stolon-suffix. It also binds the validation core on every field that carries a rule,
  * such as required, min, max, pattern, or a number, url, email, time, or date type. createConfigPage runs it on every page.
  *
  * @param root the page or element to search within

@@ -1,12 +1,15 @@
 import { make, icon, clear, has } from './lib/dom.js';
 import { applyColor } from './lib/color.js';
+import { createAvatar } from './avatar.js';
+import type { AvatarHandle } from './avatar.js';
+import type { ThumbSource } from './lib/thumb.js';
 import { createList } from './list.js';
 import type { ListHeight } from './list.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
 import type { BASE_TEXT } from './lib/stolon-text.js';
 
-/** One event on a timeline. status is a status color name, icon a Material icon name, and pre a block of mono text kept as written, such as a log or a stack trace. */
+/** One event on a timeline. status is a status color name, icon a Material icon name, pre a block of mono text kept as written, such as a log or a stack trace, and avatar a user's picture as the marker. */
 export interface TimelineItem {
     time?: string;
     datetime?: string;
@@ -15,6 +18,8 @@ export interface TimelineItem {
     pre?: string;
     status?: string;
     icon?: string;
+    avatar?: ThumbSource;
+    avatarLabel?: string;
 }
 
 /** What createTimeline takes. statusLabels maps a status color name to its hidden label. height sets the list's height as a list's does. */
@@ -43,7 +48,7 @@ var STATUS_LABELS: Record<string, keyof typeof BASE_TEXT> = { green: 'Stolon.Don
  * A vertical list of events, each with a colored marker, a time, a title, and an optional body. A status also shows an icon in its marker and a hidden label, so the status never rests on color alone.
  *
  * @param options {
- *   items     : array of { time, datetime, title, body, pre, status, icon } where pre is mono text kept as written, under the body, and status is a status color name such as 'green', and icon is a Material icon name (default an icon for the status) [optional]
+ *   items     : array of { time, datetime, title, body, pre, status, icon, avatar, avatarLabel } where pre is mono text kept as written, under the body, status is a status color name such as 'green', icon is a Material icon name (default an icon for the status), avatar is a picture address, or a function returning one, drawn as a round marker in place of the icon, with the person icon while it is empty or fails to load, and avatarLabel is the person's name, for the picture's alt text and tooltip [optional]
  *   emptyText : sentence shown while there are no events [optional]
  *   statusLabels : map of status color name to the hidden label a screen reader reads, such as { green: 'Done' } (default a word for each color) [optional]
  *   height    : the list's height, 'auto', 'fill', a number of pixels, or a CSS length (default 'auto')
@@ -56,6 +61,7 @@ var STATUS_LABELS: Record<string, keyof typeof BASE_TEXT> = { green: 'Stolon.Don
 export function createTimeline(options?: TimelineOptions): TimelineHandle {
     options = options || {};
     var items: TimelineItem[] = [];
+    var avatars: AvatarHandle[] = [];
     var root = make('div', 'stolon-timeline-wrap');
     var list = make('ol', 'stolon-timeline');
     root.appendChild(list);
@@ -71,8 +77,16 @@ export function createTimeline(options?: TimelineOptions): TimelineHandle {
         var li = make('li', 'stolon-timeline-item');
         applyColor(li, item.status);
         var marker = make('span', 'stolon-timeline-marker', { 'aria-hidden': 'true' });
-        var glyph = item.icon || (has(STATUS_ICONS, item.status) ? STATUS_ICONS[item.status!] : '');
-        if (glyph) marker.appendChild(icon(glyph));
+        // An item that names an avatar, even an empty one, is marked by a person, with the person icon when there is no picture.
+        if (item.avatar !== undefined) {
+            marker.classList.add('stolon-timeline-avatar');
+            var avatar = createAvatar({ image: item.avatar, name: item.avatarLabel, size: 'small' });
+            avatars.push(avatar);
+            marker.appendChild(avatar.element);
+        } else {
+            var glyph = item.icon || (has(STATUS_ICONS, item.status) ? STATUS_ICONS[item.status!] : '');
+            if (glyph) marker.appendChild(icon(glyph));
+        }
         li.appendChild(marker);
         var body = make('div', 'stolon-timeline-body');
         var status = labelOf(item.status as string);
@@ -99,7 +113,12 @@ export function createTimeline(options?: TimelineOptions): TimelineHandle {
     rows.emptyElement.classList.add('stolon-timeline-empty');
     root.appendChild(rows.emptyElement);
 
+    function releaseAvatars(): void {
+        avatars.splice(0).forEach(function (a) { a.destroy(); });
+    }
+
     function setValue(next: TimelineItem[] | undefined): void {
+        releaseAvatars();
         items = (next || []).slice();
         rows.setItems(items);
     }
@@ -110,6 +129,6 @@ export function createTimeline(options?: TimelineOptions): TimelineHandle {
         setValue: setValue,
         setItems: setValue,
         setHeight: function (height, maxHeight) { rows.setHeight(height, maxHeight); },
-        destroy: function () { rows.destroy(); clear(list); }
+        destroy: function () { releaseAvatars(); rows.destroy(); clear(list); }
     };
 }

@@ -175,3 +175,19 @@ test('the action row lines its buttons up on the list edge, a narrow gap apart, 
     assert.match(row, /gap: var\(--stolon-gap-narrow\)/);
     assert.match(listRule('sortable-card-list.css', '.stolon-card-list-actions > .stolon-button'), /margin: 0 !important/);
 });
+
+test('a card subtitle is plain text that stays on a narrow screen, and mono on the list or a card writes it in the mono font, the card winning', function () {
+    function subClass(ui) { return cardsOf(ui).map(function (c) { return c.innerHTML.match(/<div class="(stolon-card-item-sub[^"]*)"/)[1]; }); }
+    var plain = build({ render: function (item) { return { title: item, subtitle: 'Built in' }; } });
+    assert.deepEqual(subClass(plain), ['stolon-card-item-sub stolon-card-item-sub-text stolon-item-row-secondary', 'stolon-card-item-sub stolon-card-item-sub-text stolon-item-row-secondary', 'stolon-card-item-sub stolon-card-item-sub-text stolon-item-row-secondary']);
+    var mono = build({ mono: true, render: function (item) { return { title: item, subtitle: '10.0.0.1', mono: item === 'b' ? false : undefined }; } });
+    assert.deepEqual(subClass(mono), ['stolon-card-item-sub stolon-mono stolon-item-row-secondary', 'stolon-card-item-sub stolon-card-item-sub-text stolon-item-row-secondary', 'stolon-card-item-sub stolon-mono stolon-item-row-secondary']);
+    var one = build({ render: function (item) { return { title: item, subtitle: '/media/' + item, mono: item === 'a' }; } });
+    assert.deepEqual(subClass(one).map(function (c) { return c.indexOf('stolon-mono') !== -1; }), [true, false, false]);
+});
+
+test('a plain card subtitle takes the page font and stays at tablet width, where a mono one hides', function () {
+    var css = readFileSync(new URL('../../src/css/sortable-card-list.css', import.meta.url), 'utf8');
+    assert.match(css, /\.stolon-card-item-sub\.stolon-card-item-sub-text \{\s*font-family: inherit;/);
+    assert.match(css, /\.stolon-card-item-sub\.stolon-card-item-sub-text \{ display: block; \}/);
+});

@@ -29,6 +29,7 @@ var cards = createSortableCardList(view.querySelector('#serverList'), {
     items: servers,
     editor: view.querySelector('#serverEditor'),
     collapsible: false,
+    mono: true,
     render: function (server, index) {
         return { title: server.Name, subtitle: server.Url, dot: server.Ok ? 'ok' : 'bad',
                  disabled: server.IsEnabled === false, badges: [{ label: server.Mode, cls: 'blue' }] };
@@ -46,7 +47,7 @@ Classes: `stolon-card-list`, `stolon-card-item`, `stolon-card-item-head`, `stolo
 
 ## States and Modifiers
 
-* `render(item, index)` returns `{ icon, iconColor, title, subtitle, badges: [{ label, cls }], dot, dotTitle, disabled }`. `dot` is `'ok'` (green), `'bad'` (red), `'checking'` (orange), `'unknown'` (gray), a status color name or hex code, or `'none'` to omit it, and any other word gives a gray dot. `dotTitle` names the dot as its title and `aria-label`, and defaults to Active, Error, Checking, Unknown, or the color's meaning. `cls` is a badge color or hex code, with `medium`, `large`, or other classes beside it, `gray` by default.
+* `render(item, index)` returns `{ icon, iconColor, title, subtitle, mono, badges: [{ label, cls }], dot, dotTitle, disabled }`. `dot` is `'ok'` (green), `'bad'` (red), `'checking'` (orange), `'unknown'` (gray), a status color name or hex code, or `'none'` to omit it, and any other word gives a gray dot. `dotTitle` names the dot as its title and `aria-label`, and defaults to Active, Error, Checking, Unknown, or the color's meaning. `cls` is a badge color or hex code, with `medium`, `large`, or other classes beside it, `gray` by default.
 * `icon` leads the card with a Material icon in the [Collapsible Section](collapsible-section.md) tile, `stolon-collapsible-tile`, in place of its number. `iconColor` is a status color name or a hex code, and the accent by default. Steps and other records whose place is not a rank lead with a tile, never a number.
 * `numbered` (default true) leads a card with no `icon` with its place in the list. False leads it with nothing.
 * Given `items` draw at once, wherever the list sits, such as in a closed section. A list made with no items leaves its element's content alone until `setItems` or `render`.
@@ -58,7 +59,8 @@ Classes: `stolon-card-list`, `stolon-card-item`, `stolon-card-item-head`, `stolo
 * A click, Enter, or Space on a head opens the card. The keys are handled only when the head itself has focus.
 * A card can be `selected`, `collapsed`, `disabled`, or `dragging`. `drop-before` and `drop-after` draw a 3px accent line above or below the drop target.
 * The head is `role="button"` with `aria-expanded`. The arrow buttons are titled "Move up" and "Move down" and labelled "Move {value} up" and "Move {value} down", where `{value}` is the card's title or "Item 2". `moveUpTitle`, `moveDownTitle`, `moveUpLabel`, and `moveDownLabel` replace them, and after a move focus stays on the pressed arrow, or the other one when it is now disabled.
-* At 768px and below the mono subtitle line is hidden. `stolon-card-item-sub-text` stays, for words rather than an address.
+* A subtitle is plain text, `stolon-card-item-sub stolon-card-item-sub-text`, for words such as "Built in". `mono: true` on the list, or `mono` on one card, which wins, writes it in the mono font as `stolon-card-item-sub stolon-mono`, for a code like value such as an address or a path.
+* At 768px and below a mono subtitle line is hidden. A plain one, `stolon-card-item-sub-text`, stays. A hand written `stolon-card-item-sub` is mono.
 * The same card classes make a plain record list without the helper. A head with `stolon-card-item-head-static` only holds a control at its end.
 
 ## Gotchas
@@ -83,7 +85,7 @@ Renders records as cards, each led by its number or an icon tile, with a status 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `items` | <code>T[]</code> | array of records in priority order, replaced with setItems. Given items draw at once, wherever the list sits, such as in a closed section [optional] |
-| `render` (required) | <code>(item: T, index: number): CardSpec &#124; null &#124; undefined</code> | function(item, index) returning { icon, iconColor, title, subtitle, badges: [{ label, cls }], dot: 'ok'&#124;'bad'&#124;'checking'&#124;'unknown'&#124;'none', dotTitle, disabled } [required] |
+| `render` (required) | <code>(item: T, index: number): CardSpec &#124; null &#124; undefined</code> | function(item, index) returning { icon, iconColor, title, subtitle, mono, badges: [{ label, cls }], dot: 'ok'&#124;'bad'&#124;'checking'&#124;'unknown'&#124;'none', dotTitle, disabled }, where mono writes that card's subtitle in the mono font and wins over the list's [required] |
 | `editor` | <code>HTMLElement &#124; null</code> | element placed inside the open card's body [optional] |
 | `onSelect` | <code>(index: number): void</code> | function(index) called when a card opens, before the editor is placed [optional] |
 | `onBeforeLeave` | <code>(index: number): void</code> | function(index) called when the open card is left, to read the editor back [optional] |
@@ -91,6 +93,7 @@ Renders records as cards, each led by its number or an icon tile, with a status 
 | `reorder` | <code>boolean</code> | allow arrows and drag (default true) |
 | `collapsible` | <code>boolean</code> | clicking the open head folds it and a chevron shows the state, where false keeps the open card open (default true) |
 | `numbered` | <code>boolean</code> | lead a card with its place in the list when render gives no icon, where false leads it with nothing (default true) |
+| `mono` | <code>boolean</code> | true writes every subtitle in the mono font, for code like values such as addresses or paths, hidden at tablet width and below (default false, plain text that stays) |
 | `escapeHtml` | <code>(str: unknown): string</code> | function(str) returning a safe string (default the built in escaper) |
 | `moveUpTitle` | <code>string</code> | tooltip of an up arrow (default 'Move up') |
 | `moveDownTitle` | <code>string</code> | tooltip of a down arrow (default 'Move down') |
@@ -111,7 +114,7 @@ Renders records as cards, each led by its number or an icon tile, with a status 
 
 | Type | What it is |
 | :--- | :--- |
-| `CardSpec` | What render returns for one card. icon leads it with an icon tile in place of its number, dot picks the status dot, and a disabled card is dimmed. |
+| `CardSpec` | What render returns for one card. icon leads it with an icon tile in place of its number, dot picks the status dot, mono writes the subtitle in the mono font, and a disabled card is dimmed. |
 
 | Class | What it looks like |
 | :--- | :--- |

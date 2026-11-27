@@ -197,6 +197,18 @@ export interface CollapsibleSectionHandle extends ComponentHandle {
 // A section narrower than this puts its aside on a line of its own under the title.
 var COMPACT_WIDTH = 480;
 
+// Whether an aside is only icons, such as a Refresh icon button, which fits beside the title at any width.
+function isIconOnly(node: Node): boolean {
+    var el = node as Element;
+    if (!el.querySelectorAll) return false;
+    var icons: Element[] = Array.prototype.slice.call(el.querySelectorAll('.material-icons'));
+    if (el.classList && el.classList.contains('material-icons')) icons.push(el);
+    if (!icons.length) return false;
+    var rest = node.textContent || '';
+    icons.forEach(function (i) { rest = rest.replace(i.textContent || '', ''); });
+    return !rest.trim();
+}
+
 /**
  * Builds a collapsible section, the same markup initCollapsibles binds, with an optional badge in its header. The header
  * also takes a Material icon in a rounded tile, a dimmed subtitle under the title, and an aside on the right, such as a
@@ -212,7 +224,7 @@ var COMPACT_WIDTH = 480;
  *   icon        : a Material icon shown in a rounded tile before the title [optional]
  *   iconColor   : the tile's status color name or hex code (default the accent) [optional]
  *   subtitle    : a dimmed line under the title, as text or a node such as a route [optional]
- *   aside       : a node at the right of the header, such as a badge, a button, or a toggle, that goes under the title when the section is narrow [optional]
+ *   aside       : a node at the right of the header, such as a badge, a button, or a toggle, that goes under the title when the section is narrow. An aside of icons alone, such as a Refresh icon button, stays beside the title [optional]
  *   collapsible : false draws a fixed panel, framed, always open, with no chevron and a header that is not a button (default true)
  *   onToggle    : function(open) called when the header opens or closes it [optional]
  * }
@@ -292,6 +304,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
     }
 
     function setAside(next: Node | null | undefined): void {
+        root.classList.toggle('stolon-icon-aside', !!next && isIconOnly(next));
         if (!next) {
             if (aside) clear(aside);
             if (aside) aside.hidden = true;

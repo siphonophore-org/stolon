@@ -270,3 +270,37 @@ test('bindTileToSwitch takes its own colors and works on a built section', funct
     assert.ok(tile.classList.contains('stolon-blue'));
     assert.equal(tile.classList.contains('stolon-red'), false);
 });
+
+function text(tag, attrs, value) {
+    var e = dom.el(tag, attrs);
+    e.textContent = value;
+    return e;
+}
+
+test('an aside of icons alone, such as a Refresh icon button, marks the section so it stays beside the title', function () {
+    var refresh = dom.el('button', { type: 'button', title: 'Refresh', 'aria-label': 'Refresh' });
+    refresh.appendChild(text('span', { class: 'material-icons', 'aria-hidden': 'true' }, 'refresh'));
+    var section = createCollapsibleSection({ title: 'Disks', icon: 'storage', collapsible: false, aside: refresh });
+    assert.ok(section.element.classList.contains('stolon-icon-aside'));
+    var labelled = dom.el('button', { type: 'button' });
+    labelled.appendChild(text('span', { class: 'material-icons', 'aria-hidden': 'true' }, 'refresh'));
+    labelled.appendChild(text('span', {}, 'Refresh'));
+    section.setAside(labelled);
+    assert.ok(!section.element.classList.contains('stolon-icon-aside'));
+    section.setAside(text('span', { class: 'stolon-badge stolon-gray' }, 'Copy'));
+    assert.ok(!section.element.classList.contains('stolon-icon-aside'));
+    var icons = dom.el('span');
+    icons.appendChild(text('span', { class: 'material-icons' }, 'refresh'));
+    icons.appendChild(text('span', { class: 'material-icons' }, 'settings'));
+    section.setAside(icons);
+    assert.ok(section.element.classList.contains('stolon-icon-aside'));
+    section.setAside(null);
+    assert.ok(!section.element.classList.contains('stolon-icon-aside'));
+});
+
+test('a narrow section moves a labelled aside under the title, but never an aside of icons alone', function () {
+    var css = readFileSync(new URL('../../src/css/collapsible-section.css', import.meta.url), 'utf8');
+    assert.match(css, /\.stolon-collapsible-section\.stolon-compact:not\(\.stolon-icon-aside\) > \.stolon-collapsible-bar > \.stolon-collapsible-aside \{[^}]*flex: 1 1 100%;/);
+    assert.match(css, /\.stolon-collapsible-section\.stolon-icon-aside > \.stolon-collapsible-bar \{ flex-wrap: nowrap; \}/);
+    assert.doesNotMatch(css, /\.stolon-compact > \.stolon-collapsible-bar > \.stolon-collapsible-aside/);
+});

@@ -10,12 +10,13 @@ import { fillAll } from './lib/dom.js';
 import type { BASE_TEXT } from './lib/stolon-text.js';
 import { colorClass, colorStyle } from './lib/color.js';
 
-/** What render returns for one card. icon leads it with an icon tile in place of its number, dot picks the status dot, and a disabled card is dimmed. */
+/** What render returns for one card. icon leads it with an icon tile in place of its number, dot picks the status dot, mono writes the subtitle in the mono font, and a disabled card is dimmed. */
 export interface CardSpec {
     icon?: string;
     iconColor?: string;
     title?: unknown;
     subtitle?: unknown;
+    mono?: boolean;
     badges?: Array<{ label: unknown; cls?: string }>;
     dot?: 'ok' | 'bad' | 'checking' | 'unknown' | 'none' | string;
     dotTitle?: unknown;
@@ -33,6 +34,7 @@ export interface SortableCardListOptions<T = any> {
     reorder?: boolean;
     collapsible?: boolean;
     numbered?: boolean;
+    mono?: boolean;
     escapeHtml?(str: unknown): string;
     moveUpTitle?: string;
     moveDownTitle?: string;
@@ -72,7 +74,7 @@ function dotHtml(dot: string, title: unknown): string {
  * @param listEl container element the cards render into
  * @param options {
  *   items         : array of records in priority order, replaced with setItems. Given items draw at once, wherever the list sits, such as in a closed section [optional]
- *   render        : function(item, index) returning { icon, iconColor, title, subtitle, badges: [{ label, cls }], dot: 'ok'|'bad'|'checking'|'unknown'|'none', dotTitle, disabled } [required]
+ *   render        : function(item, index) returning { icon, iconColor, title, subtitle, mono, badges: [{ label, cls }], dot: 'ok'|'bad'|'checking'|'unknown'|'none', dotTitle, disabled }, where mono writes that card's subtitle in the mono font and wins over the list's [required]
  *   editor        : element placed inside the open card's body [optional]
  *   onSelect      : function(index) called when a card opens, before the editor is placed [optional]
  *   onBeforeLeave : function(index) called when the open card is left, to read the editor back [optional]
@@ -80,6 +82,7 @@ function dotHtml(dot: string, title: unknown): string {
  *   reorder       : allow arrows and drag (default true)
  *   collapsible   : clicking the open head folds it and a chevron shows the state, where false keeps the open card open (default true)
  *   numbered      : lead a card with its place in the list when render gives no icon, where false leads it with nothing (default true)
+ *   mono          : true writes every subtitle in the mono font, for code like values such as addresses or paths, hidden at tablet width and below (default false, plain text that stays)
  *   escapeHtml    : function(str) returning a safe string (default the built in escaper)
  *   moveUpTitle   : tooltip of an up arrow (default 'Move up')
  *   moveDownTitle : tooltip of a down arrow (default 'Move down')
@@ -138,6 +141,11 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         return numbered ? '<span class="stolon-card-item-num">' + (index + 1) + '</span>' : '';
     }
 
+    // A card's own mono wins over the list's.
+    function isMono(spec: CardSpec): boolean {
+        return typeof spec.mono === 'boolean' ? spec.mono : !!options.mono;
+    }
+
     // Builds one card from a record.
     function renderCard(item: T, index: number): HTMLDivElement {
         var spec: CardSpec = options.render(item, index) || {};
@@ -156,7 +164,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
                         (dot !== 'none' ? dotHtml(dot, spec.dotTitle) : '') +
                         '<span>' + esc(spec.title) + '</span>' + badges +
                     '</div>' +
-                    (spec.subtitle ? '<div class="stolon-card-item-sub stolon-item-row-secondary">' + esc(spec.subtitle) + '</div>' : '') +
+                    (spec.subtitle ? '<div class="stolon-card-item-sub ' + (isMono(spec) ? 'stolon-mono' : 'stolon-card-item-sub-text') + ' stolon-item-row-secondary">' + esc(spec.subtitle) + '</div>' : '') +
                 '</div>' +
                 (reorder ? '<div class="stolon-card-item-arrows stolon-row-arrows"></div>' : '') +
                 (collapsible ? '<span class="stolon-collapsible-icon stolon-card-item-chevron material-icons" aria-hidden="true">expand_more</span>' : '') +

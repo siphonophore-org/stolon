@@ -29,6 +29,7 @@ const base = await window.__baseReady;
 const built = document.getElementById('built');
 [
     base.createInputField({ label: 'Port', type: 'number', min: 1, max: 65535, value: 8096, help: 'The port it listens on.' }),
+    base.createInputField({ label: 'Subdomain', value: 'media', suffix: '.example.com', help: 'The name in front of the base address.' }),
     base.createSelectField({ label: 'Mode', options: [{ value: 'Allow', text: 'Allowlist' }, { value: 'Block', text: 'Blocklist' }], value: 'Block', help: 'Which list the rules form.' }),
     base.createTextareaField({ label: 'Hosts', value: ['a.example', 'b.example'], help: 'One host per line.' }),
     base.createSecretField({ label: 'API token', stored: true, help: 'The token the server signs in with.' }),

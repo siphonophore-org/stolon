@@ -1,6 +1,7 @@
 // Behavior tests for createUsageMeter, run on the stub DOM in fake-dom.mjs.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { installFakeDom, all } from './fake-dom.mjs';
 
 var dom = installFakeDom();
@@ -56,4 +57,36 @@ test('a share past the total stays full, and a missing total shows an empty bar'
     assert.equal(over.element.querySelector('.stolon-usage-meter-fill').style.getPropertyValue('--stolon-usage-share'), '100%');
     var empty = createUsageMeter({ used: 5 });
     assert.equal(empty.element.querySelector('.stolon-usage-meter-fill').style.getPropertyValue('--stolon-usage-share'), '0%');
+});
+
+test('a badge shows in the head beside the label, as { label, color } or a node, and setBadge swaps or removes it', function () {
+    var meter = createUsageMeter({ label: 'Media', used: 40 * GB, total: 100 * GB, bytes: true, badge: { label: 'Healthy', color: 'green' } });
+    var head = meter.element.querySelector('.stolon-usage-meter-head');
+    assert.deepEqual(head.children.map(function (c) { return c.className; }), ['stolon-usage-meter-label', 'stolon-usage-meter-badge', 'stolon-usage-meter-text']);
+    var slot = head.querySelector('.stolon-usage-meter-badge');
+    assert.equal(slot.hidden, false);
+    assert.equal(slot.querySelector('.stolon-badge').className, 'stolon-badge stolon-green');
+    assert.equal(slot.textContent, 'Healthy');
+    meter.setBadge({ label: 'Failing', color: 'Errored' });
+    assert.equal(slot.querySelector('.stolon-badge').className, 'stolon-badge stolon-red');
+    meter.setBadge({ label: 'Odd', color: 'not-a-color' });
+    assert.equal(slot.querySelector('.stolon-badge').className, 'stolon-badge stolon-gray');
+    var own = dom.el('span', { class: 'stolon-dot' });
+    meter.setBadge(own);
+    assert.equal(slot.children[0], own);
+    meter.setBadge(null);
+    assert.equal(slot.hidden, true);
+    assert.equal(slot.children.length, 0);
+    var plain = createUsageMeter({ used: 1, total: 2 });
+    assert.equal(plain.element.querySelector('.stolon-usage-meter-badge').hidden, true);
+});
+
+test('a plain progress bar fill takes every named color and a hex code, and the meter shares those rules', function () {
+    var bar = readFileSync(new URL('../../src/css/progress-bar.css', import.meta.url), 'utf8');
+    ['green', 'red', 'orange', 'purple', 'blue', 'gray', 'yellow', 'pink', 'teal'].forEach(function (c) {
+        assert.match(bar, new RegExp('\\.stolon-progress-bar\\.stolon-' + c + ' \\{ background: var\\(--stolon-' + c + '-fg\\); \\}'));
+    });
+    assert.match(bar, /\.stolon-progress-bar\.stolon-custom \{ background: var\(--stolon-custom\); \}/);
+    var meter = readFileSync(new URL('../../src/css/usage-meter.css', import.meta.url), 'utf8');
+    assert.doesNotMatch(meter, /\.stolon-usage-meter-fill\.stolon-green/);
 });

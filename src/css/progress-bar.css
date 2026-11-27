@@ -16,6 +16,19 @@
     transition: width 0.3s ease;
 }
 
+/* A fill in a named color or a hex code in place of the accent, such as green for a finished download */
+/* Example: <div class="stolon-progress"><div class="stolon-progress-bar stolon-green" style="width: 100%"></div></div> */
+.stolon-progress-bar.stolon-green { background: var(--stolon-green-fg); }
+.stolon-progress-bar.stolon-red { background: var(--stolon-red-fg); }
+.stolon-progress-bar.stolon-orange { background: var(--stolon-orange-fg); }
+.stolon-progress-bar.stolon-purple { background: var(--stolon-purple-fg); }
+.stolon-progress-bar.stolon-blue { background: var(--stolon-blue-fg); }
+.stolon-progress-bar.stolon-gray { background: var(--stolon-gray-fg); }
+.stolon-progress-bar.stolon-yellow { background: var(--stolon-yellow-fg); }
+.stolon-progress-bar.stolon-pink { background: var(--stolon-pink-fg); }
+.stolon-progress-bar.stolon-teal { background: var(--stolon-teal-fg); }
+.stolon-progress-bar.stolon-custom { background: var(--stolon-custom); }
+
 /* A progress bar along the bottom edge of a button, which the task progress button draws, thin and starting empty */
 /* Example: <button class="stolon-button stolon-btn-progress-host"><span>Run</span><div class="stolon-progress-bar stolon-btn-progress" style="width: 40%"></div></button> */
 .stolon-progress-bar.stolon-btn-progress {

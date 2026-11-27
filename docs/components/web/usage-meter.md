@@ -7,6 +7,7 @@ A progress bar of how much of something is used, such as disk space, with a labe
 | When | Use |
 | :--- | :--- |
 | A used amount out of a known total, such as a cache, a drive, or a quota | Usage Meter |
+| A meter with a state beside its name, such as a drive's health | Usage Meter, with `badge: { label, color }` |
 | A task's progress | [Progress Ring](progress-ring.md) |
 | Comparing amounts with no total | [Bar Chart](bar-chart.md) |
 
@@ -20,12 +21,13 @@ view.querySelector('#meterHost').appendChild(meter.element);
 meter.setValue({ used: 20e9 });
 ```
 
-Classes: `stolon-usage-meter`, with the `stolon-warning` and `stolon-danger` modifiers, and the parts `stolon-usage-meter-head`, `stolon-usage-meter-label`, `stolon-usage-meter-text`, `stolon-usage-meter-bar`, `stolon-usage-meter-fill`, and `stolon-usage-meter-legend`. The handle is `{ element, getValue, setValue, destroy }`. `setValue` merges `{ used, total, parts }` and draws again.
+Classes: `stolon-usage-meter`, with the `stolon-warning` and `stolon-danger` modifiers, and the parts `stolon-usage-meter-head`, `stolon-usage-meter-label`, `stolon-usage-meter-badge`, `stolon-usage-meter-text`, `stolon-usage-meter-bar`, `stolon-usage-meter-fill`, and `stolon-usage-meter-legend`. The handle is `{ element, getValue, setValue, setBadge, destroy }`. `setValue` merges `{ used, total, parts }` and draws again.
 
 ## States and Modifiers
 
-* The bar is the [Progress Bar](progress-bar.md) track, `stolon-progress`, a narrow gap tall, with one `stolon-progress-bar` fill per part.
+* The bar is the [Progress Bar](progress-bar.md) track, `stolon-progress`, a narrow gap tall, with one `stolon-progress-bar` fill per part, colored by the Progress Bar's color classes.
 * `bytes: true` writes the amounts as sizes, such as 12.4 GB, through the shared size format. Otherwise `unit` follows a plain number, and `format(value)` replaces both.
+* `badge` shows in the head beside the label, before the line, as `stolon-usage-meter-badge`. It is `{ label, color }`, drawn as a [Badge](badge.md) whose color is a status color name, a hex code, or a badge state name, gray by default, or a node of the page's own, such as a status dot. `setBadge(badge)` replaces it, and `null` removes it.
 * `usedText` is "{used} of {total} used" by default, and also takes `{percent}`.
 * The meter takes `stolon-warning` at 80 percent and `stolon-danger` at 95 percent by default. Its line takes the same color.
 * `parts: [{ label, value, color }]` splits the used amount into segments, each in its color, a status color name or a hex code. A part with no color takes the chart series colors in turn. With two or more parts a legend lists each part and its amount. A segmented meter keeps its part colors past a threshold, and only its line turns orange or red.
@@ -47,6 +49,7 @@ A progress bar that shows how much of something is used, such as disk space, wit
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `label` | <code>string</code> | the name over the bar, such as 'Storage' [optional] |
+| `badge` | <code>UsageMeterBadge &#124; Node &#124; null</code> | { label, color } or a node shown in the head beside the label, such as a disk's state, color a status color name, a hex code, or a badge state name (default gray) [optional] |
 | `bytes` | <code>boolean</code> | true writes the numbers as sizes, such as 2.4 GB (default false) |
 | `unit` | <code>string</code> | text after plain numbers, such as 'items' [optional] |
 | `warning` | <code>number</code> | percent of the total from which the bar turns orange (default 80) |
@@ -58,17 +61,20 @@ A progress bar that shows how much of something is used, such as disk space, wit
 | :--- | :--- |
 | `getValue` | <code>(): UsageMeterValue</code> |
 | `setValue` | <code>(next: UsageMeterValue &#124; null): void</code> |
+| `setBadge` | <code>(badge: UsageMeterBadge &#124; Node &#124; null): void</code> |
 | `destroy` | <code>(): void</code> |
 
 | Type | What it is |
 | :--- | :--- |
 | `UsageMeterPart` | One part of a segmented usage meter, such as the space movies take. color is a status color name or a hex code. |
 | `UsageMeterValue` | What a usage meter shows: how much is used out of a total, or the parts that add up to what is used. |
+| `UsageMeterBadge` | A badge in a usage meter's head, such as the state of a disk. color is a status color name, a hex code, or a badge state name. |
 
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-usage-meter` | A progress bar of how much is used, with a label and an "X of Y used" line over it, and a legend under it when it holds several parts |
-| `stolon-progress.stolon-usage-meter-bar` | The bar, the progress bar's track a narrow gap tall, whose fills sit side by side, each as wide as its share |
+| `stolon-usage-meter-head` | The badge in the head, beside the label, such as a disk's state |
+| `stolon-progress.stolon-usage-meter-bar` | The bar, the progress bar's track a narrow gap tall, whose fills sit side by side, each as wide as its share, in the progress bar's colors |
 | `stolon-usage-meter.stolon-warning` | A meter past its warning share turns orange, and past its danger share turns red, with its line in the same color. A segmented meter keeps its part colors and colors only the line |
 | `stolon-usage-meter-legend` | The legend of a segmented meter: a swatch, a name, and an amount per part, wrapping as a row |
 

@@ -1,5 +1,6 @@
 import { make, clear, fillAll, formatBytes, nextId } from './lib/dom.js';
 import { applyColor } from './lib/color.js';
+import { makeBadge, badgeColor } from './lib/badge.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
 
@@ -17,9 +18,16 @@ export interface UsageMeterValue {
     parts?: UsageMeterPart[];
 }
 
-/** What createUsageMeter takes. bytes formats the numbers as sizes, and unit follows plain numbers. */
+/** A badge in a usage meter's head, such as the state of a disk. color is a status color name, a hex code, or a badge state name. */
+export interface UsageMeterBadge {
+    label: string;
+    color?: string;
+}
+
+/** What createUsageMeter takes. bytes formats the numbers as sizes, unit follows plain numbers, and badge shows beside the label. */
 export interface UsageMeterOptions extends UsageMeterValue {
     label?: string;
+    badge?: UsageMeterBadge | Node | null;
     bytes?: boolean;
     unit?: string;
     warning?: number;
@@ -28,10 +36,11 @@ export interface UsageMeterOptions extends UsageMeterValue {
     format?(value: number): string;
 }
 
-/** What createUsageMeter returns. setValue merges { used, total, parts } and draws again. */
+/** What createUsageMeter returns. setValue merges { used, total, parts } and draws again, and setBadge replaces the badge in the head. */
 export interface UsageMeterHandle extends ComponentHandle {
     getValue(): UsageMeterValue;
     setValue(next: UsageMeterValue | null): void;
+    setBadge(badge: UsageMeterBadge | Node | null): void;
     destroy(): void;
 }
 
@@ -47,6 +56,7 @@ function amount(n: unknown): number {
  *
  * @param options {
  *   label    : the name over the bar, such as 'Storage' [optional]
+ *   badge    : { label, color } or a node shown in the head beside the label, such as a disk's state, color a status color name, a hex code, or a badge state name (default gray) [optional]
  *   used     : how much is used (default the sum of the parts, else 0)
  *   total    : the whole (default 0, which shows an empty bar)
  *   parts    : [{ label, value, color }] that split what is used into segments, color a status color name or a hex code (default the series colors) [optional]
@@ -57,7 +67,7 @@ function amount(n: unknown): number {
  *   usedText : the line, where {used}, {total}, and {percent} are filled in (default '{used} of {total} used')
  *   format   : function(value) returning the text of an amount, which wins over bytes and unit [optional]
  * }
- * @returns { element, getValue, setValue, destroy }. setValue merges { used, total, parts } and draws again.
+ * @returns { element, getValue, setValue, setBadge, destroy }. setValue merges { used, total, parts } and draws again, and setBadge replaces the badge, or removes it with null.
  */
 export function createUsageMeter(options?: UsageMeterOptions): UsageMeterHandle {
     var opts = options || {};
@@ -71,8 +81,20 @@ export function createUsageMeter(options?: UsageMeterOptions): UsageMeterHandle 
     var labelId = nextId('usage');
     var labelEl = make('span', 'stolon-usage-meter-label', { id: labelId }, opts.label || '');
     var textEl = make('span', 'stolon-usage-meter-text');
+    var badgeSlot = make('span', 'stolon-usage-meter-badge');
     head.appendChild(labelEl);
+    head.appendChild(badgeSlot);
     head.appendChild(textEl);
+
+    function setBadge(next: UsageMeterBadge | Node | null | undefined): void {
+        clear(badgeSlot);
+        var node: Node | null = null;
+        if (next instanceof Node) node = next;
+        else if (next && next.label) node = makeBadge(next.label, badgeColor(next.color, 'gray'));
+        badgeSlot.hidden = !node;
+        if (node) badgeSlot.appendChild(node);
+    }
+    setBadge(opts.badge);
     var bar = make('div', 'stolon-progress stolon-usage-meter-bar', { role: 'meter', 'aria-valuemin': '0' });
     if (opts.label) bar.setAttribute('aria-labelledby', labelId);
     else bar.setAttribute('aria-label', stolonText('Stolon.Usage'));
@@ -134,6 +156,7 @@ export function createUsageMeter(options?: UsageMeterOptions): UsageMeterHandle 
             state = Object.assign({}, state, next || {});
             draw();
         },
+        setBadge: setBadge,
         destroy: function () { if (root.parentNode) root.parentNode.removeChild(root); }
     };
 }

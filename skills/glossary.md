@@ -112,7 +112,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Subsection title | A small, muted, uppercase heading that groups fields inside a section or form | `stolon-subsection-title` | Caption, label |
 | Static table | A plain bordered table for a few fixed rows, such as a summary | `stolon-static-table` | Simple table, plain grid |
 | Empty state | A boxed message, a compact message, or a small dimmed line for a region with nothing in it | `stolon-empty`, `stolon-empty-section`, `stolon-empty-inline` | No data, blank slate |
-| Progress bar | A thin accent bar over a faint track, such as a download in a row | `stolon-progress`, `stolon-progress-bar` | Loading bar |
+| Progress bar | A thin accent bar over a faint track, such as a download in a row, or a bar in a named color through a color class | `stolon-progress`, `stolon-progress-bar`, `stolon-progress-bar stolon-green` | Loading bar |
 | Record selector | A stacked dropdown with an action row under it, for picking one record and acting on it. The User Selector is built on it | `stolon-selector` | Record picker, record dropdown |
 | Reset group | A stack of rows that each pair an icon tile and a description with an action button, such as per table resets | `stolon-reset-group`, `stolon-reset-row`, `createResetGroup`, `createResetRow` | Danger zone, reset list |
 | Icon tile | The rounded icon square at the start of a collapsible header or a reset row, in the accent or a status color | `stolon-collapsible-tile`, `setCollapsibleTile`, `bindTileToSwitch` | Icon box, badge |
@@ -127,6 +127,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Editor sidecar | A sidecar that edits one record with Delete, Cancel, and Save | `openEditorSidecar` | Editor dialog, record dialog |
 | Collapsible | A section whose header shows and hides its body, with an optional icon tile, subtitle, and aside in its header. `initCollapsibles` binds the ones already in a page's markup | `stolon-collapsible-section`, `createCollapsibleSection`, `initCollapsibles` | Accordion |
 | Collapsible badge | The badge or status dot in a Collapsible's header, between its title and its chevron, set or removed after it is built | `setCollapsibleBadge` | Header tag, header chip |
+| Icon aside | A Collapsible's aside of icons alone, such as a Refresh icon button, which stays beside the title at every width | `stolon-icon-aside` | Inline aside, header icon |
 | Fixed panel | A Collapsible that never collapses, a framed block with the same header slots | `createCollapsibleSection({ collapsible: false })` | Card, locked section |
 | Tab bar | The dashboard tabs that `setTabs` wires | `setTabs` | Nav, menu |
 | Breadcrumbs | A trail of places that ends at the current one | `createBreadcrumbs` | Path bar, trail nav |
@@ -164,6 +165,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Spinner | A small spinning mark that shows work in progress | `createSpinner` | Loader |
 | Skeleton | Gray placeholder shapes shown while content loads | `createSkeleton` | Shimmer, loading box |
 | Timeline | A vertical list of events with time, title, and status | `createTimeline` | Activity feed, history list |
+| Timeline avatar | A timeline marker that is the item's author, a round picture the marker's size, or the person icon when there is none | `avatar`, `avatarLabel`, `stolon-timeline-avatar` | Author icon, profile marker |
 | Status dot | A small colored dot that shows a state | `createStatusDot`, `statusDotHtml`, `setDotColor` | Indicator light |
 | Avatar | A round image, or the person icon when there is none, that stands for a user | `createAvatar`, `createUserChip` | Profile picture |
 | Status card | A bordered card with an icon, a status pill, a bold title, one detail line, and an optional large value. It links or acts as a whole with `href` or `onClick` | `createStatusCard`, `stolon-status-card` | Stat card, metric tile, widget |
@@ -175,6 +177,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Pie chart | Shares of a whole as slices of a pie or a donut, with a legend of values and percents, on the chart core | `createPieChart` | Donut chart, ring chart |
 | Sparkline | A small line with no axes that shows the shape of a series | `createSparkline` | Mini chart, trend line |
 | Usage meter | A progress bar of how much of something is used, with an "X of Y used" line | `createUsageMeter` | Quota bar, capacity bar |
+| Meter badge | The badge in a usage meter's head beside its label, such as a disk's state | `badge`, `setBadge`, `stolon-usage-meter-badge` | Meter tag, meter status |
 | Relative time | A live time such as "3 minutes ago", on the clock core | `createRelativeTime` | Time ago, timestamp |
 | Relative time cell | A render function for a Data Table column or a Filtered List that draws a live Relative Time from each row | `renderRelative` | Time column, ago column |
 | Avatar stack | A row of overlapping avatars that folds the rest into a +N bubble | `createAvatarStack` | Face pile |
@@ -195,6 +198,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Rule operators | The operators the Rule Builder offers for each value type | `RULE_OPERATORS` | Comparators, conditions |
 | Ordered list | Rows the caller draws, each with up and down buttons | `createOrderedList` | Sortable list |
 | Sortable card list | Numbered cards that reorder and open to one shared editor | `createSortableCardList` | Card stack |
+| Mono subtitle | A card's subtitle in the mono font, for a code like value such as an address or a path. A subtitle is plain text otherwise | `mono`, `stolon-mono`, `stolon-card-item-sub-text` | Code line, address line |
 | Tag input | A free form field that turns typed text into tags | `createTagInput` | Token field |
 | Placeholder hint | A Placeholders toggle under a field that lists `{name}` buttons and inserts the pressed one at the cursor | `placeholderHint`, `bindPlaceholders`, `insertAtCursor` | Token picker, variable list |
 | Chip select | A search that picks many values shown as chips | `createChipSelect` | Multi combo |
@@ -243,6 +247,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Validation core | The one check every input goes through, with rules from its attributes and an optional `validate` function. Public through `index.ts` | `bindValidation`, `validateAll`, `validateValue`, `lib/validate.ts` | Validator, form check |
 | Validation messages | The default message for each rule, which a caller can replace | `VALIDATION_MESSAGES` | Error strings |
 | Field adornments | The arrows, picker icons, and search icon Stolon draws inside number, date, time, and search fields, bound with the validation core | `adornField`, `bindFieldAdornments` | Field decorations, spinners |
+| Field prefix, field suffix | Fixed text inside a text field's box, before or after what is typed, never part of the value and read as the field's description | `prefix`, `suffix`, `data-stolon-prefix`, `data-stolon-suffix`, `stolon-adorned-affix` | Addon, input group, decoration |
 | Field control core | One control built from a field spec, and a group of them with labels and messages, for the Repeater, the Rule Builder, the Matrix Grid, the Mapping Table, and the Data Table's row editor | `buildControl`, `createFieldGroup`, `lib/field-control.ts` | Field factory |
 | Row editor core | The move buttons and a keyed set of rows with Add and Remove that every row editor shares | `createRowSet`, `moveButtons`, `lib/row-editor.ts` | List editor |
 | Popover core | The placement, closing, and Escape handling of every floating panel | `anchorPopover`, `lib/popover.ts` | Dropdown helper |

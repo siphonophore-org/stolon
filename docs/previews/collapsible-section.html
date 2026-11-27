@@ -74,6 +74,8 @@ function badge(label, color) {
 const panels = document.getElementById('panels');
 panels.appendChild(base.createCollapsibleSection({ title: 'Movies', icon: 'video_library', subtitle: route('Main Server Movies', 'Movies'), aside: badge('Copy', 'gray'), collapsible: false, content: '<p>Storage settings for this library.</p>' }).element);
 panels.appendChild(base.createCollapsibleSection({ title: 'A Very Long Library Name That Ends in an Ellipsis', icon: 'music_note', iconColor: 'purple', subtitle: 'Main Server to This Server', aside: badge('Link', 'blue'), collapsible: false, content: '<p>The title ends in an ellipsis, and at phone width the badge goes under it.</p>' }).element);
+const refresh = base.h('button', { type: 'button', is: 'emby-button', class: 'stolon-row-btn', title: 'Refresh', 'aria-label': 'Refresh' }, [base.h('span', { class: 'material-icons', 'aria-hidden': 'true', text: 'refresh' })]);
+panels.appendChild(base.createCollapsibleSection({ title: 'Disks on this server and the network', icon: 'storage', aside: refresh, collapsible: false, content: '<p>An aside of icons alone stays beside the title at every width.</p>' }).element);
 const test = document.createElement('button');
 test.setAttribute('is', 'emby-button');
 test.type = 'button';

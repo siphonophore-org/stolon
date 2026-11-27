@@ -217,8 +217,11 @@ function html(parent, markup) {
     html(s, '<div class="stolon-selector">' +
         '<select class="stolon-selector-dropdown"><option>Primary record</option><option>Backup record</option></select>' +
         '<div class="stolon-selector-actions">' +
-            '<button class="stolon-button"><span class="material-icons">add</span><span>New</span></button>' +
-            '<button class="stolon-button"><span class="material-icons">delete</span><span>Delete</span></button>' +
+            '<button class="stolon-button stolon-primary"><span class="material-icons">add</span><span>New</span></button>' +
+            '<button class="stolon-button"><span class="material-icons">edit</span><span>Rename</span></button>' +
+            '<button class="stolon-button"><span class="material-icons">delete</span><span>Remove</span></button>' +
+            '<button class="stolon-button"><span class="material-icons">upload</span><span>Import</span></button>' +
+            '<button class="stolon-button"><span class="material-icons">download</span><span>Export</span></button>' +
         '</div></div>');
 })();
 
@@ -255,6 +258,7 @@ function html(parent, markup) {
     const cards = base.createSortableCardList(list, {
         items: records,
         editor: editor,
+        mono: true,
         render: (r) => ({ title: r.name, subtitle: r.url, dot: r.dot, disabled: r.disabled,
             badges: [{ label: r.mode, cls: r.mode === 'Both' ? 'purple' : r.mode === 'Send' ? 'blue' : 'green' }].concat(r.disabled ? [{ label: 'Disabled', cls: 'gray' }] : []) }),
         onMove: (from, to) => shared.setStatus('cardListStatus', 'Moved ' + (from + 1) + ' to ' + (to + 1), true)
@@ -1002,6 +1006,10 @@ function html(parent, markup) {
         { time: '10:06', title: 'One item skipped', status: 'orange' },
         { time: '10:07', title: 'Could not reach a server', body: 'The request timed out.', status: 'red' }
     ] }).element);
+    s.appendChild(base.createTimeline({ items: [
+        { time: 'Yesterday', title: 'Ada', body: 'Could you add the extended cut?', avatar: 'missing-picture.png', avatarLabel: 'Ada' },
+        { time: 'Today', title: 'Bob', body: 'Approved. It is on its way.', avatar: '', avatarLabel: 'Bob' }
+    ] }).element);
 })();
 
 
@@ -1192,7 +1200,7 @@ function html(parent, markup) {
         ['Checkbox', 'checkbox'], ['Collapsible section headers and panels', 'collapsible-section'], ['Status card', 'status-card'], ['Tool shell', 'tool-shell'],
         ['Definition list columns', 'definition-list'], ['Paginated table thumbnails', 'paginated-table'], ['Inherit field', 'inherit-field'], ['Repeater', 'repeater'], ['Rule builder', 'rule-builder'],
         ['Record list', 'record-list'], ['Tree view', 'tree-view'], ['Compare table', 'compare-table'], ['Matrix grid', 'matrix-grid'],
-        ['Bar chart', 'bar-chart'], ['Pie chart', 'pie-chart'], ['Line chart', 'line-chart'], ['Sparkline', 'sparkline'], ['Usage meter', 'usage-meter'],
+        ['Bar chart', 'bar-chart'], ['Pie chart', 'pie-chart'], ['Line chart', 'line-chart'], ['Sparkline', 'sparkline'], ['Usage meter', 'usage-meter'], ['Progress bar colors', 'progress-bar'], ['Field prefix and suffix', 'field-adornments'], ['Timeline avatars', 'timeline'], ['Record selector on a phone', 'record-selector'], ['Sortable card subtitles', 'sortable-card-list'],
         ['Relative time', 'relative-time'], ['Avatar stack', 'avatar-stack'], ['QR code', 'qr-code'], ['Audio player', 'audio-player'],
         ['Preview frame', 'preview-frame'], ['Notify preview', 'notify-preview'], ['Web push', 'web-push'], ['Form field builders', 'form-fields'], ['Save bars per section', 'save-bar'], ['Detail drawer', 'detail-drawer'], ['Setup checklist', 'setup-checklist'],
         ['User page', 'user-page'], ['User page invite', 'user-page-invite'], ['User page WireGuard', 'user-page-wireguard'],

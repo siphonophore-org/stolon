@@ -45,6 +45,13 @@
 .stolon-timeline-item.stolon-pink .stolon-timeline-marker { background: var(--stolon-pink-fg); }
 .stolon-timeline-item.stolon-teal .stolon-timeline-marker { background: var(--stolon-teal-fg); }
 .stolon-timeline-item.stolon-custom .stolon-timeline-marker { background: var(--stolon-custom-fg); color: var(--stolon-custom-on, var(--stolon-on-accent)); }
+
+/* A marker that is a user's round picture, or the person icon on the avatar's gray circle, the marker's size so the line still meets it */
+/* Example: <span class="stolon-timeline-marker stolon-timeline-avatar" aria-hidden="true"><span class="stolon-avatar stolon-avatar-small"><img class="stolon-avatar-image" src="ada.png" alt="Ada"></span></span> */
+.stolon-timeline-item .stolon-timeline-marker.stolon-timeline-avatar { background: transparent; color: inherit; }
+.stolon-timeline-avatar > .stolon-avatar { width: 100%; height: 100%; }
+.stolon-timeline-avatar .stolon-avatar-icon { font-size: var(--stolon-icon-small); }
+
 /* The title leads, centered on the marker, with the time and the text under it */
 .stolon-timeline-body { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; }
 .stolon-timeline-title { font-weight: 600; min-height: var(--stolon-icon-large); display: flex; align-items: center; }

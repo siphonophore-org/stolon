@@ -111,7 +111,7 @@ A collapsible header with an aside written by hand. A button cannot hold a contr
 </div>
 ```
 
-Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-section`, `stolon-collapsible-header`, `stolon-collapsible-title`, `stolon-collapsible-badge`, `stolon-collapsible-icon`, `stolon-collapsible-content`, `stolon-collapsible-actions`, `stolon-collapsible-tile`, `stolon-collapsible-heading`, `stolon-collapsible-subtitle`, `stolon-collapsible-aside`, `stolon-collapsible-bar`, and the `stolon-fixed`, `stolon-compact`, and `stolon-has-tile` modifiers.
+Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-section`, `stolon-collapsible-header`, `stolon-collapsible-title`, `stolon-collapsible-badge`, `stolon-collapsible-icon`, `stolon-collapsible-content`, `stolon-collapsible-actions`, `stolon-collapsible-tile`, `stolon-collapsible-heading`, `stolon-collapsible-subtitle`, `stolon-collapsible-aside`, `stolon-collapsible-bar`, and the `stolon-fixed`, `stolon-compact`, `stolon-has-tile`, and `stolon-icon-aside` modifiers.
 
 ## States and Modifiers
 
@@ -131,6 +131,7 @@ Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-sec
 * `aside` is a node at the right of the header, such as a badge, a button, or a toggle, centered on the header's line. `setAside` replaces it, and `null` empties it. A collapsible header with an aside sits in a `stolon-collapsible-bar` with the chevron beside it, so a control in the aside never sits inside the header button, and a click on the aside never toggles the section.
 * With any slot the title sits in `stolon-collapsible-heading` and ends in an ellipsis with its full text in its tooltip. A section with no slot keeps the plain markup above.
 * A section with an aside narrower than 480 pixels, by its own width, takes `stolon-compact` and puts the aside on its own line under the title, so the title is never squeezed. The heading keeps its own width, so the aside drops to its own line rather than covering the title. Hand written markup can add `stolon-compact` itself.
+* An aside of icons alone, such as a Refresh icon button, takes `stolon-icon-aside` on the section and stays beside the title at every width, since it never squeezes the title. The title ends in an ellipsis instead. Hand written markup can add `stolon-icon-aside` itself.
 * `collapsible: false` draws a fixed panel: the section takes `stolon-fixed` and `stolon-panel`, so it is framed on the panel surface, the header is a `div` with no chevron, it is always open, `setValue` does nothing, and `onToggle` never runs. `stolon-panel` on a collapsible section, through `className`, frames it the same way.
 * `stolon-flow` on `stolon-collapsible-content` lays the open section out as a [stack](utility-classes.md), one column of blocks a wide gap apart with their own margins zeroed. Add it in markup, or through the handle with `section.content.classList.add('stolon-flow')`. A closed section stays hidden. `stolon-divided` with it draws a line between its blocks, for groups of settings.
 * `numbered` on each section of a run numbers their titles 1, 2, 3 in order, for a form split into ordered steps. The number comes from a CSS counter, so markup holds no numbers, and a numbered title keeps the case it is written in. Sections that share a parent count as one run.
@@ -194,7 +195,7 @@ Builds a collapsible section, the same markup initCollapsibles binds, with an op
 | `icon` | <code>string</code> | a Material icon shown in a rounded tile before the title [optional] |
 | `iconColor` | <code>string</code> | the tile's status color name or hex code (default the accent) [optional] |
 | `subtitle` | <code>string &#124; Node &#124; null</code> | a dimmed line under the title, as text or a node such as a route [optional] |
-| `aside` | <code>Node &#124; null</code> | a node at the right of the header, such as a badge, a button, or a toggle, that goes under the title when the section is narrow [optional] |
+| `aside` | <code>Node &#124; null</code> | a node at the right of the header, such as a badge, a button, or a toggle, that goes under the title when the section is narrow. An aside of icons alone, such as a Refresh icon button, stays beside the title [optional] |
 | `collapsible` | <code>boolean</code> | false draws a fixed panel, framed, always open, with no chevron and a header that is not a button (default true) |
 | `onToggle` | <code>(open: boolean): void</code> | function(open) called when the header opens or closes it [optional] |
 
@@ -234,6 +235,7 @@ Builds a collapsible section, the same markup initCollapsibles binds, with an op
 | `stolon-collapsible-aside` | A node at the right of the header, such as a badge, a button, or a toggle, centered on the header's line |
 | `stolon-collapsible-bar` | The row of a collapsible header that has an aside: the header button, the aside beside it, and the chevron, since a button cannot hold a control |
 | `stolon-collapsible-section.stolon-compact` | A narrow section, chosen by its own width, puts its aside on a line of its own under the title |
+| `stolon-collapsible-section.stolon-icon-aside` | A section whose aside is icons alone, such as a Refresh icon button, keeps it beside the title at every width, set by createCollapsibleSection |
 | `stolon-collapsible-section.stolon-fixed` | A fixed panel, always open, whose header is a plain heading with no chevron |
 | `stolon-collapsible-section.stolon-panel` | A section on the panel surface, its header and body inset by the panel's padding, collapsible or fixed |
 

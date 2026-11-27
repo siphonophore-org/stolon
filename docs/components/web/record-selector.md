@@ -25,7 +25,8 @@ Classes: `stolon-selector`, `stolon-selector-dropdown`, `stolon-selector-actions
 
 ## States and Modifiers
 
-* The action row is optional, and its buttons do not grow.
+* The action row is optional. Its buttons keep their own widths and never wrap their labels.
+* On a phone, 600px and below, the dropdown stays full width and the buttons fill each row they wrap into, an even share of the row each, so New, Rename, Remove, Import, and Export make two clean rows.
 * The dropdown takes its fill, border, and chevron from [Form Fields](form-fields.md).
 * A record selector takes one wide gap below it on a config page and in a dialog, as the field containers do.
 

@@ -5,6 +5,7 @@
     display: block;
     width: 100%;
 }
+.stolon-adorned > label:empty { display: none; }
 .stolon-adorned > input {
     width: 100% !important;
     padding-right: calc(var(--stolon-field-pad) + var(--stolon-chevron-primary)) !important;
@@ -114,3 +115,24 @@
     opacity: 0.7;
     pointer-events: none;
 }
+
+/* Fixed text inside a text field's box, before or after what is typed, such as https:// or .example.com, dimmed and never part of the value */
+/* Example: <span class="stolon-adorned stolon-adorned-affix stolon-adorned-with-suffix stolon-adorned-end"><input type="text" data-stolon-suffix=".example.com" aria-describedby="affix-1"><span class="stolon-adorned-suffix" id="affix-1" aria-hidden="true">.example.com</span></span> */
+.stolon-adorned-affix > input {
+    padding-right: var(--stolon-field-pad) !important;
+}
+.stolon-adorned-with-prefix > input { padding-left: calc(var(--stolon-field-pad) + var(--stolon-adorned-prefix-room, 0px)) !important; }
+.stolon-adorned-with-suffix > input { padding-right: calc(var(--stolon-field-pad) + var(--stolon-adorned-suffix-room, 0px)) !important; }
+.stolon-adorned-end > input { text-align: right; }
+.stolon-adorned-prefix,
+.stolon-adorned-suffix {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: var(--stolon-field-font);
+    white-space: nowrap;
+    opacity: 0.7;
+    pointer-events: none;
+}
+.stolon-adorned-prefix { left: var(--stolon-field-pad); }
+.stolon-adorned-suffix { right: var(--stolon-field-pad); }

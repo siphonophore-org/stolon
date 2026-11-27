@@ -25,6 +25,7 @@ const colors = { Both: 'purple', Pull: 'green', Push: 'blue' };
 const cards = base.createSortableCardList(document.getElementById('serverList'), {
     items: servers,
     editor: document.getElementById('serverEditor'),
+    mono: true,
     render: (server) => ({
         title: server.name,
         subtitle: server.url,
@@ -38,10 +39,10 @@ cards.setSelected(0);
 const steps = [
     { icon: 'notifications', color: 'blue', title: 'Send a notification', subtitle: 'To every admin' },
     { icon: 'schedule', color: 'gray', title: 'Wait', subtitle: '5 minutes' },
-    { icon: 'terminal', title: 'Run a command', subtitle: 'curl -X POST http://hooks.local/refresh-library-with-a-long-address' }
+    { icon: 'terminal', title: 'Run a command', subtitle: 'curl -X POST http://hooks.local/refresh-library-with-a-long-address', mono: true }
 ];
 base.createSortableCardList(document.getElementById('stepList'), {
     items: steps,
-    render: (step) => ({ icon: step.icon, iconColor: step.color, title: step.title, subtitle: step.subtitle })
+    render: (step) => ({ icon: step.icon, iconColor: step.color, title: step.title, subtitle: step.subtitle, mono: step.mono })
 }).render();
 </script>

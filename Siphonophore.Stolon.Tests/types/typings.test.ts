@@ -369,3 +369,18 @@ saveBars.clean();
 saveBars.add(hostView, { tracker: { isDirty: true } });
 
 export { toolChanged, modeField, tokenField, portNumber, hostLines, onValue, pushScope, anyUnsaved, built, badgeMarkup, tileSwitch, resetGroup, chosen, counted, savedConfig, ran, page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn, shellSession, look, palette, markup, adopted, toaster };
+
+var subdomainField: B.InputFieldHandle = B.createInputField({ label: 'Subdomain', suffix: '.example.com', prefix: 'www.' });
+subdomainField.setSuffix('.home.arpa');
+subdomainField.setPrefix(null);
+// @ts-expect-error A suffix is text.
+B.createInputField({ label: 'Subdomain', suffix: 5 });
+B.createTimeline({ items: [{ title: 'Ada', body: 'Please add it.', avatar: '/Users/1/Images/Primary', avatarLabel: 'Ada' }, { title: 'Bob', avatar: function () { return null; } }] });
+// @ts-expect-error An avatar label is text.
+B.createTimeline({ items: [{ avatar: 'a.png', avatarLabel: 1 }] });
+var diskMeter: B.UsageMeterHandle = B.createUsageMeter({ label: '62%', used: 62, total: 100, badge: { label: 'Healthy', color: 'green' } });
+diskMeter.setBadge(document.createElement('span'));
+diskMeter.setBadge(null);
+// @ts-expect-error A meter badge needs its label.
+B.createUsageMeter({ badge: { color: 'green' } });
+B.createSortableCardList<Row>(view, { mono: true, render: function (row: Row) { return { title: row.name, subtitle: '10.0.0.1', mono: false }; } });
