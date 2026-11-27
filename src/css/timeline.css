@@ -45,10 +45,12 @@
 .stolon-timeline-item.stolon-pink .stolon-timeline-marker { background: var(--stolon-pink-fg); }
 .stolon-timeline-item.stolon-teal .stolon-timeline-marker { background: var(--stolon-teal-fg); }
 .stolon-timeline-item.stolon-custom .stolon-timeline-marker { background: var(--stolon-custom-fg); color: var(--stolon-custom-on, var(--stolon-on-accent)); }
-.stolon-timeline-body { min-width: 0; overflow-wrap: anywhere; }
-.stolon-timeline-time { display: block; font-size: 0.8em; opacity: 0.7; }
-.stolon-timeline-title { font-weight: 600; }
-.stolon-timeline-text { font-size: 0.9em; opacity: 0.85; margin-top: 2px; }
+/* The title leads, centered on the marker, with the time and the text under it */
+.stolon-timeline-body { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; }
+.stolon-timeline-title { font-weight: 600; min-height: var(--stolon-icon-large); display: flex; align-items: center; }
+.stolon-timeline-time { display: block; order: 1; font-size: 0.8em; opacity: 0.7; }
+.stolon-timeline-text { order: 2; font-size: 0.9em; opacity: 0.85; margin-top: 2px; }
+.stolon-timeline-body > :not(.stolon-timeline-title):not(.stolon-timeline-time):not(.stolon-timeline-text) { order: 3; }
 
 /* A block of mono text kept as written under an event's body, such as a log or a stack trace, which scrolls sideways inside itself */
 /* Example: <pre class="stolon-timeline-pre stolon-mono">Error: timeout</pre> */

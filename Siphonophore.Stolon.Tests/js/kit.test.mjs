@@ -165,7 +165,7 @@ test('openEditorSidecar disables Save while onSave is pending and re-enables it 
     handle.close();
 });
 
-test('openEditorSidecar draws extra actions on the shelf between Delete and Cancel, in button order', function () {
+test('openEditorSidecar draws extra actions on the shelf between Delete and Save, in button order', function () {
     var seen = [];
     var handle = openEditorSidecar({
         title: 'Edit Invite',
@@ -178,7 +178,7 @@ test('openEditorSidecar draws extra actions on the shelf between Delete and Canc
     });
     var row = handle.element.querySelector('.stolon-sidecar-shelf');
     var buttons = all(row, '.stolon-modal-button');
-    assert.deepEqual(buttons.map(function (b) { return b.textContent; }), ['Delete', 'Revoke', 'content_copyDuplicate', 'Send', 'Cancel', 'Save']);
+    assert.deepEqual(buttons.map(function (b) { return b.textContent; }), ['Delete', 'Revoke', 'content_copyDuplicate', 'Send', 'Save']);
     var duplicate = buttons[2];
     assert.ok(duplicate.classList.contains('stolon-button'));
     assert.ok(duplicate.classList.contains('stolon-secondary'), 'an action is secondary by default');
@@ -195,9 +195,9 @@ test('openEditorSidecar draws extra actions on the shelf between Delete and Canc
     handle.close();
 });
 
-test('openEditorSidecar with no actions keeps Delete, Cancel, and Save', function () {
+test('openEditorSidecar with no actions keeps Delete and Save', function () {
     var handle = openEditorSidecar({ title: 'Edit', onDelete: function () {} });
-    assert.deepEqual(all(handle.element, '.stolon-modal-button').map(function (b) { return b.textContent; }), ['Delete', 'Cancel', 'Save']);
+    assert.deepEqual(all(handle.element, '.stolon-modal-button').map(function (b) { return b.textContent; }), ['Delete', 'Save']);
     handle.close();
 });
 

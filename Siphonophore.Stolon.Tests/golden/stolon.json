@@ -319,7 +319,7 @@
     "dialog": 2469,
     "divider": 449,
     "duration-field": 3562,
-    "editor-sidecar": 2221,
+    "editor-sidecar": 2071,
     "field-adornments": 3783,
     "field-message": 2292,
     "file-picker": 2651,
@@ -385,7 +385,7 @@
     "poller": 716,
     "preview-frame": 3931,
     "progress-ring": 1504,
-    "prompt-sidecar": 2516,
+    "prompt-sidecar": 2386,
     "qr-code": 6512,
     "record-list": 2836,
     "relative-time": 3034,
@@ -430,5 +430,5 @@
     "web-push": 5144,
     "world-map": 6264
   },
-  "bytes": 635405
+  "bytes": 635125
 }

@@ -16,25 +16,25 @@ function buttonTexts() {
     return all(dom.document, '.stolon-modal-button').map(function (b) { return b.textContent; });
 }
 
-test('openEditorSidecar labels Cancel and Save by default and takes cancelText and saveText', function () {
+test('openEditorSidecar shows Save alone by default, leaving by the close button, and takes saveText', function () {
     var plain = openEditorSidecar({ title: 'Edit', isNew: true });
-    assert.deepEqual(buttonTexts(), ['Cancel', 'Save']);
+    assert.deepEqual(buttonTexts(), ['Save']);
     plain.close();
 
     var custom = openEditorSidecar({ title: 'Edit', isNew: true, cancelText: 'Discard', saveText: 'Apply' });
-    assert.deepEqual(buttonTexts(), ['Discard', 'Apply']);
+    assert.deepEqual(buttonTexts(), ['Apply']);
     custom.close();
 });
 
-test('promptSidecar submits with Save by default and submitText overrides it', async function () {
+test('promptSidecar submits with Save by default, submitText overrides it, and its close button resolves null', async function () {
     var first = promptSidecar([{ name: 'a', label: 'A' }], { title: 'Name' });
-    assert.deepEqual(buttonTexts(), ['Cancel', 'Save']);
-    dom.document.querySelectorAll('.stolon-modal-button')[0].click();
+    assert.deepEqual(buttonTexts(), ['Save']);
+    dom.document.querySelector('.stolon-dialog-close').click();
     assert.equal(await first, null);
 
     var second = promptSidecar([{ name: 'a', label: 'A' }], { title: 'Name', submitText: 'Create', cancelText: 'Back' });
-    assert.deepEqual(buttonTexts(), ['Back', 'Create']);
-    dom.document.querySelectorAll('.stolon-modal-button')[0].click();
+    assert.deepEqual(buttonTexts(), ['Create']);
+    dom.document.querySelector('.stolon-dialog-close').click();
     await second;
 });
 
@@ -71,14 +71,14 @@ test('a default label with no translation stays in US English, in sentence case'
     var list = createStringList({});
     assert.equal(list.element.querySelector('input').getAttribute('aria-label'), 'New item');
     var dialog = openEditorSidecar({ title: 'Edit', isNew: true });
-    assert.deepEqual(buttonTexts(), ['Cancel', 'Save']);
+    assert.deepEqual(buttonTexts(), ['Save']);
     dialog.close();
 });
 
-test('a Jellyfin string Stolon uses reads from the translations, such as Cancel', function () {
+test('a Jellyfin string Stolon uses reads from the translations, such as Save', function () {
     setCurrentTranslations(createTranslations({ ButtonCancel: 'Abbrechen', Save: 'Speichern' }, 'de'));
     var dialog = openEditorSidecar({ title: 'Edit', isNew: true });
-    assert.deepEqual(buttonTexts(), ['Abbrechen', 'Speichern']);
+    assert.deepEqual(buttonTexts(), ['Speichern']);
     dialog.close();
 });
 

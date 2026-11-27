@@ -1,6 +1,6 @@
 # Editor Sidecar
 
-The record editor a config page builds, in a [Sidecar](sidecar.md). Its shelf has Delete (unless the record is new), any extra actions, Cancel, and Save. It asks before it discards edits and tracks its own changes.
+The record editor a config page builds, in a [Sidecar](sidecar.md). Its shelf has Delete (unless the record is new), any extra actions, and Save, and the close button in its header leaves. It asks before it discards edits and tracks its own changes.
 
 ## Decision
 
@@ -34,9 +34,9 @@ It returns the `openSidecar` handle plus `isDirty()` and `markClean()`.
 * `page` is the `createConfigPage` handle. An open editor then counts toward `guardUnsaved` and closes when the page hides.
 * `isNew` marks a record not saved yet. It has no Delete button.
 * `serialize()` returns a stable string of the editor state. `ready` is a promise to wait on before taking the clean snapshot, for fields still loading.
-* `saveText`, `deleteText`, and `cancelText` replace "Save", "Delete", and "Cancel".
+* `saveText` and `deleteText` replace "Save" and "Delete". `cancelText` is accepted and unused, since the header's close button leaves.
 * `onSave(close)` returns `false`, or a promise of `false`, to stay open. Save is disabled while a returned promise is pending, and a rejection enables it again. A true or undefined result closes with `'saved'`.
-* `actions` adds buttons to the shelf, such as Duplicate. Each is `{ text, icon, variant, onClick(handle, button) }`, where `icon` is a Material icon name before the text and `variant` is `'secondary'` (default), `'primary'`, or `'destructive'`. The shelf reads Delete and any destructive action first, then the other actions, then Cancel, then Save. An action leaves the editor open, and `onClick` closes it through the handle when it should.
+* `actions` adds buttons to the shelf, such as Duplicate. Each is `{ text, icon, variant, onClick(handle, button) }`, where `icon` is a Material icon name before the text and `variant` is `'secondary'` (default), `'primary'`, or `'destructive'`. The shelf reads Delete and any destructive action first, then the other actions, then Save. An action leaves the editor open, and `onClick` closes it through the handle when it should.
 * `onDelete(close)` closes the sidecar itself. Delete shows only when this is set and `isNew` is false.
 * Dismissing with changes opens a compact destructive confirm, "Unsaved changes" over "Closing now loses your edits.", with Keep editing and Discard.
 
@@ -54,7 +54,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function openEditorSidecar(opts?: EditorSidecarOptions): EditorSidecarHandle</code>
 
-Opens an editor for one record in a sidecar, with Delete, Cancel, and Save on its shelf, and asks before it discards edits. Given the createConfigPage handle, it counts toward the page unsaved guard and closes when the page hides.
+Opens an editor for one record in a sidecar, with Delete and Save on its shelf and the header's close button to leave, and asks before it discards edits. Given the createConfigPage handle, it counts toward the page unsaved guard and closes when the page hides.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -65,7 +65,7 @@ Opens an editor for one record in a sidecar, with Delete, Cancel, and Save on it
 | `saveText` | <code>string</code> |  |
 | `deleteText` | <code>string</code> |  |
 | `cancelText` | <code>string</code> |  |
-| `actions` | <code>EditorSidecarAction[]</code> | [{ text, icon, variant, onClick(handle, button) }] extra shelf buttons, such as Duplicate, drawn after Delete and before Cancel. variant is 'secondary', 'primary', or 'destructive' (default 'secondary'), and a destructive one sits beside Delete [optional] |
+| `actions` | <code>EditorSidecarAction[]</code> | [{ text, icon, variant, onClick(handle, button) }] extra shelf buttons, such as Duplicate, drawn after Delete and before Save. variant is 'secondary', 'primary', or 'destructive' (default 'secondary'), and a destructive one sits beside Delete [optional] |
 
 | Handle member | Type |
 | :--- | :--- |

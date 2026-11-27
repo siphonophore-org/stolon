@@ -35,7 +35,7 @@ export interface EditorSidecarHandle extends SidecarHandle {
 }
 
 /**
- * Opens an editor for one record in a sidecar, with Delete, Cancel, and Save on its shelf, and asks before it discards edits. Given
+ * Opens an editor for one record in a sidecar, with Delete and Save on its shelf and the header's close button to leave, and asks before it discards edits. Given
  * the createConfigPage handle, it counts toward the page unsaved guard and closes when the page hides.
  *
  * @param opts {
@@ -44,8 +44,8 @@ export interface EditorSidecarHandle extends SidecarHandle {
  *   isNew      : true for a record not saved yet, which has no Delete button (default false)
  *   serialize  : function() returning a stable string of the editor's state, for its change tracking
  *   ready      : a promise to wait on before taking the clean snapshot, such as fields still loading [optional]
- *   saveText, deleteText, cancelText : button labels (default Save, Delete, Cancel)
- *   actions    : [{ text, icon, variant, onClick(handle, button) }] extra shelf buttons, such as Duplicate, drawn after Delete and before Cancel. variant is 'secondary', 'primary', or 'destructive' (default 'secondary'), and a destructive one sits beside Delete [optional]
+ *   saveText, deleteText : button labels (default Save, Delete). cancelText is accepted and unused, since the header's close button leaves
+ *   actions    : [{ text, icon, variant, onClick(handle, button) }] extra shelf buttons, such as Duplicate, drawn after Delete and before Save. variant is 'secondary', 'primary', or 'destructive' (default 'secondary'), and a destructive one sits beside Delete [optional]
  *   onSave     : function(close) returning false (or a promise of false) to stay open, such as on invalid input
  *   onDelete   : function(close) for Delete, which closes the sidecar itself when done [optional]
  *   onClose    : function(value) called once when the sidecar closes [optional]
@@ -64,14 +64,13 @@ export function openEditorSidecar(opts?: EditorSidecarOptions): EditorSidecarHan
     if (!opts.isNew && opts.onDelete) {
         buttons.push({ text: opts.deleteText || stolonText('Delete'), className: 'stolon-button stolon-destructive', action: function (close): void { opts.onDelete!(close); } });
     }
-    // The shelf reads destructive first, then the extra actions, then Cancel, then Save.
+    // The shelf reads destructive first, then the extra actions, then Save. The close button in the header leaves, asking first when there are edits.
     var extras = (opts.actions || []).filter(Boolean);
     var ordered = extras.filter(function (a) { return a.variant === 'destructive'; }).concat(extras.filter(function (a) { return a.variant !== 'destructive'; }));
     ordered.forEach(function (a) {
         var variant = a.variant === 'primary' || a.variant === 'destructive' ? a.variant : 'secondary';
         buttons.push({ text: a.text, icon: a.icon, className: 'stolon-button stolon-' + variant, action: function (close, dismiss, btn): void { a.onClick(handle, btn); } });
     });
-    buttons.push({ text: opts.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close, dismiss): void { dismiss(); } });
     // Save stays disabled while onSave is pending, and a rejection re-enables it since onSave reports its own error.
     var busy: boolean = false;
     buttons.push({

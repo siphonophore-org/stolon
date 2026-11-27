@@ -32,7 +32,7 @@ export interface PromptSidecarOptions {
  * the validation core and stays open while one is invalid, with focus on the first.
  *
  * @param fields [{ name, label, description, type, value, placeholder, required, min, max, options, validate }], where type is text, number, password, textarea, or select (default text), a select reads options as [{ value, label }], description is a sentence under the field, and validate(value) returns an error sentence or an empty value
- * @param opts { title, subtitle, submitText (default 'Save'), cancelText (default 'Cancel') } [optional]
+ * @param opts { title, subtitle, submitText (default 'Save'), cancelText (accepted and unused, since the header's close button leaves) } [optional]
  */
 export function promptSidecar(fields: PromptSidecarField[], opts?: PromptSidecarOptions): Promise<Record<string, string> | null> {
     opts = opts || {};
@@ -103,7 +103,6 @@ export function promptSidecar(fields: PromptSidecarField[], opts?: PromptSidecar
             subtitle: opts.subtitle,
             body: form,
             buttons: [
-                { text: opts.cancelText || stolonText('ButtonCancel'), className: 'stolon-button stolon-secondary', action: function (close): void { close(null); } },
                 { text: opts.submitText || stolonText('Save'), className: 'stolon-button stolon-primary', action: function (close): void { submit(close); } }
             ],
             onClose: function (value: Record<string, string> | null): void {
