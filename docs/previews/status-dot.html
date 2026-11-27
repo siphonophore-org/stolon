@@ -5,4 +5,8 @@ const base = await window.__baseReady;
 const mount = document.getElementById('mount');
 mount.style.cssText = 'display:flex;align-items:center;gap:12px';
 ['green', 'red', 'orange', 'purple', 'blue', 'gray'].forEach((color) => mount.appendChild(base.createStatusDot({ color }).element));
+const live = document.createElement('span');
+live.innerHTML = base.statusDotHtml('orange', 'Checking');
+mount.appendChild(live);
+setTimeout(() => base.setDotColor(live.querySelector('.stolon-dot'), 'green', 'Reachable'), 1500);
 </script>

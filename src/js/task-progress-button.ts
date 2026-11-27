@@ -1,4 +1,5 @@
 import { createProgressRing } from './progress-ring.js';
+import { stolonText } from './lib/stolon-text.js';
 import type { ProgressRingHandle } from './progress-ring.js';
 import type { TaskProgressHandle, ScheduledTaskInfo } from './types.js';
 
@@ -109,4 +110,25 @@ export function pollTaskProgress(btn: HTMLButtonElement, taskKey: string, label:
     }, socketBound ? 5000 : 1000);
 
     return { cancel: finish };
+}
+
+/**
+ * Starts a Jellyfin scheduled task by its key, then follows it on a button as pollTaskProgress does. The bag calls it as shared.runScheduledTask.
+ *
+ * @param btn the button that starts the task
+ * @param taskKey key of the scheduled task
+ * @param label button text, which the percent follows while it runs
+ * @param onComplete function called once when the task finishes [optional]
+ * @returns a promise of the progress handle, which rejects when the task is not found or could not start
+ */
+export function runScheduledTask(btn: HTMLButtonElement, taskKey: string, label: string, onComplete?: () => void): Promise<TaskProgressHandle> {
+    var client = ApiClient!;
+    return client.getScheduledTasks().then(function (tasks) {
+        var task = (tasks || []).filter(function (t: ScheduledTaskInfo) { return t && t.Key === taskKey; })[0] as ScheduledTaskInfo | undefined;
+        if (!task || !task.Id) throw new Error(stolonText('Stolon.RequestFailed') + ' (' + taskKey + ')');
+        if (client.startScheduledTask) return client.startScheduledTask(task.Id);
+        return client.fetch({ url: client.getUrl('ScheduledTasks/Running/' + encodeURIComponent(task.Id)), type: 'POST' });
+    }).then(function () {
+        return pollTaskProgress(btn, taskKey, label, onComplete);
+    });
 }

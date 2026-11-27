@@ -17,6 +17,13 @@ import { createStatusDot } from './configurationpage?name=myplugin_stolon.js';
 cell.appendChild(createStatusDot({ color: 'green', label: 'Reachable' }).element);
 ```
 
+```js
+import { statusDotHtml, setDotColor } from './configurationpage?name=myplugin_stolon.js';
+
+title.innerHTML = statusDotHtml('gray', 'Checking') + escapeHtml(server.Name);
+setDotColor(title.querySelector('.stolon-dot'), reachable ? 'green' : 'red', reachable ? 'Reachable' : 'Unreachable');
+```
+
 Class: `stolon-dot`. The handle is `{ element, getValue, setValue, destroy }`.
 
 ## States and Modifiers
@@ -25,6 +32,8 @@ Class: `stolon-dot`. The handle is `{ element, getValue, setValue, destroy }`.
 * `label` defaults to the meaning of the color: "Active" for green, "Error" for red, "Waiting" for orange, "Working" for purple, "Info" for blue, "Off" for gray, and "Note" for the rest.
 * `getValue()` returns `{ color, label }` as drawn, and `setValue({ color, label })` redraws it.
 * The dot has `role="img"`, and a title and `aria-label`.
+* `statusDotHtml(color, label)` builds the same dot as markup, for a row drawn as text. The label is escaped.
+* `setDotColor(el, color, label)` recolors a dot already on the page in place, so a live check never redraws the row. It names the dot by the label, or the color's meaning. A dot marked `aria-hidden="true"` keeps no name unless a label is given.
 * The [Sortable Card List](sortable-card-list.md) draws its card dots as this dot.
 
 ## Reference
@@ -32,6 +41,18 @@ Class: `stolon-dot`. The handle is `{ element, getValue, setValue, destroy }`.
 Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this section.
 
 <!-- reference:start -->
+
+### `statusDotHtml`
+
+<code>function statusDotHtml(color: unknown, label?: unknown): string</code>
+
+Builds the markup of the dot createStatusDot draws, for a page or component that renders text. The label is escaped.
+
+### `setDotColor`
+
+<code>function setDotColor(el: HTMLElement, color: unknown, label?: unknown): void</code>
+
+Recolors a dot already on the page, such as one statusDotHtml drew, in place. A dot a screen reader reads takes the label, or the color's meaning, as its title and accessible name. A dot marked aria-hidden keeps its own.
 
 ### `createStatusDot`
 

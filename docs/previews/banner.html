@@ -6,4 +6,5 @@ const mount = document.getElementById('mount');
 ['info', 'success', 'warn', 'error', 'neutral'].forEach((kind) => {
     mount.appendChild(base.createBanner({ kind, title: kind === 'warn' ? 'Back up first' : '', text: 'This is a ' + kind + ' banner.' }).element);
 });
+mount.appendChild(base.createBanner({ kind: 'error', text: 'Two disks need a look.', items: ['media1 is 98% full.', 'media2 went missing 2 hours ago.'], dismissible: false }).element);
 </script>

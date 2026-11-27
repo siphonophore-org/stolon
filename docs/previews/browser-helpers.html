@@ -11,7 +11,8 @@ const items = [
     { label: 'plural', value: base.plural(1, 'item') + ', ' + base.plural(3, 'item') + ', ' + base.plural(2, 'child', 'children'), mono: true },
     { label: 'escapeHtml', value: base.escapeHtml('<b>"Tom" & Jerry</b>'), mono: true },
     { label: 'generateGuid', value: base.generateGuid(), mono: true },
-    { label: 'generateGuid compact', value: base.generateGuid({ compact: true }), mono: true }
+    { label: 'generateGuid compact', value: base.generateGuid({ compact: true }), mono: true },
+    { label: 'h', value: base.h('div', { class: ['a', null, 'b'], title: 'Tip', hidden: false }, ['text', base.make('span', 'c', null, 'child')]).outerHTML, mono: true }
 ];
 list.setItems(items);
 base.errorText(new Response(JSON.stringify({ title: 'Bad request' }), { status: 400 }), 'Could not save.')

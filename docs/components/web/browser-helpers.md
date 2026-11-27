@@ -1,6 +1,6 @@
 # Browser Helpers
 
-Small functions exported from the bundle for what a plugin otherwise rewrites. Each one is also on the [Shared Bag](shared-bag.md), and `copyWithFeedback` and `fetchObjectUrl` live only there.
+Small functions exported from the bundle for what a plugin otherwise rewrites. Each one is also on the [Shared Bag](shared-bag.md), and `copyWithFeedback` and `fetchObjectUrl` live only there. The element builders `make` and `h` are exported on their own.
 
 ## Decision
 
@@ -9,6 +9,10 @@ Small functions exported from the bundle for what a plugin otherwise rewrites. E
 | Every value placed into HTML a component builds from a string | `escapeHtml` |
 | Any count in a label | `plural` |
 | A plural built by hand, such as `n + ' items'` | `plural` instead |
+| A count in a translated sentence | `t.plural` on the [Translations](translations.md) handle |
+| Markup drawn in script, with Jellyfin fields and listeners | `h` |
+| One element with a class and some text | `make` |
+| A string of markup a component renders as text | `escapeHtml` and the markup helpers, such as `badgeHtml` and `statusDotHtml` |
 
 ## Usage
 
@@ -22,6 +26,33 @@ shared.saveConfig(config).catch(function (err) {
     errorText(err, 'Save failed.').then(function (text) { shared.setStatus('saveStatus', text, true); });
 });
 ```
+
+```js
+import { h } from './configurationpage?name=myplugin_stolon.js';
+
+var name = h('input', { type: 'text', is: 'emby-input', id: 'txtName', label: 'Name', required: true });
+var field = h('div', { class: 'inputContainer' }, [name, h('div', { class: 'fieldDescription', text: 'Shown on the card.' })]);
+var button = h('button', { is: 'emby-button', type: 'button', class: ['raised', 'stolon-button', dirty && 'stolon-primary'], on: { click: save } }, [h('span', { text: 'Save' })]);
+view.querySelector('#form').appendChild(field);
+```
+
+## Element Builders
+
+`h(tag, attrs, children)` builds an element with its attributes, listeners, and children. `make(tag, className, attrs, text)` builds one element with a class and some text.
+
+* `class` takes a string or a list, whose empty entries are skipped. `text` sets the text before the children.
+* `on` takes listeners by event type, such as `{ click: fn }`.
+* `is` names a Jellyfin element: `emby-input`, `emby-checkbox`, `emby-select`, `emby-button`, or `emby-textarea`.
+* Any other name sets that attribute as text. `true` sets it empty, and `null`, `undefined`, and `false` leave it out.
+* Children are nodes or text, in order. `null`, `undefined`, and `false` are skipped, so `cond && node` works.
+
+The web client upgrades a Jellyfin element when it joins the page, not when it is made. Build to these rules.
+
+* Set `is` as an attribute, as `h` does. `document.createElement(tag, { is })` upgrades at once, and an `emby-input` with no parent yet throws.
+* Build the whole field detached, then append it once. An `emby-checkbox` reads its parent `label` and the `span` in it, and an `emby-input`, `emby-select`, or `emby-textarea` puts its label before itself, so each needs its parent in place when it joins.
+* Give an `emby-input`, `emby-select`, or `emby-textarea` its text in a `label` attribute. Give an `emby-checkbox` a `label` parent with a `span` after it.
+* Never add the `emby-input`, `emby-select`, or `emby-textarea` class yourself. An element that already has it is taken as upgraded, and gets no label.
+* Set `is` before the element joins the page, since the upgrade runs as it joins.
 
 ## States and Modifiers
 

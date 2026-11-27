@@ -152,6 +152,7 @@ test('generateGuid gives 32 hex digits when compact', function () {
 | :--- | :--- |
 | Data view, popover, row editor, selection, thumb, typeahead, validation | Their own file, such as `validate.test.mjs` and `selection.test.mjs` |
 | Badge core | `badge.test.mjs`, with the Badge |
+| DOM helpers | `dom.test.mjs` for the element builders, and the files of the components that use the rest |
 | Checkbox core, card, message, pressed group | `shared-bases.test.mjs`, which tests the shared bases a family inherits, along with the List's keyed redraw |
 | The Filtered List features every list variation inherits | `filtered-list-parity.test.mjs` |
 | Chart, clock, QR, balance | The file of the component that owns them, `bar-chart.test.mjs`, `relative-time.test.mjs`, `qr-code.test.mjs`, and `balanced-rows.test.mjs` |

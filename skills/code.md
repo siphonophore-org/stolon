@@ -57,7 +57,7 @@ Stolon is a set of base components and cores, with thin variations on top. A var
 | Push core, `lib/push.ts` | Web Push, which adds the sentences, and the standalone page script, which `lib/page-script.ts` builds into `StolonPageScript` with the state codes alone |
 | DOM helpers, `lib/dom.ts` | Nearly every component and core. See [Shared Helpers](#shared-helpers) |
 
-Three cores are public API. `src/js/index.ts` exports the color core, the validation core, and the world shapes, so a rename in them is a [stop and ask](../starthere.md#stop-and-ask) item like any other export.
+Three cores are public API. `src/js/index.ts` exports the color core, the validation core, and the world shapes, so a rename in them is a [stop and ask](../starthere.md#stop-and-ask) item like any other export. It also exports the element builders `make` and `h` from the DOM helpers and `badgeHtml` from the badge core, under the same rule.
 
 ### Add a Component
 
@@ -86,6 +86,7 @@ A helper exists once, and two helpers never share a name with different output. 
 
 * Clock time, such as `1:30:00`, is `clockText` in `lib/dom.ts`. The Audio Player, the Relative Time countdown, and the bag's `formatDuration` all call it.
 * Duration in units, such as `1h 30m`, is the Duration Field's `durationText`.
+* An element built in script comes from `h` or `make` in `lib/dom.ts`. `h` sets a Jellyfin element's `is` as an attribute, so the web client upgrades it when it joins the page.
 * Text matching is `matchesText`, ids are `idOf`, sizes are `formatBytes`, and focus after a remove is `focusAfterRemove`, all in `lib/dom.ts`. Debounce is `debounce` and plurals are `plural`, in `browser-helpers.ts`.
 
 ## Compatibility

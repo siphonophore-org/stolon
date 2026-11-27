@@ -17,7 +17,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | License | The GNU General Public License v3.0 the package ships under, as the plugins do | `LICENSE`, `GPL-3.0-only` | MIT, open source terms |
 | Consumer | A plugin that references the package | | Client, host, dependent |
 | Component | One reusable piece, a CSS file, a TypeScript module, a template, or a C# helper | | Widget, control, module |
-| Core | Shared code in `src/js/lib/` that a family of components is built on, with no CSS file of its own. Most cores are internal. `index.ts` makes the color core, the validation core, and the world shapes public | `src/js/lib/*.ts` | Engine, base class, mixin |
+| Core | Shared code in `src/js/lib/` that a family of components is built on, with no CSS file of its own. Most cores are internal. `index.ts` makes the color core, the validation core, and the world shapes public, with `make` and `h` from the DOM helpers and `badgeHtml` from the badge core | `src/js/lib/*.ts` | Engine, base class, mixin |
 | Stolon component | A public component that other components are built on, such as the List or the Filtered List | | Parent, superclass |
 | Variation | A thin component on a base component or a core that adds only its own options and look | | Fork, copy, subclass |
 | Helper | A C# type in `src/` that a plugin calls | `src/*.cs` | Utility class, service |
@@ -77,7 +77,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Surface | The background of a panel or dialog | `--stolon-surface` | Panel color |
 | Fallback | A plain rule kept for an engine that cannot read `color-mix()` or `:is()` | | Polyfill, hack |
 | Callout | A soft inline notice in one status color | `stolon-callout-info`, `stolon-callout-success`, `stolon-callout-warn`, `stolon-callout-error`, `stolon-callout-neutral` | Alert |
-| Badge | A pill that holds a short status label | `stolon-badge` | Chip, label |
+| Badge | A pill that holds a short status label | `stolon-badge`, `badgeHtml` | Chip, label |
 | Badge states | The one map from every state a badge shows to its color, which a plugin maps its own statuses onto | `BADGE_STATES` | Status map, state colors |
 | Count card | A count over a label inside `stolon-cards`, the count in its status color, in the status card's look | `stolon-card` | Tile, counter |
 | Status page | The themed standalone card page that `StatusPage` renders | `StatusPage`, `status.html` | Error page, landing page |
@@ -107,7 +107,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Empty state | A boxed message, a compact message, or a small dimmed line for a region with nothing in it | `stolon-empty`, `stolon-empty-section`, `stolon-empty-inline` | No data, blank slate |
 | Progress bar | A thin accent bar over a faint track, such as a download in a row | `stolon-progress`, `stolon-progress-bar` | Loading bar |
 | Record selector | A stacked dropdown with an action row under it, for picking one record and acting on it. The User Selector is built on it | `stolon-selector` | Record picker, record dropdown |
-| Reset group | A stack of rows that each pair a description with an action button, such as per table resets | `stolon-reset-group`, `stolon-reset-row` | Danger zone, reset list |
+| Reset group | A stack of rows that each pair an icon tile and a description with an action button, such as per table resets | `stolon-reset-group`, `stolon-reset-row`, `createResetGroup`, `createResetRow` | Danger zone, reset list |
+| Icon tile | The rounded icon square at the start of a collapsible header or a reset row, in the accent or a status color | `stolon-collapsible-tile`, `setCollapsibleTile`, `bindTileToSwitch` | Icon box, badge |
 | Tags | Removable chips that wrap, drawn by the Chip Select, the Tag Input, and the Placeholder Hint | `stolon-tags`, `stolon-tag` | Tokens, labels |
 | Toggle group | A wrapping row of pills for choosing any number of options, whose pressed state the page owns | `stolon-toggle` | Checkbox pills, filter chips |
 | Unsaved indicator | A small dot and text that fades in to flag unsaved changes, in a heading or a label | `stolon-unsaved` | Dirty flag, change marker |
@@ -154,7 +155,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Spinner | A small spinning mark that shows work in progress | `createSpinner` | Loader |
 | Skeleton | Gray placeholder shapes shown while content loads | `createSkeleton` | Shimmer, loading box |
 | Timeline | A vertical list of events with time, title, and status | `createTimeline` | Activity feed, history list |
-| Status dot | A small colored dot that shows a state | `createStatusDot` | Indicator light |
+| Status dot | A small colored dot that shows a state | `createStatusDot`, `statusDotHtml`, `setDotColor` | Indicator light |
 | Avatar | A round image, or the person icon when there is none, that stands for a user | `createAvatar`, `createUserChip` | Profile picture |
 | Status card | A bordered card with an icon, a status pill, a bold title, one detail line, and an optional large value. It links or acts as a whole with `href` or `onClick` | `createStatusCard`, `stolon-status-card` | Stat card, metric tile, widget |
 | Status card grid | Status cards in balanced rows | `createStatusCardGrid`, `stolon-status-cards` | Card wall, dashboard grid |
@@ -278,7 +279,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | JSON import | Opening a file picker and reading the chosen JSON file | `pickJsonFile` | Upload, restore |
 | Copy | Putting text on the clipboard, with a fallback for HTTP dashboards | `copyToClipboard` | Clip, yank |
 | Debounce | Running a function once calls pause, with the latest arguments | `debounce` | Throttle, delay |
-| Plural | A count with its word, singular only for exactly 1 | `plural` | Pluralize, count label |
+| Plural | A count with its word, singular only for exactly 1. The translations handle's `plural` picks a string key the same way | `plural`, `t.plural` | Pluralize, count label |
+| Element builder | A function that builds an element with its attributes and children in one call | `make`, `h` | createElement wrapper, hyperscript, el |
 
 ## C# Helpers
 

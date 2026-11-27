@@ -22,6 +22,11 @@ import { BADGE_STATES } from './configurationpage?name=myplugin_stolon.js';
 container.innerHTML = shared.badge('green', 'Active') + shared.statusBadge('Queued', 'Queued');
 ```
 
+```js
+import { badgeHtml } from './configurationpage?name=myplugin_stolon.js';
+row.innerHTML = '<td>' + badgeHtml(item.Status, item.Status, 'medium') + '</td>';
+```
+
 Classes: `stolon-badge`, `stolon-table-status-badge`.
 
 ## States and Modifiers
@@ -29,6 +34,7 @@ Classes: `stolon-badge`, `stolon-table-status-badge`.
 * Color names for `stolon-badge`: `green`, `red`, `orange`, `purple`, `blue`, `gray`, `yellow`, `pink`, and `teal`.
 * State names for `stolon-table-status-badge`: Active, Synced, Downloaded, Completed, and Enabled are green. Disabled, Errored, Error, Deleting, Pending-Deletion, and Failed are red. Expired, Queued, and Paused are orange. Locked, Running, Downloading, Pending, and Pending-Download are purple. Admin, Imported, and Pending-Replacement are blue. Ignored, Group, Skipped, and Unknown are gray.
 * `BADGE_STATES` is `{ names, colors, stateColors }`, the one source of truth for mapping a status code to a badge. `stateColors` gives the color each state name draws in.
+* `badgeHtml(label, color, size, className)` builds the badge markup every component draws. It escapes the label, and `color` is a color name, a hex code, or a state name such as `Errored`. `size` is `small` (default), `medium`, or `large`, and `className` adds the caller's classes.
 * `shared.badge(cls, label)` escapes the label. A color name or hex code in `cls` colors it, `medium` or `large` sizes it, and any other word stays as a class reduced to letters, digits, `_`, and `-`.
 * `shared.statusBadge(text, stateClass)` draws a `stolon-badge` in the color `stateColors` gives the state, or in the color itself when `stateClass` is a color name or a hex code, and keeps `stolon-table-status-badge` and the state name as classes, such as `<span class="stolon-badge stolon-orange stolon-table-status-badge stolon-Queued">`.
 * Every badge Stolon draws, in the bag, the [Media Card](media-card.md), and the [Sortable Card List](sortable-card-list.md), comes from one badge maker, so they look the same.

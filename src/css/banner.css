@@ -13,3 +13,8 @@
 /* Example: <div class="stolon-banner-body"><div class="stolon-banner-text">Settings changed.</div><div class="stolon-button-row stolon-banner-actions"><button class="raised stolon-button stolon-small stolon-primary">Apply</button></div></div> */
 .stolon-banner-actions { display: flex; flex-wrap: wrap; gap: var(--stolon-gap-narrow); margin-top: var(--stolon-gap-narrow); }
 .stolon-banner-actions[hidden] { display: none; }
+
+/* A bulleted list under a banner's text, one line per item */
+/* Example: <div class="stolon-banner-body"><div class="stolon-banner-text">Two disks need a look.</div><ul class="stolon-banner-list"><li>media2 is missing.</li></ul></div> */
+.stolon-banner-list { margin: 0; padding-left: var(--stolon-gap-wide); }
+.stolon-banner-list[hidden] { display: none; }

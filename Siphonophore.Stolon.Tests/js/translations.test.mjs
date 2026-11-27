@@ -227,3 +227,11 @@ test('every key of Stolon\'s own text is drawn by some component', function () {
         .join('\n');
     assert.deepEqual(Object.keys(BASE_TEXT).filter(function (k) { return sources.indexOf("'" + k + "'") === -1; }), []);
 });
+
+test('plural picks the one key for exactly 1 and the many key for any other count, with the count as {0}', function () {
+    var t = createTranslations({ OneMoved: '{0} user moved to {1}.', ManyMoved: '{0} users moved to {1}.' });
+    assert.equal(t.plural(1, 'OneMoved', 'ManyMoved', 'Kids'), '1 user moved to Kids.');
+    assert.equal(t.plural(0, 'OneMoved', 'ManyMoved', 'Kids'), '0 users moved to Kids.');
+    assert.equal(t.plural(3, 'OneMoved', 'ManyMoved'), '3 users moved to {1}.');
+    assert.equal(t.plural(2, 'Missing', 'AlsoMissing'), 'AlsoMissing');
+});

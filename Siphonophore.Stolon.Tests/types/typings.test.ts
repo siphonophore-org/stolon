@@ -146,8 +146,8 @@ B.createToolShell({ tools: [{ icon: 'dns' }] });
 B.confirmDialog('Remove it?').then(function (yes: string) { return yes; });
 // @ts-expect-error A secret field is an input.
 B.readSecretField('field');
-// @ts-expect-error lib/dom helpers are not exported from the bundle.
-B.make('div');
+// @ts-expect-error The other lib/dom helpers are not exported from the bundle.
+B.icon('close');
 // @ts-expect-error classNames is not exported from the bundle.
 B.classNames('a');
 // @ts-expect-error minWidth is a number of pixels.
@@ -271,6 +271,29 @@ B.webCard({ image: 'a.jpg' });
 // @ts-expect-error A menu entry needs its text.
 B.startWebClientShell({ menuItems: [{ icon: 'star' }] });
 
+var built: HTMLInputElement = B.h('input', { type: 'checkbox', is: 'emby-checkbox', class: ['a', null], on: { change: function () { return; } } }, [B.make('span', 'b', null, 'text'), 'more', null]);
+var badgeMarkup: string = B.badgeHtml('Ready', 'green', 'medium') + B.statusDotHtml('red', 'Down');
+B.setDotColor(view, 'green', 'Up');
+B.setCollapsibleTile(view, 'gray');
+var tileSwitch: B.TileSwitchHandle = B.bindTileToSwitch(view, input, { on: 'green', off: 'gray' });
+tileSwitch.refresh();
+B.createCollapsibleSection({ icon: 'sync' }).setIconColor('red');
+var resetRow: B.ResetRowHandle = B.createResetRow({ icon: 'history', label: 'History', help: 'Forgets history.', destructive: true, empty: false, action: 'reset-history' });
+resetRow.setEmpty(true);
+var resetGroup: B.ResetGroupHandle = B.createResetGroup([resetRow, { icon: 'info', label: 'Metadata', button: 'Reset', onClick: function (button: HTMLButtonElement) { button.disabled = true; } }]);
+B.createBanner({ kind: 'warn', items: ['One', 'Two'] }).setValue({ items: null });
+var chosen: B.ChoiceGroupHandle = B.createChoiceGroup(null, { name: 'mode', label: 'Mode', value: 'a', choices: [{ value: 'a', name: 'A', text: 'First.' }] });
+var counted: string = B.createTranslations({}).plural(2, 'OneItem', 'ManyItems', 'extra');
+var savedConfig: Promise<any> = shared.saveConfigWith(function (config: any) { config.A = 1; });
+shared.apiRequest('Groups/Users', 'GET', null, { prefix: '' });
+var ran: Promise<B.TaskProgressHandle> = shared.runScheduledTask(document.createElement('button'), 'MyTask', 'Run');
+// @ts-expect-error A reset row needs its icon and label.
+B.createResetRow({ button: 'Reset' });
+// @ts-expect-error A choice needs its value and name.
+B.createChoiceGroup(null, { choices: [{ text: 'First.' }] });
+// @ts-expect-error The plural keys are text.
+B.createTranslations({}).plural(2, 1, 2);
+
 var thumbColumn: B.TableColumn<Row> = { key: 'name', label: 'Name', image: function () { return function () { return Promise.resolve(new Blob()); }; } };
 
 declare var hostView: HTMLElement;
@@ -311,4 +334,4 @@ saveBars.clean();
 // @ts-expect-error A tracker reports isDirty and markClean.
 saveBars.add(hostView, { tracker: { isDirty: true } });
 
-export { toolChanged, modeField, tokenField, portNumber, hostLines, onValue, pushScope, anyUnsaved, page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn, shellSession, look, palette, markup, adopted, toaster };
+export { toolChanged, modeField, tokenField, portNumber, hostLines, onValue, pushScope, anyUnsaved, built, badgeMarkup, tileSwitch, resetGroup, chosen, counted, savedConfig, ran, page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn, shellSession, look, palette, markup, adopted, toaster };

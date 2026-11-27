@@ -1,5 +1,5 @@
 // dom.ts
-// Small DOM helpers the web components share. None of them is exported from the bundle.
+// Small DOM helpers the web components share. make and h are exported from the bundle, and the rest are internal.
 
 /** An anchor's rectangle, as getBoundingClientRect gives it. */
 export interface Rect { top: number; left: number; right: number; bottom: number; }
@@ -24,14 +24,67 @@ export function nextId(part: string): string {
 }
 
 /**
- * Builds an element with a class, optional attributes, and optional text.
- * Internal to the web components.
+ * Builds an element with a class, optional attributes, and optional text. Every attribute value is set as text.
+ *
+ * @param tag the tag, such as div
+ * @param className the class attribute [optional]
+ * @param attrs attributes by name [optional]
+ * @param text the text content [optional]
+ * @returns the element
  */
 export function make<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string | null, attrs?: Record<string, unknown> | null, text?: unknown): HTMLElementTagNameMap[K] {
     var el = document.createElement(tag);
     if (className) el.className = className;
     if (attrs) Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k] as string); });
     if (text !== undefined && text !== null) el.textContent = text as string;
+    return el;
+}
+
+/** A child h appends: a node, or text for a text node. null, undefined, and false are skipped. */
+export type ElementChild = Node | string | number | null | undefined | false;
+
+/** What h takes as attributes. class takes a string or a list, text the text, on the listeners by event type, and is the Jellyfin element. */
+export interface ElementAttrs {
+    class?: string | Array<string | null | undefined | false> | null;
+    text?: unknown;
+    is?: 'emby-input' | 'emby-checkbox' | 'emby-select' | 'emby-button' | 'emby-textarea' | string | null;
+    on?: Record<string, (e: any) => void> | null;
+    [name: string]: unknown;
+}
+
+/**
+ * Builds an element with its attributes, listeners, and children, for a page that draws its markup in script.
+ * The is attribute is set after the element is made, so the web client upgrades a Jellyfin element such as emby-input once it joins the page.
+ *
+ * @param tag the tag, such as div
+ * @param attrs {
+ *   class : the class attribute, as a string or a list whose empty entries are skipped [optional]
+ *   text  : the text content, set before the children [optional]
+ *   is    : the Jellyfin element, such as 'emby-input', 'emby-checkbox', 'emby-select', 'emby-button', or 'emby-textarea' [optional]
+ *   on    : listeners by event type, such as { click: fn } [optional]
+ *   any other name sets that attribute. true sets it empty, and null, undefined, and false leave it out [optional]
+ * }
+ * @param children the children in order, as nodes or text. null, undefined, and false are skipped [optional]
+ * @returns the element
+ */
+export function h<K extends keyof HTMLElementTagNameMap>(tag: K, attrs?: ElementAttrs | null, children?: ElementChild | ElementChild[] | null): HTMLElementTagNameMap[K] {
+    var el = document.createElement(tag);
+    var a = attrs || {};
+    Object.keys(a).forEach(function (key) {
+        var value = a[key];
+        if (value === null || value === undefined || value === false) return;
+        if (key === 'class') el.className = Array.isArray(value) ? value.filter(Boolean).join(' ') : String(value);
+        else if (key === 'text') el.textContent = String(value);
+        else if (key === 'on') {
+            var handlers = value as Record<string, (e: any) => void>;
+            Object.keys(handlers).forEach(function (type) { if (typeof handlers[type] === 'function') el.addEventListener(type, handlers[type]); });
+        } else el.setAttribute(key, value === true ? '' : String(value));
+    });
+    var list = Array.isArray(children) ? children : [children];
+    list.forEach(function (child) {
+        if (child === null || child === undefined || child === false) return;
+        el.appendChild(typeof child === 'object' ? child : document.createTextNode(String(child)));
+    });
     return el;
 }
 
