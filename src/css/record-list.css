@@ -10,7 +10,7 @@
 .stolon-record-list-row.stolon-openable:focus { outline: none; }
 .stolon-record-list-row.stolon-openable:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
 .stolon-record-list-body {
-    flex: 1 1 calc(var(--stolon-size-large) * 4);
+    flex: 1000 1 calc(var(--stolon-size-large) * 4);
     display: flex;
     flex-direction: column;
     gap: calc(var(--stolon-gap-narrow) / 2);
@@ -26,3 +26,8 @@
 /* Example: <div class="stolon-record-list-aside"><button class="raised stolon-button stolon-small">Unblock</button></div> */
 .stolon-record-list-open .material-icons { font-size: var(--stolon-chevron-secondary); }
 .stolon-record-list-aside { flex: 0 1 auto; min-width: 0; max-width: 100%; display: flex; align-items: center; }
+
+/* An aside that fills, such as a usage meter: the text beside it takes nearly all the spare room, so beside the text it keeps its own width, and on a line of its own under the text it takes the row's full width */
+/* Example: <div class="stolon-record-list-aside stolon-fill"><div class="stolon-usage-meter"></div></div> */
+.stolon-record-list-aside.stolon-fill { flex-grow: 1; }
+.stolon-record-list-aside.stolon-fill > * { flex: 1 1 auto; min-width: 0; }

@@ -35,6 +35,7 @@ Classes: `stolon-check-list`, `stolon-check-list-search`, `stolon-check-list-bod
 ## States and Modifiers
 
 * `renderRow` returns `{ label, sublabel, imageUrl, image, avatar, badge, note }`, and reads `item.name` by default. `image` is a loader, such as a proxied image, and wins over `imageUrl`. `avatar` is `{ src, name }` and draws a person, with the person icon when there is no picture, in place of `imageUrl`. `badge` is a label or `{ label, color }`, drawn as a `stolon-badge`. `note` is a gray badge.
+* A sublabel too long for its row ends in an ellipsis with its full text as the tooltip. `wrapSublabels: true` wraps it at a word instead, so the whole sentence reads.
 * `idKey` names the id property, or is a function of the item, `id` by default. `matchKey(id)` sets how two ids compare, such as ignoring case and dashes in a GUID.
 * `items` is a static array. `fetchItems()` returns an array or a promise of one (or `{ Items }`) and overrides it.
 * `showSelectAll` adds a "Select all" row that checks or clears the rows in view that are not disabled. It is checked when all of them are, and indeterminate when only some are. `selectAllText` replaces the label.
@@ -92,6 +93,7 @@ A searchable list of checkbox rows for picking many items, with an optional thum
 | `stolon-check-text` | Text block that stacks a label over an optional sublabel |
 | `stolon-check-label` | Row label that clips with an ellipsis |
 | `stolon-check-sub` | Small dimmed sublabel that clips with an ellipsis |
+| `stolon-check-sub.stolon-wrap` | A sublabel that wraps at a word, so the whole sentence reads |
 | `stolon-check-avatar` | A person's avatar at the start of a row, the size of a thumbnail, with the person icon when they have no picture |
 | `stolon-check-badge` | A badge or note at the end of a row, drawn as a stolon-badge |
 | `stolon-check-selectall` | Select all row that sits above the list with a divider |

@@ -1,6 +1,7 @@
 // Behavior tests for createFilePicker, run on the stub DOM in fake-dom.mjs.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { installFakeDom, all, shown } from './fake-dom.mjs';
 
 var dom = installFakeDom();
@@ -179,4 +180,19 @@ test('the file rows sit in a List with no empty sentence, and the zone lines its
     var row = list.querySelector('.stolon-file-item');
     assert.ok(row.classList.contains('stolon-item-row'));
     assert.ok(row.classList.contains('stolon-list-item'));
+});
+
+function pickerRule(file, selector) {
+    var css = readFileSync(new URL('../../src/css/' + file, import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    var at = css.indexOf(selector + ' {');
+    assert.ok(at !== -1, file + ' has ' + selector);
+    return css.slice(at, css.indexOf('}', at));
+}
+
+test('the picker keeps no gap for an empty message: only the file list takes a gap, and the message its own while it shows', function () {
+    assert.doesNotMatch(pickerRule('file-picker.css', '.stolon-file-picker'), /gap/);
+    assert.match(pickerRule('file-picker.css', '.stolon-file-picker > .stolon-file-list'), /margin-top: var\(--stolon-gap-narrow\)/);
+    var picker = createFilePicker();
+    var message = picker.element.querySelector('.stolon-field-message');
+    assert.equal(message.classList.contains('stolon-error'), false);
 });

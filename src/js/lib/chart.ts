@@ -1,7 +1,7 @@
 // chart.ts
 // The core every chart shares: the frame, the scale, the axes, the legend, the tooltip, the empty state, and the hidden table of numbers. The bar chart, the line chart, the pie chart, and the sparkline each draw only their marks on it. None of it is exported from the bundle.
 
-import { make, clear, listen, runAll, toText, nextId, fill } from './dom.js';
+import { make, clear, listen, runAll, toText, fill } from './dom.js';
 import { applyColor, colorClass } from './color.js';
 import { anchorPopover } from './popover.js';
 import { stolonText } from './stolon-text.js';
@@ -220,12 +220,8 @@ export function buildChart(options: ChartOptions, core: ChartCore): ChartHandle 
     var drawCleanups: Array<() => void> = [];
     var lastWidth = -1;
 
+    // The label names the plot and captions the hidden table, and nothing else, so a screen reader hears it once for each.
     var root = make('figure', 'stolon-chart ' + core.className);
-    var titleId = nextId('chart');
-    if (options.label) {
-        root.appendChild(make('figcaption', 'stolon-sr-only', { id: titleId }, options.label));
-        root.setAttribute('aria-labelledby', titleId);
-    }
     var plot = make('div', 'stolon-chart-plot');
     var empty = make('div', 'stolon-list-empty stolon-chart-empty');
     empty.hidden = true;

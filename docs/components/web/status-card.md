@@ -11,6 +11,7 @@ A bordered card on the surface color with an icon, a status pill, a bold title, 
 | A trend over time under the number | `sparkline` |
 | The state of each of several things, such as each server's health | `dots` |
 | How a total splits into parts, such as rows by state | `segments` |
+| The parts of that bar named under it, with their values | `segments` and `legend: true` |
 | A few counts side by side, such as each state of a queue | `bars` |
 | A card that opens the page it describes | `href`, or `onClick` for an in-page action |
 | A plain row of colored counts | [Count Cards](count-cards.md) |
@@ -42,9 +43,10 @@ Classes: `stolon-status-cards` for the grid and `stolon-status-card` for a card,
 * `value` is drawn large in even width digits, with `valueLabel` small after it. Each part hides while it is empty.
 * `sparkline` is a list of numbers drawn as a [Sparkline](sparkline.md) under the value, named by the title, in the accent or `sparklineColor`.
 * `dots` is a list of `{ color, label }` drawn as a row of [Status Dots](status-dot.md) in the sparkline's place, each named by its label. `segments` is a list of `{ label, value, color }` drawn as a bar in the same place, each part as wide as its share of the total. A bar whose values add to 0 is an empty track. `bars` takes the same list as a small column chart, each column as tall as its share of the largest, and a column of 0 is a faint stub. A card shows one of the four, and the slot is one height whichever it is, so the cards in a row line up.
+* `legend: true` lists the segments under the bar, each a dot in its part's color, its label, and its value, wrapping as a row. The bar's own name already says each part, so the legend is hidden from a screen reader.
 * `href` makes the card a link and `onClick` makes it a button. Either one gives the card the shared card hover and the accent focus ring.
 * `setValue(value, label)`, `setStatus(label, color)`, `setDetail(text)`, `setSparkline(values)`, `setDots(dots)`, `setSegments(segments)`, and `setBars(bars)` change a card in place.
-* The grid keeps a card at least `minWidth` wide, 200 by default, and balances the rows so a wrapped row never holds one card alone. The cards in a row share one height.
+* The grid keeps a card at least `minWidth` wide, 200 by default, and balances the rows so a wrapped row never holds one card alone. The cards in a row share one height. `even: true` gives every card one width on a fixed column count, as `stolon-even` does on [Count Cards](count-cards.md).
 
 ## Gotchas
 
@@ -78,6 +80,7 @@ A bordered card on the surface color with an icon, a status pill, a bold title, 
 | `dots` | <code>StatusCardDot[] &#124; null</code> | array of { color, label }, a row of status dots in the sparkline's place, such as one per server, each named by its label [optional] |
 | `segments` | <code>StatusCardSegment[] &#124; null</code> | array of { label, value, color }, a bar in the sparkline's place split into parts by value, such as rows by state. A bar whose values add to 0 is an empty track [optional] |
 | `bars` | <code>StatusCardSegment[] &#124; null</code> | array of { label, value, color }, a small column chart in the sparkline's place, one column per entry as tall as its share of the largest. A column of 0 is a faint stub [optional] |
+| `legend` | <code>boolean</code> | true lists the segments under the bar, each a dot in its part's color, its label, and its value (default false) |
 | `href` | <code>string</code> | address the card links to, which makes the card a link [optional] |
 | `onClick` | <code>(event: MouseEvent): void</code> | function(event) called on a click, which makes the card a button when there is no href [optional] |
 
@@ -104,6 +107,7 @@ A grid of status cards in balanced rows, so a wrapped row never holds a single c
 | `cards` | <code>StatusCardOptions[]</code> | array of status card options, one card each [optional] |
 | `minWidth` | <code>number</code> | least width of a card in pixels before the row wraps (default 200) |
 | `maxColumns` | <code>number</code> | most cards in a row [optional] |
+| `even` | <code>boolean</code> | true gives every card one width on a fixed column count, so a short last row lines up with the rows above it (default false) |
 
 | Handle member | Type |
 | :--- | :--- |
@@ -129,6 +133,7 @@ A grid of status cards in balanced rows, so a wrapped row never holds a single c
 | `stolon-status-card-sparkline` | Sparkline under a status card's value, a narrow space below it |
 | `stolon-status-card-dots` | Row of status dots under a status card's value in the sparkline's place, a sparkline tall, such as one dot per server |
 | `stolon-status-card-meter` | Bar under a status card's value in the sparkline's place, a sparkline tall, split into parts by value, such as rows by state |
+| `stolon-status-card-legend` | The legend under a status card's bar: a dot in each part's color, its label, and its value, wrapping as a row |
 | `stolon-status-card-columns` | Small column chart under a status card's value in the sparkline's place, a sparkline tall, one column per entry as tall as its share of the largest |
 | `stolon-status-card-detail` | Quiet detail line of a status card, dimmed, cut with an ellipsis, and titled with its full text |
 

@@ -456,3 +456,21 @@ test('the reload button ends the selection header, reloads from the first page, 
     assert.equal(btn.classList.contains('stolon-spinning'), false);
     assert.deepEqual(t.table.getSelectedIds(), []);
 });
+
+test('with filteredMessage an empty list says there are none, and a search or a filter other than All that finds nothing says none match', async function () {
+    var t = makeTable({
+        emptyState: { message: 'No issues yet.', filteredMessage: 'No issues match.' },
+        filters: { options: [{ value: 'Open', label: 'Open' }], allValue: 'All' }
+    }, answerWith([]));
+    var empty = function () { return t.body.querySelector('.stolon-list-empty').textContent; };
+    await t.table.load();
+    assert.equal(empty(), 'No issues yet.');
+    await t.table.setSearch('disk');
+    assert.equal(empty(), 'No issues match.');
+    await t.table.setSearch('');
+    assert.equal(empty(), 'No issues yet.');
+    await t.table.setFilter('Open');
+    assert.equal(empty(), 'No issues match.');
+    await t.table.setFilter('All');
+    assert.equal(empty(), 'No issues yet.');
+});

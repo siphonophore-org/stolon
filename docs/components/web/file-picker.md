@@ -30,7 +30,7 @@ Parts: `stolon-file-name`, `stolon-file-size`.
 * `accept` is an accept list such as `'image/*,.png'`. `maxSize` is the most bytes one file may have, and the size limit follows the size message in parentheses, such as (2 MB).
 * The zone has `role="button"` and `tabindex="0"`, and is built as `stolon-icon-text`, so its icon lines up with the first line of the text. The `stolon-dragover` modifier shows the accent.
 * `dropText` is "Drop files here or click to select." by default. `typeText`, `sizeLimitText`, and `singleText` replace the refusal messages, and `{value}` is the file name.
-* The refusal messages show together under the zone as an error [Field Message](field-message.md).
+* The refusal messages show together under the zone as an error [Field Message](field-message.md). With no message the picker keeps no room for one.
 * `onChange(files)` runs after each change. `onError(messages)` runs with the refusal messages.
 * `stolon-file-list` is a [List](list.md) of `stolon-item-row` rows, with no empty sentence, and is hidden while empty. Remove moves focus to the next Remove button, the one before it, or the zone.
 
@@ -69,7 +69,7 @@ A drop zone that is also a button. The user clicks it, presses Enter or Space, o
 
 | Class | What it looks like |
 | :--- | :--- |
-| `stolon-file-picker` | Drop zone that is also a button, with a list of the chosen files under it |
+| `stolon-file-picker` | Drop zone that is also a button, with a list of the chosen files under it, and a message under that only while it has one |
 | `stolon-file-list` | One chosen file with its name, size, and remove button |
 
 <!-- reference:end -->

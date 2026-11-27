@@ -2,6 +2,7 @@
 // the clearable pressed group, the message core, and the media card's compact layout.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { installFakeDom, all } from './fake-dom.mjs';
 
 var dom = installFakeDom();
@@ -158,4 +159,48 @@ test('balanceRows runs onLayout after each layout, so count cards fit their colu
     balanceRows(row, { onLayout: function (el) { seen.push(el); fitCounts(el); } });
     assert.deepEqual(seen, [row]);
     assert.equal(row.classList.contains('stolon-fit'), true);
+});
+
+function cardRule(file, selector) {
+    var css = readFileSync(new URL('../../src/css/' + file, import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    var at = css.indexOf(selector + ' {');
+    assert.ok(at !== -1, file + ' has ' + selector);
+    return css.slice(at, css.indexOf('}', at));
+}
+
+// A row of count cards whose labels measure the given widths inside cards 100 wide.
+function labelRow(widths) {
+    var row = dom.el('div', { class: 'stolon-cards' });
+    widths.forEach(function (w) {
+        var card = buildCard({ count: '1', label: 'Administrators' });
+        Object.defineProperty(card.label, 'scrollWidth', { value: w });
+        Object.defineProperty(card.label, 'clientWidth', { value: 100 });
+        row.appendChild(card.element);
+    });
+    return row;
+}
+
+test('fitCounts gives every label the small size when a label word is wider than its card, and clears it when all fit', function () {
+    var tight = labelRow([80, 130]);
+    fitCounts(tight);
+    assert.equal(tight.classList.contains('stolon-fit-labels'), true);
+    assert.equal(tight.classList.contains('stolon-fit'), false);
+    var roomy = labelRow([90, 100]);
+    roomy.classList.add('stolon-fit-labels');
+    fitCounts(roomy);
+    assert.equal(roomy.classList.contains('stolon-fit-labels'), false);
+});
+
+test('a count card label wraps at a word to two lines rather than clipping, a fitted row breaks a word still too wide, and even cards fit three across a phone', function () {
+    var label = cardRule('count-cards.css', '.stolon-card-label');
+    assert.match(label, /white-space: normal/);
+    assert.match(label, /-webkit-line-clamp: 2/);
+    assert.doesNotMatch(label, /nowrap|text-overflow/);
+    var fitted = cardRule('count-cards.css', '.stolon-cards.stolon-fit-labels .stolon-card-label');
+    assert.match(fitted, /font-size: var\(--stolon-font-small\)/);
+    assert.match(fitted, /overflow-wrap: anywhere/);
+    var even = cardRule('count-cards.css', '.stolon-cards.stolon-even');
+    var min = parseFloat(/--stolon-balance-min: (\d+)px/.exec(even)[1]);
+    assert.equal(Math.floor((343 + 8) / (min + 8)), 3);
+    assert.equal(Math.floor((288 + 8) / (min + 8)), 2);
 });

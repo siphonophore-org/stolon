@@ -2,6 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { installFakeDom } from './fake-dom.mjs';
+import { readFileSync } from 'node:fs';
 
 installFakeDom();
 var { createDataTable, createWorldMap, linkWorldMap } = await import('../../src/js/index.js');
@@ -230,4 +231,29 @@ test('a clipped cell shows its full text on hover, and loses it once it fits', f
     cell.scrollWidth = 50;
     cell.dispatch('mouseover');
     assert.equal(cell.hasAttribute('title'), false);
+});
+
+test('a table turns compact when its text columns no longer fit at full width, not only its number columns', function () {
+    var dom = installFakeDom();
+    delete globalThis.ResizeObserver;
+    var four = [{ key: 'a', label: 'A' }, { key: 'b', label: 'B' }, { key: 'c', label: 'C' }, { key: 'd', label: 'D' }];
+    var table = createDataTable({ columns: four, rows: [] });
+    table.element.clientWidth = 343;
+    dom.dispatchWindow('resize');
+    assert.ok(table.element.classList.contains('stolon-compact'));
+    table.element.clientWidth = 600;
+    dom.dispatchWindow('resize');
+    assert.equal(table.element.classList.contains('stolon-compact'), false);
+    var two = createDataTable({ columns: four.slice(0, 2), rows: [] });
+    two.element.clientWidth = 343;
+    dom.dispatchWindow('resize');
+    assert.equal(two.element.classList.contains('stolon-compact'), false);
+});
+
+test('a compact table narrows its text columns, and an empty table spans its columns so the header scrolls with it', function () {
+    var css = readFileSync(new URL('../../src/css/data-table.css', import.meta.url), 'utf8');
+    assert.match(/\.stolon-data-table\.stolon-compact \{([^}]*)\}/.exec(css)[1], /--stolon-data-min: calc\(var\(--stolon-size-large\) \* 1\.5\)/);
+    var empty = /\.stolon-data-body\.stolon-list > \.stolon-list-empty \{([^}]*)\}/.exec(css)[1];
+    assert.match(empty, /min-width: var\(--stolon-data-least\)/);
+    assert.match(empty, /padding-right: max\(/);
 });

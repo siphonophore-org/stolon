@@ -1,6 +1,7 @@
 // Tests the filtered list: search, select, pill, and card filters with counts, sort, and the summary.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { installFakeDom } from './fake-dom.mjs';
 
 installFakeDom();
@@ -95,4 +96,17 @@ test('reloadText names the reload button, and a list without onReload or multipl
     assert.equal(named.reloadButton.getAttribute('title'), 'Refresh');
     assert.equal(make({ selectable: 'multiple' }).reloadButton, null);
     assert.equal(make({ onReload: function () {} }).reloadButton, null);
+});
+
+function toolbarRule(file, selector) {
+    var css = readFileSync(new URL('../../src/css/' + file, import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    var at = css.indexOf(selector + ' {');
+    assert.ok(at !== -1, file + ' has ' + selector);
+    return css.slice(at, css.indexOf('}', at));
+}
+
+test('the search takes nearly all the spare room, so selects after it that wrap share their own line with no gap at its end', function () {
+    assert.match(toolbarRule('filtered-list.css', '.stolon-filtered-toolbar > .stolon-search'), /flex: 1000 1 /);
+    assert.match(toolbarRule('filtered-list.css', '.stolon-filtered-toolbar > .stolon-search ~ .stolon-filtered-sort'), /flex-grow: 1/);
+    assert.match(toolbarRule('filtered-list.css', '.stolon-filtered-sort'), /flex: 0 1 auto/);
 });

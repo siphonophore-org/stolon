@@ -41,12 +41,15 @@
 
 /* The legend of a segmented meter: a swatch, a name, and an amount per part, wrapping as a row */
 /* Example: <div class="stolon-usage-meter-legend"><span class="stolon-usage-meter-key"><span class="stolon-chart-swatch stolon-blue"></span><span>Movies</span><span class="stolon-usage-meter-amount">30 GB</span></span></div> */
-.stolon-usage-meter-legend {
+.stolon-usage-meter-legend,
+.stolon-status-card-legend {
     display: flex;
     flex-wrap: wrap;
     gap: var(--stolon-gap-narrow) var(--stolon-gap-wide);
     font-size: var(--stolon-font-small);
 }
 .stolon-usage-meter-legend[hidden] { display: none; }
-.stolon-usage-meter-key { display: inline-flex; align-items: center; gap: var(--stolon-gap-narrow); }
-.stolon-usage-meter-amount { opacity: 0.7; font-variant-numeric: tabular-nums; }
+.stolon-usage-meter-key,
+.stolon-status-card-key { display: inline-flex; align-items: center; gap: var(--stolon-gap-narrow); }
+.stolon-usage-meter-amount,
+.stolon-status-card-amount { opacity: 0.7; font-variant-numeric: tabular-nums; }

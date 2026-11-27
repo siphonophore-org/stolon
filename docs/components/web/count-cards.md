@@ -34,7 +34,8 @@ Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`
 * The color modifiers are `stolon-green`, `stolon-red`, `stolon-orange`, `stolon-purple`, `stolon-blue`, `stolon-gray`, `stolon-yellow`, `stolon-pink`, and `stolon-teal`. `renderCards` also takes a hex code such as `#e91e63`, drawn with the `stolon-custom` modifier.
 * The cards wrap in [Balanced Rows](balanced-rows.md), so five cards that do not fit in one row become three and two, never four and one. A card with `hidden` takes no place.
 * A card in balanced rows fits the column `balanceRows` gives it. At 600px and below the count takes a smaller size from the scale. When any count is still wider than its card, the row takes `stolon-fit` and every count in it takes the large text size, so they keep one size. Only a count too wide even then ends in an ellipsis.
-* `even` gives every card in the row one width, on as many columns as fit. Use it when a page shows many cards, such as a dashboard of ten, where balanced rows of six and four would give two card widths. A last row of one is avoided by taking a column fewer.
+* A label wraps at a word onto a second line, and ends in an ellipsis only after that. When a label holds a word wider than its card, the row takes `stolon-fit-labels` and every label takes the small text size, and a word still too wide breaks rather than clips.
+* `even` gives every card in the row one width, on as many columns as fit. Use it when a page shows many cards, such as a dashboard of ten, where balanced rows of six and four would give two card widths. A last row of one is avoided by taking a column fewer. At 600px and below even cards fit three across a 375px phone, so six counts take two rows.
 * `words` is for cards whose values are words, such as Running, rather than numbers. The value takes the large text size and wraps, so it reads whole.
 * `compact` makes a tighter row of small cards, with a smaller gap, padding, and label, for many counts on a phone.
 * `--stolon-balance-max` caps the cards in a row. `style="--stolon-balance-max: 4"` never shows more than four.
@@ -43,7 +44,7 @@ Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`
 
 ## Gotchas
 
-* `stolon-fit` is set by Stolon as the row lays out. A plugin never sets it or overrides the count's size or overflow.
+* `stolon-fit` and `stolon-fit-labels` are set by Stolon as the row lays out. A plugin never sets them or overrides the count's or the label's size or overflow.
 * `renderCards` draws only a known color name or a hex code. Any other color leaves the count in the text color.
 * There is no keyboard behavior.
 
@@ -58,12 +59,13 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | `stolon-cards` | Row of count cards that wraps to fit |
 | `stolon-card` | Count card in the status card's look: a large count over a quiet label on the surface color, with the count in its status color |
 | `stolon-card-count` | Large bold count at the top of a card, in the card's status color, cut with an ellipsis when the card is too narrow for it |
-| `stolon-card-label` | Quiet label under the count, cut with an ellipsis |
+| `stolon-card-label` | Quiet label under the count, which wraps at a word onto a second line and ends in an ellipsis after it |
 | `stolon-card.stolon-green` | Status color modifiers for a card, each coloring its count and, on a filter card, its outline |
 | `stolon-cards.stolon-compact` | A tighter row of small count cards, for many counts in little room, such as on a phone |
 | `stolon-cards.stolon-balanced` | A card in balanced rows fits its column, which balanceRows sizes, whatever the card's own least width |
 | `stolon-cards.stolon-words` | A row of cards whose values are words, such as Running, in a smaller size that wraps, so each word reads whole |
 | `stolon-cards.stolon-fit` | A row with a count wider than its card, which fitCounts marks, gives every count the large text size, so they keep one size and read whole |
+| `stolon-cards.stolon-fit-labels` | A row with a label word wider than its card, which fitCounts marks, gives every label the small text size, and a word still too wide breaks rather than clips |
 
 <!-- reference:end -->
 

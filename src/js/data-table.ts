@@ -186,7 +186,7 @@ function saveWidths(storeKey: string | null, widths: Record<string, DataTableWid
  *   onSelect     : function(row, key) with the selected row, or (null, null) when the selection clears [optional]
  *   onChange     : function(state) after the rows shown change [optional]
  * }
- * A cell too narrow for its text shows the full text on hover.
+ * A cell too narrow for its text shows the full text on hover. A table too narrow for its columns turns compact, then scrolls its rows sideways inside its frame, with the header and an empty sentence following them.
  * @returns { element, setRows, setSearch, setFilter, setFilterOptions, setSort, select, getSelected, getSelectedKeys, getSelectedRows, setSelectedKeys, clearSelection, onSelect, setHeight, getState, reload, edit, cancelEdit, getEditing, setColumnHidden, setColumnWidth, getColumnWidths, destroy }. edit(key) opens a row's editor, and cancelEdit closes it. setColumnHidden(key, hidden) hides or shows a column's heading and cells, and the other columns share its width. setColumnWidth(key, width) sets a column to pixels, to 'fit', or with null back to its own width, and getColumnWidths returns what was set. onSelect(listener) adds a listener beside the option and returns a function that removes it.
  */
 export function createDataTable<T = any>(options: DataTableOptions<T>): DataTableHandle<T> {
@@ -568,11 +568,12 @@ export function createDataTable<T = any>(options: DataTableOptions<T>): DataTabl
 
     drawSort(opts.sort || null);
 
-    // A table too narrow for its number columns at full width turns compact: narrower number columns and icon headings.
+    // A table too narrow for its columns at full width turns compact: narrower columns and icon headings.
     // A number column given its own width counts too, so a wide heading still turns into its icon.
     var fitter = fitWidth(root, function (width) {
         var ends = shown().filter(narrow).length;
-        return width < ends * 100 + 240;
+        var texts = shown().length - ends;
+        return width < ends * 100 + Math.max(240, texts * 96);
     });
     var fit = fitter.check;
     cleanups.push(fitter.stop);

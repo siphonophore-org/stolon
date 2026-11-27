@@ -68,6 +68,7 @@ setInterval(function () { load().then(function (rows) { queue.setItems(rows); })
 
 * A filter's `kind` is `select` (default), `pills` (a row with an All pill, one choice at a time), `cards` (count cards that each turn on and off, and with none on every choice shows), or `daterange` (a [Date Range Picker](date-range-picker.md) on its own line that keeps the items whose `field` date falls in the range). A daterange filter needs no `options`, takes `presets`, and its values are `[from, to]`.
 * Every choice shows how many items it would match, given the search and the other filters: in its card, after its pill, and in its select option.
+* The search takes nearly all the room on its line. Selects after it that wrap onto a line of their own share that line's full width, so no gap is left at its end.
 * `sorts` adds a sort select. The first sort applies at the start unless `sort` names another.
 * The summary line reads "Showing {shown} of {total}." `summaryText` replaces it, and `summary: false` hides it.
 * The height is the List's: `auto` grows with the page, a length holds a fixed height that scrolls inside, `maxHeight` caps a growing list, and `fill` reaches the bottom of the window. `pageSize` shows that many and loads more as the list scrolls to its end.
@@ -146,7 +147,7 @@ The List with a search, filters, a sort, a summary line, selection, and actions.
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-filtered-list` | A List with a search, filters, a sort, and a summary line above it, the base a Data Table is built on |
-| `stolon-filtered-toolbar` | The search field and the selects on one line that wraps, the search taking the room left over |
+| `stolon-filtered-toolbar` | The search field and the selects on one line that wraps, the search taking nearly all the room left over, and selects after a search that wrap onto a line of their own sharing its full width |
 | `stolon-filtered-card` | Count cards that each turn a choice on and off: on is outlined in its status color, off is dimmed, and with none on every choice shows |
 | `stolon-filtered-pill-count` | A row of pills, one per choice and an All pill, each with its count |
 | `stolon-filtered-action` | A button beside the search or on the bar of selected items, hidden while its visible test says no |

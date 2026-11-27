@@ -21,6 +21,7 @@ export interface StatusCardOptions {
     dots?: StatusCardDot[] | null;
     segments?: StatusCardSegment[] | null;
     bars?: StatusCardSegment[] | null;
+    legend?: boolean;
     href?: string;
     onClick?(event: MouseEvent): void;
 }
@@ -51,11 +52,12 @@ export interface StatusCardHandle extends ComponentHandle {
     destroy(): void;
 }
 
-/** What createStatusCardGrid takes. minWidth is the least width a card takes before the row wraps. */
+/** What createStatusCardGrid takes. minWidth is the least width a card takes before the row wraps, and even gives every card one width. */
 export interface StatusCardGridOptions {
     cards?: StatusCardOptions[];
     minWidth?: number;
     maxColumns?: number;
+    even?: boolean;
 }
 
 /** What createStatusCardGrid returns. */
@@ -90,6 +92,7 @@ function setLine(el: HTMLElement, text: string): void {
  *   dots        : array of { color, label }, a row of status dots in the sparkline's place, such as one per server, each named by its label [optional]
  *   segments    : array of { label, value, color }, a bar in the sparkline's place split into parts by value, such as rows by state. A bar whose values add to 0 is an empty track [optional]
  *   bars        : array of { label, value, color }, a small column chart in the sparkline's place, one column per entry as tall as its share of the largest. A column of 0 is a faint stub [optional]
+ *   legend      : true lists the segments under the bar, each a dot in its part's color, its label, and its value (default false)
  *   href        : address the card links to, which makes the card a link [optional]
  *   onClick     : function(event) called on a click, which makes the card a button when there is no href [optional]
  * }
@@ -116,6 +119,8 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
     var spark: SparklineHandle | null = null;
     // The row of dots or the bar, which takes the sparkline's place.
     var extra: HTMLElement | null = null;
+    // The bar's legend, which follows it.
+    var key: HTMLElement | null = null;
 
     head.appendChild(iconEl);
     valueRow.appendChild(numberEl);
@@ -151,10 +156,28 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
         root.insertBefore(spark.element, detailEl);
     }
 
-    function setExtra(next: HTMLElement | null): void {
+    function setExtra(next: HTMLElement | null, legend?: HTMLElement | null): void {
         if (extra && extra.parentNode) extra.parentNode.removeChild(extra);
+        if (key && key.parentNode) key.parentNode.removeChild(key);
         extra = next;
+        key = legend || null;
         if (extra) root.insertBefore(extra, detailEl);
+        if (key) root.insertBefore(key, detailEl);
+    }
+
+    // The bar's legend, one key per part in the part's color. The bar's own name already says each part, so the legend is hidden from a screen reader.
+    function legendOf(segments: StatusCardSegment[]): HTMLElement {
+        var list = make('span', 'stolon-status-card-legend', { 'aria-hidden': 'true' });
+        segments.forEach(function (part: StatusCardSegment): void {
+            var item = make('span', 'stolon-status-card-key');
+            var dot = make('span', 'stolon-dot');
+            applyColor(dot, part.color, 'blue');
+            item.appendChild(dot);
+            item.appendChild(make('span', null, null, toText(part.label)));
+            item.appendChild(make('span', 'stolon-status-card-amount', null, String(Math.max(0, Number(part.value) || 0))));
+            list.appendChild(item);
+        });
+        return list;
     }
 
     // A row of status dots, each named by its label for a screen reader and on hover.
@@ -183,7 +206,7 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
             });
         }
         slot.appendChild(bar);
-        setExtra(slot);
+        setExtra(slot, options!.legend ? legendOf(segments) : null);
     }
 
     // A small column chart, one column per entry, each as tall as its share of the largest, named as a whole.
@@ -237,14 +260,15 @@ export function createStatusCard(options?: StatusCardOptions): StatusCardHandle 
  *   cards      : array of status card options, one card each [optional]
  *   minWidth   : least width of a card in pixels before the row wraps (default 200)
  *   maxColumns : most cards in a row [optional]
+ *   even       : true gives every card one width on a fixed column count, so a short last row lines up with the rows above it (default false)
  * }
  * @returns { element, getCards, setCards, add, destroy }. setCards replaces every card and returns their handles, and add appends one card and returns its handle.
  */
 export function createStatusCardGrid(options?: StatusCardGridOptions): StatusCardGridHandle {
     options = options || {};
-    var root = make('div', 'stolon-status-cards');
+    var root = make('div', 'stolon-status-cards' + (options.even ? ' stolon-even' : ''));
     var cards: StatusCardHandle[] = [];
-    var balance = balanceRows(root, { minWidth: options.minWidth || 200, maxColumns: options.maxColumns });
+    var balance = balanceRows(root, { minWidth: options.minWidth || 200, maxColumns: options.maxColumns, even: !!options.even });
 
     function add(card: StatusCardOptions): StatusCardHandle {
         var handle = createStatusCard(card);

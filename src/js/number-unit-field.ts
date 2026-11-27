@@ -1,4 +1,5 @@
-import { make, listen, runAll, clear, nextId, applyFieldSize, toText } from './lib/dom.js';
+import { make, listen, runAll, clear, nextId, applyFieldSize, toText, addToken } from './lib/dom.js';
+import { labelField } from './form-fields.js';
 import { bindValidation } from './lib/validate.js';
 import { createFieldMessage } from './field-message.js';
 import { adornField } from './field-adornments.js';
@@ -27,6 +28,8 @@ export interface NumberUnitFieldOptions {
     min?: number | string;
     max?: number | string;
     step?: number;
+    label?: string;
+    help?: string;
     valueLabel?: string;
     unitLabel?: string;
     rangeText?: string;
@@ -37,10 +40,11 @@ export interface NumberUnitFieldOptions {
     onChange?(value: NumberUnitValue): void;
 }
 
-/** What createNumberUnitField returns. */
+/** What createNumberUnitField returns. help is the description under the field, or null with none. */
 export interface NumberUnitFieldHandle extends ComponentHandle {
     input: HTMLInputElement;
     select: HTMLSelectElement;
+    help: HTMLElement | null;
     getValue(): NumberUnitValue;
     setValue(next?: { value?: number | string | null; unit?: string }): void;
     setBaseValue(base: number): void;
@@ -59,7 +63,9 @@ export interface NumberUnitFieldHandle extends ComponentHandle {
  *   min       : lowest number allowed, and a min above max swaps the two [optional]
  *   max       : highest number allowed [optional]
  *   step      : step of the number input, and a given step is also a rule, so 0.5 refuses 0.25 (default 1, which the arrows use and typing may leave)
- *   valueLabel: aria-label of the number input (default 'Value')
+ *   label     : the label over the field, which names the number input, in the web client's inputContainer [optional]
+ *   help      : the description under the field, in the same inputContainer [optional]
+ *   valueLabel: aria-label of the number input (default 'Value', or none when label names it)
  *   unitLabel : aria-label of the unit select (default 'Unit')
  *   rangeText : message for a number out of range, where {min} and {max} are filled in (default 'Enter a number from {min} to {max}.')
  *   minText   : message when only min is set (default 'Enter {min} or more.')
@@ -68,7 +74,7 @@ export interface NumberUnitFieldHandle extends ComponentHandle {
  *   validate  : function({ value, unit, base }) returning an error sentence, or an empty value when valid, after the range passes [optional]
  *   onChange  : function({ value, unit, base }) [optional]
  * }
- * @returns { element, input, select, getValue, setValue, setBaseValue, isValid, setSize, destroy }. getValue returns { value, unit, base }, where value is null while the input is empty and base is value times the unit's factor, or null with no factor.
+ * @returns { element, input, select, help, getValue, setValue, setBaseValue, isValid, setSize, destroy }. With a label or help, element is the inputContainer around the field. getValue returns { value, unit, base }, where value is null while the input is empty and base is value times the unit's factor, or null with no factor.
  * setBaseValue(base) picks the largest unit that divides the base evenly, so 2048 with MB and GB units shows 2 GB. It ignores a base that is not a finite number.
  */
 export function createNumberUnitField(options: NumberUnitFieldOptions): NumberUnitFieldHandle {
@@ -85,7 +91,9 @@ export function createNumberUnitField(options: NumberUnitFieldOptions): NumberUn
 
     var root = make('div', 'stolon-number-unit');
     applyFieldSize(root, options.size);
-    var input = make('input', '', { type: 'number', 'aria-label': options.valueLabel || stolonText('LabelValue'), step: String(options.step || 1) });
+    var input = make('input', '', { type: 'number', step: String(options.step || 1) });
+    // A visible label names the input, so it takes no aria-label of its own unless one is given.
+    if (!options.label || options.valueLabel) input.setAttribute('aria-label', options.valueLabel || stolonText('LabelValue'));
     if (min !== undefined) input.setAttribute('min', String(min));
     if (max !== undefined) input.setAttribute('max', String(max));
     var select = make('select', '', { 'aria-label': options.unitLabel || stolonText('Stolon.Unit') });
@@ -98,6 +106,18 @@ export function createNumberUnitField(options: NumberUnitFieldOptions): NumberUn
     var message = createFieldMessage({ input: input, id: nextId('range') });
     root.appendChild(wrap);
     root.appendChild(message.element);
+    var element: HTMLElement = root;
+    var help: HTMLElement | null = null;
+    if (options.label || options.help) {
+        input.id = nextId('number');
+        var field = labelField(root, input.id, options.label, options.help);
+        element = field.element;
+        help = field.help;
+        if (help) {
+            help.id = nextId('help');
+            addToken(input, 'aria-describedby', help.id);
+        }
+    }
 
     function unitOf(value: string | undefined): NumberUnit { return units.filter(function (u) { return u.value === value; })[0] || units[0]; }
 
@@ -138,9 +158,10 @@ export function createNumberUnitField(options: NumberUnitFieldOptions): NumberUn
     check();
 
     return {
-        element: root,
+        element: element,
         input: input,
         select: select,
+        help: help,
         getValue: value,
         setValue: function (next?: { value?: number | string | null; unit?: string }) {
             next = next || {};

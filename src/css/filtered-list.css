@@ -34,7 +34,7 @@
 .pluginConfigurationPage .stolon-filtered-list > [class],
 .stolon-dialog .stolon-filtered-list > [class] { margin-top: 0 !important; margin-bottom: 0 !important; }
 
-/* The search field and the selects on one line that wraps, the search taking the room left over */
+/* The search field and the selects on one line that wraps, the search taking nearly all the room left over, and selects after a search that wrap onto a line of their own sharing its full width */
 /* Example: <div class="stolon-filtered-toolbar"><div class="stolon-search"></div><select class="stolon-filtered-select"></select><select class="stolon-filtered-sort"></select></div> */
 .stolon-filtered-toolbar {
     display: flex;
@@ -43,9 +43,11 @@
     gap: var(--stolon-gap-narrow);
 }
 .stolon-filtered-toolbar:empty { display: none; }
-.stolon-filtered-toolbar > .stolon-search { flex: 1 1 calc(var(--stolon-size-large) * 5); min-width: 0; }
+.stolon-filtered-toolbar > .stolon-search { flex: 1000 1 calc(var(--stolon-size-large) * 5); min-width: 0; }
 .stolon-filtered-select,
 .stolon-filtered-sort { flex: 0 1 auto; width: auto; min-width: calc(var(--stolon-size-large) * 3.5); }
+.stolon-filtered-toolbar > .stolon-search ~ .stolon-filtered-select,
+.stolon-filtered-toolbar > .stolon-search ~ .stolon-filtered-sort { flex-grow: 1; }
 
 /* Count cards that each turn a choice on and off: on is outlined in its status color, off is dimmed, and with none on every choice shows */
 /* Example: <div class="stolon-cards stolon-filtered-cards"><button class="stolon-card stolon-filtered-card stolon-green" aria-pressed="true"><span class="stolon-card-count">4</span><span class="stolon-card-label">Synced</span></button></div> */

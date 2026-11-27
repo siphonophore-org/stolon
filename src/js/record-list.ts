@@ -13,13 +13,14 @@ export interface RecordListTag {
     off?: boolean;
 }
 
-/** One record row. aside is a control drawn at the row's end in place of the chevron, such as a button or a toggle. */
+/** One record row. aside is a control drawn at the row's end in place of the chevron, such as a button or a toggle, and asideFill lets it take the row's full width once it moves under the text, such as a usage meter. */
 export interface RecordListItem {
     id?: unknown;
     title: string;
     secondary?: string | null;
     tags?: RecordListTag[] | null;
     aside?: Node | ListItemHandle | null;
+    asideFill?: boolean;
     [key: string]: unknown;
 }
 
@@ -52,7 +53,7 @@ export interface RecordListHandle extends ComponentHandle {
  * the list, and a refresh keeps the rows whose title, secondary line, and tags did not change, with their aside.
  *
  * @param options {
- *   items     : array of { id, title, secondary, tags: [{ label, icon, color, off }], aside }, where color is a status color name or a hex code [optional]
+ *   items     : array of { id, title, secondary, tags: [{ label, icon, color, off }], aside, asideFill }, where color is a status color name or a hex code, and asideFill true lets the aside take the row's full width once it moves under the text [optional]
  *   rowKey    : the field or function that names a row, so a refresh keeps it (default 'id')
  *   label     : aria-label of the list [optional]
  *   emptyText : shown while there is no row (default 'Nothing to show.')
@@ -92,7 +93,7 @@ export function createRecordList(options?: RecordListOptions): RecordListHandle 
         var aside = item.aside;
         var handle = aside && (aside as ListItemHandle).element ? aside as ListItemHandle : null;
         if (aside) {
-            var holder = make('div', 'stolon-record-list-aside');
+            var holder = make('div', 'stolon-record-list-aside' + (item.asideFill ? ' stolon-fill' : ''));
             holder.appendChild(handle ? handle.element : aside as Node);
             el.appendChild(holder);
         } else if (opts.onOpen) {

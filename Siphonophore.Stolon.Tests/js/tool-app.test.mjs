@@ -167,3 +167,21 @@ test('a stored answer never hides a tool that has no visibleWhen', function () {
     var ui = build();
     assert.deepEqual(names(ui.view), ['Dashboard', 'VPN']);
 });
+
+test('another tool starts at the top of the page, as the web client shows a page, and the open tool chosen again keeps its place', async function () {
+    serve();
+    var ui = build();
+    await ui.handle.show('dashboard');
+    var scrolls = [];
+    globalThis.scrollTo = function (x, y) { scrolls.push([x, y]); };
+    try {
+        await ui.handle.show('vpn');
+        assert.deepEqual(scrolls, [[0, 0]]);
+        await ui.handle.show('vpn');
+        assert.deepEqual(scrolls, [[0, 0]]);
+        await ui.handle.show('dashboard');
+        assert.deepEqual(scrolls, [[0, 0], [0, 0]]);
+    } finally {
+        delete globalThis.scrollTo;
+    }
+});

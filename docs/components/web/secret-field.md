@@ -35,7 +35,7 @@ The same three functions are on the bag and take an id or an element. `clearSecr
 
 * A field shows one of three things. With nothing stored it shows its own placeholder, the help text. With a value typed in, it shows the browser's regular dots. With a stored secret the field shows eight dots in secondary gray, so it reads as filled though the browser never has the value. Its title says "Saved, leave blank to keep", which `opts.placeholder` replaces. Typing replaces the dots.
 * `opts.allowExpose: true` adds an eye inside the box that shows and hides what was typed. It is off by default.
-* `opts.clearButton` is shown while a secret is stored. Its click clears the secret, hides the button, and fires an `input` event.
+* `opts.clearButton` is shown while a secret is stored. Its click clears the secret, hides the button, and fires an `input` event. The Clear button `createSecretField` builds carries `stolon-secret-clear`, which sets it a narrow gap under the box, on the field's start edge.
 * `readSecretField` returns the typed value when there is one, `''` after a clear, `SECRET_KEPT` for an empty field with a stored secret, and `''` otherwise.
 * `SECRET_KEPT` is `__JPK_SECRET_KEPT__` and mirrors `SecretProtector.KeptSentinel`. Feed the posted value through `SecretProtector.ResolveIncoming` on the server.
 * `SECRET_DOTS` is the eight dots a stored secret shows.
@@ -86,6 +86,7 @@ Returns the value to post for a bound secret field. That is SECRET_KEPT when it 
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-secret-stored` | A secret field with a stored secret, whose eight placeholder dots show in secondary gray, since the value is not in the page |
+| `stolon-secret-clear` | The Clear button under a secret field's box, a narrow gap below it and on the field's start edge |
 
 <!-- reference:end -->
 

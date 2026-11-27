@@ -144,11 +144,18 @@
 .stolon-card-item.stolon-collapsed .stolon-card-item-body,
 .stolon-card-item:not(.stolon-selected) .stolon-card-item-body { display: none; }
 
-/* Action row under the list, for an Add button */
+/* Action row under the list, for an Add button or several, a narrow gap apart and wrapping, the first on the list's start edge */
 /* Example: <div class="stolon-card-list-actions"><button class="stolon-button stolon-primary">Add</button></div> */
 .stolon-card-list-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--stolon-gap-narrow);
     margin: var(--stolon-gap-wide) 0 var(--stolon-gap-wide);
 }
+/* Jellyfin's button margin would inset the buttons from the list's edge */
+.stolon-card-list-actions > .emby-button,
+.stolon-card-list-actions > .stolon-button { margin: 0 !important; }
 
 @media (max-width: 768px) {
     /* A narrow head uses the narrow gap, so the name keeps room beside the grip, number, and buttons. */

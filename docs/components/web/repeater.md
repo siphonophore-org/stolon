@@ -53,6 +53,7 @@ The handle is `{ element, getValue, setValue, setItems, addRow, isValid, setHeig
 * `minRows` disables Remove at that count and fills empty rows up to it. `maxRows` disables Add and shows `limitText`.
 * `removeText` is "Remove {value}", where the value is the row's name: its first text field, else "Row 2" from `rowName`, or a card's title. `upText` and `downText` are "Move {value} up" and "Move {value} down".
 * `emptyText` shows under the rows while there is none.
+* The Add button is small. `addSize: 'medium'` or `'large'` sizes it to sit beside buttons of that size.
 * An inline repeater too narrow for its fields side by side turns `compact`: the column labels hide, and each row stacks its fields full width under their own labels, with the row buttons at the top right.
 
 ## Gotchas
@@ -79,6 +80,7 @@ The base for any list of rows or cards of mixed fields, built on the row editor 
 | `layout` | <code>'inline' &#124; 'card'</code> | 'inline' for one row of fields per item, or 'card' for a boxed card per item (default 'inline') |
 | `value` | <code>RepeaterItem[] &#124; null</code> | array of items, each an object of values by field key [optional] |
 | `addText` | <code>string</code> | text of the add button (default 'Add') |
+| `addSize` | <code>'small' &#124; 'medium' &#124; 'large'</code> | 'small', 'medium', or 'large' for the add button, such as medium beside other medium buttons (default 'small') |
 | `removeText` | <code>string</code> | aria-label of a remove button, where {value} is the row's name (default 'Remove {value}') |
 | `upText` | <code>string</code> |  |
 | `downText` | <code>string</code> |  |

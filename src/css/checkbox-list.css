@@ -51,6 +51,13 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+/* A sublabel that wraps at a word, so the whole sentence reads */
+/* Example: <span class="stolon-check-sub stolon-wrap">Runs every night and keeps the last seven copies.</span> */
+.stolon-check-sub.stolon-wrap {
+    overflow: visible;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
 
 /* A person's avatar at the start of a row, the size of a thumbnail, with the person icon when they have no picture */
 /* Example: <span class="stolon-avatar stolon-avatar-small stolon-check-avatar"></span> */

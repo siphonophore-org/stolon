@@ -33,7 +33,7 @@ const table = base.createPaginatedTable(view, shared, {
     getDisplayStatus: (item) => item.id === 'item-3' ? 'Ignored (Copy to Link)' : item.status,
     getStatusClass: (item) => item.id === 'item-3' ? 'Ignored' : item.status,
     actions: { onRowClick: (item) => shared.showAlert('Opened ' + item.name) },
-    emptyState: { message: 'No items found.' }
+    emptyState: { message: 'No items yet.', filteredMessage: 'No items match.' }
 });
 table.load();
 </script>

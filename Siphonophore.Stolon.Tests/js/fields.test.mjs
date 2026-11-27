@@ -231,3 +231,32 @@ test('createSchedulePicker puts size small or large on data-stolon-size, and lea
     handle.setSize('medium');
     assert.equal(handle.element.hasAttribute('data-stolon-size'), false);
 });
+
+test('a number unit field with a label and help sits in an inputContainer, labelled and described like a form field', function () {
+    var f = createNumberUnitField({ units: SIZE_UNITS, label: 'Cache size', help: 'The most the cache holds.' });
+    assert.equal(f.element.className, 'inputContainer');
+    var label = f.element.children[0];
+    assert.equal(label.tagName, 'LABEL');
+    assert.equal(label.className, 'inputLabel inputLabelUnfocused');
+    assert.equal(label.textContent, 'Cache size');
+    assert.equal(label.getAttribute('for'), f.input.id);
+    assert.ok(f.input.id);
+    assert.equal(f.input.getAttribute('aria-label'), null);
+    assert.ok(f.element.children[1].classList.contains('stolon-number-unit'));
+    assert.equal(f.help, f.element.children[2]);
+    assert.equal(f.help.className, 'fieldDescription');
+    assert.equal(f.help.textContent, 'The most the cache holds.');
+    assert.ok(f.input.getAttribute('aria-describedby').split(' ').indexOf(f.help.id) !== -1);
+});
+
+test('a number unit field without a label keeps its bare markup and default aria-label', function () {
+    var f = createNumberUnitField({ units: SIZE_UNITS });
+    assert.ok(f.element.classList.contains('stolon-number-unit'));
+    assert.equal(f.help, null);
+    assert.equal(f.input.getAttribute('aria-label'), 'Value');
+    var named = createNumberUnitField({ units: SIZE_UNITS, label: 'Size', valueLabel: 'Size in units' });
+    assert.equal(named.input.getAttribute('aria-label'), 'Size in units');
+    var helped = createNumberUnitField({ units: SIZE_UNITS, help: 'Only help.' });
+    assert.equal(helped.element.className, 'inputContainer');
+    assert.equal(helped.element.querySelector('label'), null);
+});

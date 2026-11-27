@@ -1,4 +1,4 @@
-import { h, icon, listen, runAll } from './lib/dom.js';
+import { h, icon, listen, runAll, buttonSizeClass } from './lib/dom.js';
 import { applyColor } from './lib/color.js';
 import { stolonText } from './lib/stolon-text.js';
 import type { ComponentHandle } from './types.js';
@@ -11,6 +11,7 @@ export interface ResetRowOptions {
     button?: string | HTMLButtonElement;
     action?: string;
     destructive?: boolean;
+    size?: 'small' | 'medium' | 'large';
     empty?: boolean;
     onClick?(button: HTMLButtonElement): void;
 }
@@ -42,6 +43,7 @@ export interface ResetGroupHandle extends ComponentHandle {
  *   button      : the button's label, or a button already built (default 'Reset') [optional]
  *   action      : the button's data-action, for a page that handles every row's click in one place [optional]
  *   destructive : true for a row that loses data, with a destructive button and a red tile (default false)
+ *   size        : 'small', 'medium', or 'large' for the button it builds, such as medium beside medium buttons (default 'small')
  *   empty       : true while there is nothing to reset, which grays the tile (default false)
  *   onClick     : function(button) called when the button is pressed [optional]
  * }
@@ -56,7 +58,7 @@ export function createResetRow(options: ResetRowOptions): ResetRowHandle {
         : h('button', {
             is: 'emby-button',
             type: 'button',
-            class: 'raised stolon-button stolon-small ' + (o.destructive ? 'stolon-destructive' : 'stolon-secondary'),
+            class: ['raised stolon-button', buttonSizeClass(o.size, 'small'), o.destructive ? 'stolon-destructive' : 'stolon-secondary'].filter(Boolean).join(' '),
             'data-action': o.action
         }, [h('span', { text: typeof o.button === 'string' && o.button ? o.button : stolonText('Reset') })]);
     if (o.action && !button.getAttribute('data-action')) button.setAttribute('data-action', o.action);

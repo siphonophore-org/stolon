@@ -2,6 +2,7 @@
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { installFakeDom, all } from './fake-dom.mjs';
+import { readFileSync } from 'node:fs';
 
 var dom = installFakeDom();
 var { createRecordList } = await import('../../src/js/record-list.js');
@@ -78,4 +79,15 @@ test('a tag takes a status color or a hex code', function () {
     assert.equal(tags[0].classList.contains('stolon-green'), true);
     assert.equal(tags[1].classList.contains('stolon-custom'), true);
     assert.equal(tags[2].className, 'stolon-tag');
+});
+
+test('an aside with asideFill is marked to fill, and the row text takes nearly all the room so the aside fills only a line of its own', function () {
+    var meter = dom.el('div', { class: 'stolon-usage-meter' });
+    var list = createRecordList({ items: [{ id: 'a', title: 'Disk', aside: meter, asideFill: true }, { id: 'b', title: 'Other', aside: dom.el('button') }] });
+    var asides = all(list.element, '.stolon-record-list-aside');
+    assert.ok(asides[0].classList.contains('stolon-fill'));
+    assert.equal(asides[1].classList.contains('stolon-fill'), false);
+    var css = readFileSync(new URL('../../src/css/record-list.css', import.meta.url), 'utf8');
+    assert.match(/\.stolon-record-list-body \{([^}]*)\}/.exec(css)[1], /flex: 1000 1 /);
+    assert.match(/\.stolon-record-list-aside\.stolon-fill \{([^}]*)\}/.exec(css)[1], /flex-grow: 1/);
 });

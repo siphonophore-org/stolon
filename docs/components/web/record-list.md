@@ -28,9 +28,10 @@ Classes: `stolon-record-list`, `stolon-record-list-row`, `stolon-record-list-bod
 
 ## States and Modifiers
 
-* An item is `{ id, title, secondary, tags, aside }`. A tag is `{ label, icon, color, off }`, where `color` is a status color name or a hex code that tints it. An off tag is faded and struck through, `stolon-tag-off`, with a hidden word, "off" by `offText`.
+* An item is `{ id, title, secondary, tags, aside, asideFill }`. A tag is `{ label, icon, color, off }`, where `color` is a status color name or a hex code that tints it. An off tag is faded and struck through, `stolon-tag-off`, with a hidden word, "off" by `offText`.
 * With `onOpen` a row opens by a click, by Enter or Space, and by its chevron, "Open {value}" by `openLabel`.
 * `aside` is a node or a handle with an `element`, such as a button, drawn in place of the chevron. A click on it opens nothing. An aside too wide to sit beside the row's text moves under it, so the title and the secondary line keep their room.
+* `asideFill: true` marks the aside `stolon-fill`. Beside the text it keeps its own width, and once it moves under the text it takes the row's full width, so a [Usage Meter](usage-meter.md) given a width reads full width on a phone.
 * An inline [QR Code](qr-code.md) as an aside is at most a code's width, and its link wraps inside it.
 * `label` sets the list's `aria-label`.
 * `rowKey` names a row, `id` by default, so `setItems` keeps a row whose content did not change.
@@ -50,7 +51,7 @@ A List of static rows, each a title, a secondary line, tags with an icon and an 
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
-| `items` | <code>RecordListItem[] &#124; null</code> | array of { id, title, secondary, tags: [{ label, icon, color, off }], aside }, where color is a status color name or a hex code [optional] |
+| `items` | <code>RecordListItem[] &#124; null</code> | array of { id, title, secondary, tags: [{ label, icon, color, off }], aside, asideFill }, where color is a status color name or a hex code, and asideFill true lets the aside take the row's full width once it moves under the text [optional] |
 
 | Handle member | Type |
 | :--- | :--- |
@@ -63,7 +64,7 @@ A List of static rows, each a title, a secondary line, tags with an icon and an 
 | Type | What it is |
 | :--- | :--- |
 | `RecordListTag` | A tag on a record row. icon is a Material icon before its label, color tints it with a status color name or a hex code, and off shows it faded and struck through, such as a destination that is turned off. |
-| `RecordListItem` | One record row. aside is a control drawn at the row's end in place of the chevron, such as a button or a toggle. |
+| `RecordListItem` | One record row. aside is a control drawn at the row's end in place of the chevron, such as a button or a toggle, and asideFill lets it take the row's full width once it moves under the text, such as a usage meter. |
 
 | Class | What it looks like |
 | :--- | :--- |
@@ -71,6 +72,7 @@ A List of static rows, each a title, a secondary line, tags with an icon and an 
 | `stolon-record-list-row` | One record row: its title and secondary line, its tags under them, and a chevron or an aside control at its end. A row that opens takes the shared hover and focus ring |
 | `stolon-record-list-tags` | The row's tags, each an icon and a label, which wrap under the text |
 | `stolon-record-list-open` | The chevron at the end of a row that opens, and the aside control that takes its place. An aside too wide to sit beside the row's text moves under it |
+| `stolon-record-list-aside.stolon-fill` | An aside that fills, such as a usage meter: the text beside it takes nearly all the spare room, so beside the text it keeps its own width, and on a line of its own under the text it takes the row's full width |
 
 <!-- reference:end -->
 
