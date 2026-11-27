@@ -25,6 +25,7 @@ declare var ApiClient: {
     getPluginConfiguration(pluginId: string): Promise<any>;
     updatePluginConfiguration(pluginId: string, config: unknown): Promise<any>;
     getScheduledTasks(query?: Record<string, unknown>): Promise<any[]>;
+    startScheduledTask?(id: string): Promise<any>;
     sendMessage?(name: string, data?: unknown): void;
     sendWebSocketMessage?(name: string, data?: unknown): void;
 } | undefined;

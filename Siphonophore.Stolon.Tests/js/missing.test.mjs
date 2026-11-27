@@ -78,6 +78,51 @@ test('createChoiceGroup gives null with nothing checked and needs a group elemen
     assert.throws(function () { createChoiceGroup(null); }, /group element/);
 });
 
+test('createChoiceGroup builds its cards from choices when given no group element, and wires them the same way', function () {
+    var seen = [];
+    var handle = createChoiceGroup(null, { name: 'mode', label: 'Direction', value: 'Push', choices: [
+        { value: 'Pull', name: 'Pull', text: 'Read on a schedule.' },
+        { value: 'Push', name: 'Push', text: 'Send as it happens.' },
+        { value: 'Both', name: 'Both' }
+    ], onChange: function (v) { seen.push(v); } });
+    var group = handle.element;
+    dom.document.body.appendChild(group);
+    assert.equal(group.classList.contains('stolon-choice-group'), true);
+    assert.equal(group.getAttribute('role'), 'radiogroup');
+    assert.equal(group.getAttribute('aria-label'), 'Direction');
+    var cards = all(group, '.stolon-choice');
+    assert.equal(cards.length, 3);
+    var inputs = all(group, 'input');
+    assert.deepEqual(inputs.map(function (i) { return i.getAttribute('name'); }), ['mode', 'mode', 'mode']);
+    assert.deepEqual(inputs.map(function (i) { return i.value; }), ['Pull', 'Push', 'Both']);
+    assert.equal(cards[0].querySelector('.stolon-choice-name').textContent, 'Pull');
+    assert.equal(cards[0].querySelector('.stolon-choice-text').textContent, 'Read on a schedule.');
+    assert.equal(cards[2].querySelector('.stolon-choice-text'), null);
+    assert.equal(handle.get(), 'Push');
+    assert.equal(cards[1].classList.contains('stolon-selected'), true);
+    inputs[1].checked = false;
+    inputs[0].checked = true;
+    inputs[0].dispatch('change');
+    assert.deepEqual(seen, ['Pull']);
+    handle.destroy();
+});
+
+test('createChoiceGroup fills a group element with choices, gives a page unique name, and keeps the markup without them', function () {
+    var g = choiceGroup();
+    var marked = createChoiceGroup(g.group);
+    assert.equal(marked.element, g.group);
+    assert.equal(all(g.group, '.stolon-choice').length, 2);
+    var holder = dom.el('div');
+    var a = createChoiceGroup(holder, { choices: [{ value: 'x', name: 'X' }] });
+    var b = createChoiceGroup(null, { choices: [{ value: 'y', name: 'Y' }] });
+    assert.equal(a.element, holder);
+    assert.equal(holder.classList.contains('stolon-choice-group'), true);
+    assert.equal(a.get(), null);
+    var nameA = holder.querySelector('input').getAttribute('name');
+    var nameB = b.element.querySelector('input').getAttribute('name');
+    assert.ok(nameA && nameB && nameA !== nameB);
+});
+
 test('bindSecretField empties the field and shows eight dots, with the hint in its title, while a secret is stored', function () {
     var input = dom.el('input', { type: 'password' });
     input.placeholder = 'Password';

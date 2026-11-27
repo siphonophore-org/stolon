@@ -47,7 +47,7 @@ view.querySelector('#host').appendChild(section.element);
 section.setBadge({ label: 'Renewed', color: 'green' });
 ```
 
-The handle is `{ element, header, content, getValue, setValue, setTitle, setBadge, setSubtitle, setAside, destroy }`, where `getValue` is whether it is open.
+The handle is `{ element, header, content, getValue, setValue, setTitle, setBadge, setSubtitle, setAside, setIconColor, destroy }`, where `getValue` is whether it is open.
 
 A header with slots, as a fixed panel:
 
@@ -67,6 +67,17 @@ var card = createCollapsibleSection({
     content: fieldsNode
 });
 card.setSubtitle('Main Server Shows to Shows');
+```
+
+A tile that follows a feature's switch, green while it is on and gray while it is off, in markup or built:
+
+```js
+import { bindTileToSwitch, setCollapsibleTile } from './configurationpage?name=myplugin_stolon.js';
+
+var tile = bindTileToSwitch(view.querySelector('#syncSection'), view.querySelector('#chkSyncEnabled'));
+shared.setChecked('chkSyncEnabled', config.SyncEnabled);
+tile.refresh();
+setCollapsibleTile(view.querySelector('#cacheSection'), 'red');
 ```
 
 The same panel written by hand. A fixed header is a `div`, and `initCollapsibles` leaves it alone:
@@ -114,6 +125,8 @@ Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-sec
 * `stolon-collapsible-actions` is a footer row inside a body, with a rule above it. Its buttons and any `stolon-status-text` sit centered on one line. `flush` drops the rule and the space above it, for a row that follows its fields directly.
 * A header can show a badge or a status dot between its title and its chevron. `setCollapsibleBadge(header, { label, color, dot })` adds or replaces it on any header, built or bound, and `null` removes it. `color` is a status color name, a hex code, or a [Badge](badge.md) state name, and `dot: true` draws a [Status Dot](status-dot.md) named by `label`. In markup, put `stolon-collapsible-badge` on a `stolon-badge` before the icon.
 * `icon` draws a Material icon in a rounded tile before the title, the size of a large avatar, on the accent wash. `iconColor` is a status color name or a hex code.
+* `setCollapsibleTile(target, color)` colors the tile later, on a section in markup or a built one, found from the section, its header, or the tile. No color gives the accent back. A built section's `setIconColor(color)` does the same.
+* `bindTileToSwitch(section, input, { on, off })` colors the tile `on` (default green) while the checkbox is checked and `off` (default gray) while it is not, and follows each `change`. Its handle is `{ refresh, destroy }`.
 * `subtitle` is a dimmed line under the title, as text that ends in an ellipsis with its tooltip, or a node such as a From and To route. `setSubtitle` replaces it, and `null` removes it.
 * `aside` is a node at the right of the header, such as a badge, a button, or a toggle, centered on the header's line. `setAside` replaces it, and `null` empties it. A collapsible header with an aside sits in a `stolon-collapsible-bar` with the chevron beside it, so a control in the aside never sits inside the header button, and a click on the aside never toggles the section.
 * With any slot the title sits in `stolon-collapsible-heading` and ends in an ellipsis with its full text in its tooltip. A section with no slot keeps the plain markup above.
@@ -124,6 +137,7 @@ Also on the bag as `shared.initCollapsibles()`. Classes: `stolon-collapsible-sec
 ## Gotchas
 
 * Use `type="button"`, or the header submits a surrounding form.
+* Setting `checked` in code fires no `change`, so call `refresh()` on a `bindTileToSwitch` handle after loading the config.
 * The content is found inside the `view` you pass, so a section in a body level dialog is not found by a page level call.
 * The title shows exactly as written, so a name such as `yt-dlp` keeps its case. Write a title in Title Case.
 
@@ -144,6 +158,23 @@ Binds every collapsible header in the view so a click toggles its target, once p
 <code>function setCollapsibleBadge(header: Element, badge: CollapsibleBadge &#124; null &#124; undefined): void</code>
 
 Shows a badge, or a status dot, in a collapsible header between its title and its chevron, replacing any it already shows. Null removes it.
+
+### `setCollapsibleTile`
+
+<code>function setCollapsibleTile(target: Element, color?: string &#124; null): HTMLElement &#124; null</code>
+
+Colors the icon tile of a collapsible section, in markup or built by createCollapsibleSection. No color gives the accent.
+
+### `bindTileToSwitch`
+
+<code>function bindTileToSwitch(section: Element, input: HTMLInputElement, colors?: TileSwitchColors &#124; null): TileSwitchHandle</code>
+
+Colors a collapsible section's tile by a checkbox and follows the checkbox as it changes, such as green while a feature's switch is on and gray while it is off. Setting checked in code fires no change, so call refresh after it.
+
+| Handle member | Type |
+| :--- | :--- |
+| `refresh` | <code>(): void</code> |
+| `destroy` | <code>(): void</code> |
 
 ### `createCollapsibleSection`
 
@@ -177,11 +208,13 @@ Builds a collapsible section, the same markup initCollapsibles binds, with an op
 | `setBadge` | <code>(badge: CollapsibleBadge &#124; null): void</code> |
 | `setSubtitle` | <code>(subtitle: string &#124; Node &#124; null): void</code> |
 | `setAside` | <code>(aside: Node &#124; null): void</code> |
+| `setIconColor` | <code>(color: string &#124; null): void</code> |
 | `destroy` | <code>(): void</code> |
 
 | Type | What it is |
 | :--- | :--- |
 | `CollapsibleBadge` | A badge or status dot in a collapsible header. color is a status color name, a hex code, or a badge state name, and dot draws a dot named by label. |
+| `TileSwitchColors` | The tile colors bindTileToSwitch paints, while the switch is on and while it is off. |
 
 | Class | What it looks like |
 | :--- | :--- |

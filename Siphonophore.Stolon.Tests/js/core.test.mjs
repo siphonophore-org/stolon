@@ -269,3 +269,83 @@ test('apiRequest and fetchObjectUrl send the page\'s language, from its current 
         delete globalThis.ApiClient;
     }
 });
+
+test('saveConfigWith resolves with the config it saved, the replacement when the mutator returns one', async function () {
+    var posted = [];
+    globalThis.ApiClient = {
+        getPluginConfiguration: function () { return Promise.resolve({ A: 1 }); },
+        updatePluginConfiguration: function (id, config) { posted.push(config); return Promise.resolve({ ok: true }); }
+    };
+    try {
+        var saved = await shared.saveConfigWith(function (config) { config.A = 2; });
+        assert.deepEqual(saved, { A: 2 });
+        assert.equal(saved, posted[0]);
+        var replaced = await shared.saveConfigWith(function () { return { B: 3 }; });
+        assert.deepEqual(replaced, { B: 3 });
+        assert.equal(replaced, posted[1]);
+    } finally {
+        delete globalThis.ApiClient;
+    }
+});
+
+test('apiRequest takes a prefix for one call, where an empty one calls the endpoint as given', async function () {
+    var urls = [];
+    globalThis.ApiClient = {
+        getUrl: function (u) { return '/' + u; },
+        fetch: function (o) { urls.push(o.url); return Promise.resolve({}); }
+    };
+    try {
+        await shared.apiRequest('Items');
+        await shared.apiRequest('Groups/Users', 'GET', null, { prefix: '' });
+        await shared.apiRequest('Items', 'GET', null, { prefix: 'Other' });
+        await shared.apiRequest('Items', 'GET', null, {});
+        assert.deepEqual(urls, ['/Api/Items', '/Groups/Users', '/Other/Items', '/Api/Items']);
+    } finally {
+        delete globalThis.ApiClient;
+    }
+});
+
+test('runScheduledTask starts the task found by its key, then follows it on the button', async function () {
+    var started = [];
+    var timers = mock.timers;
+    timers.enable({ apis: ['setInterval'] });
+    globalThis.ApiClient = {
+        getUrl: function (u) { return '/' + u; },
+        getScheduledTasks: function () { return Promise.resolve([{ Id: 'other', Key: 'Other' }, { Id: 't1', Key: 'MyTask', State: 'Idle' }]); },
+        startScheduledTask: function (id) { started.push(id); return Promise.resolve(); }
+    };
+    try {
+        var btn = dom.el('button', { class: 'stolon-small' }, [dom.el('span')]);
+        dom.document.body.appendChild(btn);
+        var handle = await shared.runScheduledTask(btn, 'MyTask', 'Scan');
+        assert.deepEqual(started, ['t1']);
+        assert.equal(btn.disabled, true);
+        assert.equal(btn.querySelector('span').textContent, 'Scan 0%');
+        handle.cancel();
+        assert.equal(btn.disabled, false);
+    } finally {
+        timers.reset();
+        delete globalThis.ApiClient;
+    }
+});
+
+test('runScheduledTask posts to the running tasks route without startScheduledTask, and rejects for an unknown key', async function () {
+    var sent = [];
+    var timers = mock.timers;
+    timers.enable({ apis: ['setInterval'] });
+    globalThis.ApiClient = {
+        getUrl: function (u) { return '/' + u; },
+        getScheduledTasks: function () { return Promise.resolve([{ Id: 't 1', Key: 'MyTask' }]); },
+        fetch: function (o) { sent.push(o); return Promise.resolve({}); }
+    };
+    try {
+        var btn = dom.el('button', {}, [dom.el('span')]);
+        var handle = await shared.runScheduledTask(btn, 'MyTask', 'Scan');
+        assert.deepEqual(sent.map(function (o) { return [o.url, o.type]; }), [['/ScheduledTasks/Running/t%201', 'POST']]);
+        handle.cancel();
+        await assert.rejects(shared.runScheduledTask(dom.el('button'), 'Missing', 'Scan'), /Missing/);
+    } finally {
+        timers.reset();
+        delete globalThis.ApiClient;
+    }
+});

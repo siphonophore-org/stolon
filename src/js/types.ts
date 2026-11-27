@@ -148,13 +148,19 @@ export interface ComboBoxHandle extends ComponentHandle {
     destroy(): void;
 }
 
+/** The last argument of the bag's apiRequest. prefix replaces the bag's apiPrefix for this call, and '' calls the endpoint as given. */
+export interface ApiRequestOptions {
+    prefix?: string;
+}
+
 /** What pollTaskProgress returns. cancel stops it and resets the button. */
 export interface TaskProgressHandle {
     cancel(): void;
 }
 
-/** The parts of a Jellyfin scheduled task that pollTaskProgress reads. */
+/** The parts of a Jellyfin scheduled task that pollTaskProgress and runScheduledTask read. */
 export interface ScheduledTaskInfo {
+    Id?: string;
     Key: string;
     State: 'Idle' | 'Running' | 'Cancelling' | string;
     CurrentProgressPercentage?: number;

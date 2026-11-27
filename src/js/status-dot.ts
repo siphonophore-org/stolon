@@ -27,8 +27,7 @@ function dotState(color: unknown, label: unknown): { color: string; label: strin
 }
 
 /**
- * Builds the markup of the dot createStatusDot draws, for a component that renders text. The label is escaped.
- * Internal to the web components.
+ * Builds the markup of the dot createStatusDot draws, for a page or component that renders text. The label is escaped.
  *
  * @param color a status color name or a hex code (default gray)
  * @param label the name of the state (default the color's meaning) [optional]
@@ -38,6 +37,24 @@ export function statusDotHtml(color: unknown, label?: unknown): string {
     var state = dotState(color, label);
     var name = escapeHtml(state.label);
     return '<span class="stolon-dot ' + colorClass(state.color, 'gray') + '" role="img" title="' + name + '" aria-label="' + name + '"' + colorStyle(state.color) + '></span>';
+}
+
+/**
+ * Recolors a dot already on the page, such as one statusDotHtml drew, in place. A dot a screen reader reads takes the
+ * label, or the color's meaning, as its title and accessible name. A dot marked aria-hidden keeps its own.
+ *
+ * @param el the stolon-dot element
+ * @param color a status color name or a hex code (default gray)
+ * @param label the name of the state (default the color's meaning) [optional]
+ */
+export function setDotColor(el: HTMLElement, color: unknown, label?: unknown): void {
+    if (!el) return;
+    var state = dotState(color, label);
+    el.classList.add('stolon-dot');
+    applyColor(el, state.color, 'gray');
+    if (el.getAttribute('aria-hidden') === 'true' && !label) return;
+    el.title = state.label;
+    el.setAttribute('aria-label', state.label);
 }
 
 /**

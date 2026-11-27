@@ -17,6 +17,8 @@
     </label>
 </div>
 <span id="modeStatus" class="stolon-status-text"></span>
+<p class="fieldDescription">The same cards built from data.</p>
+<div id="built"></div>
 <script type="module">
 const base = await window.__baseReady;
 const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
@@ -24,4 +26,14 @@ const mode = base.createChoiceGroup(document.getElementById('modeChoices'), {
     onChange: (value) => shared.setStatus('modeStatus', 'Chose ' + value + '.', false, { timeout: 0 })
 });
 mode.set('Pull');
+const built = base.createChoiceGroup(null, {
+    name: 'storageMode',
+    label: 'Storage',
+    value: 'Copy',
+    choices: [
+        { value: 'Copy', name: 'Copy', text: 'Keep a copy on this server.' },
+        { value: 'Link', name: 'Link', text: 'Point at the files where they are.' }
+    ]
+});
+document.getElementById('built').appendChild(built.element);
 </script>

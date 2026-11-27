@@ -346,6 +346,8 @@ export function installFakeDom(opts) {
         activeElement: null,
         createElement(tag) { return new FakeElement(doc, tag); },
         createElementNS(ns, tag) { return new FakeElement(doc, tag); },
+        // A text node, as an element named #text that holds only its text.
+        createTextNode(text) { var node = new FakeElement(doc, '#text'); node.textContent = text; return node; },
         // Delivers an event to the document's listeners only, with the given target, as one that reached the document.
         dispatch(type, init) {
             var e = Object.assign({ type: type, target: doc.body, defaultPrevented: false, stopped: false, preventDefault() { this.defaultPrevented = true; }, stopPropagation() { this.stopped = true; }, stopImmediatePropagation() { this.stopped = true; this.immediate = true; } }, init || {});

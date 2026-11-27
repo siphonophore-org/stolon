@@ -15,10 +15,10 @@ import { renderCards } from './count-cards.js';
 import { createPoller } from './poller.js';
 import { createChangeTracker } from './change-tracker.js';
 import { createSearchableComboBox } from './combo-box.js';
-import { pollTaskProgress } from './task-progress-button.js';
+import { pollTaskProgress, runScheduledTask } from './task-progress-button.js';
 import type {
     SecretFieldOptions, Poller, PollerOptions, ChangeTracker, ChangeTrackerOptions, CardData, SaveMessages, CopyFeedbackOptions,
-    ComboBoxOptions, ComboBoxHandle, TaskProgressHandle
+    ComboBoxOptions, ComboBoxHandle, TaskProgressHandle, ApiRequestOptions
 } from './types.js';
 import { stolonText, pageLanguage, getCurrentTranslations } from './lib/stolon-text.js';
 import { currentLanguage } from './translations.js';
@@ -210,12 +210,14 @@ export function createShared(view: HTMLElement, pluginId: string, apiPrefix?: st
         saveConfigWith: function (mutator: (config: any) => any, statusId?: string, messages?: SaveMessages): Promise<any> {
             var self = this;
             messages = messages || {};
+            var saved: any = null;
             return this.getConfig().then(function (config) {
                 var replacement = mutator(config);
-                return self.saveConfig(replacement && typeof replacement === 'object' ? replacement : config);
-            }).then(function (result) {
+                saved = replacement && typeof replacement === 'object' ? replacement : config;
+                return self.saveConfig(saved);
+            }).then(function () {
                 if (statusId) self.setStatus(statusId, messages.success || stolonText('Stolon.Saved'), false);
-                return result;
+                return saved;
             }).catch(function (err) {
                 if (statusId) self.setStatus(statusId, messages.error || stolonText('Stolon.SaveFailed'), true);
                 throw err;
@@ -265,8 +267,9 @@ export function createShared(view: HTMLElement, pluginId: string, apiPrefix?: st
             return createChangeTracker.call(this, opts);
         },
 
-        apiRequest: function (endpoint: string, method?: string, data?: unknown): Promise<any> {
-            var url = this.apiPrefix ? this.apiPrefix + '/' + endpoint : endpoint;
+        apiRequest: function (endpoint: string, method?: string, data?: unknown, opts?: ApiRequestOptions): Promise<any> {
+            var prefix = opts && typeof opts.prefix === 'string' ? opts.prefix : this.apiPrefix;
+            var url = prefix ? prefix + '/' + endpoint : endpoint;
             var options: JellyfinFetchOptions = { url: ApiClient!.getUrl(url), type: method || 'GET', dataType: 'json', headers: requestHeaders() };
             if (data !== undefined && data !== null) {
                 options.contentType = 'application/json';
@@ -311,6 +314,10 @@ export function createShared(view: HTMLElement, pluginId: string, apiPrefix?: st
 
         pollTaskProgress: function (btn: HTMLButtonElement, taskKey: string, label: string, onComplete?: () => void): TaskProgressHandle {
             return pollTaskProgress(btn, taskKey, label, onComplete);
+        },
+
+        runScheduledTask: function (btn: HTMLButtonElement, taskKey: string, label: string, onComplete?: () => void): Promise<TaskProgressHandle> {
+            return runScheduledTask(btn, taskKey, label, onComplete);
         }
     };
 }

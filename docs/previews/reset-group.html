@@ -16,3 +16,14 @@
         <button is="emby-button" type="button" class="raised stolon-button stolon-destructive stolon-small"><span>Reset All</span></button>
     </div>
 </div>
+<h3 class="stolon-subsection-title">Built in Script</h3>
+<div id="built"></div>
+<script type="module">
+const base = await window.__baseReady;
+const group = base.createResetGroup([
+    { icon: 'video_library', label: 'Content sync', help: 'Forgets content tracking.', destructive: true },
+    { icon: 'history', label: 'History sync', help: 'Forgets history tracking.', destructive: true, empty: true },
+    { icon: 'tune', label: 'Settings', help: 'Puts every setting back to its default.', button: 'Restore' }
+]);
+document.getElementById('built').appendChild(group.element);
+</script>

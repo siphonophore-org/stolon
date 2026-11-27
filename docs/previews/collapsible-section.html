@@ -44,6 +44,8 @@
 <div id="panels"></div>
 <p class="fieldDescription">A collapsible header with a button on the right, beside its chevron.</p>
 <div id="asided"></div>
+<p class="fieldDescription">A tile that follows a switch, green while it is on and gray while it is off.</p>
+<div id="switched"></div>
 <script type="module">
 const base = await window.__baseReady;
 const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
@@ -79,4 +81,8 @@ test.className = 'raised stolon-button stolon-small';
 test.textContent = 'Test';
 test.addEventListener('click', function () { test.textContent = 'Tested'; });
 document.getElementById('asided').appendChild(base.createCollapsibleSection({ title: 'Relay', icon: 'hub', subtitle: 'relay.example.com', aside: test, collapsed: true, content: '<p>The relay settings.</p>' }).element);
+const enabled = base.h('input', { type: 'checkbox', is: 'emby-checkbox', checked: true });
+const sync = base.createCollapsibleSection({ title: 'History sync', icon: 'history', content: base.h('label', { class: 'emby-checkbox-label' }, [enabled, base.h('span', { class: 'checkboxLabel', text: 'Enabled' })]) });
+document.getElementById('switched').appendChild(sync.element);
+base.bindTileToSwitch(sync.element, enabled);
 </script>

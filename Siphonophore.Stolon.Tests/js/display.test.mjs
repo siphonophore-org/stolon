@@ -255,3 +255,55 @@ test('the status dot has an image role with a title and aria-label from the colo
     assert.equal(J.createStatusDot().element.title, 'Off');
     assert.ok(J.createStatusDot({ color: 'nope' }).element.classList.contains('stolon-gray'));
 });
+
+test('statusDotHtml is exported and draws the dot createStatusDot draws, with an escaped name', function () {
+    var html = J.statusDotHtml('green', 'Up <now>');
+    assert.match(html, /^<span class="stolon-dot stolon-green" role="img" title="Up &lt;now&gt;" aria-label="Up &lt;now&gt;"><\/span>$/);
+    assert.match(J.statusDotHtml('nope'), /stolon-gray/);
+});
+
+test('setDotColor recolors a dot in place and names it by the label or the color', function () {
+    var dot = dom.el('span', { class: 'stolon-dot stolon-gray stolon-card-dot', role: 'img' });
+    J.setDotColor(dot, 'red', 'Down');
+    assert.equal(dot.classList.contains('stolon-red'), true);
+    assert.equal(dot.classList.contains('stolon-gray'), false);
+    assert.equal(dot.classList.contains('stolon-card-dot'), true);
+    assert.equal(dot.title, 'Down');
+    assert.equal(dot.getAttribute('aria-label'), 'Down');
+    J.setDotColor(dot, 'green');
+    assert.equal(dot.title, 'Active');
+    J.setDotColor(dot, '#e91e63');
+    assert.equal(dot.classList.contains('stolon-custom'), true);
+    assert.equal(dot.style.getPropertyValue('--stolon-custom'), '#e91e63');
+});
+
+test('setDotColor leaves a hidden dot unnamed unless a label is given', function () {
+    var dot = dom.el('span', { 'aria-hidden': 'true' });
+    J.setDotColor(dot, 'orange');
+    assert.equal(dot.classList.contains('stolon-dot'), true);
+    assert.equal(dot.classList.contains('stolon-orange'), true);
+    assert.equal(dot.hasAttribute('aria-label'), false);
+    J.setDotColor(null, 'red');
+});
+
+test('a banner draws its items as a list under the text, and setValue replaces them', function () {
+    var b = banner({ text: 'Two disks need a look.', items: ['media1 is full.', '', null, 'media2 is missing.'] });
+    var list = b.element.querySelector('.stolon-banner-list');
+    assert.equal(list.tagName, 'UL');
+    assert.deepEqual(all(list, 'li').map(function (li) { return li.textContent; }), ['media1 is full.', 'media2 is missing.']);
+    assert.equal(list.hidden, false);
+    assert.deepEqual(b.getValue().items, ['media1 is full.', 'media2 is missing.']);
+    b.setValue({ text: '', items: ['Only one.'] });
+    assert.equal(all(list, 'li').length, 1);
+    assert.equal(b.element.querySelector('.stolon-banner-text').hidden, true);
+    b.setValue({ items: null });
+    assert.equal(list.hidden, true);
+    assert.equal(all(list, 'li').length, 0);
+});
+
+test('a banner with no items hides its list and keeps its text line', function () {
+    var b = banner();
+    assert.equal(b.element.querySelector('.stolon-banner-list').hidden, true);
+    assert.equal(b.element.querySelector('.stolon-banner-text').hidden, false);
+    assert.deepEqual(b.getValue().items, []);
+});

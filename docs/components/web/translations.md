@@ -47,6 +47,7 @@ The endpoint answers with `StolonTranslations.Serve`. A relative address goes th
 * The language is `options.language`, else the viewer's display setting in the web client, else the browser's language. `options.userId` names whose display setting to read on a page with no `ApiClient`.
 * `tr(key, fallback)` gives the string, else `fallback`, else the key.
 * `has(key)` is `true` only for a key the plugin has a string for.
+* `plural(count, oneKey, manyKey, ...args)` formats `oneKey` for a count of exactly 1 and `manyKey` for any other, with the count as `{0}` and the other values as `{1}` on, such as `t.plural(n, 'UserMoved', 'UsersMoved', group)`. The word based `plural` in [Browser Helpers](browser-helpers.md) is for English text with no key.
 * `currentLanguage()` reads the viewer's language on its own, and `formatText(text, ...args)` fills placeholders in any text.
 * `currentTranslations()` gives the page's current translations, the handle `loadTranslations` gave last, or `null`.
 * `t.title(key)` and `t.sentence(key)` convert in the handle's language, so only English changes, and keep the words of `t.casing`, Stolon's defaults and the plugin's casing list.
@@ -112,6 +113,7 @@ The page's current translations: the handle loadTranslations gave last, which ev
 | `casing` | <code>string[]</code> |
 | `tr` | <code>(key: string, fallback?: string): string</code> |
 | `format` | <code>(key: string, ...args: unknown[]): string</code> |
+| `plural` | <code>(count: number, oneKey: string, manyKey: string, ...args: unknown[]): string</code> |
 | `title` | <code>(key: string): string</code> |
 | `sentence` | <code>(key: string): string</code> |
 | `has` | <code>(key: string): boolean</code> |
@@ -130,6 +132,7 @@ Builds a translations handle over strings already loaded.
 | `casing` | <code>string[]</code> |
 | `tr` | <code>(key: string, fallback?: string): string</code> |
 | `format` | <code>(key: string, ...args: unknown[]): string</code> |
+| `plural` | <code>(count: number, oneKey: string, manyKey: string, ...args: unknown[]): string</code> |
 | `title` | <code>(key: string): string</code> |
 | `sentence` | <code>(key: string): string</code> |
 | `has` | <code>(key: string): boolean</code> |
@@ -148,6 +151,7 @@ Translates marked markup under a root. data-str sets the text, and data-str-titl
 | `casing` (required) | <code>string[]</code> |  |
 | `tr` (required) | <code>(key: string, fallback?: string): string</code> |  |
 | `format` (required) | <code>(key: string, ...args: unknown[]): string</code> |  |
+| `plural` (required) | <code>(count: number, oneKey: string, manyKey: string, ...args: unknown[]): string</code> |  |
 | `title` (required) | <code>(key: string): string</code> |  |
 | `sentence` (required) | <code>(key: string): string</code> |  |
 | `has` (required) | <code>(key: string): boolean</code> |  |

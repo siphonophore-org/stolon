@@ -98,7 +98,7 @@ Explain what you would change, why, and what it risks. Wait for an answer before
 | `src/*.cs` | The C# helpers, one per file, in the `Siphonophore.Stolon` namespace. |
 | `src/css/` | One CSS file per component, named after its docs page, with every token in `design-tokens.css`. |
 | `src/js/` | Strict TypeScript, one file per component named after its docs page, re-exported from `index.ts`, with shared types in `types.ts`. There is no `.js` source. |
-| `src/js/lib/` | The cores and internal helpers that components are built on. Most are internal. `index.ts` makes the color core, the validation core, and the world shapes public, and exports the types `ChartSeries` from `chart.ts` and `ThumbSource` from `thumb.ts`. |
+| `src/js/lib/` | The cores and internal helpers that components are built on. Most are internal. `index.ts` makes the color core, the validation core, and the world shapes public, exports `make` and `h` from `dom.ts` and `badgeHtml` from `badge.ts`, and exports the types `ChartSeries` from `chart.ts` and `ThumbSource` from `thumb.ts`. |
 | `src/templates/` | The HTML templates, such as `status.html`. |
 | `dist/` | The bundled CSS and JS, the typings, and Jellyfin's strings in `dist/jellyfin/`. Built by `scripts/bundle.sh` and not committed. |
 | `build/` | The targets that wire the package into a plugin. `Siphonophore.Stolon.targets` imports `Siphonophore.Stolon.Translations.targets`. |

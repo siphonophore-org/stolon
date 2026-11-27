@@ -23,16 +23,21 @@ var banner = createBanner({
 container.appendChild(banner.element);
 ```
 
+```js
+createBanner({ kind: 'error', text: 'Two disks need a look.', items: ['media1 is full.', 'media2 is missing.'], dismissible: false });
+```
+
 Classes: `stolon-banner`, `stolon-banner-close`. The handle is `{ element, getValue, setValue, show, dismiss, destroy }`.
 
-Parts: `stolon-banner-body`, `stolon-banner-title`.
+Parts: `stolon-banner-body`, `stolon-banner-title`, `stolon-banner-text`, `stolon-banner-list`.
 
 ## States and Modifiers
 
 * `kind` is `info` (default), `success`, `warn`, `error`, or `neutral`. The banner also takes the matching [Callout](callout.md) class, and shows the icon of its kind beside the text.
 * `title` adds a bold first line. `dismissible: false` hides the button. `dismissLabel` replaces "Dismiss".
 * Dismissal is remembered only with both `key` and `storage`. With a key and a storage whose `get(key)` is true, the banner starts hidden.
-* `getValue()` returns `{ kind, title, text, dismissed }`, and `setValue({ kind, title, text })` changes what it shows. `show()` brings back a dismissed banner, and `dismiss()` closes it from code.
+* `items` are lines drawn as a bulleted list under the text, such as one per problem. Empty lines are skipped. With items and no text, the text line hides.
+* `getValue()` returns `{ kind, title, text, items, dismissed }`, and `setValue({ kind, title, text, items })` changes what it shows. `show()` brings back a dismissed banner, and `dismiss()` closes it from code.
 * `onDismiss()` runs when it is dismissed.
 * `actions` are small buttons under the text, `[{ text, primary, className, onClick(button) }]`, such as Apply. `primary` draws the main one, and the rest are secondary. `setActions(actions)` replaces them, and `null` removes them.
 
@@ -53,6 +58,7 @@ A callout with a Dismiss button. It remembers a dismissal only when the caller g
 | `kind` | <code>BannerKind &#124; string</code> | 'info', 'success', 'warn', 'error', or 'neutral' (default 'info') |
 | `title` | <code>string</code> | bold first line [optional] |
 | `text` | <code>string</code> | the message sentence [optional] |
+| `items` | <code>string[] &#124; null</code> | lines drawn as a bulleted list under the text, such as one per problem [optional] |
 | `dismissible` | <code>boolean</code> | false hides the button (default true) |
 | `dismissLabel` | <code>string</code> | title and aria-label of the button (default 'Dismiss') |
 | `key` | <code>string</code> | name that identifies this banner in the storage [optional] |
@@ -73,12 +79,13 @@ A callout with a Dismiss button. It remembers a dismissal only when the caller g
 | :--- | :--- |
 | `BannerKind` | The tone of a banner, which picks its tint and glyph. |
 | `BannerStorage` | Where a banner remembers a dismissal, given by the caller so Stolon never touches browser storage itself. |
-| `BannerValue` | What a banner's getValue returns, and the kind, title, and text its setValue takes. |
+| `BannerValue` | What a banner's getValue returns, and the kind, title, text, and items its setValue takes. |
 | `BannerAction` | A button under a banner's text. primary draws it as the main action, and onClick gets the button, which it may disable while it works. |
 
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-banner-actions` | The buttons under a banner's text, such as Apply |
+| `stolon-banner-list` | A bulleted list under a banner's text, one line per item |
 
 <!-- reference:end -->
 

@@ -199,3 +199,9 @@ test('pollTaskProgress draws a progress bar along a medium button, also on a bar
     handle.cancel();
     delete globalThis.ApiClient;
 });
+
+test('badgeHtml is exported from the bundle entry as the badge core itself', async function () {
+    var core = await import('../../src/js/lib/badge.js');
+    assert.equal(kit.badgeHtml, core.badgeHtml);
+    assert.equal(kit.badgeHtml('Ready <1>', 'Errored', 'medium'), '<span class="stolon-badge stolon-red stolon-medium">Ready &lt;1&gt;</span>');
+});

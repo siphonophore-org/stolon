@@ -8,8 +8,9 @@ export interface TranslationsOptions {
 }
 
 /**
- * What loadTranslations returns. tr reads one string, format fills its placeholders, title and sentence read one in
- * title case or sentence case, and apply translates marked markup. casing is the plugin's casing list.
+ * What loadTranslations returns. tr reads one string, format fills its placeholders, plural picks the string for a
+ * count, title and sentence read one in title case or sentence case, and apply translates marked markup. casing is the
+ * plugin's casing list.
  */
 export interface TranslationsHandle {
     language: string;
@@ -17,6 +18,7 @@ export interface TranslationsHandle {
     casing: string[];
     tr(key: string, fallback?: string): string;
     format(key: string, ...args: unknown[]): string;
+    plural(count: number, oneKey: string, manyKey: string, ...args: unknown[]): string;
     title(key: string): string;
     sentence(key: string): string;
     has(key: string): boolean;
@@ -121,6 +123,9 @@ export function createTranslations(strings: Record<string, string>, language?: s
         },
         format: function (key: string, ...args: unknown[]) {
             return formatText(handle.tr(key), ...args);
+        },
+        plural: function (count: number, oneKey: string, manyKey: string, ...args: unknown[]) {
+            return formatText(handle.tr(count === 1 ? oneKey : manyKey), count, ...args);
         },
         title: function (key: string) {
             return convertCase(handle.tr(key), words, handle.language, true);

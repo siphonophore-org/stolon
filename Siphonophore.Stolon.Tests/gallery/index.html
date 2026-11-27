@@ -611,6 +611,11 @@ function html(parent, markup) {
     html(s, '<div class="stolon-reset-group">' +
         '<div class="stolon-reset-row"><div class="stolon-reset-info"><div>Reset sync state</div><div class="fieldDescription">Clears the sync history.</div></div><button type="button" class="raised stolon-button stolon-secondary">Reset</button></div>' +
         '<div class="stolon-reset-row stolon-reset-row-nuclear"><div class="stolon-reset-info"><div>Reset everything</div><div class="fieldDescription">Clears every setting.</div></div><button type="button" class="raised stolon-button stolon-destructive">Reset</button></div></div>');
+    s.appendChild(base.createResetGroup([
+        { icon: 'history', label: 'History sync', help: 'Forgets history tracking.', destructive: true },
+        { icon: 'info', label: 'Metadata sync', help: 'Forgets metadata tracking.', destructive: true, empty: true },
+        { icon: 'tune', label: 'Settings', help: 'Puts every setting back to its default.', button: 'Restore' }
+    ]).element);
 })();
 
 (function () {

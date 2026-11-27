@@ -12,11 +12,12 @@ export interface BannerStorage {
     set?(key: string, value: true): void;
 }
 
-/** What a banner's getValue returns, and the kind, title, and text its setValue takes. */
+/** What a banner's getValue returns, and the kind, title, text, and items its setValue takes. */
 export interface BannerValue {
     kind?: BannerKind | string;
     title?: string;
     text?: string;
+    items?: string[] | null;
     dismissed?: boolean;
 }
 
@@ -28,11 +29,12 @@ export interface BannerAction {
     onClick?(button: HTMLButtonElement): void;
 }
 
-/** What createBanner takes. A key and a storage together remember a dismissal, and actions are buttons under the text. */
+/** What createBanner takes. A key and a storage together remember a dismissal, items are a list under the text, and actions are buttons under it. */
 export interface BannerOptions {
     kind?: BannerKind | string;
     title?: string;
     text?: string;
+    items?: string[] | null;
     dismissible?: boolean;
     dismissLabel?: string;
     key?: string;
@@ -51,6 +53,11 @@ export interface BannerHandle extends ComponentHandle {
     destroy(): void;
 }
 
+// The non empty lines of an items option, as text.
+function listOf(list: unknown): string[] {
+    return Array.isArray(list) ? list.filter(function (item) { return item !== null && item !== undefined && item !== ''; }).map(String) : [];
+}
+
 var GLYPHS: Record<BannerKind, string> = { info: MESSAGE_ICONS.info, success: MESSAGE_ICONS.success, warn: MESSAGE_ICONS.warn, error: MESSAGE_ICONS.error, neutral: MESSAGE_ICONS.neutral };
 
 /**
@@ -60,6 +67,7 @@ var GLYPHS: Record<BannerKind, string> = { info: MESSAGE_ICONS.info, success: ME
  *   kind         : 'info', 'success', 'warn', 'error', or 'neutral' (default 'info')
  *   title        : bold first line [optional]
  *   text         : the message sentence [optional]
+ *   items        : lines drawn as a bulleted list under the text, such as one per problem [optional]
  *   dismissible  : false hides the button (default true)
  *   dismissLabel : title and aria-label of the button (default 'Dismiss')
  *   key          : name that identifies this banner in the storage [optional]
@@ -67,7 +75,7 @@ var GLYPHS: Record<BannerKind, string> = { info: MESSAGE_ICONS.info, success: ME
  *   actions      : array of { text, primary, className, onClick(button) } drawn as small buttons under the text, such as Apply [optional]
  *   onDismiss    : function() called when the user dismisses it [optional]
  * }
- * @returns { element, getValue, setValue, show, dismiss, setActions, destroy }. setActions replaces the buttons, and null removes them. getValue returns { kind, title, text, dismissed }, and setValue takes kind, title, and text.
+ * @returns { element, getValue, setValue, show, dismiss, setActions, destroy }. setActions replaces the buttons, and null removes them. getValue returns { kind, title, text, items, dismissed }, and setValue takes kind, title, text, and items.
  * With a key and a storage whose get(key) is true, the banner starts hidden.
  */
 export function createBanner(options?: BannerOptions): BannerHandle {
@@ -75,6 +83,7 @@ export function createBanner(options?: BannerOptions): BannerHandle {
     var kind: BannerKind = has(GLYPHS, options.kind as BannerKind) ? options.kind as BannerKind : 'info';
     var title: string = options.title || '';
     var text: string = options.text || '';
+    var items: string[] = listOf(options.items);
     var dismissed: boolean = false;
     var cleanups: Array<() => void> = [];
 
@@ -83,10 +92,12 @@ export function createBanner(options?: BannerOptions): BannerHandle {
     var body = make('div', 'stolon-banner-body');
     var titleEl = make('div', 'stolon-banner-title');
     var textEl = make('div', 'stolon-banner-text');
+    var listEl = make('ul', 'stolon-banner-list');
     var actionRow = make('div', 'stolon-button-row stolon-banner-actions');
     var actionOff: Array<() => void> = [];
     body.appendChild(titleEl);
     body.appendChild(textEl);
+    body.appendChild(listEl);
     body.appendChild(actionRow);
     root.appendChild(glyph);
     root.appendChild(body);
@@ -100,6 +111,10 @@ export function createBanner(options?: BannerOptions): BannerHandle {
         titleEl.textContent = title;
         titleEl.hidden = !title;
         textEl.textContent = text;
+        textEl.hidden = !text && !!items.length;
+        clear(listEl);
+        items.forEach(function (item) { listEl.appendChild(make('li', null, null, item)); });
+        listEl.hidden = !items.length;
         root.hidden = dismissed;
     }
 
@@ -133,12 +148,13 @@ export function createBanner(options?: BannerOptions): BannerHandle {
 
     return {
         element: root,
-        getValue: function (): BannerValue { return { kind: kind, title: title, text: text, dismissed: dismissed }; },
+        getValue: function (): BannerValue { return { kind: kind, title: title, text: text, items: items.slice(), dismissed: dismissed }; },
         setValue: function (next: BannerValue): void {
             next = next || {};
             if (next.kind && has(GLYPHS, next.kind)) kind = next.kind as BannerKind;
             if (next.title !== undefined) title = next.title || '';
             if (next.text !== undefined) text = next.text || '';
+            if (next.items !== undefined) items = listOf(next.items);
             reflect();
         },
         show: function (): void { dismissed = false; reflect(); },

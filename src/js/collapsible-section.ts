@@ -102,6 +102,67 @@ export function setCollapsibleBadge(header: Element, badge: CollapsibleBadge | n
     header.insertBefore(el, header.querySelector('.stolon-collapsible-icon') || childOf(header, 'stolon-collapsible-aside'));
 }
 
+// The section's own header, beside its content or inside its bar, so a nested section's header is never found.
+function ownHeader(section: Element): Element | null {
+    var direct = childOf(section, 'stolon-collapsible-header');
+    if (direct) return direct;
+    var bar = childOf(section, 'stolon-collapsible-bar');
+    return bar ? childOf(bar, 'stolon-collapsible-header') : null;
+}
+
+// The icon tile of a section, of a header, or the tile itself.
+function tileOf(target: Element | null | undefined): HTMLElement | null {
+    if (!target || !target.classList) return null;
+    if (target.classList.contains('stolon-collapsible-tile')) return target as HTMLElement;
+    var header = target.classList.contains('stolon-collapsible-header') ? target : ownHeader(target);
+    return header ? header.querySelector<HTMLElement>('.stolon-collapsible-tile') : null;
+}
+
+/**
+ * Colors the icon tile of a collapsible section, in markup or built by createCollapsibleSection. No color gives the accent.
+ *
+ * @param target the stolon-collapsible-section, its stolon-collapsible-header, or the stolon-collapsible-tile
+ * @param color a status color name such as 'green', 'gray', or 'red', or a hex code (default the accent) [optional]
+ * @returns the tile, or null when the section has none
+ */
+export function setCollapsibleTile(target: Element, color?: string | null): HTMLElement | null {
+    var tile = tileOf(target);
+    if (tile) applyColor(tile, color);
+    return tile;
+}
+
+/** The tile colors bindTileToSwitch paints, while the switch is on and while it is off. */
+export interface TileSwitchColors {
+    on?: string;
+    off?: string;
+}
+
+/** What bindTileToSwitch returns. refresh repaints the tile after code sets the switch, and destroy stops following it. */
+export interface TileSwitchHandle {
+    refresh(): void;
+    destroy(): void;
+}
+
+/**
+ * Colors a collapsible section's tile by a checkbox and follows the checkbox as it changes, such as green while a
+ * feature's switch is on and gray while it is off. Setting checked in code fires no change, so call refresh after it.
+ *
+ * @param section the stolon-collapsible-section, its header, or its tile
+ * @param input the checkbox the tile follows
+ * @param colors { on: the color while checked (default 'green'), off: the color while unchecked (default 'gray') } [optional]
+ * @returns { refresh, destroy }
+ */
+export function bindTileToSwitch(section: Element, input: HTMLInputElement, colors?: TileSwitchColors | null): TileSwitchHandle {
+    var on = colors && colors.on ? colors.on : 'green';
+    var off = colors && colors.off ? colors.off : 'gray';
+    function refresh(): void {
+        setCollapsibleTile(section, input && input.checked ? on : off);
+    }
+    var stop = input ? listen(input, 'change', refresh) : function () { /* nothing to follow */ };
+    refresh();
+    return { refresh: refresh, destroy: stop };
+}
+
 /** What createCollapsibleSection takes. content is HTML or a node, badge shows in the header, and icon, subtitle, and aside fill the header's slots. */
 export interface CollapsibleSectionOptions {
     title?: string;
@@ -129,6 +190,7 @@ export interface CollapsibleSectionHandle extends ComponentHandle {
     setBadge(badge: CollapsibleBadge | null): void;
     setSubtitle(subtitle: string | Node | null): void;
     setAside(aside: Node | null): void;
+    setIconColor(color: string | null): void;
     destroy(): void;
 }
 
@@ -154,7 +216,7 @@ var COMPACT_WIDTH = 480;
  *   collapsible : false draws a fixed panel, framed, always open, with no chevron and a header that is not a button (default true)
  *   onToggle    : function(open) called when the header opens or closes it [optional]
  * }
- * @returns { element, header, content, getValue, setValue, setTitle, setBadge, setSubtitle, setAside, destroy }. getValue is whether it is open.
+ * @returns { element, header, content, getValue, setValue, setTitle, setBadge, setSubtitle, setAside, setIconColor, destroy }. getValue is whether it is open, and setIconColor colors the tile as setCollapsibleTile does.
  */
 export function createCollapsibleSection(options?: CollapsibleSectionOptions): CollapsibleSectionHandle {
     options = options || {};
@@ -290,6 +352,7 @@ export function createCollapsibleSection(options?: CollapsibleSectionOptions): C
         setBadge: function (badge: CollapsibleBadge | null): void { setCollapsibleBadge(header, badge); },
         setSubtitle: setSubtitle,
         setAside: setAside,
+        setIconColor: function (color: string | null): void { setCollapsibleTile(root, color); },
         destroy: function (): void { runAll(cleanups); }
     };
 }
