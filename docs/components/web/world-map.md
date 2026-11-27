@@ -34,7 +34,7 @@ Classes: `stolon-world-map`, `stolon-world-layers`, `stolon-world-layer`, `stolo
 ## States and Modifiers
 
 * `counts` is `{ CODE: { layerKey: count } }` by ISO 3166 alpha-2 code. `setCounts` replaces it.
-* `layers` holds up to six layers, and any past the sixth is dropped. Each layer can pick its own `color`, a status color name or a hex code. A layer with no `color` takes the default for its place: the paint primaries blue, yellow, and red, then the secondaries green, orange, and purple.
+* `layers` holds up to six layers, and any past the sixth is dropped. Each layer can pick its own `color`, a status color name or a hex code. A layer with no `color` takes the default for its place: the paint primaries blue, yellow, and red, then the secondaries green, orange, and purple. A layer with `outline: true` rings its countries in its color instead of filling them, such as the server's own country, and its button shows a ring in place of a dot.
 * Every layer starts on unless `active` names the ones that do. A layer button turns its layer on or off. On is filled with the layer's color and shows a check. Off is an outline with a colored dot. `onLayersChange` reports the layers that are on. `getActive` and `setActive` read and set them.
 * A country's color mixes the colors of the layers that are on and have a count there, as paint does, by each layer's share of its count. A country with red and yellow counts is orange. Its strength follows its total over the layers that are on, on a log scale so one busy country does not wash out the rest.
 * A click, Enter, or Space on a counted country selects it, and again clears it. Escape clears it. `selected` sets the country that starts selected. `onSelect` reports the code, or null. `select(code)` highlights a country picked elsewhere without calling `onSelect`.
@@ -63,7 +63,7 @@ A world map that shades each country by its counts, with a toggle button per lay
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
-| `layers` (required) | <code>WorldMapLayer[]</code> | up to six { key, label, color } where color is a status color name or a hex code (default blue, yellow, red, green, orange, purple in order) [required] |
+| `layers` (required) | <code>WorldMapLayer[]</code> | up to six { key, label, color, outline } where color is a status color name or a hex code (default blue, yellow, red, green, orange, purple in order), and outline draws the layer's countries as an outline in its color instead of a fill [required] |
 | `counts` | <code>WorldMapCounts</code> | { CODE: { layerKey: count } } by ISO 3166 alpha-2 code [optional] |
 | `active` | <code>string[]</code> | the layer keys that start on (default all) |
 | `selected` | <code>string &#124; null</code> | the country code that starts selected [optional] |
@@ -95,7 +95,7 @@ Joins a world map to a table both ways, so a selection on either one is the sele
 
 | Type | What it is |
 | :--- | :--- |
-| `WorldMapLayer` | One kind of count the map can show, such as People or Failed. color is a status color name or a hex code. |
+| `WorldMapLayer` | One kind of count the map can show, such as People or Failed. color is a status color name or a hex code. outline draws its countries as an outline in its color instead of a fill, such as the server's own country. |
 | `WorldMapCounts` | Counts by country code, and within each country by layer key, such as { US: { people: 3, failed: 1 } }. |
 | `WorldMapTable` | A table the map can follow: it reports a selected row, selects rows from code, and can filter by a field, as createDataTable does. |
 | `WorldMapLinkOptions` | How linkWorldMap joins the two. field holds the country code, rowKey names a row, as the table's rowKey does, and filter true also narrows the table to the picked country. |
@@ -105,6 +105,8 @@ Joins a world map to a table both ways, so a selection on either one is the sele
 | `stolon-world-map` | A world map that shades countries by their counts, with a layer toggle per kind of count above it |
 | `stolon-world-layers` | The layer toggles: on is filled with the layer's color and shows a check, off is an outline with an empty dot |
 | `stolon-world-frame` | The map itself, which scales to its width, with uncounted countries in a faint wash |
+| `stolon-world-country.stolon-outlined` | A country an outline layer counts, ringed in that layer's color over whatever fill it has |
+| `stolon-world-layer.stolon-outline` | An outline layer's button shows a ring in place of a dot |
 
 <!-- reference:end -->
 

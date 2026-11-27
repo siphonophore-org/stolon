@@ -5,11 +5,12 @@ import { WORLD, WORLD_VIEWBOX } from './lib/world-shapes.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
 
-/** One kind of count the map can show, such as People or Failed. color is a status color name or a hex code. */
+/** One kind of count the map can show, such as People or Failed. color is a status color name or a hex code. outline draws its countries as an outline in its color instead of a fill, such as the server's own country. */
 export interface WorldMapLayer {
     key: string;
     label: string;
     color?: string;
+    outline?: boolean;
 }
 
 /** Counts by country code, and within each country by layer key, such as { US: { people: 3, failed: 1 } }. */
@@ -62,7 +63,7 @@ function layerColor(color: string | undefined): string {
  * can filter by country. select(code) highlights a country picked elsewhere, such as a table row.
  *
  * @param options {
- *   layers         : up to six { key, label, color } where color is a status color name or a hex code (default blue, yellow, red, green, orange, purple in order) [required]
+ *   layers         : up to six { key, label, color, outline } where color is a status color name or a hex code (default blue, yellow, red, green, orange, purple in order), and outline draws the layer's countries as an outline in its color instead of a fill [required]
  *   counts         : { CODE: { layerKey: count } } by ISO 3166 alpha-2 code [optional]
  *   active         : the layer keys that start on (default all)
  *   selected       : the country code that starts selected [optional]
@@ -76,7 +77,7 @@ export function createWorldMap(options: WorldMapOptions): WorldMapHandle {
     var opts = options || ({ layers: [] } as WorldMapOptions);
     // Up to six layers, each with its own color or the default for its place.
     var layers = (opts.layers || []).slice(0, MAX_LAYERS).map(function (l, i) {
-        return { key: l.key, label: l.label, color: l.color || DEFAULT_COLORS[i] };
+        return { key: l.key, label: l.label, color: l.color || DEFAULT_COLORS[i], outline: !!l.outline };
     });
     var counts: WorldMapCounts = opts.counts || {};
     var active: string[] = opts.active ? opts.active.slice() : layers.map(function (l) { return l.key; });
@@ -89,7 +90,7 @@ export function createWorldMap(options: WorldMapOptions): WorldMapHandle {
     var root = make('div', 'stolon-world-map');
     var header = make('div', 'stolon-world-layers', { role: 'group', 'aria-label': stolonText('Stolon.Layers') });
     layers.forEach(function (layer) {
-        var button = make('button', 'raised stolon-button stolon-small stolon-world-layer', { type: 'button', 'data-value': layer.key, 'aria-pressed': active.indexOf(layer.key) !== -1 ? 'true' : 'false' });
+        var button = make('button', 'raised stolon-button stolon-small stolon-world-layer' + (layer.outline ? ' stolon-outline' : ''), { type: 'button', 'data-value': layer.key, 'aria-pressed': active.indexOf(layer.key) !== -1 ? 'true' : 'false' });
         button.style.setProperty('--stolon-layer', layerColor(layer.color));
         button.appendChild(icon('check'));
         button.appendChild(make('span', 'stolon-world-layer-dot', { 'aria-hidden': 'true' }));
@@ -130,10 +131,24 @@ export function createWorldMap(options: WorldMapOptions): WorldMapHandle {
         return out;
     }
 
-    // The layers that are on, mixed as paint by their share of the country's count, so red and yellow make orange.
+    // A country's count over the filled layers that are on, leaving out outline layers.
+    function filledOf(code: string): number {
+        var c = counts[code];
+        if (!c) return 0;
+        return layers.reduce(function (sum, l) { return sum + (!l.outline && active.indexOf(l.key) !== -1 ? Number(c[l.key]) || 0 : 0); }, 0);
+    }
+
+    // The color of the first outline layer that is on and counts this country, or null.
+    function outlineOf(code: string): string | null {
+        var c = counts[code] || {};
+        var hit = layers.filter(function (l) { return l.outline && active.indexOf(l.key) !== -1 && Number(c[l.key]) > 0; })[0];
+        return hit ? layerColor(hit.color) : null;
+    }
+
+    // The filled layers that are on, mixed as paint by their share of the country's count, so red and yellow make orange.
     function fillOf(code: string): string {
         var c = counts[code] || {};
-        var parts = layers.filter(function (l) { return active.indexOf(l.key) !== -1 && Number(c[l.key]) > 0; })
+        var parts = layers.filter(function (l) { return !l.outline && active.indexOf(l.key) !== -1 && Number(c[l.key]) > 0; })
             .map(function (l) { return { color: l.color, weight: Number(c[l.key]) }; });
         if (parts.length === 1) return layerColor(parts[0].color);
         return mixColors(parts, root) || 'var(--stolon-accent)';
@@ -150,18 +165,31 @@ export function createWorldMap(options: WorldMapOptions): WorldMapHandle {
     // Shades every country, marks the selection, and makes the countries with a count reachable by keyboard.
     function draw(): void {
         var all = totals();
-        var max = Object.keys(all).reduce(function (m, k) { return Math.max(m, all[k]); }, 0);
+        var filled: Record<string, number> = {};
+        Object.keys(all).forEach(function (code) { filled[code] = filledOf(code); });
+        var max = Object.keys(filled).reduce(function (m, k) { return Math.max(m, filled[k]); }, 0);
+        var outlined: string[] = [];
         Object.keys(paths).forEach(function (code) {
             var path = paths[code];
             var total = all[code] || 0;
+            var fillTotal = filled[code] || 0;
             var name = WORLD[code].name;
-            path.classList.toggle('stolon-counted', total > 0);
+            var ring = total > 0 ? outlineOf(code) : null;
+            path.classList.toggle('stolon-counted', fillTotal > 0);
+            path.classList.toggle('stolon-outlined', !!ring);
+            if (ring) { path.style.setProperty('--stolon-world-outline', ring); outlined.push(code); } else path.style.removeProperty('--stolon-world-outline');
             path.classList.toggle('stolon-selected', code === selected);
             if (total > 0) {
-                // A log scale, so one busy country does not wash out the rest.
-                var level = max > 0 ? 0.25 + 0.75 * Math.log(1 + total) / Math.log(1 + max) : 0;
-                path.style.setProperty('fill-opacity', level.toFixed(3));
-                path.style.setProperty('--stolon-world-fill', fillOf(code));
+                // A log scale, so one busy country does not wash out the rest. A country only an outline layer counts
+                // keeps its plain fill.
+                if (fillTotal > 0) {
+                    var level = max > 0 ? 0.25 + 0.75 * Math.log(1 + fillTotal) / Math.log(1 + max) : 0;
+                    path.style.setProperty('fill-opacity', level.toFixed(3));
+                    path.style.setProperty('--stolon-world-fill', fillOf(code));
+                } else {
+                    path.style.removeProperty('fill-opacity');
+                    path.style.removeProperty('--stolon-world-fill');
+                }
                 path.setAttribute('tabindex', '0');
                 path.setAttribute('role', 'button');
                 path.setAttribute('aria-pressed', code === selected ? 'true' : 'false');
@@ -177,7 +205,8 @@ export function createWorldMap(options: WorldMapOptions): WorldMapHandle {
                 titles[code].textContent = name;
             }
         });
-        // The selected country is drawn last, so its outline is never covered by a neighbor.
+        // Outlined countries, then the selected one, are drawn last, so their outlines are never covered by a neighbor.
+        outlined.forEach(function (code) { svg.appendChild(paths[code]); });
         if (selected && paths[selected]) svg.appendChild(paths[selected]);
     }
 

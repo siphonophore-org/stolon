@@ -90,3 +90,16 @@ test('a click on a counted country selects it and reports it, again clears it, a
     assert.equal(map.getSelected(), 'US');
     assert.deepEqual(picked, ['DE', null]);
 });
+
+test('an outline layer rings its countries in its color and leaves their fill to the other layers', function () {
+    var map = createWorldMap({ layers: [{ key: 'people', label: 'People', color: 'green' }, { key: 'server', label: 'This server', color: 'yellow', outline: true }], counts: { US: { server: 1 }, DE: { people: 4, server: 1 } } });
+    var us = country(map, 'US'), de = country(map, 'DE');
+    assert.equal(us.classList.contains('stolon-outlined'), true);
+    assert.equal(us.classList.contains('stolon-counted'), false, 'a country only the outline layer counts keeps its plain fill');
+    assert.equal(us.style.getPropertyValue('--stolon-world-fill'), '');
+    assert.match(us.style.getPropertyValue('--stolon-world-outline'), /yellow/);
+    assert.equal(de.classList.contains('stolon-outlined'), true);
+    assert.equal(de.classList.contains('stolon-counted'), true, 'a filled layer still fills it');
+    assert.match(de.style.getPropertyValue('--stolon-world-fill'), /green/);
+    assert.ok(layer(map, 'server').classList.contains('stolon-outline'));
+});
