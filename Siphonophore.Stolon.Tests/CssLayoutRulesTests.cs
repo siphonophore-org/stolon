@@ -95,6 +95,7 @@ public class CssLayoutRulesTests
         var css = CssRules.StripComments(Sources["paginated-table.css"]);
         Assert.Contains("@media (max-width: 800px)", css, StringComparison.Ordinal);
         Assert.Contains(".stolon-table-selection-header > .stolon-table-bulk-actions { order: 2; flex: 1 0 100%; }", css, StringComparison.Ordinal);
+        Assert.Contains(".stolon-table-selection-header > .stolon-table-bulk-actions > .stolon-button { flex: 1 1 0; min-width: max-content; margin: 0; }", css, StringComparison.Ordinal);
     }
 
     /// <summary>

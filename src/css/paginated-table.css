@@ -22,6 +22,8 @@
 @media (max-width: 800px) {
     .stolon-table-selection-header > .stolon-table-bulk-actions { order: 2; flex: 1 0 100%; }
     .stolon-table-selection-header > .stolon-table-bulk-actions:empty { display: none; }
+    /* The actions share each line they wrap onto evenly, so no button sits alone at a ragged width */
+    .stolon-table-selection-header > .stolon-table-bulk-actions > .stolon-button { flex: 1 1 0; min-width: max-content; margin: 0; }
 }
 
 /* The reload row button, whose icon turns while the table reloads */
