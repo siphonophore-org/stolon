@@ -384,3 +384,6 @@ diskMeter.setBadge(null);
 // @ts-expect-error A meter badge needs its label.
 B.createUsageMeter({ badge: { color: 'green' } });
 B.createSortableCardList<Row>(view, { mono: true, render: function (row: Row) { return { title: row.name, subtitle: '10.0.0.1', mono: false }; } });
+B.createWebPushToggle({ keyUrl: 'Push/Key', subscribeUrl: 'Push/Subscribe', unsubscribeUrl: 'Push/Unsubscribe', showInsecure: true });
+// @ts-expect-error showInsecure is a flag.
+B.createWebPushToggle({ keyUrl: 'Push/Key', subscribeUrl: 'Push/Subscribe', unsubscribeUrl: 'Push/Unsubscribe', showInsecure: 'yes' });

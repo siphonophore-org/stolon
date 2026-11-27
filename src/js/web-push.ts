@@ -115,6 +115,7 @@ export interface WebPushToggleOptions {
     look?: 'button' | 'settings';
     label?: string;
     id?: string;
+    showInsecure?: boolean;
 }
 
 /**
@@ -165,8 +166,8 @@ var TOGGLE_LOOK: Record<WebPushState, 'success' | 'info' | 'warn'> = { on: 'succ
 /**
  * A status line of where this browser stands with web push, and a button that turns notifications on or off for it. It asks the
  * plugin for the server's VAPID public key, registers the plugin's service worker, and sends the subscription to the plugin's
- * routes. A browser with no push, a page not on HTTPS, an iPhone page not on the home screen, and a person who blocked
- * notifications each show their sentence with no button. While the server offers no key the whole toggle is hidden. The settings
+ * routes. A browser with no push, an iPhone page not on the home screen, and a person who blocked notifications each show their
+ * sentence with no button. A page not on HTTPS, where no browser offers push, and a server that offers no key hide the whole toggle. The settings
  * look draws it as a checkbox row of the web client's settings pages, for a page in the web client shell, with the sentence as
  * the row's description, and the checkbox turns on only while notifications can be turned on or off.
  *
@@ -185,6 +186,7 @@ var TOGGLE_LOOK: Record<WebPushState, 'success' | 'info' | 'warn'> = { on: 'succ
  *   look           : 'button', the status line and a button, or 'settings', a web client settings checkbox with its state line (default 'button')
  *   label          : the settings checkbox's label (default 'Notifications in this browser')
  *   id             : the settings checkbox's id [optional]
+ *   showInsecure   : true shows a page not on HTTPS the sentence that says why, in place of hiding the toggle (default false)
  * }
  * @returns { element, button, checkbox, status, getState, refresh, destroy }
  */
@@ -216,6 +218,9 @@ export function createWebPushToggle(options: WebPushToggleOptions): WebPushToggl
         root.appendChild(button);
     }
     button.hidden = true;
+    // A page not on HTTPS can never turn push on, so the toggle stays out of sight unless the page asks to explain why.
+    var hideInsecure = !opts.showInsecure;
+    if (hideInsecure && typeof isSecureContext === 'boolean' && !isSecureContext) root.hidden = true;
     var state: WebPushState | null = null;
     var key = '';
     var destroyed = false;
@@ -252,6 +257,7 @@ export function createWebPushToggle(options: WebPushToggleOptions): WebPushToggl
 
     function show(next: WebPushResult): WebPushResult {
         state = next.state;
+        root.hidden = hideInsecure && state === 'insecure';
         line(next.message, false, TOGGLE_LOOK[next.state]);
         button.textContent = state === 'on' ? (opts.offText || stolonText('Stolon.PushTurnOff')) : (opts.onText || stolonText('Stolon.PushTurnOn'));
         button.hidden = !(state === 'on' || state === 'off');

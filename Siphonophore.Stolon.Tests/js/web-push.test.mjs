@@ -311,6 +311,31 @@ test('the toggle hides while the server offers no key, and a failed change shows
     assert.equal(t.button.disabled, false);
 });
 
+test('a page not on HTTPS hides the whole toggle, and showInsecure shows the sentence that says why', async function () {
+    browser({ secure: false });
+    var heard = [];
+    var hidden = toggle(plugin(), registration().reg, { onChange: function (r) { heard.push(r.state); } });
+    assert.equal(hidden.element.hidden, true);
+    await settle();
+    assert.equal(hidden.getState(), 'insecure');
+    assert.equal(hidden.element.hidden, true);
+    assert.deepEqual(heard, ['insecure']);
+    var row = toggle(plugin(), registration().reg, { look: 'settings' });
+    await settle();
+    assert.equal(row.element.hidden, true);
+    var shown = toggle(plugin(), registration().reg, { showInsecure: true });
+    assert.equal(shown.element.hidden, false);
+    await settle();
+    assert.equal(shown.getState(), 'insecure');
+    assert.equal(shown.element.hidden, false);
+    assert.equal(shown.button.hidden, true);
+    assert.match(shown.status.textContent, /Notifications work only when the page opens over HTTPS\./);
+    browser();
+    var secure = toggle(plugin(), registration().reg);
+    await settle();
+    assert.equal(secure.element.hidden, false);
+});
+
 test('a worker address is registered at the base path of the page', async function () {
     browser();
     dom = installFakeDom();
