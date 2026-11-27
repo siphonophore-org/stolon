@@ -231,15 +231,16 @@ public class CssLayoutRulesTests
     }
 
     /// <summary>
-    /// A record row wraps, its text keeps a least basis, and its aside may shrink.
-    /// True: a wide aside, such as an inline QR code, moves under the row's text instead of crushing it.
+    /// A record row wraps, its text keeps a least basis and takes nearly all the spare room, and its aside may shrink.
+    /// True: a wide aside, such as an inline QR code, moves under the row's text instead of crushing it, and an aside that fills grows only on a line of its own.
     /// False: the aside takes the whole row and the title gets no room.
     /// </summary>
     [Fact]
     public void RecordAside_MovesUnderTheText()
     {
         Assert.Equal("wrap", Value(RuleFor("record-list.css", ".stolon-record-list-row"), "flex-wrap"));
-        Assert.Equal("1 1 calc(var(--stolon-size-large) * 4)", Value(RuleFor("record-list.css", ".stolon-record-list-body"), "flex"));
+        Assert.Equal("1000 1 calc(var(--stolon-size-large) * 4)", Value(RuleFor("record-list.css", ".stolon-record-list-body"), "flex"));
+        Assert.Equal("1", Value(RuleFor("record-list.css", ".stolon-record-list-aside.stolon-fill"), "flex-grow"));
         var aside = RuleFor("record-list.css", ".stolon-record-list-aside");
         Assert.Equal("0 1 auto", Value(aside, "flex"));
         Assert.Equal("0", Value(aside, "min-width"));

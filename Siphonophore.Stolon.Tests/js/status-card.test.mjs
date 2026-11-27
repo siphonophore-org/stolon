@@ -154,3 +154,35 @@ test('bars draw a column per entry, sized to the largest, with a faint stub for 
     assert.ok(columns[2].classList.contains('stolon-zero'));
     assert.ok(columns[2].classList.contains('stolon-red'));
 });
+
+test('legend lists every segment under the bar with a dot in its part color, its label, and its value, and a new set replaces it', function () {
+    var card = createStatusCard({ title: 'Queue', legend: true, segments: [{ label: 'Pending', value: 3, color: 'orange' }, { label: 'Sent', value: 0 }, { label: 'Late', value: 2, color: 'teal' }] });
+    var legend = card.element.querySelector('.stolon-status-card-legend');
+    assert.equal(legend.getAttribute('aria-hidden'), 'true');
+    var kids = card.element.children;
+    assert.equal(kids[kids.indexOf(legend) - 1], card.element.querySelector('.stolon-status-card-meter'));
+    var keys = Array.prototype.slice.call(legend.querySelectorAll('.stolon-status-card-key'));
+    assert.deepEqual(keys.map(function (k) { return [k.children[1].textContent, k.querySelector('.stolon-status-card-amount').textContent]; }), [['Pending', '3'], ['Sent', '0'], ['Late', '2']]);
+    assert.ok(keys[0].querySelector('.stolon-dot').classList.contains('stolon-orange'));
+    assert.ok(keys[1].querySelector('.stolon-dot').classList.contains('stolon-blue'));
+    assert.ok(keys[2].querySelector('.stolon-dot').classList.contains('stolon-teal'));
+    assert.ok(card.element.querySelector('.stolon-status-card-bar-part.stolon-teal'));
+    card.setSegments([{ label: 'Done', value: 1, color: 'green' }]);
+    assert.equal(card.element.querySelectorAll('.stolon-status-card-legend').length, 1);
+    assert.equal(card.element.querySelectorAll('.stolon-status-card-key').length, 1);
+    card.setSegments(null);
+    assert.equal(card.element.querySelector('.stolon-status-card-legend'), null);
+});
+
+test('a bar has no legend unless legend is set', function () {
+    var card = createStatusCard({ title: 'Queue', segments: [{ label: 'Pending', value: 3 }] });
+    assert.equal(card.element.querySelector('.stolon-status-card-legend'), null);
+});
+
+test('an even grid gives every card one width on a fixed column count', function () {
+    var grid = createStatusCardGrid({ even: true, cards: [{ title: 'A' }, { title: 'B' }, { title: 'C' }] });
+    dom.document.body.appendChild(grid.element);
+    assert.ok(grid.element.classList.contains('stolon-even'));
+    grid.getCards().forEach(function (card) { assert.equal(card.element.style.getPropertyValue('--stolon-balance-span'), '1'); });
+    assert.equal(createStatusCardGrid({ cards: [{ title: 'A' }] }).element.classList.contains('stolon-even'), false);
+});

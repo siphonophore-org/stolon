@@ -1,5 +1,5 @@
 import { fitWidth } from './lib/fit.js';
-import { make, listen, runAll, fillAll, toText, applyFieldSize } from './lib/dom.js';
+import { make, listen, runAll, fillAll, toText, applyFieldSize, buttonSizeClass } from './lib/dom.js';
 import { createRowSet, rowLabel, moveButtons, refocusAfterMove } from './lib/row-editor.js';
 import type { RowSetRow } from './lib/row-editor.js';
 import { createFieldGroup, isEmptyValue, toChoice } from './lib/field-control.js';
@@ -36,6 +36,7 @@ export interface RepeaterOptions {
     layout?: 'inline' | 'card';
     value?: RepeaterItem[] | null;
     addText?: string;
+    addSize?: 'small' | 'medium' | 'large';
     removeText?: string;
     upText?: string;
     downText?: string;
@@ -109,6 +110,7 @@ export interface RepeaterBuild extends RepeaterHandle {
  *   layout     : 'inline' for one row of fields per item, or 'card' for a boxed card per item (default 'inline')
  *   value      : array of items, each an object of values by field key [optional]
  *   addText    : text of the add button (default 'Add')
+ *   addSize    : 'small', 'medium', or 'large' for the add button, such as medium beside other medium buttons (default 'small')
  *   removeText : aria-label of a remove button, where {value} is the row's name (default 'Remove {value}')
  *   upText, downText : aria-labels of the move buttons, where {value} is the row's name (default 'Move {value} up' and 'Move {value} down')
  *   rowName    : prefix of the name of an inline row whose first text field is empty (default 'Row')
@@ -168,7 +170,8 @@ export function buildRepeater(options: RepeaterOptions, parts: RepeaterParts | n
         root.appendChild(head);
     }
     var body = make('div', 'stolon-repeater-rows' + (p.rowsClass ? ' ' + p.rowsClass : ''));
-    var addButton = make('button', 'raised stolon-button stolon-small stolon-repeater-add' + (p.addClass ? ' ' + p.addClass : ''), { type: 'button' }, opts.addText || stolonText('Add'));
+    var addSize = buttonSizeClass(opts.addSize, 'small');
+    var addButton = make('button', 'raised stolon-button ' + (addSize ? addSize + ' ' : '') + 'stolon-repeater-add' + (p.addClass ? ' ' + p.addClass : ''), { type: 'button' }, opts.addText || stolonText('Add'));
     var set = createRowSet<RepeaterItem, RepeaterRow>({
         body: body,
         build: buildRow,

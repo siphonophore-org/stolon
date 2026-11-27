@@ -39,20 +39,23 @@ export function buildCard(opts: CardOptions): CardParts {
     return { element: card, count: count, label: label };
 }
 
+// Whether any of the parts is wider than its box.
+function overflows(parts: NodeListOf<HTMLElement>): boolean {
+    for (var i = 0; i < parts.length; i++) if (parts[i].scrollWidth > parts[i].clientWidth) return true;
+    return false;
+}
+
 /**
  * Gives a row of count cards the smaller count size when any count is wider than its card, so every count in the row
- * keeps one size and only a count still too wide ends in an ellipsis.
+ * keeps one size and only a count still too wide ends in an ellipsis. A label holding a word wider than its card gives
+ * every label the small size the same way.
  * Internal to the web components.
  *
  * @param container the stolon-cards row
  */
 export function fitCounts(container: HTMLElement): void {
     container.classList.remove('stolon-fit');
-    var counts = container.querySelectorAll<HTMLElement>('.stolon-card-count');
-    for (var i = 0; i < counts.length; i++) {
-        if (counts[i].scrollWidth > counts[i].clientWidth) {
-            container.classList.add('stolon-fit');
-            return;
-        }
-    }
+    container.classList.remove('stolon-fit-labels');
+    if (overflows(container.querySelectorAll<HTMLElement>('.stolon-card-count'))) container.classList.add('stolon-fit');
+    if (overflows(container.querySelectorAll<HTMLElement>('.stolon-card-label'))) container.classList.add('stolon-fit-labels');
 }

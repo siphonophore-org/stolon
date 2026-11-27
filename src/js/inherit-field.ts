@@ -1,4 +1,5 @@
-import { make, listen, runAll, fill, toText, nextId } from './lib/dom.js';
+import { make, listen, runAll, fill, toText, nextId, addToken } from './lib/dom.js';
+import { labelField } from './form-fields.js';
 import { makeCheck, makeCheckRow } from './lib/check.js';
 import { bindPressedGroup } from './lib/pressed-group.js';
 import type { ComponentHandle } from './types.js';
@@ -29,11 +30,14 @@ export interface InheritFieldOptions<V = unknown> {
     onText?: string;
     offText?: string;
     label?: string;
+    fieldLabel?: string;
+    help?: string;
     onChange?(value: InheritValue<V>): void;
 }
 
-/** What createInheritField returns. setInherited changes the value shown while inheriting. */
+/** What createInheritField returns. setInherited changes the value shown while inheriting, and help is the description under the field, or null with none. */
 export interface InheritFieldHandle<V = unknown> extends ComponentHandle {
+    help: HTMLElement | null;
     getValue(): InheritValue<V>;
     setValue(next?: Partial<InheritValue<V>> | null): void;
     setInherited(value: V, text?: string): void;
@@ -63,9 +67,11 @@ function isControl(field: unknown): field is Control {
  *   onText         : how a checked checkbox reads (default 'On')
  *   offText        : how a cleared checkbox reads (default 'Off')
  *   label          : aria-label of the toggle group [optional]
+ *   fieldLabel     : the label over the field and its toggle, which names the field's input, in the web client's inputContainer [optional]
+ *   help           : the description under the field and its toggle, in the same inputContainer [optional]
  *   onChange       : function({ inherit, value }) after each change [optional]
  * }
- * @returns { element, getValue, setValue, setInherited, destroy }. getValue returns { inherit, value }, where value is the field's own value even while it inherits.
+ * @returns { element, help, getValue, setValue, setInherited, destroy }. With a fieldLabel or help, element is the inputContainer around the field and its toggle. getValue returns { inherit, value }, where value is the field's own value even while it inherits.
  */
 export function createInheritField<V = unknown>(options: InheritFieldOptions<V>): InheritFieldHandle<V> {
     var opts = options || ({} as InheritFieldOptions<V>);
@@ -107,7 +113,21 @@ export function createInheritField<V = unknown>(options: InheritFieldOptions<V>)
 
     var root = make('div', 'stolon-inherit' + (checkbox ? ' stolon-check' : ''));
     var slot = make('div', 'stolon-inherit-field');
-    if (fieldEl.parentNode) fieldEl.parentNode.insertBefore(root, fieldEl);
+    var element: HTMLElement = root;
+    var help: HTMLElement | null = null;
+    if (opts.fieldLabel || opts.help) {
+        // The label names the field's own input, the control itself or the first one inside a Stolon field.
+        var named = control || fieldEl.querySelector<HTMLElement>('input, select, textarea');
+        if (named && !named.id) named.id = nextId('inherit');
+        var labelled = labelField(root, named ? named.id : '', opts.fieldLabel, opts.help);
+        element = labelled.element;
+        help = labelled.help;
+        if (help && named) {
+            help.id = nextId('help');
+            addToken(named, 'aria-describedby', help.id);
+        }
+    }
+    if (fieldEl.parentNode) fieldEl.parentNode.insertBefore(element, fieldEl);
     slot.appendChild(fieldEl);
     root.appendChild(slot);
 
@@ -174,7 +194,8 @@ export function createInheritField<V = unknown>(options: InheritFieldOptions<V>)
     apply(start.inherit !== false);
 
     return {
-        element: root,
+        element: element,
+        help: help,
         getValue: value,
         setValue: setValue,
         setInherited: function (v: V, text?: string) {

@@ -24,11 +24,11 @@ grid.element.addEventListener('click', (e) => {
     note.textContent = 'Opens ' + card.getAttribute('href') + '.';
 });
 
-const metrics = base.createStatusCardGrid({ cards: [
+const metrics = base.createStatusCardGrid({ even: true, cards: [
     { icon: 'movie', title: 'Items', value: '1,204', valueLabel: 'in 6 libraries', status: 'Synced' },
     { icon: 'sync', title: 'Syncs', value: 47, valueLabel: 'this week', status: 'Running', sparkline: [3, 5, 4, 8, 6, 9, 12] },
     { icon: 'dns', title: 'Servers', value: 4, status: 'Check', statusColor: 'orange', detail: '3 of 4 answering', dots: [{ color: 'green', label: 'Alpha' }, { color: 'green', label: 'Beta' }, { color: 'green', label: 'Gamma' }, { color: 'red', label: 'Delta' }] },
-    { icon: 'swap_horiz', title: 'Queue', value: 9, status: 'Pending', detail: '2 failing', segments: [{ label: 'Pending', value: 5, color: 'orange' }, { label: 'Sent', value: 2, color: 'blue' }, { label: 'Failed', value: 2, color: 'red' }] },
+    { icon: 'swap_horiz', title: 'Queue', value: 9, status: 'Pending', detail: '2 failing', legend: true, segments: [{ label: 'Pending', value: 5, color: 'orange' }, { label: 'Sent', value: 2, color: 'blue' }, { label: 'Failed', value: 2, color: 'red' }] },
     { icon: 'bar_chart', title: 'States', value: 9, status: 'Pending', detail: 'Each state of the queue', bars: [{ label: 'Gathering', value: 0, color: 'gray' }, { label: 'Pending', value: 5, color: 'orange' }, { label: 'Sent', value: 2, color: 'blue' }, { label: 'Received', value: 0, color: 'purple' }, { label: 'Failed', value: 2, color: 'red' }] },
     { icon: 'error_outline', title: 'Errors', value: 2, valueLabel: 'today', status: 'Check', statusColor: 'orange', detail: 'Last at 14:02', onClick: () => { note.textContent = 'Opens the errors.'; } }
 ] });

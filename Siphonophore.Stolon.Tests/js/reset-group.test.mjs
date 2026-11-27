@@ -71,3 +71,10 @@ test('createResetGroup holds the rows in order, from options or handles, and des
     first.button.click();
     assert.equal(pressed, 0);
 });
+
+test('a reset row button is small by default, and size sets it to medium or large', function () {
+    function cls(size) { return createResetRow({ icon: 'history', label: 'History', size: size }).button.className; }
+    assert.equal(cls(), 'raised stolon-button stolon-small stolon-secondary');
+    assert.equal(cls('medium'), 'raised stolon-button stolon-secondary');
+    assert.equal(cls('large'), 'raised stolon-button stolon-large stolon-secondary');
+});

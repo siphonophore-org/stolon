@@ -30,6 +30,7 @@ Classes: `stolon-inherit`, `stolon-inherit-field`, `stolon-inherit-toggle`, and 
 * `value` is `{ inherit, value }` to start with, inheriting by default. The field's own value is kept while it inherits and restored on Override.
 * The inherited value reads as a select's option text, On or Off for a checkbox, else the value. `inheritedText` replaces it, and `setInherited(value, text)` changes it.
 * `toggle: 'checkbox'` shows an Override checkbox in place of the pills. `inheritText` ("Inherit ({value})"), `overrideText` ("Override"), `onText` ("On"), and `offText` ("Off") replace the defaults. `label` is the aria-label of the toggle group.
+* `fieldLabel` and `help` put the field and its toggle in the web client's `inputContainer`, with the label over them and the description under them, as a [Form Field](form-fields.md) is built. The label names the field's input, and the description is its `aria-describedby`. `element` is the container, and `help` is the description.
 * A field that inherits is disabled, so the validation core skips it.
 
 ## Reference
@@ -56,10 +57,13 @@ Wraps any field with an Inherit state. While it inherits, the field shows the in
 | `onText` | <code>string</code> | how a checked checkbox reads (default 'On') |
 | `offText` | <code>string</code> | how a cleared checkbox reads (default 'Off') |
 | `label` | <code>string</code> | aria-label of the toggle group [optional] |
+| `fieldLabel` | <code>string</code> | the label over the field and its toggle, which names the field's input, in the web client's inputContainer [optional] |
+| `help` | <code>string</code> | the description under the field and its toggle, in the same inputContainer [optional] |
 | `onChange` | <code>(value: InheritValue&lt;V&gt;): void</code> | function({ inherit, value }) after each change [optional] |
 
 | Handle member | Type |
 | :--- | :--- |
+| `help` | <code>HTMLElement &#124; null</code> |
 | `getValue` | <code>(): InheritValue&lt;V&gt;</code> |
 | `setValue` | <code>(next?: Partial&lt;InheritValue&lt;V&gt;&gt; &#124; null): void</code> |
 | `setInherited` | <code>(value: V, text?: string): void</code> |

@@ -1,10 +1,10 @@
-/* Drop zone that is also a button, with a list of the chosen files under it */
+/* Drop zone that is also a button, with a list of the chosen files under it, and a message under that only while it has one */
 /* Example: <div class="stolon-file-picker"><div class="stolon-file-zone stolon-icon-text" role="button" tabindex="0"><span class="material-icons" aria-hidden="true">upload_file</span><span class="stolon-file-text">Drop files here or click to select.</span></div></div> */
 .stolon-file-picker {
     display: flex;
     flex-direction: column;
-    gap: var(--stolon-gap-narrow);
 }
+.stolon-file-picker > .stolon-file-list { margin-top: var(--stolon-gap-narrow); }
 .stolon-file-zone {
     justify-content: center;
     padding: var(--stolon-gap-wide);

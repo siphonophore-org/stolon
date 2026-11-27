@@ -148,3 +148,13 @@ test('a search function asks the server for each search text, and the selection 
     assert.deepEqual(items.map(function (i) { return i.id; }), [2]);
     assert.deepEqual(asked, ['', 'tw', 'tw']);
 });
+
+test('a sublabel ends in an ellipsis with its full text as the tooltip, and wrapSublabels lets it wrap instead', async function () {
+    var row = function (item) { return { label: item.name, sublabel: 'Runs every night and keeps seven copies' }; };
+    var cut = (await build({ renderRow: row })).body.querySelector('.stolon-check-sub');
+    assert.equal(cut.classList.contains('stolon-wrap'), false);
+    assert.equal(cut.title, 'Runs every night and keeps seven copies');
+    var wraps = (await build({ renderRow: row, wrapSublabels: true })).body.querySelector('.stolon-check-sub');
+    assert.ok(wraps.classList.contains('stolon-wrap'));
+    assert.equal(wraps.title, '');
+});

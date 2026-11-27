@@ -70,6 +70,7 @@ shared.saveConfig(config).then(function () { refreshToolConfig(view, config); })
 * A tool gets `viewshow` each time it opens, `viewbeforehide` before it is left, and `viewhide` once it is. A `viewbeforehide` the tool cancels, such as for unsaved changes, keeps it open. The host page's own events reach the open tool.
 * The sidebar's top row is the fold button with the plugin's `name` beside it. It folds the sidebar to its icons, and the name hides while folded. The choice is kept per browser under `storageKey`.
 * A tool still loading is shown only once it is ready, and the last tool chosen wins.
+* Switching to another tool scrolls the page to its top, as the web client does for a page it shows. Choosing the open tool again keeps the place.
 * A tool that leaves the list while it is on screen hands over to the first tool.
 * A tool with `visibleWhen` shows while it returns true for the configuration. One that throws shows its tool. The answers are kept per browser under `storageKey`, so the sidebar is drawn right before the configuration loads, and a tool with no answer yet shows.
 * The configuration is read once the app is built, each time the host page shows, and each time another tool opens, so a tool turned on from another browser joins without a reload. A later read wins over a slow one.
@@ -142,7 +143,7 @@ Tells the tool app around element that the plugin's configuration changed, such 
 
 <code>function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolAppHandle</code>
 
-One config page that holds a plugin's tools in a tool shell and swaps them in place. Each tool is its own registered page, loaded the first time it opens and kept after, and its controller gets the same viewshow, viewbeforehide, and viewhide events the dashboard sends a page, so a page built for its own address works here unchanged.
+One config page that holds a plugin's tools in a tool shell and swaps them in place. Each tool is its own registered page, loaded the first time it opens and kept after, and its controller gets the same viewshow, viewbeforehide, and viewhide events the dashboard sends a page, so a page built for its own address works here unchanged. Switching to another tool scrolls the page to its top, as the web client does for a page it shows, and choosing the open tool again keeps the place.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |

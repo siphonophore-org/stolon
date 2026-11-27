@@ -45,6 +45,7 @@ B.createBanner({});
 B.createBreadcrumbs({});
 B.createSortableCardList<Row>(view, { render: function (row: Row) { return { title: row.name }; } });
 B.createCheckboxList({});
+B.createCheckboxList({ wrapSublabels: true });
 B.createChipSelect({ options: ['a', { value: 'b', label: 'B' }] });
 var combo: B.ComboBoxFieldHandle = B.createComboBox({ suggestions: ['a', { value: 'b', label: 'B' }], onChange: function (value: string) { return value; } });
 combo.setSuggestions(null);
@@ -84,6 +85,13 @@ B.createHelpHint({ text: 'Help.' });
 B.createKeyValueEditor({});
 B.createLogViewer({});
 B.createNumberUnitField({ units: ['minutes', { value: 'hours', factor: 60 }] });
+var unitHelp: HTMLElement | null = B.createNumberUnitField({ units: ['MB'], label: 'Cache', help: 'The most it holds.' }).help;
+B.createInheritField({ field: document.createElement('select'), fieldLabel: 'Language', help: 'New items use it.' }).help;
+B.createRepeater({ fields: [{ key: 'name', label: 'Name' }], addSize: 'medium' });
+// @ts-expect-error addSize takes a size on the scale
+B.createRepeater({ fields: [{ key: 'name', label: 'Name' }], addSize: 'huge' });
+B.createRecordList({ items: [{ title: 'Disk', aside: document.createElement('div'), asideFill: true }] });
+B.createPaginatedTable<Row>(view, shared, { containerId: 'rows', endpoint: 'Rows', columns: [{ key: 'name' }], emptyState: { message: 'No rows yet.', filteredMessage: 'No rows match.' } });
 B.createOrderedList<Row>({ render: function (row: Row) { return row.name; } });
 B.createOverflowMenu({});
 B.createPagination({ pageSize: 25, onChange: function (value) { return value.skip + value.take; } });
@@ -98,6 +106,7 @@ B.createSkeleton({});
 B.createSliderField({});
 B.createSpinner({});
 B.createStatusCard({ icon: 'vpn_lock', title: 'VPN', status: 'Ok', statusColor: 'green', detail: '3 of 7 peers online' }).setStatus('Check', 'orange');
+B.createStatusCardGrid({ even: true, cards: [{ title: 'Queue', legend: true, segments: [{ label: 'Pending', value: 3, color: 'orange' }] }] });
 B.createStatusCardGrid({ cards: [{ title: 'Storage', value: 82, valueLabel: '%', href: '#storage' }] }).add({ title: 'Users', onClick: function (e: MouseEvent) { return e; } });
 B.createToolShell({ tools: [{ key: 'vpn', name: 'VPN', icon: 'vpn_lock', href: '#vpn', badge: { label: '2', color: 'red' } }], current: 'vpn', onSelect: function (key: string, tool, event: MouseEvent) { event.preventDefault(); return tool.name + key; } }).setCurrent('vpn');
 B.createStatusDot({});
@@ -309,6 +318,7 @@ shared.apiRequest('Groups/Users', 'GET', null, { prefix: '' });
 var ran: Promise<B.TaskProgressHandle> = shared.runScheduledTask(document.createElement('button'), 'MyTask', 'Run');
 // @ts-expect-error A reset row needs its icon and label.
 B.createResetRow({ button: 'Reset' });
+B.createResetRow({ icon: 'history', label: 'History', size: 'medium' });
 // @ts-expect-error A choice needs its value and name.
 B.createChoiceGroup(null, { choices: [{ text: 'First.' }] });
 // @ts-expect-error The plural keys are text.

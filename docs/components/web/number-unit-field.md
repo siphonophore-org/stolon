@@ -30,6 +30,7 @@ Classes: `stolon-number-unit`, `stolon-number-unit-row`. The handle is `{ elemen
 * A `step` the caller sets is a rule too, so `step: 0.5` refuses 0.25. With no `step` the arrows step by 1 and any typed number is allowed. `validate({ value, unit, base })` runs after the range.
 * A `min` above `max` swaps the two. `unit` sets the first unit, the first in `units` by default.
 * The labels default to "Value" and "Unit".
+* `label` and `help` put the field in the web client's `inputContainer`, with the label over it and the description under it, as a [Form Field](form-fields.md) is built. The label names the number input, which then takes no aria-label unless `valueLabel` gives one, and the description is its `aria-describedby`. `element` is the container, and `help` is the description.
 * `size` is `small`, `medium` (default), or `large`, and sizes its fields on the [size scale](design-tokens.md). `setSize(size)` changes it later.
 
 ## Reference
@@ -52,7 +53,9 @@ A number input beside a unit select, such as 512 MB or 2 GB. The value is checke
 | `min` | <code>number &#124; string</code> | lowest number allowed, and a min above max swaps the two [optional] |
 | `max` | <code>number &#124; string</code> | highest number allowed [optional] |
 | `step` | <code>number</code> | step of the number input, and a given step is also a rule, so 0.5 refuses 0.25 (default 1, which the arrows use and typing may leave) |
-| `valueLabel` | <code>string</code> | aria-label of the number input (default 'Value') |
+| `label` | <code>string</code> | the label over the field, which names the number input, in the web client's inputContainer [optional] |
+| `help` | <code>string</code> | the description under the field, in the same inputContainer [optional] |
+| `valueLabel` | <code>string</code> | aria-label of the number input (default 'Value', or none when label names it) |
 | `unitLabel` | <code>string</code> | aria-label of the unit select (default 'Unit') |
 | `rangeText` | <code>string</code> | message for a number out of range, where {min} and {max} are filled in (default 'Enter a number from {min} to {max}.') |
 | `minText` | <code>string</code> | message when only min is set (default 'Enter {min} or more.') |
@@ -65,6 +68,7 @@ A number input beside a unit select, such as 512 MB or 2 GB. The value is checke
 | :--- | :--- |
 | `input` | <code>HTMLInputElement</code> |
 | `select` | <code>HTMLSelectElement</code> |
+| `help` | <code>HTMLElement &#124; null</code> |
 | `getValue` | <code>(): NumberUnitValue</code> |
 | `setValue` | <code>(next?: { value?: number &#124; string &#124; null; unit?: string; }): void</code> |
 | `setBaseValue` | <code>(base: number): void</code> |

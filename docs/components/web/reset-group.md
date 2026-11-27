@@ -44,7 +44,7 @@ Classes: `stolon-reset-group`, `stolon-reset-row`, `stolon-reset-row-nuclear`, `
 * The last row has no rule.
 * At 600px and below the button moves under the text and starts where the text starts, so the text keeps the full width.
 * A row leads with an icon tile. It takes the accent, red for a `destructive` row, and gray while the row is `empty`, with nothing to reset. `setEmpty(empty)` changes it later, and `getValue()` reads it.
-* `button` is the label (default "Reset") or a button already built. A built button is an `emby-button`, destructive for a destructive row and secondary otherwise, with `action` as its `data-action`.
+* `button` is the label (default "Reset") or a button already built. A built button is an `emby-button`, destructive for a destructive row and secondary otherwise, with `action` as its `data-action`. It is small, and `size: 'medium'` or `'large'` sizes it to sit beside buttons of that size.
 * `createResetGroup(rows)` takes row handles or the options for new ones, and its `rows` are the handles in order. `destroy()` stops every row's `onClick`.
 
 ## Gotchas
@@ -71,6 +71,7 @@ Builds one stolon-reset-row: an icon tile, what the row does, one sentence on wh
 | `button` | <code>string &#124; HTMLButtonElement</code> | the button's label, or a button already built (default 'Reset') [optional] |
 | `action` | <code>string</code> | the button's data-action, for a page that handles every row's click in one place [optional] |
 | `destructive` | <code>boolean</code> | true for a row that loses data, with a destructive button and a red tile (default false) |
+| `size` | <code>'small' &#124; 'medium' &#124; 'large'</code> | 'small', 'medium', or 'large' for the button it builds, such as medium beside medium buttons (default 'small') |
 | `empty` | <code>boolean</code> | true while there is nothing to reset, which grays the tile (default false) |
 | `onClick` | <code>(button: HTMLButtonElement): void</code> | function(button) called when the button is pressed [optional] |
 

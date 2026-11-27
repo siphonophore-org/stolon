@@ -71,7 +71,7 @@ function dotHtml(dot: string, title: unknown): string {
  *
  * @param listEl container element the cards render into
  * @param options {
- *   items         : array of records in priority order, replaced with setItems [optional]
+ *   items         : array of records in priority order, replaced with setItems. Given items draw at once, wherever the list sits, such as in a closed section [optional]
  *   render        : function(item, index) returning { icon, iconColor, title, subtitle, badges: [{ label, cls }], dot: 'ok'|'bad'|'checking'|'unknown'|'none', dotTitle, disabled } [required]
  *   editor        : element placed inside the open card's body [optional]
  *   onSelect      : function(index) called when a card opens, before the editor is placed [optional]
@@ -106,7 +106,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
     var esc = options.escapeHtml || escapeHtml;
     var height: ListHeight | undefined = options.height;
     var maxHeight = options.maxHeight;
-    // The list adopts listEl on the first render, so the caller's own content stays until then.
+    // The list adopts listEl on the first render, so the caller's own content stays until then, unless items are given.
     var list: ListHandle<T> | null = null;
 
     // The editor parks here during a render, since replacing the list HTML would destroy it.
@@ -300,6 +300,9 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         listEl.addEventListener('drop', onDrop as EventListener);
         listEl.addEventListener('dragend', onDragEnd);
     }
+
+    // Given items draw at once, so the cards exist before anything opens the section the list sits in.
+    if (items.length) render();
 
     return {
         render: render,

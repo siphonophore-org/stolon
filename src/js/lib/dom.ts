@@ -250,6 +250,15 @@ export function applyFieldSize(el: HTMLElement, size: FieldSize | string | null 
 }
 
 /**
+ * Gives the class of a button size on the scale: stolon-small or stolon-large, or none for medium. An unknown size takes the fallback.
+ * Internal to the web components.
+ */
+export function buttonSizeClass(size: FieldSize | string | null | undefined, fallback?: FieldSize): string {
+    var picked = size === 'small' || size === 'medium' || size === 'large' ? size : (fallback || 'medium');
+    return picked === 'medium' ? '' : 'stolon-' + picked;
+}
+
+/**
  * Moves focus after a remove: to the target now at the removed index, else the last one, else the fallback, such as the
  * input or the Add button. Every list that removes rows or chips uses it, so focus never drops to the page.
  * Internal to the web components.

@@ -129,7 +129,13 @@ button.stolon-status-card { width: 100%; }
 .stolon-status-card-bar-part.stolon-blue { background: var(--stolon-blue-fg); }
 .stolon-status-card-bar-part.stolon-gray { background: var(--stolon-gray-fg); }
 .stolon-status-card-bar-part.stolon-yellow { background: var(--stolon-yellow-fg); }
+.stolon-status-card-bar-part.stolon-pink { background: var(--stolon-pink-fg); }
+.stolon-status-card-bar-part.stolon-teal { background: var(--stolon-teal-fg); }
 .stolon-status-card-bar-part.stolon-custom { background: var(--stolon-custom); }
+
+/* The legend under a status card's bar: a dot in each part's color, its label, and its value, wrapping as a row */
+/* Example: <span class="stolon-status-card-legend" aria-hidden="true"><span class="stolon-status-card-key"><span class="stolon-dot stolon-orange"></span><span>Pending</span><span class="stolon-status-card-amount">3</span></span></span> */
+.stolon-status-card-legend { margin-top: var(--stolon-gap-narrow); }
 
 /* Small column chart under a status card's value in the sparkline's place, a sparkline tall, one column per entry as tall as its share of the largest */
 /* Example: <span class="stolon-status-card-columns" role="img" aria-label="Pending 3, Sent 1"><span class="stolon-status-card-column stolon-orange" style="--stolon-status-share: 100%"></span><span class="stolon-status-card-column stolon-blue" style="--stolon-status-share: 33%"></span></span> */

@@ -37,7 +37,7 @@ Classes: `stolon-chart` and `stolon-bar-chart`, with the parts `stolon-chart-plo
 * Every bar keeps its label, shortened with an ellipsis when it does not fit its band.
 * A legend shows only with two or more series.
 * Hovering a bar shows its label and value on the shared tooltip surface. The plot takes focus, and the arrow keys move the tooltip from bar to bar. Escape hides it.
-* A visually hidden table holds every number, captioned by `label`, so a screen reader reads the data.
+* A visually hidden table holds every number, captioned by `label`, so a screen reader reads the data. `label` also names the plot, and nothing else, so it is heard once for each.
 * Bars grow up as they draw, except under `prefers-reduced-motion: reduce`.
 
 ## Gotchas

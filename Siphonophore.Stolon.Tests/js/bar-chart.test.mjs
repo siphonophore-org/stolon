@@ -115,3 +115,13 @@ test('setValue draws new series and getValue returns copies', function () {
     assert.equal(chart.getValue().series[0].values.length, 3);
     chart.destroy();
 });
+
+test('the label names the plot and captions the hidden table once each, with no second hidden caption or name on the figure', function () {
+    var chart = build({ label: 'Storage', labels: ['Movies'], series: [{ name: 'Den', values: [820] }] });
+    assert.equal(chart.element.querySelector('figcaption'), null);
+    assert.equal(chart.element.getAttribute('aria-labelledby'), null);
+    assert.equal(chart.element.querySelector('.stolon-chart-plot').getAttribute('aria-label'), 'Storage');
+    assert.equal(all(chart.element, 'caption').length, 1);
+    var spoken = all(chart.element, '*').filter(function (el) { return el.textContent === 'Storage' && !el.children.length; });
+    assert.equal(spoken.length, 1);
+});

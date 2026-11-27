@@ -248,3 +248,14 @@ test('with no row the labels and the list hide, and they come back with the firs
     handle.setValue([]);
     assert.equal(head.hidden, true);
 });
+
+test('the add button is small by default, and addSize sets it to medium or large', function () {
+    function add(extra) { return createRepeater(Object.assign({ fields: [{ key: 'name', label: 'Name' }] }, extra)).element.querySelector('.stolon-repeater-add'); }
+    assert.ok(add().classList.contains('stolon-small'));
+    var medium = add({ addSize: 'medium' });
+    assert.equal(medium.classList.contains('stolon-small'), false);
+    assert.equal(medium.classList.contains('stolon-large'), false);
+    assert.ok(medium.classList.contains('stolon-button'));
+    assert.ok(add({ addSize: 'large' }).classList.contains('stolon-large'));
+    assert.ok(add({ addSize: 'huge' }).classList.contains('stolon-small'));
+});

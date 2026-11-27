@@ -74,7 +74,7 @@ Classes: `stolon-table-wrapper`, `stolon-table-controls`, `stolon-table-search`,
 * A newer load supersedes one in flight, and the old answer is dropped.
 * A clickable row has `tabindex="0"` and answers Enter and Space when the row itself has focus. The status badge button opens the row too, and neither fires the click twice.
 * The footer reads "1 item", "N items", "Showing X of N items" while more remain, or "X/N items" in Load more mode.
-* Until the first answer the rows say "Loading", and with no rows they say the `emptyState` message. A next page shows "Loading" under the rows.
+* Until the first answer the rows say "Loading", and with no rows they say the `emptyState` message. With `emptyState.filteredMessage` the message is for a list with nothing in it, such as "No issues yet.", and `filteredMessage` takes its place while a search or a filter other than All finds nothing, such as "No issues match.". A next page shows "Loading" under the rows.
 * `stolon-table-loading` goes on the host element while the first page loads. The rows drop to 60 percent opacity and take no pointer events, and the search and filters stay usable.
 * The status column is at least 120px wide, 110px at 768px and below, and grows to fit a longer status, such as Ignored (Copy to Link), so its badge stays inside the row. At 600px and below it takes only its badge's width.
 * An action on the bar of selected rows that shows only an icon is a `stolon-button` with `stolon-small` and `stolon-icon-only`, named by a `title` and an `aria-label`. See [Button](button.md).
@@ -117,7 +117,7 @@ Builds a searchable, filterable, infinite scrolling table backed by an endpoint 
 | `filters` | <code>TableFilters &#124; TableFilters[] &#124; null</code> | { name, label, options: [{ value, label, id, hidden }], buildParams(value), onChange(value), initialValue, allValue, allLabel }, an array of them for several selects, or null for none. name is the query parameter (default 'filter' for the first, then 'filter2' and on), and label the select's aria-label |
 | `search` | <code>TableSearch</code> | { enabled, placeholder, debounceMs } (defaults true, 'Search items', 300) |
 | `actions` | <code>TableActions&lt;T&gt;</code> | { onRowClick(item), onReload() } |
-| `emptyState` | <code>{ message?: string; }</code> | { message } (default 'No items found.') |
+| `emptyState` | <code>{ message?: string; filteredMessage?: string; }</code> | { message, filteredMessage }, where message shows while the list is empty (default 'No items found.') and filteredMessage, when given, takes its place while a search or filter finds nothing, such as 'No items match.' |
 | `size` | <code>'small' &#124; 'medium' &#124; 'large'</code> | 'small', 'medium', or 'large' for its fields (default 'medium') |
 
 | Handle member | Type |

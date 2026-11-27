@@ -80,7 +80,7 @@ export interface TableOptions<T = any> {
     filters?: TableFilters | TableFilters[] | null;
     search?: TableSearch;
     actions?: TableActions<T>;
-    emptyState?: { message?: string };
+    emptyState?: { message?: string; filteredMessage?: string };
     size?: 'small' | 'medium' | 'large';
 }
 
@@ -111,7 +111,7 @@ export interface TableHandle<T = any> {
 type TableConfig<T> = Omit<TableOptions<T>, 'pagination' | 'search' | 'emptyState'> & {
     pagination: TablePagination & { pageSize: number };
     search: TableSearch;
-    emptyState: { message: string };
+    emptyState: { message: string; filteredMessage?: string };
 };
 
 /**
@@ -132,7 +132,7 @@ type TableConfig<T> = Omit<TableOptions<T>, 'pagination' | 'search' | 'emptyStat
  *   filters       : { name, label, options: [{ value, label, id, hidden }], buildParams(value), onChange(value), initialValue, allValue, allLabel }, an array of them for several selects, or null for none. name is the query parameter (default 'filter' for the first, then 'filter2' and on), and label the select's aria-label
  *   search        : { enabled, placeholder, debounceMs } (defaults true, 'Search items', 300)
  *   actions       : { onRowClick(item), onReload() }
- *   emptyState    : { message } (default 'No items found.')
+ *   emptyState    : { message, filteredMessage }, where message shows while the list is empty (default 'No items found.') and filteredMessage, when given, takes its place while a search or filter finds nothing, such as 'No items match.'
  *   size          : 'small', 'medium', or 'large' for its fields (default 'medium')
  * }
  * @returns { load, reload, setFilter, setSearch, getSelectedIds, getSelectedItems, clearSelection, getItems, getTotalCount, getBulkActionsContainer, getControlsContainer, disconnectObserver, reconnectObserver, refresh, destroy, setFilterValue, setFilterOptions, setFilterOptionVisible }.
@@ -261,6 +261,13 @@ export function createPaginatedTable<T = any>(view: ParentNode, shared: Shared, 
         return shared.apiRequest(opts.endpoint + '?' + params.join('&'), 'GET');
     }
 
+    // Says no item matches while a search or a filter other than All narrows the list, and that there are none at all otherwise.
+    function paintEmpty(): void {
+        if (!base) return;
+        var narrowed = !!searchText || filterList.some(function (f, i) { return (filterValues[names[i]] || '') !== (f.allValue || ''); });
+        base.list.emptyElement.textContent = narrowed ? opts.emptyState.filteredMessage! : opts.emptyState.message || stolonText('Stolon.NoItemsFound');
+    }
+
     // A count of items, such as 12 items.
     function itemsText(count: number): string {
         return formatText(stolonText(count === 1 ? 'Stolon.ItemsOne' : 'ItemCount'), count);
@@ -316,6 +323,7 @@ export function createPaginatedTable<T = any>(view: ParentNode, shared: Shared, 
         reloadText: stolonText('Stolon.Reload'),
         onChange: function (state) {
             current = state.items;
+            if (opts.emptyState.filteredMessage) paintEmpty();
             if (container) container.classList.toggle('stolon-table-loading', state.loading && state.query.page === 1);
             paintFooter(state);
         }

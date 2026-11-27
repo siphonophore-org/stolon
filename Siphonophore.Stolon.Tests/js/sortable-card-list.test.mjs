@@ -1,6 +1,7 @@
 // Behavior tests for createSortableCardList, run on the stub DOM in fake-dom.mjs.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { installFakeDom, all } from './fake-dom.mjs';
 
 var dom = installFakeDom();
@@ -34,13 +35,24 @@ function head(card, move) {
     return h;
 }
 
-test('the list leaves its element alone until the first render', function () {
-    var ui = build();
+test('a list with no items leaves its element alone until the first render', function () {
+    var ui = build({ items: [] });
     ui.listEl.appendChild(dom.el('p'));
     assert.equal(ui.listEl.children.length, 1);
     assert.equal(ui.listEl.classList.contains('stolon-card-list'), false);
-    ui.cards.render();
+    ui.cards.setItems(['a', 'b', 'c']);
     assert.deepEqual(titles(ui), ['a', 'b', 'c']);
+});
+
+test('given items draw at once, even in a closed section, so later opening finds the cards', function () {
+    var section = dom.el('div', { class: 'stolon-collapsible-section stolon-collapsed' });
+    var body = section.appendChild(dom.el('div', { class: 'stolon-collapsible-content' }));
+    body.hidden = true;
+    dom.document.body.appendChild(section);
+    var listEl = body.appendChild(dom.el('div'));
+    createSortableCardList(listEl, { items: ['a', 'b'], render: function (item) { return { title: item }; } });
+    assert.ok(listEl.classList.contains('stolon-card-list'));
+    assert.equal(all(listEl, '.stolon-card-item').length, 2);
 });
 
 test('by default the cards keep their markup and grow with the page', function () {
@@ -148,4 +160,18 @@ test('numbered false leads a card with no icon with nothing', function () {
         assert.doesNotMatch(c.innerHTML, /stolon-card-item-num|stolon-collapsible-tile/);
     });
     assert.deepEqual(titles(ui), ['a', 'b', 'c']);
+});
+
+function listRule(file, selector) {
+    var css = readFileSync(new URL('../../src/css/' + file, import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    var at = css.indexOf(selector + ' {');
+    assert.ok(at !== -1, file + ' has ' + selector);
+    return css.slice(at, css.indexOf('}', at));
+}
+
+test('the action row lines its buttons up on the list edge, a narrow gap apart, past the emby-button margin', function () {
+    var row = listRule('sortable-card-list.css', '.stolon-card-list-actions');
+    assert.match(row, /display: flex/);
+    assert.match(row, /gap: var\(--stolon-gap-narrow\)/);
+    assert.match(listRule('sortable-card-list.css', '.stolon-card-list-actions > .stolon-button'), /margin: 0 !important/);
 });

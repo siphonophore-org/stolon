@@ -49,6 +49,8 @@ Classes: `stolon-card-list`, `stolon-card-item`, `stolon-card-item-head`, `stolo
 * `render(item, index)` returns `{ icon, iconColor, title, subtitle, badges: [{ label, cls }], dot, dotTitle, disabled }`. `dot` is `'ok'` (green), `'bad'` (red), `'checking'` (orange), `'unknown'` (gray), a status color name or hex code, or `'none'` to omit it, and any other word gives a gray dot. `dotTitle` names the dot as its title and `aria-label`, and defaults to Active, Error, Checking, Unknown, or the color's meaning. `cls` is a badge color or hex code, with `medium`, `large`, or other classes beside it, `gray` by default.
 * `icon` leads the card with a Material icon in the [Collapsible Section](collapsible-section.md) tile, `stolon-collapsible-tile`, in place of its number. `iconColor` is a status color name or a hex code, and the accent by default. Steps and other records whose place is not a rank lead with a tile, never a number.
 * `numbered` (default true) leads a card with no `icon` with its place in the list. False leads it with nothing.
+* Given `items` draw at once, wherever the list sits, such as in a closed section. A list made with no items leaves its element's content alone until `setItems` or `render`.
+* `stolon-card-list-actions` under the list is a row of buttons, such as Add, a narrow gap apart, the first on the list's start edge.
 * The editor parks in a hidden holder after the list while the list re-renders, so its fields and bindings survive.
 * `setSelected(index, { collapsed })` opens a card and calls `onSelect`. A bad index clears the selection. `setItems(next)` re-renders and clamps the selection. `getSelected()` is the open index or -1.
 * `height`, `maxHeight`, and `minHeight` set the height of the list as a [List](list.md) takes them, `'auto'` by default so the list grows with the page. `setHeight(height, maxHeight)` changes them later.
@@ -80,7 +82,7 @@ Renders records as cards, each led by its number or an icon tile, with a status 
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
-| `items` | <code>T[]</code> | array of records in priority order, replaced with setItems [optional] |
+| `items` | <code>T[]</code> | array of records in priority order, replaced with setItems. Given items draw at once, wherever the list sits, such as in a closed section [optional] |
 | `render` (required) | <code>(item: T, index: number): CardSpec &#124; null &#124; undefined</code> | function(item, index) returning { icon, iconColor, title, subtitle, badges: [{ label, cls }], dot: 'ok'&#124;'bad'&#124;'checking'&#124;'unknown'&#124;'none', dotTitle, disabled } [required] |
 | `editor` | <code>HTMLElement &#124; null</code> | element placed inside the open card's body [optional] |
 | `onSelect` | <code>(index: number): void</code> | function(index) called when a card opens, before the editor is placed [optional] |
@@ -124,7 +126,7 @@ Renders records as cards, each led by its number or an icon tile, with a status 
 | `stolon-card-item-sub.stolon-card-item-sub-text` | The sub line in the page's own font, for words rather than an address or path |
 | `stolon-card-item-head.stolon-card-item-head-static` | A head row that only holds a control at its end (such as Unblock) opens nothing itself |
 | `stolon-card-item-body` | Body shown only inside the open, unfolded card |
-| `stolon-card-list-actions` | Action row under the list, for an Add button |
+| `stolon-card-list-actions` | Action row under the list, for an Add button or several, a narrow gap apart and wrapping, the first on the list's start edge |
 
 <!-- reference:end -->
 

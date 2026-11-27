@@ -101,3 +101,28 @@ test('setValue and setInherited update the state, and setValue keeps a disabled 
     assert.equal(field.disabled, true);
     assert.throws(function () { createInheritField({}); }, /field/);
 });
+
+test('fieldLabel and help put the field and its toggle in an inputContainer, labelled and described like a form field', function () {
+    var host = dom.el('div');
+    var field = select();
+    host.appendChild(field);
+    dom.document.body.appendChild(host);
+    var ui = createInheritField({ field: field, inheritedValue: 'fr', fieldLabel: 'Language', help: 'The language of new items.', label: 'Language source' });
+    assert.equal(host.children[0], ui.element);
+    assert.equal(ui.element.className, 'inputContainer');
+    var label = ui.element.children[0];
+    assert.equal(label.textContent, 'Language');
+    assert.equal(label.getAttribute('for'), field.id);
+    assert.ok(field.id);
+    assert.ok(ui.element.children[1].classList.contains('stolon-inherit'));
+    assert.equal(ui.help, ui.element.children[2]);
+    assert.equal(ui.help.textContent, 'The language of new items.');
+    assert.ok(field.getAttribute('aria-describedby').split(' ').indexOf(ui.help.id) !== -1);
+    assert.equal(ui.element.querySelector('.stolon-inherit-toggle').getAttribute('aria-label'), 'Language source');
+});
+
+test('without fieldLabel or help the inherit field keeps its bare markup', function () {
+    var ui = createInheritField({ field: select(), inheritedValue: 'fr' });
+    assert.ok(ui.element.classList.contains('stolon-inherit'));
+    assert.equal(ui.help, null);
+});

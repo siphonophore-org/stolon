@@ -32,15 +32,17 @@
     color: var(--stolon-card-color, inherit);
     margin-bottom: calc(var(--stolon-gap-narrow) / 2);
 }
-/* Quiet label under the count, cut with an ellipsis */
+/* Quiet label under the count, which wraps at a word onto a second line and ends in an ellipsis after it */
 /* Example: <span class="stolon-card-label">Users</span> */
 .stolon-card-label {
     display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     font-size: var(--stolon-font-medium);
     color: var(--stolon-text-muted);
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
 }
 /* Status color modifiers for a card, each coloring its count and, on a filter card, its outline */
 /* Example: <div class="stolon-card stolon-orange"><span class="stolon-card-count">2</span><span class="stolon-card-label">Queued</span></div> */
@@ -82,6 +84,10 @@
 /* Example: <div class="stolon-cards stolon-fit"><div class="stolon-card"><span class="stolon-card-count">460.5 GB</span></div></div> */
 .stolon-cards.stolon-fit .stolon-card-count { font-size: var(--stolon-font-large); }
 
+/* A row with a label word wider than its card, which fitCounts marks, gives every label the small text size, and a word still too wide breaks rather than clips */
+/* Example: <div class="stolon-cards stolon-fit-labels"><div class="stolon-card"><span class="stolon-card-count">3</span><span class="stolon-card-label">Administrators</span></div></div> */
+.stolon-cards.stolon-fit-labels .stolon-card-label { font-size: var(--stolon-font-small); overflow-wrap: anywhere; }
+
 @media (max-width: 768px) {
     .stolon-cards { gap: var(--stolon-gap-narrow); }
     .stolon-card { min-width: calc(var(--stolon-size-large) * 2); padding: var(--stolon-pad-small) var(--stolon-pad-medium); }
@@ -90,5 +96,8 @@
 @media (max-width: 600px) {
     /* A phone card is narrow, so its count takes a size step down from the scale before it would need an ellipsis. */
     .stolon-card-count { font-size: calc(var(--stolon-font-large) * 1.25); }
+    /* Cards of one width fit three across a phone, so six counts take two rows, with the small side padding so a long label word still fits. */
+    .stolon-cards.stolon-even { --stolon-balance-min: 96px; }
+    .stolon-cards.stolon-even > .stolon-card { padding-left: var(--stolon-pad-small); padding-right: var(--stolon-pad-small); }
     .stolon-cards.stolon-compact .stolon-card-count { font-size: var(--stolon-font-large); }
 }

@@ -86,6 +86,26 @@ function description(text: string | undefined, className: string): HTMLElement |
     return text ? make('div', className, null, text) : null;
 }
 
+/**
+ * Puts a control in the web client's own inputContainer, with its label over it and its description under it, as every
+ * form field builder does. A field with no label has none.
+ * Internal to the web components.
+ *
+ * @param control the control, or the element that holds it
+ * @param id the id of the input the label names
+ * @param label the label over the control [optional]
+ * @param help the description under it [optional]
+ * @returns { element, help }
+ */
+export function labelField(control: HTMLElement, id: string, label?: string, help?: string): { element: HTMLElement; help: HTMLElement | null } {
+    var element = make('div', 'inputContainer');
+    if (label) element.appendChild(make('label', 'inputLabel inputLabelUnfocused', { for: id }, label));
+    element.appendChild(control);
+    var note = description(help, 'fieldDescription');
+    if (note) element.appendChild(note);
+    return { element: element, help: note };
+}
+
 function setAttributes(el: Element, list: Record<string, unknown>): void {
     Object.keys(list).forEach(function (name) {
         var value = list[name];
@@ -188,7 +208,7 @@ export function createInputField(options: InputFieldOptions): FormFieldHandle<st
 export function createSecretField(options: SecretFieldBuildOptions): SecretFieldHandle {
     var opts = options || ({} as SecretFieldBuildOptions);
     var made = createInputField({ label: opts.label, help: opts.help, id: opts.id, field: opts.field, type: 'password', required: opts.required, disabled: opts.disabled, validate: opts.validate });
-    var clear = make('button', 'raised stolon-button stolon-secondary stolon-small stolon-hidden', { type: 'button', is: 'emby-button' }, opts.clearText || stolonText('Stolon.Clear'));
+    var clear = make('button', 'raised stolon-button stolon-secondary stolon-small stolon-secret-clear stolon-hidden', { type: 'button', is: 'emby-button' }, opts.clearText || stolonText('Stolon.Clear'));
     made.element.insertBefore(clear, made.help);
     function setStored(stored: boolean): void {
         bindSecretField(made.input, !!stored, { clearButton: clear, allowExpose: !!opts.allowExpose, placeholder: opts.keptText });

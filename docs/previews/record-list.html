@@ -6,11 +6,14 @@ const unblock = document.createElement('button');
 unblock.className = 'raised stolon-button stolon-secondary stolon-small';
 unblock.type = 'button';
 unblock.textContent = 'Unblock';
+const meter = base.createUsageMeter({ used: 820, total: 2000, unit: 'GB' });
+meter.element.style.width = '14rem';
 const list = base.createRecordList({
     items: [
         { id: 'discord', title: 'Discord', secondary: 'Every sync result', tags: [{ label: 'Movies', icon: 'movie' }, { label: 'Shows', icon: 'tv' }, { label: 'Music', icon: 'album', off: true }] },
         { id: 'email', title: 'Email', secondary: 'Failures only', tags: [{ label: 'All Libraries', icon: 'video_library' }] },
         { id: 'blocked', title: '203.0.113.7', secondary: 'Blocked after 5 failed sign ins', aside: unblock },
+        { id: 'disk', title: 'Media disk', secondary: '/mnt/media', aside: meter.element, asideFill: true },
         { id: 'invite', title: 'Family invite', secondary: 'Expires in 6 days', aside: base.createQrCode({ value: 'https://jellyfin.example.com/invite/4b1e0c2a9f7d4e21b3c8a05f6e9d2c71', label: 'Invite link', layout: 'inline' }).element }
     ],
     onOpen: function () {}

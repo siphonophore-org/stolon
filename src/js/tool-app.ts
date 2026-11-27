@@ -167,7 +167,8 @@ function send(view: HTMLElement, type: string, cancelable?: boolean): boolean {
 /**
  * One config page that holds a plugin's tools in a tool shell and swaps them in place. Each tool is its own registered page,
  * loaded the first time it opens and kept after, and its controller gets the same viewshow, viewbeforehide, and viewhide events
- * the dashboard sends a page, so a page built for its own address works here unchanged.
+ * the dashboard sends a page, so a page built for its own address works here unchanged. Switching to another tool scrolls
+ * the page to its top, as the web client does for a page it shows, and choosing the open tool again keeps the place.
  *
  * @param view    the host page's view, whose content-primary takes the shell
  * @param options {
@@ -335,6 +336,8 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
             mark(current);
             writeToolToAddress(current);
             entry.view.hidden = false;
+            // Another tool starts at its top, as a page the web client shows does, and the same tool keeps its place.
+            if (!again && was && typeof window.scrollTo === 'function') window.scrollTo(0, 0);
             if (!again || param) send(entry.view, 'viewshow');
             if (!again && was) void reloadConfig();
             return entry.view;

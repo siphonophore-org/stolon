@@ -2,6 +2,7 @@
 // markup, with is set as an attribute so the web client upgrades each control once it is in the page.
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { installFakeDom, all, shown } from './fake-dom.mjs';
 
 var dom = installFakeDom();
@@ -91,7 +92,7 @@ test('a checkbox field is the web client checkbox with its description, and read
 
 test('a secret field keeps a stored secret out of the page and posts the kept sentinel until it is typed or cleared', function () {
     var f = kit.createSecretField({ label: 'Token', help: 'The API token.', stored: true });
-    assert.deepEqual(kids(f.element), ['label.inputLabel.inputLabelUnfocused', 'input.stolon-secret-stored', 'button.raised.stolon-button.stolon-secondary.stolon-small', 'div.fieldDescription']);
+    assert.deepEqual(kids(f.element), ['label.inputLabel.inputLabelUnfocused', 'input.stolon-secret-stored', 'button.raised.stolon-button.stolon-secondary.stolon-small.stolon-secret-clear', 'div.fieldDescription']);
     assert.equal(f.input.getAttribute('type'), 'password');
     assert.equal(f.input.getAttribute('autocomplete'), 'new-password');
     assert.equal(f.clear.textContent, 'Clear');
@@ -110,4 +111,16 @@ test('readNumber gives a number, or null for blank or anything that is not a num
     assert.equal(kit.readNumber({ value: '' }), null);
     assert.equal(kit.readNumber({ value: '12abc' }), null);
     assert.equal(kit.readNumber(null), null);
+});
+
+function secretRule(file, selector) {
+    var css = readFileSync(new URL('../../src/css/' + file, import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    var at = css.indexOf(selector + ' {');
+    assert.ok(at !== -1, file + ' has ' + selector);
+    return css.slice(at, css.indexOf('}', at));
+}
+
+test('the Clear button of a secret field sits a narrow gap under the box on its start edge, past the zero margin of the field container', function () {
+    var rule = secretRule('secret-field.css', '.stolon-dialog .inputContainer > .stolon-secret-clear');
+    assert.match(rule, /margin: var\(--stolon-gap-narrow\) 0 0 0 !important/);
 });

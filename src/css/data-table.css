@@ -38,6 +38,13 @@
 }
 .stolon-data-grid > .stolon-data-body.stolon-list { overflow-x: auto; }
 .stolon-data-grid > .stolon-data-body.stolon-list > .stolon-data-row { min-width: var(--stolon-data-least); }
+/* An empty table's sentence spans the columns too, so its header scrolls with it, and its right padding keeps the sentence centered in the frame */
+/* Example: <div class="stolon-data-body stolon-list stolon-rows stolon-empty"><div class="stolon-list-empty">Nothing matches.</div></div> */
+.stolon-data-grid > .stolon-data-body.stolon-list > .stolon-list-empty {
+    min-width: var(--stolon-data-least);
+    box-sizing: border-box;
+    padding-right: max(var(--stolon-gap-wide), calc(var(--stolon-data-least) - 100% + var(--stolon-gap-wide)));
+}
 .stolon-data-table.stolon-compact .stolon-data-grid > .stolon-data-head,
 .stolon-data-table.stolon-compact .stolon-data-grid > .stolon-data-body.stolon-list { --stolon-data-gap: var(--stolon-gap-narrow); }
 .stolon-data-head,
@@ -98,7 +105,7 @@
 /* A narrow table: number columns shrink, and a heading with an icon shows the icon in place of its label */
 /* Example: <div class="stolon-data-table stolon-compact"><div class="stolon-data-heading stolon-end"><button class="stolon-data-sort"><span class="material-icons stolon-data-glyph">person</span><span class="stolon-data-label">People</span></button></div></div> */
 .stolon-data-glyph { display: none; font-size: var(--stolon-icon-medium); }
-.stolon-data-table.stolon-compact { --stolon-data-number: calc(var(--stolon-size-large) * 1.25); }
+.stolon-data-table.stolon-compact { --stolon-data-number: calc(var(--stolon-size-large) * 1.25); --stolon-data-min: calc(var(--stolon-size-large) * 1.5); }
 .stolon-data-table.stolon-compact .stolon-data-glyph { display: inline-block; }
 .stolon-data-table.stolon-compact .stolon-data-heading.stolon-has-icon .stolon-data-label { display: none; }
 .stolon-data-table.stolon-compact .stolon-data-head,

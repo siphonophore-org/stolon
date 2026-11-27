@@ -39,6 +39,7 @@ export interface CheckboxListOptions {
     maxHeight?: number | string | null;
     minHeight?: number | string | null;
     size?: 'small' | 'medium' | 'large';
+    wrapSublabels?: boolean;
     onChange?(ids: string[]): void;
 }
 
@@ -76,6 +77,7 @@ export interface CheckboxListHandle extends ComponentHandle {
  *   maxHeight     : the most the rows grow before they scroll, or null for no cap (default 320)
  *   minHeight     : the least a filling list takes [optional]
  *   size          : 'small', 'medium', or 'large' for its fields (default 'medium')
+ *   wrapSublabels : true wraps a long sublabel at a word, where false ends it in an ellipsis with the full text as its tooltip (default false)
  *   onChange      : function(idsArray) called on every selection change [optional]
  * }
  * @returns { element, ready, getValue, setValue, setDisabled, refresh, setHeight, destroy }.
@@ -115,7 +117,11 @@ export function createCheckboxList(options?: CheckboxListOptions): CheckboxListH
 
         var textWrap = make('span', 'stolon-check-text');
         textWrap.appendChild(make('span', 'stolon-check-label', null, toText(info.label)));
-        if (info.sublabel) textWrap.appendChild(make('span', 'stolon-check-sub', null, info.sublabel));
+        if (info.sublabel) {
+            var sub = make('span', 'stolon-check-sub' + (opts.wrapSublabels ? ' stolon-wrap' : ''), null, info.sublabel);
+            if (!opts.wrapSublabels) sub.title = info.sublabel;
+            textWrap.appendChild(sub);
+        }
         row.appendChild(textWrap);
 
         if (info.badge) {

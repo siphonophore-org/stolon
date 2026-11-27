@@ -153,6 +153,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | User selector | A select of the server's users for picking one | `createUserSelector` | User dropdown |
 | User multi selector | A Checkbox List of the server's users for picking many | `createUserMultiSelector` | User picker, user list |
 | Record list | A List of static rows, each a title, a secondary line, tags, and a chevron or an aside control | `createRecordList` | Settings list, nav list |
+| Fill aside | A record row's aside that takes the row's full width once it moves under the text | `asideFill`, `stolon-record-list-aside stolon-fill` | Wide aside, block aside |
+| Filtered message | The empty sentence a table shows while a search or filter finds nothing, apart from the one for a table with nothing in it | `emptyState.filteredMessage` | No results text, miss text |
 | Tree view | Nested rows that open and close, with optional checkboxes and children that load on open | `createTreeView` | Outline, hierarchy |
 | Media card | One media item with its artwork, as a list row or a grid tile | `createMediaCard`, `stolon-media-card` | Poster card, item row |
 | Media picker | A library search that picks media items | `createMediaPicker` | Item selector, title picker |
@@ -165,7 +167,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Status dot | A small colored dot that shows a state | `createStatusDot`, `statusDotHtml`, `setDotColor` | Indicator light |
 | Avatar | A round image, or the person icon when there is none, that stands for a user | `createAvatar`, `createUserChip` | Profile picture |
 | Status card | A bordered card with an icon, a status pill, a bold title, one detail line, and an optional large value. It links or acts as a whole with `href` or `onClick` | `createStatusCard`, `stolon-status-card` | Stat card, metric tile, widget |
-| Status card grid | Status cards in balanced rows | `createStatusCardGrid`, `stolon-status-cards` | Card wall, dashboard grid |
+| Status card grid | Status cards in balanced rows, or in one width with `even` | `createStatusCardGrid`, `stolon-status-cards` | Card wall, dashboard grid |
+| Legend | The row under a bar or chart that names each part with its color and, where it has one, its amount | `stolon-chart-legend`, `stolon-usage-meter-legend`, `stolon-status-card-legend`, `legend` | Key, caption |
 | Count cards | A row of counts over labels, each in its status color, drawn from data | `renderCards` | Counters, tiles |
 | Bar chart | Bars per label and series on the chart core | `createBarChart` | Column chart, histogram |
 | Line chart | A line per series through one point per label on the chart core | `createLineChart` | Trend chart, graph |
