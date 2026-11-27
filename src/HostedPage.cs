@@ -47,7 +47,13 @@ public enum HostedPageFrame
     /// The web client shell from the <c>webclient</c> template, which loads the installed web client's stylesheets and fonts and draws its
     /// app bar, user menu, and drawer, so the page looks like Jellyfin itself.
     /// </summary>
-    WebClient
+    WebClient,
+
+    /// <summary>
+    /// The web client shell signed out, as the web client's login page: its header with the server's logo and its form column, with no
+    /// user menu or libraries. It suits a page anyone with a link opens, such as an invite sign up.
+    /// </summary>
+    WebClientSignedOut
 }
 
 /// <summary>
@@ -65,6 +71,12 @@ public sealed class HostedPage
     /// The name of Jellyfin's policy for administrators, for an <c>[Authorize]</c> attribute on an administrator page's API calls.
     /// </summary>
     public const string AdministratorPolicy = "RequiresElevation";
+
+    // The signed out frame's classes, the web client login page's: its body, its page's padding, and its form's width. The page
+    // script reads the same lists from web-client-shell.ts when it moves a status page into the signed in shell.
+    private const string SignedOutClass = "stolon-shell-signed-out";
+    private const string SignedOutColumnClasses = "standalonePage padded-left padded-right padded-bottom-page";
+    private const string SignedOutFormClasses = "readOnlyContent margin-auto-x";
 
     private readonly HostedPageContent _content;
 
@@ -110,7 +122,7 @@ public sealed class HostedPage
     /// <summary>
     /// Gets the frame the page is drawn in. <see cref="HostedPageFrame.UserPage"/> is the default. <see cref="HostedPageFrame.WebClient"/>
     /// suits a page for signed in viewers, since its bar shows their libraries and user menu. In the shell the mark and its icon name
-    /// the page's own entry among the libraries.
+    /// the page's own entry among the libraries. <see cref="HostedPageFrame.WebClientSignedOut"/> suits a page anyone with a link opens.
     /// </summary>
     public HostedPageFrame Frame { get; init; }
 
@@ -237,7 +249,17 @@ public sealed class HostedPage
     /// <returns>The not found page.</returns>
     public ContentResult NotFound(ControllerBase controller) => Answer(controller, null, notFound: true);
 
-    private ContentResult Answer(ControllerBase controller, IReadOnlyDictionary<string, string>? values, bool notFound)
+    /// <summary>
+    /// Answers with the page in the web client shell, signed out until the page script finds the viewer's sign-in, with a screen in
+    /// its gate in place of the content. <see cref="StatusPage"/> serves its web client screens through it.
+    /// </summary>
+    /// <param name="controller">The controller whose request is answered.</param>
+    /// <param name="gate">The screen's markup, which the caller has encoded.</param>
+    /// <param name="statusCode">The status code.</param>
+    /// <returns>The page.</returns>
+    internal ContentResult Status(ControllerBase controller, string gate, int statusCode) => Answer(controller, null, notFound: false, gate, statusCode);
+
+    private ContentResult Answer(ControllerBase controller, IReadOnlyDictionary<string, string>? values, bool notFound, string? gate = null, int? statusCode = null)
     {
         ArgumentNullException.ThrowIfNull(controller);
         var context = controller.HttpContext;
@@ -251,7 +273,7 @@ public sealed class HostedPage
 
         var assets = WebClientAssets.For(paths?.WebPath);
         var language = StolonTranslations.RequestLanguage(context.Request);
-        var html = Frame == HostedPageFrame.WebClient
+        var html = Frame != HostedPageFrame.UserPage || gate is not null
             ? RenderShell(
                 context.Request.Path,
                 host?.FriendlyName,
@@ -261,9 +283,10 @@ public sealed class HostedPage
                 WebClientAssets.Shell(paths?.WebPath),
                 DetailsTemplate && !notFound ? WebClientDetailsTemplate.Load(paths?.WebPath) : null,
                 values,
-                notFound)
-            : Render(context.Request.Path, host?.FriendlyName, language, assets.FaviconHref, assets.IconFace, values, notFound, WebClientAssets.BannerHref(paths?.WebPath));
-        return new ContentResult { Content = html, ContentType = "text/html; charset=utf-8", StatusCode = notFound ? StatusCodes.Status404NotFound : StatusCodes.Status200OK };
+                notFound,
+                gate)
+            : Render(context.Request.Path, host?.FriendlyName, language, assets.FaviconHref, assets.IconFace, values, notFound, WebClientAssets.BannerHref(paths?.WebPath), NotoFaces(paths?.WebPath));
+        return new ContentResult { Content = html, ContentType = "text/html; charset=utf-8", StatusCode = statusCode ?? (notFound ? StatusCodes.Status404NotFound : StatusCodes.Status200OK) };
     }
 
     /// <summary>
@@ -301,10 +324,11 @@ public sealed class HostedPage
     /// <param name="values">Values for the content's tokens, encoded here.</param>
     /// <param name="notFound">True to draw the not found screen in place of the content.</param>
     /// <param name="bannerHref">The server logo the web client's login page shows, relative to the web folder, or <c>null</c>.</param>
+    /// <param name="fonts">The web client's Noto Sans faces, or empty.</param>
     /// <returns>The document.</returns>
-    internal string Render(PathString path, string? serverName, string language, string? faviconHref, string iconFace, IReadOnlyDictionary<string, string>? values, bool notFound = false, string? bannerHref = null)
+    internal string Render(PathString path, string? serverName, string language, string? faviconHref, string iconFace, IReadOnlyDictionary<string, string>? values, bool notFound = false, string? bannerHref = null, string fonts = "")
     {
-        if (Frame == HostedPageFrame.WebClient)
+        if (Frame != HostedPageFrame.UserPage)
         {
             return RenderShell(path, serverName, null, language, faviconHref, WebClientAssets.Shell(null), null, values, notFound);
         }
@@ -326,6 +350,7 @@ public sealed class HostedPage
             ["TITLE"] = WebUtility.HtmlEncode(Title ?? server),
             ["FAVICON"] = faviconHref is null ? string.Empty : "<link rel=\"icon\" href=\"web/" + WebUtility.HtmlEncode(faviconHref) + "\" />",
             ["ICONS"] = iconFace.Length == 0 ? string.Empty : "<style>" + iconFace.Replace("</", "<\\/", StringComparison.Ordinal) + "</style>",
+            ["FONTS"] = fonts.Length == 0 ? string.Empty : "<style>" + fonts.Replace("</", "<\\/", StringComparison.Ordinal) + "</style>",
             ["STYLESHEET"] = WebUtility.HtmlEncode(SharedPage("css")),
             ["SCRIPT"] = StringUtilities.EscapeJsString(SharedPage("js")),
             ["SERVER"] = WebUtility.HtmlEncode(server),
@@ -348,10 +373,14 @@ public sealed class HostedPage
     /// <param name="shell">What the shell links from the web client.</param>
     /// <param name="details">The details page template, or <c>null</c> for none.</param>
     /// <param name="values">Values for the content's tokens, encoded here.</param>
+    /// <param name="notFound">True to draw the not found screen in place of the content.</param>
+    /// <param name="gate">A screen for the gate in place of the content, which the caller has encoded, or <c>null</c> for none. The page
+    /// starts signed out, and the page script moves it into the signed in shell when it finds the viewer's sign-in.</param>
     /// <returns>The document.</returns>
-    internal string RenderShell(PathString path, string? serverName, string? serverId, string language, string? faviconHref, WebClientShellAssets shell, string? details, IReadOnlyDictionary<string, string>? values, bool notFound = false)
+    internal string RenderShell(PathString path, string? serverName, string? serverId, string language, string? faviconHref, WebClientShellAssets shell, string? details, IReadOnlyDictionary<string, string>? values, bool notFound = false, string? gate = null)
     {
         ArgumentNullException.ThrowIfNull(shell);
+        var signedOut = Frame == HostedPageFrame.WebClientSignedOut || gate is not null;
         var server = string.IsNullOrWhiteSpace(serverName) ? "Jellyfin" : serverName;
         var web = new StringBuilder();
         if (shell.IndexStyle.Length > 0)
@@ -372,6 +401,12 @@ public sealed class HostedPage
             ["ACCESS"] = AccessName(Access),
             ["ACCESS_CHECK"] = WebUtility.HtmlEncode(AccessCheck ?? string.Empty),
             ["SCREEN"] = notFound ? "not-found" : string.Empty,
+            ["FRAME"] = signedOut ? " " + SignedOutClass : string.Empty,
+            ["SESSION"] = gate is null ? string.Empty : "follow",
+            ["COLUMN"] = signedOut ? " " + SignedOutColumnClasses : string.Empty,
+            ["FORM"] = signedOut ? " " + SignedOutFormClasses : string.Empty,
+            ["GATE_HIDDEN"] = gate is null ? " hidden" : string.Empty,
+            ["GATE"] = gate ?? string.Empty,
             ["TITLE"] = WebUtility.HtmlEncode(Title ?? server),
             ["FAVICON"] = faviconHref is null ? string.Empty : "<link rel=\"icon\" href=\"web/" + WebUtility.HtmlEncode(faviconHref) + "\" />",
             ["MANIFEST"] = string.IsNullOrEmpty(Manifest) ? string.Empty : "<link rel=\"manifest\" href=\"" + WebUtility.HtmlEncode(Manifest) + "\" />",
@@ -385,8 +420,16 @@ public sealed class HostedPage
             ["MARK_ICON"] = WebUtility.HtmlEncode(MarkIcon ?? string.Empty),
             ["DETAILS"] = details is null ? string.Empty : "<template id=\"stolon-shell-details\">" + details + "</template>",
             ["OPTIONS"] = ScriptOptions(),
-            ["CONTENT"] = notFound ? string.Empty : TemplateLoader.FillText(_content.Html, Encode(values))
+            ["CONTENT"] = notFound || gate is not null ? string.Empty : TemplateLoader.FillText(_content.Html, Encode(values))
         });
+    }
+
+    // The web client's Noto Sans faces alone, for the user page, whose own font stack names them. Its font stacks are left out,
+    // since they would set the page's font in place of the user page's.
+    private static string NotoFaces(string? webPath)
+    {
+        var fonts = WebClientAssets.Shell(webPath).Fonts;
+        return string.Join('\n', fonts.Split('\n').Where(rule => rule.StartsWith("@font-face", StringComparison.Ordinal)));
     }
 
     // Each value HTML encoded, for the content's tokens.

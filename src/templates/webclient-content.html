@@ -1,0 +1,44 @@
+<!-- content style, the web client's dark theme for author content in a frame, with the web client's values (jellyfin-web 12.4, GPL-2.0-or-later). Author CSS after it wins -->
+<style id="stolon-web-content">
+/* font stack, the web client's, for when its faces are not found */
+html { font-family: "Noto Sans", "Noto Sans HK", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", "Noto Sans TC", sans-serif; }
+/* fonts, the web client's Noto Sans faces and font stacks, and its Material Icons face */
+{{FONTS}}
+/* page, the web client's root size, line height, background, and secondary text color */
+html { font-size: 93%; line-height: 1.35; background-color: var(--jf-palette-background-default, #101010); color: var(--jf-palette-text-secondary, rgba(255, 255, 255, 0.7)); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; padding: 1em max(env(safe-area-inset-right), 3.3%) 5em max(env(safe-area-inset-left), 3.3%); overflow-wrap: break-word; }
+/* headings, the web client's sizes at its normal weight */
+h1 { font-size: 1.8em; font-weight: 400; }
+h2 { font-size: 1.5em; font-weight: 400; }
+h3 { font-size: 1.17em; font-weight: 400; }
+/* links, in the theme's primary color as the web client's link buttons */
+a { color: var(--jf-palette-primary-main, #00a4dc); }
+a:hover { color: var(--jf-palette-primary-dark, #00729a); }
+/* lines, quotes, and code */
+hr { border: 0; border-bottom: 1px solid var(--jf-palette-divider, rgba(255, 255, 255, 0.12)); margin: 1.5em 0; }
+blockquote { margin: 1em 0; padding: 0 1em; border-left: 0.25em solid var(--jf-palette-divider, rgba(255, 255, 255, 0.12)); }
+code, kbd, pre, samp { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+pre { overflow: auto; padding: 1em; border-radius: 0.2em; background-color: var(--jf-palette-background-paper, #202020); }
+img, video { max-width: 100%; height: auto; }
+/* tables, rows divided as the web client's lists are */
+table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+th, td { padding: 0.6em 0.8em; text-align: start; vertical-align: top; border-bottom: 1px solid var(--jf-palette-divider, rgba(255, 255, 255, 0.12)); }
+th { font-weight: 600; }
+/* buttons, the web client's raised button, and its submit button in the primary color */
+button, input[type="button"], input[type="submit"], input[type="reset"], .button { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; margin: 0.3em; padding: 0.9em 1em; border: 0; border-radius: 0.2em; font-family: inherit; font-size: inherit; font-weight: 600; text-decoration: none; cursor: pointer; color: var(--jf-palette-text-secondary, rgba(255, 255, 255, 0.7)); background: var(--jf-palette-Button-inheritContainedBg, #424242); }
+button:hover, input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover, .button:hover { background: var(--jf-palette-Button-inheritContainedHoverBg, #616161); }
+button[type="submit"], input[type="submit"], .button-submit { color: var(--jf-palette-primary-contrastText, rgba(0, 0, 0, 0.87)); background: var(--jf-palette-primary-main, #00a4dc); }
+button[type="submit"]:hover, input[type="submit"]:hover, .button-submit:hover { background: var(--jf-palette-primary-dark, #00729a); }
+button:disabled, input:disabled { opacity: 0.45; cursor: default; }
+/* fields, the web client's filled inputs with the accent border while focused */
+input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), select, textarea { box-sizing: border-box; width: 100%; padding: 0.35em 0.25em; font-family: inherit; font-size: 110%; color: inherit; background: var(--jf-palette-FilledInput-bg, rgba(255, 255, 255, 0.09)); border: 0.16em solid var(--jf-palette-FilledInput-borderColor, rgba(255, 255, 255, 0.09)); border-radius: 0.2em; outline: none; }
+input:focus, select:focus, textarea:focus { border-color: var(--jf-palette-secondary-main, #00a4dc); }
+select option { background: var(--jf-palette-background-paper, #202020); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--jf-palette-primary-main, #00a4dc); }
+label { display: inline-block; margin-bottom: 0.25em; }
+/* the web client's secondary text and field description */
+.secondaryText, .fieldDescription { color: var(--jf-palette-text-secondary, rgba(255, 255, 255, 0.7)); }
+.fieldDescription { padding-top: 0.25em; }
+/* focus, shown for the keyboard only */
+:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+</style>

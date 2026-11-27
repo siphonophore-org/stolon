@@ -1,0 +1,14 @@
+<!-- title: Status Page in the Web Client Shell -->
+<p>The not found screen StatusPage.ServeWebClient serves, signed out, as the web client's login page. A style block stands in for the web client's dark theme.</p>
+<iframe id="page" title="Status page in the web client shell" style="display: block; width: 100%; height: 360px; border: 0; border-radius: 8px;"></iframe>
+<template id="content"></template>
+<script type="module">
+await window.__baseReady;
+// The markup StatusPage.WebClientScreen writes for the not found screen.
+const gate = '<style>body { background: #101010; color: rgba(255, 255, 255, 0.7); font-family: sans-serif; } .sectionTitle { font-weight: 400; } .padded-left { padding-left: 3.3%; } .padded-right { padding-right: 3.3%; } .standalonePage { padding-top: 1em; } @media (min-width: 50em) { .readOnlyContent { max-width: 54em; } } .margin-auto-x { margin-left: auto; margin-right: auto; }'
+    + ' .button-submit { display: block; padding: 0.9em 1em; border-radius: 0.2em; font-weight: 600; text-align: center; text-decoration: none; background: #00a4dc; color: rgba(0, 0, 0, 0.87); }</style>'
+    + '<section class="stolon-screen stolon-screen-web stolon-not-found" role="alert" aria-label="Page not found"><div class="pageTitle pageTitleWithLogo pageTitleWithDefaultLogo stolon-screen-logo" aria-hidden="true"></div>'
+    + '<h1 class="stolon-screen-title sectionTitle">Page not found</h1><p class="stolon-screen-text secondaryText">This is not the page you are looking for.</p>'
+    + '<div class="stolon-screen-body"><a class="raised block emby-button button-submit stolon-screen-button" href="#">Home</a></div></section>';
+window.__gallery.webClientShell({ frame: document.getElementById('page'), content: document.getElementById('content'), server: 'Den', signedOut: true, gate: gate, logo: window.__gallery.rect(28, 28, '#00a4dc', 'J') });
+</script>

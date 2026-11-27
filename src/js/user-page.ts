@@ -13,6 +13,7 @@ export interface UserPageUser {
     Id: string;
     Name: string;
     Policy?: { IsAdministrator?: boolean };
+    PrimaryImageTag?: string | null;
 }
 
 /** What startUserPage takes. Every text replaces a default label. */
@@ -100,6 +101,19 @@ function session(access: UserPageAccess, serverId: string | null, user: UserPage
             return fetch(path, options);
         }
     };
+}
+
+/**
+ * A session for a viewer a page found with a stored sign-in of its own, such as a status page in the web client shell.
+ * Internal to the web components.
+ *
+ * @param access who may open the page
+ * @param serverId the server's id
+ * @param user the viewer
+ * @param token the viewer's access token
+ */
+export function userPageSession(access: UserPageAccess, serverId: string | null, user: UserPageUser | null, token: string | null): UserPageSession {
+    return session(access, serverId, user, token);
 }
 
 // Draws the gate in the state's look: an icon, a sentence, and a link back to the web client.

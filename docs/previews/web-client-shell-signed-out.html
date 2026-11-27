@@ -1,0 +1,30 @@
+<!-- title: Web Client Shell Signed Out -->
+<p>The signed out frame, as the web client's login page: the server's logo alone in the bar, and the page in the login form's column. A style block stands in for the web client's dark theme.</p>
+<iframe id="page" title="Web client shell signed out" style="display: block; width: 100%; height: 420px; border: 0; border-radius: 8px;"></iframe>
+<template id="content">
+<style>
+body { background: #101010; color: rgba(255, 255, 255, 0.7); font-family: sans-serif; }
+.sectionTitle { text-align: center; font-weight: 400; }
+.inputContainer { margin-bottom: 1.8em; }
+.inputLabel { display: block; margin-bottom: 0.25em; }
+.emby-input { box-sizing: border-box; width: 100%; padding: 0.4em 0.25em; font-size: 110%; color: inherit; background: rgba(255, 255, 255, 0.09); border: 0.16em solid rgba(255, 255, 255, 0.09); border-radius: 0.2em; }
+.fieldDescription { padding-top: 0.25em; }
+.button-submit { display: block; width: 100%; padding: 0.9em 1em; border: 0; border-radius: 0.2em; font-weight: 600; background: #00a4dc; color: rgba(0, 0, 0, 0.87); }
+@media (min-width: 50em) { .readOnlyContent { max-width: 54em; } }
+.margin-auto-x { margin-left: auto; margin-right: auto; }
+.padded-left { padding-left: 3.3%; } .padded-right { padding-right: 3.3%; } .standalonePage { padding-top: 1em; }
+</style>
+<form class="manualLoginForm">
+<h1 class="sectionTitle">Create your account</h1>
+<div class="inputContainer">
+<label class="inputLabel" for="name">User</label>
+<input is="emby-input" class="emby-input" id="name" type="text" />
+<div class="fieldDescription">Your name on this server.</div>
+</div>
+<button is="emby-button" type="button" class="raised button-submit block emby-button"><span>Create account</span></button>
+</form>
+</template>
+<script type="module">
+await window.__baseReady;
+window.__gallery.webClientShell({ frame: document.getElementById('page'), content: document.getElementById('content'), server: 'Den', signedOut: true, logo: window.__gallery.rect(28, 28, '#00a4dc', 'J') });
+</script>

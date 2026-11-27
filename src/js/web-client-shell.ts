@@ -2,7 +2,7 @@
 // The page script of the web client shell, the HostedPage frame that looks like Jellyfin's own web client. It checks the
 // viewer through the user page script, then follows the viewer's web client settings, theme and custom CSS, and fills the
 // app bar, user menu, and drawer as jellyfin-web 12.4 draws them (GPL-2.0-or-later).
-import { startUserPage } from './user-page.js';
+import { startUserPage, storedTokens, userPageSession, pageAccess } from './user-page.js';
 import type { UserPageOptions, UserPageSession, UserPageUser } from './user-page.js';
 import { stolonText } from './lib/stolon-text.js';
 import {
@@ -257,6 +257,25 @@ function menuKeys(e: KeyboardEvent, menu: HTMLElement, close: (refocus: boolean)
 
 var started: Promise<WebClientShellSession | null> | null = null;
 
+// The signed out frame's classes, the web client login page's, the same lists HostedPage writes into the template.
+var SIGNED_OUT = 'stolon-shell-signed-out';
+var SIGNED_OUT_COLUMN = ['standalonePage', 'padded-left', 'padded-right', 'padded-bottom-page'];
+var SIGNED_OUT_FORM = ['readOnlyContent', 'margin-auto-x'];
+
+/**
+ * Moves the page between the web client shell's signed out frame, the web client login page's header and form column, and
+ * the signed in shell with its app bar. Internal to the web components.
+ *
+ * @param signedOut true for the signed out frame
+ */
+export function setWebClientFrame(signedOut: boolean): void {
+    document.body.classList.toggle(SIGNED_OUT, signedOut);
+    var column = element('.stolon-shell-column');
+    var form = element('.stolon-shell-form');
+    SIGNED_OUT_COLUMN.forEach(function (c) { if (column) column.classList.toggle(c, signedOut); });
+    SIGNED_OUT_FORM.forEach(function (c) { if (form) form.classList.toggle(c, signedOut); });
+}
+
 /** Forgets the started shell, for tests. Internal to the web components. */
 export function resetWebClientShell(): void {
     started = null;
@@ -265,8 +284,9 @@ export function resetWebClientShell(): void {
 /**
  * Starts a page HostedPage serves in the web client shell. It follows the viewer's layout, theme, and custom CSS, checks the
  * viewer as startUserPage does, and fills the app bar with their libraries, the user menu, and the drawer. A viewer who may
- * not see the page gets the user page's card. Later calls return the same promise, so the page's own script calls it for
- * the session.
+ * not see the page gets the user page's card. In the signed out frame the page keeps the web client login page's header and
+ * shows no viewer, and a status page moves into the signed in shell once it finds the viewer's sign-in. Later calls return
+ * the same promise, so the page's own script calls it for the session.
  *
  * @param options {
  *   translations       : address of the plugin's translations relative to the server root [optional]
@@ -292,6 +312,9 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
     }
 
     root.classList.add('layout-' + webClientLayout());
+    var signedOut = body.classList.contains(SIGNED_OUT);
+    // A status page starts signed out and follows the viewer's sign-in when this browser has one.
+    var follow = body.getAttribute('data-stolon-session') === 'follow';
     var meta = element('meta[name="stolon-server-id"]');
     var serverId = meta ? meta.getAttribute('content') : null;
     applyWebClientLook({ userId: storedUserId(serverId) });
@@ -475,6 +498,50 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
             });
     }
 
+    function fillViewer(session: UserPageSession, user: UserPageUser): void {
+        fetch('web/config.json', { headers: { Accept: 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : {}; })
+            .catch(function () { return {}; })
+            .then(function (config: { themes?: WebClientTheme[]; menuLinks?: MenuLink[] }) {
+                applyWebClientLook({ userId: user!.Id, themes: config && config.themes });
+                fillNav(session, user!, config || {});
+            });
+        if (avatar) {
+            // A viewer with no picture keeps the person icon, so the page never asks for an image that is not there.
+            if (user.PrimaryImageTag) {
+                var picture = new Image();
+                picture.alt = '';
+                picture.onload = function () { if (avatar) { avatar.innerHTML = ''; avatar.appendChild(picture); } };
+                picture.src = 'Users/' + encodeURIComponent(user.Id) + '/Images/Primary?height=80&quality=90&tag=' + encodeURIComponent(user.PrimaryImageTag);
+            }
+            avatar.setAttribute('title', user.Name);
+            avatar.setAttribute('aria-label', user.Name);
+            avatar.hidden = false;
+        }
+        fillUserMenu(session, user);
+        if (drawerButton) drawerButton.hidden = false;
+    }
+
+    // Each stored sign-in is tried in turn. The first the server still knows moves the page into the signed in shell, and none
+    // leaves it signed out, since a status page never asks anyone to sign in.
+    function followSession(shell: WebClientShellSession): void {
+        var tokens = storedTokens(serverId);
+        function tryToken(index: number): void {
+            if (index >= tokens.length) return;
+            fetch('Users/Me', { headers: { Authorization: 'MediaBrowser Token="' + tokens[index] + '"', Accept: 'application/json' } })
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (user: UserPageUser | null) {
+                    if (!user || typeof user.Id !== 'string') { tryToken(index + 1); return; }
+                    Object.assign(shell, userPageSession(pageAccess(body), serverId, user, tokens[index]));
+                    setWebClientFrame(false);
+                    applyWebClientLook({ userId: user.Id });
+                    fillViewer(shell, user);
+                })
+                .catch(function () { return null; });
+        }
+        tryToken(0);
+    }
+
     started = startUserPage(opts).then(function (session) {
         if (!session) return null;
         var user = session.user;
@@ -485,25 +552,9 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
                 toast.destroy();
             }
         });
-        if (!user) return shell;
-        fetch('web/config.json', { headers: { Accept: 'application/json' } })
-            .then(function (r) { return r.ok ? r.json() : {}; })
-            .catch(function () { return {}; })
-            .then(function (config: { themes?: WebClientTheme[]; menuLinks?: MenuLink[] }) {
-                applyWebClientLook({ userId: user!.Id, themes: config && config.themes });
-                fillNav(session, user!, config || {});
-            });
-        if (avatar) {
-            var picture = new Image();
-            picture.alt = '';
-            picture.onload = function () { if (avatar) { avatar.innerHTML = ''; avatar.appendChild(picture); } };
-            picture.src = 'Users/' + encodeURIComponent(user.Id) + '/Images/Primary?height=80&quality=90';
-            avatar.setAttribute('title', user.Name);
-            avatar.setAttribute('aria-label', user.Name);
-            avatar.hidden = false;
-        }
-        fillUserMenu(session, user);
-        if (drawerButton) drawerButton.hidden = false;
+        if (!user && follow) followSession(shell);
+        if (!user || signedOut) return shell;
+        fillViewer(session, user);
         return shell;
     });
     return started;

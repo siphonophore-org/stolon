@@ -1,6 +1,6 @@
 # Web Client Shell
 
-A frame for a page a plugin hosts for signed in viewers that looks like Jellyfin's own web client. It loads the installed web client's stylesheets and fonts, follows the viewer's theme and custom CSS, and draws the web client's app bar, user menu, and drawer around the plugin's content. `HostedPage` serves it with `Frame = HostedPageFrame.WebClient`. See [Pages and Templates](../csharp/pages-and-templates.md#hostedpageframe) for the C# side, and [Web Client Markup](web-client-markup.md) for the builders of the content.
+A frame for a page a plugin hosts that looks like Jellyfin's own web client. It loads the installed web client's stylesheets and fonts, follows the viewer's theme and custom CSS, and draws the web client's app bar, user menu, and drawer around the plugin's content. `HostedPage` serves it with `Frame = HostedPageFrame.WebClient`, or signed out, as the web client's login page, with `Frame = HostedPageFrame.WebClientSignedOut`. See [Pages and Templates](../csharp/pages-and-templates.md#hostedpageframe) for the C# side, and [Web Client Markup](web-client-markup.md) for the builders of the content.
 
 ## Decision
 
@@ -8,7 +8,10 @@ A frame for a page a plugin hosts for signed in viewers that looks like Jellyfin
 | :--- | :--- |
 | A page signed in viewers open beside their libraries, such as a request page | Web Client Shell |
 | The web client's cards, dialogs, fields, and details page inside it | [Web Client Markup](web-client-markup.md) |
-| A page for someone with no account yet, such as an invite | [User Page](user-page.md), which draws no library or user menu |
+| A page anyone with a link opens, such as an invite sign up | Web Client Shell with `Frame = HostedPageFrame.WebClientSignedOut` |
+| Loading, sign in required, not authorized, or not found in the web client's look | `StatusPage.ServeWebClient`, see [Status Page](status-page.md#in-the-web-client-shell) |
+| A page an administrator wrote, shown in a frame | `WebClientContentStyle.Inject`, see [Author Content in a Frame](#author-content-in-a-frame) |
+| A page in Stolon's own look, outside the web client | [User Page](user-page.md) |
 | A short message, such as "page not found" | [Status Page](status-page.md) |
 | Anything inside the dashboard | A [config page](config-page.md) |
 
@@ -51,13 +54,61 @@ The frame, which `HostedPage` writes:
 * `stolon-shell` on the body, with the web client's page backdrop behind the content.
 * `stolon-shell-bar`, the web client's app bar on Jellyfin's `skinHeader`, with the server's name and logo, the libraries in `stolon-shell-nav`, and the viewer's avatar in `stolon-shell-end`.
 * `stolon-shell-menu`, the user menu and the libraries that do not fit the bar, and `stolon-shell-drawer`, which takes over below 900px.
-* `stolon-shell-main`, under the bar, with the sign in card's gate and `stolon-shell-content`, the plugin's content.
+* `stolon-shell-main`, under the bar, stacked over the web client's fixed background as its own pages are, with `stolon-shell-column` and `stolon-shell-form` around the sign in card's gate and `stolon-shell-content`, the plugin's content.
 
 The bar's entries are Favorites, the menu links of the web client's `config.json`, the page's own entry, named by `Mark` and `MarkIcon` unless a menu link points at the page, and the viewer's libraries. As many show as fit the width, and the rest go under More, as the web client lays them out. The user menu has Profile and Settings, the plugin's `menuItems`, Dashboard and Metadata manager for an administrator, Quick Connect when the server has it on, and Sign out.
 
 ### Access
 
 The access rules are `HostedPage`'s, checked by the same page script as the [User Page](user-page.md). A signed out viewer of a `User` page gets the sign in card under the bar, and the content stays hidden. An `Anyone` page starts with no viewer, so its bar shows the server alone.
+
+## Signed Out
+
+`Frame = HostedPageFrame.WebClientSignedOut` draws the page as the web client's login page, for a page anyone with a link opens, such as an invite sign up, an invite that is no longer good, or the page after sign up.
+
+* `stolon-shell-signed-out` on the body. The bar holds the server's logo alone, a link to the web client, with no libraries, avatar, user menu, or drawer, at every width.
+* `stolon-shell-column` takes the login page's `standalonePage padded-left padded-right padded-bottom-page`, and `stolon-shell-form` takes its form's `readOnlyContent margin-auto-x`, 54em wide on a wide screen and the full width on a phone.
+* A page screen in the gate, such as not found, drops its own logo, since the bar shows it.
+* The frame never shows a viewer, even one this browser has a sign-in for.
+
+Write the content in the login page's markup: a `form` with its heading in `sectionTitle`, fields in `inputContainer` with `emby-input`, `fieldDescription` under a field, and `raised button-submit block emby-button` for the main button.
+
+```csharp
+private static readonly HostedPage Signup = new("myplugin", HostedPageAccess.Anyone, HostedPageContent.Resource(typeof(Plugin).Assembly, "Web.signup.html"))
+{
+    Frame = HostedPageFrame.WebClientSignedOut
+};
+```
+
+```html
+<form class="manualLoginForm" id="signup">
+<div class="padded-left padded-right flex align-items-center justify-content-center"><h1 class="sectionTitle">Create your account</h1></div>
+<div class="inputContainer">
+<label class="inputLabel inputLabelUnfocused" for="name">User</label>
+<input is="emby-input" class="emby-input" id="name" type="text" required />
+<div class="fieldDescription">Your name on this server.</div>
+</div>
+<button is="emby-button" type="submit" class="raised button-submit block emby-button"><span>Create account</span></button>
+</form>
+<script type="module">
+const base = await import('./web/configurationpage?name=myplugin_stolon.js');
+await base.startWebClientShell();
+</script>
+```
+
+<iframe class="stolon-preview" src="../../../assets/previews/web-client-shell-signed-out.html" title="Web Client Shell signed out example" loading="lazy"></iframe>
+
+## Author Content in a Frame
+
+`WebClientContentStyle` gives author content, such as a page an administrator wrote and the plugin shows in a frame, the web client's look: its Noto Sans and Material Icons faces from the installed web client, its root size and line height, light text on its dark background, its link color, headings, tables, fields, and raised and submit buttons. The style reads the `--jf-palette-*` variables first, so a document that sets them follows another theme.
+
+```csharp
+var html = WebClientContentStyle.Inject(this, authorDocument);
+```
+
+`Inject` puts the style block first in the document's head, so the author's own styles after it win. `Style` returns the block alone. The font addresses are relative to the page the request opened, which a `srcdoc` frame resolves its addresses against.
+
+<iframe class="stolon-preview" src="../../../assets/previews/web-client-content.html" title="Web Client content style example" loading="lazy"></iframe>
 
 ## How It Finds the Web Client's Stylesheets
 
@@ -132,9 +183,11 @@ The built in probe groups are `appBar`, `userMenu`, `drawer`, `details`, `dialog
 
 ## Gotchas
 
-* The docs preview below has none of the web client's stylesheets, since Stolon does not ship Jellyfin's CSS. It shows the bar, the user menu, and the drawer, which Stolon draws, and the content in the browser's plain styles. Look at a page on a real server, or run the parity check, to see it as viewers do.
+* The docs previews have none of the web client's stylesheets, since Stolon does not ship Jellyfin's CSS. It shows the bar, the user menu, and the drawer, which Stolon draws, and the content in the browser's plain styles. Look at a page on a real server, or run the parity check, to see it as viewers do.
 * The bar's Material UI parts, such as the avatar and the menu entries, keep Material UI's class names beside Stolon's, such as `MuiMenuItem-root`, for custom CSS that aims at them. Stolon's `stolon-shell-` classes carry their look.
 * The palette the page script writes covers the web client's own six themes. A theme a server adds gets the dark palette under its own stylesheet.
+* The shell's script shows keyboard focus on the web client's buttons and links, which its stylesheets turn off, dims a disabled `emby-button` and checkbox, and lets the details page's `mainDetailButtons` wrap onto a second line on a narrow screen.
+* The avatar shows the viewer's picture only when they have one, so a viewer with none never makes the page ask for a missing image.
 * Sign out ends the session on the server and forgets it in the web client's storage, as the web client's own sign out does, then opens the web client.
 
 ## Reference
@@ -165,7 +218,7 @@ Follows the viewer's web client look in the order the web client applies it: the
 
 <code>function startWebClientShell(options?: WebClientShellOptions): Promise&lt;WebClientShellSession &#124; null&gt;</code>
 
-Starts a page HostedPage serves in the web client shell. It follows the viewer's layout, theme, and custom CSS, checks the viewer as startUserPage does, and fills the app bar with their libraries, the user menu, and the drawer. A viewer who may not see the page gets the user page's card. Later calls return the same promise, so the page's own script calls it for the session.
+Starts a page HostedPage serves in the web client shell. It follows the viewer's layout, theme, and custom CSS, checks the viewer as startUserPage does, and fills the app bar with their libraries, the user menu, and the drawer. A viewer who may not see the page gets the user page's card. In the signed out frame the page keeps the web client login page's header and shows no viewer, and a status page moves into the signed in shell once it finds the viewer's sign-in. Later calls return the same promise, so the page's own script calls it for the session.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -188,7 +241,10 @@ Starts a page HostedPage serves in the web client shell. It follows the viewer's
 | `stolon-shell-end` | The end of the bar, with the viewer's avatar, which opens the user menu |
 | `stolon-shell-menu` | A menu, the user menu or the libraries that do not fit the bar, as Material UI's menu: it grows in from its corner |
 | `stolon-shell-drawer` | The drawer, from the left over a dimmed page on a screen narrower than 900px, as the web client's |
-| `stolon-shell-main` | The page under the bar, which the plugin's content fills, and the gate where the page script asks the viewer to sign in |
+| `stolon-shell-main` | The page under the bar, which the plugin's content fills, and the gate where the page script asks the viewer to sign in. It stacks over the web client's fixed background, as the web client's own pages do |
+| `stolon-shell-column` | The column and form the page's gate and content sit in. Signed out they take the web client login page's classes, its page's padding and its form's width |
+| `stolon-shell-signed-out` | The signed out frame, as the web client's login page: the bar holds the server's logo alone, a link home, and the page sits in the login form's column |
+| `stolon-screen-spinner` | A status page's spinner under its sentence, the web client's loading spinner placed in the screen |
 
 <!-- reference:end -->
 
@@ -200,4 +256,16 @@ Starts a page HostedPage serves in the web client shell. It follows the viewer's
 
 ```html
 --8<-- "web-client-shell.html"
+```
+
+The signed out frame:
+
+```html
+--8<-- "web-client-shell-signed-out.html"
+```
+
+The content style:
+
+```html
+--8<-- "web-client-content.html"
 ```

@@ -433,8 +433,14 @@ var ARROW_FORWARD = '<path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></
 var CHECKBOX_BLANK = '<path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"></path>';
 var CHECKBOX_CHECKED = '<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2m-9 14-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path>';
 
-function muiIcon(path: string, classes: string): string {
-    return '<svg class="' + classes + '" focusable="false" aria-hidden="true" viewBox="0 0 24 24">' + path + '</svg>';
+/**
+ * A Material UI icon, its SVG path in Material UI's icon box, as the web client's Material UI parts draw them.
+ *
+ * @param path the icon's SVG markup inside the box, such as a path element, which the caller writes
+ * @param classes the SVG's whole class list, such as MuiSvgIcon-root
+ */
+export function webMuiIcon(path: string, classes: string): string {
+    return '<svg class="' + esc(classes) + '" focusable="false" aria-hidden="true" viewBox="0 0 24 24">' + path + '</svg>';
 }
 
 /**
@@ -446,7 +452,7 @@ function muiIcon(path: string, classes: string): string {
  */
 export function webResetFiltersButton(id: string, label: string, disabled?: boolean): string {
     return '<button type="button" class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium stolon-web-reset-filters"' + attrs({ id: id, disabled: !!disabled })
-        + '><span class="MuiButton-startIcon">' + muiIcon('<path d="M19.79 5.61C20.3 4.95 19.83 4 19 4H6.83l7.97 7.97zM2.81 2.81 1.39 4.22 10 13v6c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2.17l5.78 5.78 1.41-1.41z"></path>', 'MuiSvgIcon-root')
+        + '><span class="MuiButton-startIcon">' + webMuiIcon('<path d="M19.79 5.61C20.3 4.95 19.83 4 19 4H6.83l7.97 7.97zM2.81 2.81 1.39 4.22 10 13v6c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-2.17l5.78 5.78 1.41-1.41z"></path>', 'MuiSvgIcon-root')
         + '</span><span>' + esc(label) + '</span></button>';
 }
 
@@ -473,7 +479,7 @@ export function webFilterAccordion(id: string, title: string, checkboxesHtml: st
     var safe = esc(id);
     return '<div class="MuiAccordion-root stolon-web-filter"><h3 class="MuiAccordion-heading stolon-web-filter-heading"><button type="button" class="MuiAccordionSummary-root stolon-web-filter-summary" aria-expanded="false" aria-controls="' + safe + '-content" id="' + safe + '-header">'
         + '<span class="MuiAccordionSummary-content stolon-web-filter-title"><p class="MuiTypography-body1 stolon-web-filter-text">' + esc(title) + '</p></span>'
-        + '<span class="MuiAccordionSummary-expandIconWrapper stolon-web-filter-expand">' + muiIcon(ARROW_FORWARD, 'MuiSvgIcon-root') + '</span></button></h3>'
+        + '<span class="MuiAccordionSummary-expandIconWrapper stolon-web-filter-expand">' + webMuiIcon(ARROW_FORWARD, 'MuiSvgIcon-root') + '</span></button></h3>'
         + '<div class="MuiCollapse-root" id="' + safe + '-content" role="region" aria-labelledby="' + safe + '-header" hidden><div class="MuiAccordionDetails-root stolon-web-filter-details"><div class="MuiFormGroup-root stolon-web-filter-group">'
         + checkboxesHtml + '</div></div></div></div>';
 }
@@ -487,7 +493,7 @@ export function webFilterAccordion(id: string, title: string, checkboxesHtml: st
  */
 export function webFilterCheckbox(inputAttrs: WebAttributes, label: string, checked?: boolean): string {
     return '<label class="MuiFormControlLabel-root stolon-web-filter-option"><span class="MuiCheckbox-root stolon-web-filter-box"><input type="checkbox" class="PrivateSwitchBase-input stolon-web-filter-input"' + attrs(inputAttrs) + (checked ? ' checked' : '') + ' />'
-        + muiIcon(CHECKBOX_BLANK, 'MuiSvgIcon-root stolon-web-unchecked') + muiIcon(CHECKBOX_CHECKED, 'MuiSvgIcon-root stolon-web-checked') + '</span>'
+        + webMuiIcon(CHECKBOX_BLANK, 'MuiSvgIcon-root stolon-web-unchecked') + webMuiIcon(CHECKBOX_CHECKED, 'MuiSvgIcon-root stolon-web-checked') + '</span>'
         + '<span class="MuiTypography-body1 MuiFormControlLabel-label stolon-web-filter-text">' + esc(label) + '</span></label>';
 }
 
@@ -726,8 +732,20 @@ export interface WebOverlayButton {
     key?: string;
 }
 
-function overlayButton(b: WebOverlayButton, extra?: string): string {
-    return '<button type="button" class="cardOverlayButton itemAction paper-icon-button-light' + (extra || '') + '"' + attrs({ 'data-stolon-action': b.action, 'data-stolon-key': b.key || null, title: b.title, 'aria-label': b.title })
+/** Where a card's hover menu button sits: in the corner on a phone, in the hover menu's corner, or as its middle button. */
+export type WebOverlayPlacement = 'corner' | 'hover' | 'fab';
+
+// cardBuilder.js getHoverMenuHtml: the hover menu's buttons.
+/**
+ * A button of a card's hover menu, answered by the page through data-stolon-action.
+ *
+ * @param button the button's action, icon, words, and key
+ * @param placement where it sits (default 'corner', always shown)
+ */
+export function webOverlayButton(button: WebOverlayButton, placement?: WebOverlayPlacement): string {
+    var b = button;
+    var extra = placement === 'fab' ? ' cardOverlayButton-hover cardOverlayFab-primary' : placement === 'hover' ? ' cardOverlayButton-hover' : '';
+    return '<button type="button" class="cardOverlayButton itemAction paper-icon-button-light' + extra + '"' + attrs({ 'data-stolon-action': b.action, 'data-stolon-key': b.key || null, title: b.title, 'aria-label': b.title })
         + '><span class="material-icons cardOverlayButtonIcon' + (extra ? ' cardOverlayButtonIcon-hover' : '') + ' ' + esc(b.icon) + '" aria-hidden="true"></span></button>';
 }
 
@@ -790,11 +808,11 @@ export function webCard(options: WebCardOptions): string {
     if (desktop) {
         if (o.fab || buttons.length) {
             html += '<div class="cardOverlayContainer itemAction">'
-                + (o.fab ? overlayButton(o.fab, ' cardOverlayButton-hover cardOverlayFab-primary') : '')
-                + '<div class="cardOverlayButton-br flex">' + buttons.map(function (b) { return overlayButton(b, ' cardOverlayButton-hover'); }).join('') + '</div></div>';
+                + (o.fab ? webOverlayButton(o.fab, 'fab') : '')
+                + '<div class="cardOverlayButton-br flex">' + buttons.map(function (b) { return webOverlayButton(b, 'hover'); }).join('') + '</div></div>';
         }
     } else if (buttons.length) {
-        html += '<div class="cardOverlayButton-br flex">' + buttons.map(function (b) { return overlayButton(b); }).join('') + '</div>';
+        html += '<div class="cardOverlayButton-br flex">' + buttons.map(function (b) { return webOverlayButton(b); }).join('') + '</div>';
     }
     html += '</div>';
     html += '<div class="cardText cardTextCentered cardText-first"><bdi><a class="itemAction textActionButton"' + attrs({ href: href, 'data-stolon-card': o.key || null, title: o.title }) + '>' + esc(o.title) + '</a></bdi></div>';
@@ -1095,6 +1113,17 @@ export function webCriticRating(value: number): string {
 }
 
 /**
+ * A tag in the info row's outlined text style, such as where an item stands. It takes the row's text color, and a class of the
+ * page's own may set another.
+ *
+ * @param text the tag's words
+ * @param className a class of the page's own [optional]
+ */
+export function webStatusTag(text: string, className?: string): string {
+    return webMediaInfoItem(esc(text), 'mediaInfoText' + (className ? ' ' + className : ''));
+}
+
+/**
  * A row of the details page's info, with a class of the page's own.
  *
  * @param html its content, markup the caller has escaped
@@ -1119,6 +1148,17 @@ function detailIcon(name: string): string {
  */
 export function webDetailButton(id: string | null, iconName: string, title: string, disabled?: boolean): string {
     return '<button type="button" class="button-flat detailButton emby-button"' + attrs({ id: id || null, title: title, 'aria-label': title, disabled: !!disabled }) + '>' + detailIcon(iconName) + '</button>';
+}
+
+/**
+ * Where an item stands when there is nothing to do, such as a request on its way: the detail button's icon, plain, with its
+ * words as the tooltip and the accessible name. It is an image, never a disabled button, so it is never greyed out.
+ *
+ * @param iconName the Material icon
+ * @param title its words
+ */
+export function webDetailStatus(iconName: string, title: string): string {
+    return '<span class="detailButton stolon-web-detail-status" role="img"' + attrs({ title: title, 'aria-label': title }) + '>' + detailIcon(iconName) + '</span>';
 }
 
 /**
@@ -1218,6 +1258,24 @@ export function webPersonLinks(links: WebItemLink[]): string {
     }).join('<span>, </span>');
 }
 
+/** One link of a line that opens a list, such as a genre, with a data-stolon-list value for the page to open it by. */
+export interface WebListLink {
+    href: string;
+    name: string;
+    key?: string;
+}
+
+/**
+ * A line of links that each open a list, such as genres or studios, separated by commas as webPersonLinks.
+ *
+ * @param links the links
+ */
+export function webListLinks(links: WebListLink[]): string {
+    return links.map(function (l) {
+        return '<span><a class="button-link emby-button stolon-web-inherit"' + attrs({ href: l.href, 'data-stolon-list': l.key || null }) + '>' + esc(l.name) + '</a></span>';
+    }).join('<span>, </span>');
+}
+
 // itemDetails/index.js renderLinks: the external links line.
 /**
  * The external links line, each opening in a new tab.
@@ -1226,4 +1284,84 @@ export function webPersonLinks(links: WebItemLink[]): string {
  */
 export function webExternalLinks(links: WebLink[]): string {
     return links.map(function (l) { return '<a class="button-link emby-button" href="' + esc(l.href) + '" target="_blank" rel="noopener noreferrer">' + esc(l.text) + '</a>'; }).join(', ');
+}
+
+// ---------- rows, notices, and limits ----------
+
+/** One note under a row, who wrote it and what. */
+export interface WebNote {
+    by: string;
+    text: string;
+}
+
+/** What webNoteRow takes. */
+export interface WebNoteRowOptions {
+    title: string;
+    secondary?: string;
+    asideHtml?: string;
+    by?: string;
+    notes?: WebNote[];
+}
+
+// The dashboard's lists (listItem-withContentWrapper, 12.4): a row titled as its lists title one, with notes across it.
+/**
+ * A row in the web client's list look, its title as the dashboard's lists title a row, a second line, an aside at its end,
+ * then who it is from and each note under who wrote it, across the row. It reads as text, with no hover.
+ *
+ * @param options {
+ *   title     : the row's title
+ *   secondary : the line under it, such as when [optional]
+ *   asideHtml : markup at the row's end, such as from webStatusTag, which the caller has escaped [optional]
+ *   by        : who the row is from, a line across it [optional]
+ *   notes     : notes under it, each who wrote it and its text [optional]
+ * }
+ */
+export function webNoteRow(options: WebNoteRowOptions): string {
+    var o = options;
+    var notes = (o.notes || []).map(function (n) {
+        return '<div class="stolon-web-note"><div class="secondary stolon-web-note-by">' + esc(n.by) + '</div><div class="stolon-web-note-text">' + esc(n.text) + '</div></div>';
+    }).join('');
+    return '<div class="listItem listItem-border listItem-withContentWrapper stolon-web-note-row">'
+        + '<div class="listItem-content"><div class="listItemBody two-line stolon-web-note-body"><h3 class="listItemBodyText stolon-web-note-title">' + esc(o.title) + '</h3>'
+        + (o.secondary ? '<div class="listItemBodyText secondary">' + esc(o.secondary) + '</div>' : '') + '</div>'
+        + (o.asideHtml ? '<div class="listItemAside stolon-web-note-aside">' + o.asideHtml + '</div>' : '') + '</div>'
+        + (o.by || notes ? '<div class="stolon-web-notes">' + (o.by ? '<div class="secondary stolon-web-note-from">' + esc(o.by) + '</div>' : '') + notes + '</div>' : '') + '</div>';
+}
+
+// src/controllers/user/display/index.html (12.4): a settings page's group heading and its description.
+/**
+ * A heading over a form with its description under it, as the web client's settings pages head a group.
+ *
+ * @param title the heading
+ * @param text the description
+ */
+export function webNoticeBlock(title: string, text: string): string {
+    return '<div class="verticalSection stolon-web-notice"><h2 class="sectionTitle">' + esc(title) + '</h2><div class="fieldDescription">' + esc(text) + '</div></div>';
+}
+
+/** One limit of webLimitsBox: what it is, what is left, and how much is used. */
+export interface WebLimit {
+    label: string;
+    amount: string;
+    percent: number;
+}
+
+// The dashboard's storage bars, a Material UI determinate LinearProgress, in a checkbox list's paper box.
+/**
+ * A box of limits in the web client's paper list, each a line of what it is and what is left over a thin bar of how much is
+ * used, green, then orange from 80 percent and red from 90, as the dashboard's storage bars.
+ *
+ * @param label the box's heading
+ * @param rows the limits
+ */
+export function webLimitsBox(label: string, rows: WebLimit[]): string {
+    return '<div class="checkboxListContainer"><h3 class="checkboxListLabel">' + esc(label) + '</h3><div class="' + WEB_CHECKBOX_LIST + ' stolon-web-limits">'
+        + rows.map(function (r) {
+            var percent = Math.max(0, Math.min(100, Number(r.percent) || 0));
+            var color = percent >= 90 ? 'Error' : percent >= 80 ? 'Warning' : 'Success';
+            return '<div class="stolon-web-limit"><div class="stolon-web-limit-head"><span>' + esc(r.label) + '</span><span class="secondaryText">' + esc(r.amount) + '</span></div>'
+                + '<span class="MuiLinearProgress-root MuiLinearProgress-determinate MuiLinearProgress-color' + color + ' stolon-web-limit-bar stolon-web-limit-' + color.toLowerCase() + '" role="progressbar"'
+                + attrs({ 'aria-label': r.label, 'aria-valuemin': '0', 'aria-valuemax': '100', 'aria-valuenow': String(Math.round(percent)) }) + '>'
+                + '<span class="MuiLinearProgress-bar stolon-web-limit-fill" style="transform:translateX(' + (percent - 100) + '%)"></span></span></div>';
+        }).join('') + '</div></div>';
 }

@@ -80,7 +80,12 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Badge | A pill that holds a short status label | `stolon-badge`, `badgeHtml` | Chip, label |
 | Badge states | The one map from every state a badge shows to its color, which a plugin maps its own statuses onto | `BADGE_STATES` | Status map, state colors |
 | Count card | A count over a label inside `stolon-cards`, the count in its status color, in the status card's look | `stolon-card` | Tile, counter |
-| Status page | The themed standalone card page that `StatusPage` renders | `StatusPage`, `status.html` | Error page, landing page |
+| Status page | The themed standalone card page that `StatusPage` renders, or one of its screens in the web client shell | `StatusPage`, `status.html`, `StatusPage.ServeWebClient`, `StatusPageScreen` | Error page, landing page |
+| Signed out frame | The web client shell drawn as the web client's login page, with the server's logo alone in the bar, for a page anyone with a link opens | `HostedPageFrame.WebClientSignedOut`, `stolon-shell-signed-out`, `setWebClientFrame` | Login frame, anonymous shell, guest page |
+| Content style | The web client's look for author content a plugin shows in a frame | `WebClientContentStyle`, `webclient-content.html` | Iframe CSS, base stylesheet, reset |
+| Detail status | Where an item stands among the details page's buttons, the button's icon as a plain image, never a disabled button | `webDetailStatus`, `stolon-web-detail-status` | Disabled button, state button |
+| Note row | A row in the web client's list look that reads as text, with an aside and notes under it | `webNoteRow`, `stolon-web-note-row` | Issue row, comment row |
+| Limits box | Limits in the web client's paper list, each a line over a bar of how much is used | `webLimitsBox`, `stolon-web-limits` | Quota bar, usage box |
 | User page | A whole page a plugin hosts for regular users, in the frame of the `page` template, built from the kit's cards, fields, steps, and finished state | `stolon-user-page`, `page.html`, `startUserPage` | Public site, portal, landing page |
 | Sign in card | The card a user page shows in place of its content to a viewer who may not open it | `stolon-user-page-gate` | Login wall, paywall |
 | Finished state | The card that closes a flow on a user page, a round icon in its state's color over a heading and its buttons | `stolon-user-page-done` | Success screen, thank you page |

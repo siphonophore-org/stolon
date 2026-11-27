@@ -111,6 +111,17 @@ The screen for an address or an item that does not exist.
 | `element` | <code>HTMLElement</code> |
 | `destroy` | <code>(): void</code> |
 
+### `showScreen`
+
+<code>function showScreen(screen: ScreenHandle): void</code>
+
+Puts a screen in the page's gate, in place of anything there, and shows the gate, such as a status page's script that finds the page is gone and shows createNotFound().
+
+| Option | Type | What it does |
+| :--- | :--- | :--- |
+| `element` (required) | <code>HTMLElement</code> |  |
+| `destroy` (required) | <code>(): void</code> |  |
+
 | Type | What it is |
 | :--- | :--- |
 | `SignInResult` | What Jellyfin answers to a sign in: the user, their token, and the server they signed in to. |

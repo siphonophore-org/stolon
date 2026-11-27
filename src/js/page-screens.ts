@@ -422,7 +422,8 @@ export function createNotFound(options?: MessageScreenOptions): ScreenHandle {
 }
 
 /**
- * Puts a screen in the page's gate, in place of anything there, and shows the gate. Internal to the web components.
+ * Puts a screen in the page's gate, in place of anything there, and shows the gate, such as a status page's script that
+ * finds the page is gone and shows createNotFound().
  *
  * @param screen the screen
  */

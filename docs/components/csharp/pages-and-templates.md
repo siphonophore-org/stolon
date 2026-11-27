@@ -123,7 +123,7 @@ What a `HostedPage` serves inside its frame, read once on first use. `HostedPage
 
 ## HostedPageFrame
 
-The frame a `HostedPage` is drawn in. `UserPage` is the default, Stolon's own look from the `page` template, which needs no signed in viewer, such as an invite page. `WebClient` is the [Web Client Shell](../web/web-client-shell.md) from the `webclient` template, which loads the installed web client's stylesheets and fonts and draws its app bar, user menu, and drawer, so a page for signed in viewers looks like Jellyfin itself.
+The frame a `HostedPage` is drawn in. `UserPage` is the default, Stolon's own look from the `page` template, which needs no signed in viewer, such as an invite page. `WebClient` is the [Web Client Shell](../web/web-client-shell.md) from the `webclient` template, which loads the installed web client's stylesheets and fonts and draws its app bar, user menu, and drawer, so a page for signed in viewers looks like Jellyfin itself. `WebClientSignedOut` is the same shell as the web client's login page, with the server's logo alone in the bar and the page in the login form's column, for a page anyone with a link opens. See [Signed Out](../web/web-client-shell.md#signed-out).
 
 ```csharp
 private static readonly HostedPage Page = new("myplugin", HostedPageAccess.User, HostedPageContent.Resource(typeof(Plugin).Assembly, "Web.things.html"))
@@ -145,7 +145,9 @@ public ContentResult Things() => Page.Serve(this);
 * In the shell, `Mark` and `MarkIcon` name the page's own entry among the libraries in the bar and the drawer. A menu link in the web client's `config.json` that points at the page takes its place.
 * `DetailsTemplate` writes the web client's details page template into the page, for `adoptDetailsTemplate`. See [WebClientDetailsTemplate](#webclientdetailstemplate).
 * `Manifest` links a web app manifest, so a browser offers to install the page. See [WebClientApp](#webclientapp).
-* The access rules are the same in both frames. A signed out viewer of a `User` page gets the sign in card under the bar.
+* The access rules are the same in every frame. A signed out viewer of a `User` page gets the sign in card under the bar.
+* A plugin moves a page between frames with this one property. Its content keeps working, but each frame's look comes from the markup it is written in, Stolon's classes for `UserPage` and the web client's for the other two.
+* `WebClientSignedOut` never shows a viewer, even one this browser has a sign-in for.
 
 **Gotchas**
 
@@ -283,6 +285,44 @@ return Content(html, "text/html");
 * The template styles three classes for `content`: `stolon-status-error` for a red error line, which hides while empty, `stolon-btn stolon-btn-secondary` for a quieter link button, and `stolon-btn-stack` to stack link buttons full width.
 * The button shows only when both its text and its address are non-empty. The defaults are "Back to Jellyfin" and `../web/`. The default text and the spinner's label are Stolon's own strings, in the language of `StolonTranslations.UseLanguage`, else US English.
 * The page links `favicon.ico` relatively and loads the logo from `../web/favicons/touchicon.png`. Expose a sibling `favicon.ico` route backed by `PublicPage.Favicon` to give the tab the server's icon.
+
+### In the Web Client Shell
+
+`ServeWebClient` serves a status screen in the [Web Client Shell](../web/web-client-shell.md) instead, with the hardening headers, in the request's language. `StatusPageScreen` picks loading, sign in required, not authorized, or not found, and the other overload takes the plugin's own heading, message, button, spinner, content, and status code.
+
+```csharp
+[HttpGet("/pages/{slug}")]
+[AllowAnonymous]
+public IActionResult Page(string slug) => Exists(slug)
+    ? StatusPage.ServeWebClient(this, "myplugin", StatusPageScreen.Loading, content: LoaderScript(slug))
+    : StatusPage.ServeWebClient(this, "myplugin", StatusPageScreen.NotFound);
+```
+
+**Gotchas**
+
+* The page starts signed out, as the web client's login page, and the page script moves it into the signed in shell when this browser has a sign-in the server still knows. It never asks anyone to sign in itself.
+* The screens answer 200 for loading, 401 for sign in, 403 for not authorized, and 404 for not found.
+* The prefix is the one the plugin passes to `GetSharedPages`, since the page loads the plugin's shared Stolon CSS and JS.
+* See [Status Page](../web/status-page.md#in-the-web-client-shell) for how each screen looks.
+
+## StatusPageScreen
+
+The screens `StatusPage.ServeWebClient` serves: `Loading`, `SignIn`, `Unauthorized`, and `NotFound`. See [StatusPage](#in-the-web-client-shell).
+
+## WebClientContentStyle
+
+The web client's look for author content a plugin shows in a frame, such as a page an administrator wrote: the installed web client's Noto Sans and Material Icons faces, its root size and line height, light text on its dark background, its link color, headings, tables, fields, and buttons, from the `webclient-content` template. See [Author Content in a Frame](../web/web-client-shell.md#author-content-in-a-frame).
+
+```csharp
+var document = WebClientContentStyle.Inject(this, authorHtml);
+var frame = "<iframe sandbox srcdoc=\"" + WebUtility.HtmlEncode(document) + "\"></iframe>";
+```
+
+**Gotchas**
+
+* `Inject` puts the style block first in the head, so the author's own styles win. A document with no head gets it after its `html` tag, or before everything.
+* The font addresses are relative to the page the request opened, since a `srcdoc` frame resolves addresses against the page that holds it. Jellyfin answers the web client's fonts to any origin, so a sandboxed frame loads them too.
+* Without a web client folder the block has no font faces, and the text falls back to the font stack.
 
 ## PublicPage
 

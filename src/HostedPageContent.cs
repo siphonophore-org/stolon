@@ -16,6 +16,9 @@ public sealed class HostedPageContent
         _html = new Lazy<string>(read);
     }
 
+    /// <summary>Gets content with nothing in it, for a page whose gate holds a screen.</summary>
+    internal static HostedPageContent Empty { get; } = new(() => string.Empty);
+
     /// <summary>Gets the fragment, read on first use.</summary>
     internal string Html => _html.Value;
 

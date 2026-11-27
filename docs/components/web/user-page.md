@@ -49,7 +49,7 @@ document.getElementById('form').addEventListener('submit', async function (e) {
 
 The frame, which `HostedPage` writes:
 
-* `stolon-user-page` on the body, the page color, the web client's font, and fields a step up for touch.
+* `stolon-user-page` on the body, the page color, the web client's font, whose Noto Sans faces `HostedPage` reads from the installed web client, and fields a step up for touch.
 * `stolon-user-page-header` with `stolon-user-page-server`, the server's name as a link to the web client, and `stolon-user-page-mark`, the plugin's mark.
 * `stolon-user-page-column`, the centered column, and `stolon-user-page-gate` and `stolon-user-page-content` inside it.
 

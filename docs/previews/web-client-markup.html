@@ -11,7 +11,10 @@ const samples = {
     webConfirmDialogFooter: () => base.webConfirmDialogFooter('Delete', 'delete'),
     webCheckbox: () => base.webCheckbox({ id: 'season1' }, 'Season 1', 'In the library', true, true),
     webSelectField: () => base.webSelectField('sort', 'Sort by', [{ value: 'name', text: 'Name' }, { value: 'date', text: 'Date added' }]),
-    webEmptyState: () => base.webEmptyState('Nothing here', 'Add one to start.')
+    webEmptyState: () => base.webEmptyState('Nothing here', 'Add one to start.'),
+    webDetailStatus: () => base.webDetailStatus('schedule', 'Waiting for approval'),
+    webNoteRow: () => base.webNoteRow({ title: 'No sound', secondary: 'Today', asideHtml: base.webStatusTag('Open'), by: 'Ana', notes: [{ by: 'Bo', text: 'Fixed in the new copy.' }] }),
+    webLimitsBox: () => base.webLimitsBox('Limits', [{ label: 'Movies', amount: '2 of 5 left', percent: 60 }, { label: 'Shows', amount: '0 of 2 left', percent: 100 }])
 };
 const select = document.getElementById('builder');
 const out = document.getElementById('markup');
