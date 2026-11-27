@@ -40,7 +40,7 @@ Classes: `stolon-reset-group`, `stolon-reset-row`, `stolon-reset-row-nuclear`, `
 
 ## States and Modifiers
 
-* `stolon-reset-row-nuclear` gives the one dangerous row a red tint and no rule.
+* `stolon-reset-row-nuclear` gives a row that loses data a red tint and no rule, and two such rows in a row sit a narrow gap apart. `createResetRow` adds it to every `destructive` row.
 * The last row has no rule.
 * At 600px and below the button moves under the text and starts where the text starts, so the text keeps the full width.
 * A row leads with an icon tile. It takes the accent, red for a `destructive` row, and gray while the row is `empty`, with nothing to reset. `setEmpty(empty)` changes it later, and `getValue()` reads it.
@@ -70,7 +70,7 @@ Builds one stolon-reset-row: an icon tile, what the row does, one sentence on wh
 | `help` | <code>string</code> | one sentence on what follows [optional] |
 | `button` | <code>string &#124; HTMLButtonElement</code> | the button's label, or a button already built (default 'Reset') [optional] |
 | `action` | <code>string</code> | the button's data-action, for a page that handles every row's click in one place [optional] |
-| `destructive` | <code>boolean</code> | true for a row that loses data, with a destructive button and a red tile (default false) |
+| `destructive` | <code>boolean</code> | true for a row that loses data, with a destructive button, a red tile, and the red tinted row (default false) |
 | `size` | <code>'small' &#124; 'medium' &#124; 'large'</code> | 'small', 'medium', or 'large' for the button it builds, such as medium beside medium buttons (default 'small') |
 | `empty` | <code>boolean</code> | true while there is nothing to reset, which grays the tile (default false) |
 | `onClick` | <code>(button: HTMLButtonElement): void</code> | function(button) called when the button is pressed [optional] |
@@ -99,7 +99,7 @@ Builds a stolon-reset-group holding reset rows, in order.
 | :--- | :--- |
 | `stolon-reset-group` | Container for a stack of reset or action rows |
 | `stolon-reset-row` | Row pairing an action description with its button |
-| `stolon-reset-row-nuclear` | Row with a faint red tint for the most destructive action |
+| `stolon-reset-row-nuclear` | Row with a faint red tint for an action that loses data, with a narrow gap between two such rows |
 | `stolon-reset-info` | Column that holds the description beside an action button |
 
 <!-- reference:end -->

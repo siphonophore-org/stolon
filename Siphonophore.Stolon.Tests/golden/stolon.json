@@ -390,7 +390,7 @@
     "record-list": 2836,
     "relative-time": 3034,
     "repeater": 6133,
-    "reset-group": 1462,
+    "reset-group": 1520,
     "rule-builder": 5840,
     "save-bar": 3561,
     "schedule-picker": 2263,
@@ -430,5 +430,5 @@
     "web-push": 5309,
     "world-map": 6264
   },
-  "bytes": 638816
+  "bytes": 638874
 }

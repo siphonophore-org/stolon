@@ -14,13 +14,14 @@
 }
 .stolon-reset-row:last-child { border-bottom: none; }
 
-/* Row with a faint red tint for the most destructive action */
+/* Row with a faint red tint for an action that loses data, with a narrow gap between two such rows */
 /* Example: <div class="stolon-reset-row stolon-reset-row-nuclear"></div> */
 .stolon-reset-row-nuclear {
     background: var(--stolon-red-soft);
     border-radius: var(--stolon-radius-small);
     border-bottom: none;
 }
+.stolon-reset-row-nuclear + .stolon-reset-row-nuclear { margin-top: var(--stolon-gap-narrow); }
 /* Column that holds the description beside an action button */
 /* Example: <div class="stolon-reset-info"><div>Reset</div><div class="fieldDescription">Clears every setting.</div></div> */
 .stolon-reset-info {

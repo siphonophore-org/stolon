@@ -13,7 +13,7 @@ beforeEach(function () {
 test('createResetRow builds the reset group markup with a leading tile, its text, and an emby-button', function () {
     var row = createResetRow({ icon: 'history', label: 'History sync', help: 'Forgets history tracking.', button: 'Reset', action: 'reset-history', destructive: true });
     var el = row.element;
-    assert.equal(el.className, 'stolon-reset-row');
+    assert.equal(el.className, 'stolon-reset-row stolon-reset-row-nuclear', 'a destructive row takes the red tint');
     assert.deepEqual(el.children.map(function (c) { return c.className; }), ['stolon-collapsible-tile stolon-red', 'stolon-reset-info', 'raised stolon-button stolon-small stolon-destructive']);
     assert.equal(el.children[0].getAttribute('aria-hidden'), 'true');
     assert.equal(el.children[0].querySelector('.material-icons').textContent, 'history');

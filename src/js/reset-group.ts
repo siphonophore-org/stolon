@@ -42,7 +42,7 @@ export interface ResetGroupHandle extends ComponentHandle {
  *   help        : one sentence on what follows [optional]
  *   button      : the button's label, or a button already built (default 'Reset') [optional]
  *   action      : the button's data-action, for a page that handles every row's click in one place [optional]
- *   destructive : true for a row that loses data, with a destructive button and a red tile (default false)
+ *   destructive : true for a row that loses data, with a destructive button, a red tile, and the red tinted row (default false)
  *   size        : 'small', 'medium', or 'large' for the button it builds, such as medium beside medium buttons (default 'small')
  *   empty       : true while there is nothing to reset, which grays the tile (default false)
  *   onClick     : function(button) called when the button is pressed [optional]
@@ -67,7 +67,7 @@ export function createResetRow(options: ResetRowOptions): ResetRowHandle {
         h('div', { text: o.label || '' }),
         o.help ? h('div', { class: 'fieldDescription', text: o.help }) : null
     ]);
-    var root = h('div', { class: 'stolon-reset-row' }, [tile, info, button]);
+    var root = h('div', { class: o.destructive ? 'stolon-reset-row stolon-reset-row-nuclear' : 'stolon-reset-row' }, [tile, info, button]);
 
     function paint(): void {
         applyColor(tile, empty ? 'gray' : o.destructive ? 'red' : null);
