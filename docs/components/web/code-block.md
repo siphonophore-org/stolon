@@ -22,7 +22,7 @@ Classes: `stolon-code`, `stolon-code-block`, `stolon-code-invalid`.
 ## States and Modifiers
 
 * `stolon-code` is a full width mono textarea on the field surface in the theme text color, at least 240px tall, that keeps its lines unwrapped and resizes vertically.
-* `stolon-code-block` goes with `stolon-code`. It is as tall as its text and wraps.
+* `stolon-code-block` goes with `stolon-code`. It is as tall as its text and wraps, breaking a long path or token anywhere, so it never runs past its frame or makes the page scroll sideways on a phone.
 * `stolon-code-invalid` goes with `stolon-code` and turns the border to `--stolon-error`. Toggle it from your own validation.
 
 ## Reference
@@ -35,6 +35,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | :--- | :--- |
 | `stolon-code` | Full width monospace textarea for editing code |
 | `stolon-code.stolon-code-block` | Read only block of code or JSON that wraps and is only as tall as its text |
+| `stolon-code-block` | A code block breaks a long path or token anywhere, so it never runs past its frame or makes the page scroll sideways |
 | `stolon-code.stolon-code-invalid` | Code field or block with a red border for content that is not valid |
 
 <!-- reference:end -->

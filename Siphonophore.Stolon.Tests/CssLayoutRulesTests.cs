@@ -117,6 +117,8 @@ public class CssLayoutRulesTests
             }
         }
 
+        Assert.Equal("var(--stolon-font-large)", Value(RuleFor("count-cards.css", ".stolon-cards.stolon-fit .stolon-card-count"), "font-size"));
+        Assert.True(CssRules.Specificity(".stolon-cards.stolon-fit .stolon-card-count").CompareTo(CssRules.Specificity(".stolon-cards.stolon-compact .stolon-card-count")) >= 0);
         Assert.Equal("ellipsis", Value(RuleFor("count-cards.css", ".stolon-card-count"), "text-overflow"));
         Assert.Equal("normal", Value(RuleFor("count-cards.css", ".stolon-cards.stolon-words .stolon-card-count"), "white-space"));
     }
@@ -258,5 +260,93 @@ public class CssLayoutRulesTests
     public void Specificity_CountsLikeCss(string selector, int ids, int classes, int types)
     {
         Assert.Equal((ids, classes, types), CssRules.Specificity(selector));
+    }
+
+    private static List<CssRules.Rule> PhoneRules(string file)
+    {
+        var css = Sources[file];
+        var at = css.IndexOf("@media (max-width: 600px)", StringComparison.Ordinal);
+        Assert.True(at >= 0, file + " must have a phone rule.");
+        var open = css.IndexOf('{', at);
+        var depth = 0;
+        var end = open;
+        for (; end < css.Length; end++)
+        {
+            if (css[end] == '{')
+            {
+                depth++;
+            }
+            else if (css[end] == '}' && --depth == 0)
+            {
+                break;
+            }
+        }
+
+        return CssRules.Parse(css.Substring(open + 1, end - open - 1), file);
+    }
+
+    private static CssRules.Rule PhoneRuleFor(string file, string selector)
+    {
+        var wanted = CssRules.Normalize(selector);
+        var rule = PhoneRules(file).FirstOrDefault(r => r.Selectors.Contains(wanted));
+        Assert.True(rule != null, file + " must have a phone rule for " + selector + ".");
+        return rule!;
+    }
+
+    /// <summary>
+    /// On a phone a reset row wraps, its text takes the full width beside the tile, and the button moves under the text, starting where the text starts.
+    /// True: the text reads in one wide column and the button sits under it.
+    /// False: the text squeezes into a narrow column beside the button.
+    /// </summary>
+    [Fact]
+    public void ResetRow_StacksTheButtonUnderTheTextOnAPhone()
+    {
+        Assert.Equal("wrap", Value(PhoneRuleFor("reset-group.css", ".stolon-reset-row"), "flex-wrap"));
+        Assert.Equal("1 1 100%", Value(PhoneRuleFor("reset-group.css", ".stolon-reset-info"), "flex"));
+        Assert.Equal("calc(100% - var(--stolon-size-large) - var(--stolon-gap-narrow))", Value(PhoneRuleFor("reset-group.css", ".stolon-reset-row > .stolon-collapsible-tile ~ .stolon-reset-info"), "flex-basis"));
+        Assert.Equal("calc(var(--stolon-size-large) + var(--stolon-gap-narrow))", Value(PhoneRuleFor("reset-group.css", ".stolon-reset-row > .stolon-collapsible-tile ~ .stolon-reset-info ~ *"), "margin-left"));
+    }
+
+    /// <summary>
+    /// A code block breaks a long path anywhere and never grows past its frame, with or without stolon-code.
+    /// True: a long path wraps inside the block.
+    /// False: the page scrolls sideways on a phone.
+    /// </summary>
+    [Fact]
+    public void CodeBlock_BreaksALongPathInsideItsFrame()
+    {
+        var rule = RuleFor("code-block.css", ".stolon-code-block");
+
+        Assert.Equal("pre-wrap", Value(rule, "white-space"));
+        Assert.Equal("anywhere", Value(rule, "overflow-wrap"));
+        Assert.Equal("100%", Value(rule, "max-width"));
+        Assert.Equal("0", Value(rule, "min-width"));
+        Assert.DoesNotContain(Rules("code-block.css"), r => r.Selectors.Any(s => s.Contains("stolon-code-block", StringComparison.Ordinal)) && Value(r, "white-space") == "pre");
+    }
+
+    /// <summary>
+    /// On a phone a count takes a size step down from the scale, a compact count a step further, and a row that fitCounts marks takes the large text size, so a count fits its card before it needs an ellipsis.
+    /// True: a long count such as 460.5 GB reads whole on a phone.
+    /// False: it ends in an ellipsis.
+    /// </summary>
+    [Fact]
+    public void CardCount_TakesASmallerSizeOnAPhone()
+    {
+        Assert.Equal("calc(var(--stolon-font-large) * 1.25)", Value(PhoneRuleFor("count-cards.css", ".stolon-card-count"), "font-size"));
+        Assert.Equal("var(--stolon-font-large)", Value(PhoneRuleFor("count-cards.css", ".stolon-cards.stolon-compact .stolon-card-count"), "font-size"));
+        Assert.Equal("var(--stolon-font-large)", Value(RuleFor("count-cards.css", ".stolon-cards.stolon-fit .stolon-card-count"), "font-size"));
+        Assert.True(CssRules.Specificity(".stolon-cards.stolon-fit .stolon-card-count").CompareTo(CssRules.Specificity(".stolon-cards.stolon-compact .stolon-card-count")) >= 0);
+        Assert.Equal("ellipsis", Value(RuleFor("count-cards.css", ".stolon-card-count"), "text-overflow"));
+    }
+
+    /// <summary>
+    /// Every tile in an even group spans one column.
+    /// True: every card on a dashboard shares one width.
+    /// False: a short last row would stretch its cards wider than the rows above.
+    /// </summary>
+    [Fact]
+    public void EvenGroup_GivesEveryTileOneColumn()
+    {
+        Assert.Equal("span 1", Value(RuleFor("balanced-rows.css", ".stolon-balanced.stolon-even > *"), "grid-column"));
     }
 }

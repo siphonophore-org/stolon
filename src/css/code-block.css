@@ -29,8 +29,18 @@
     min-height: 0;
     margin: 0;
     white-space: pre-wrap;
-    word-break: break-word;
     font-size: 0.85em;
+}
+
+/* A code block breaks a long path or token anywhere, so it never runs past its frame or makes the page scroll sideways */
+/* Example: <pre class="stolon-code stolon-code-block">/var/lib/jellyfin/plugins/configurations/a-very-long-file-name.json</pre> */
+.stolon-code-block {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 /* Code field or block with a red border for content that is not valid */

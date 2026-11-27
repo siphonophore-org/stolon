@@ -38,3 +38,21 @@ export function buildCard(opts: CardOptions): CardParts {
     card.appendChild(label);
     return { element: card, count: count, label: label };
 }
+
+/**
+ * Gives a row of count cards the smaller count size when any count is wider than its card, so every count in the row
+ * keeps one size and only a count still too wide ends in an ellipsis.
+ * Internal to the web components.
+ *
+ * @param container the stolon-cards row
+ */
+export function fitCounts(container: HTMLElement): void {
+    container.classList.remove('stolon-fit');
+    var counts = container.querySelectorAll<HTMLElement>('.stolon-card-count');
+    for (var i = 0; i < counts.length; i++) {
+        if (counts[i].scrollWidth > counts[i].clientWidth) {
+            container.classList.add('stolon-fit');
+            return;
+        }
+    }
+}

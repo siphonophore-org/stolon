@@ -26,14 +26,15 @@ shared.renderCards('statusRow', [
 ]);
 ```
 
-Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`, and the `stolon-compact` and `stolon-words` modifiers on `stolon-cards`.
+Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`, and the `stolon-compact`, `stolon-words`, `stolon-even`, and `stolon-fit` modifiers on `stolon-cards`.
 
 ## States and Modifiers
 
 * `shared.renderCards(containerId, cards)` takes an id or element, adds `stolon-cards` to it, and fills `[{ label, count, color }]`. Count and label are set as text. A null count shows nothing. A missing element is ignored.
 * The color modifiers are `stolon-green`, `stolon-red`, `stolon-orange`, `stolon-purple`, `stolon-blue`, `stolon-gray`, `stolon-yellow`, `stolon-pink`, and `stolon-teal`. `renderCards` also takes a hex code such as `#e91e63`, drawn with the `stolon-custom` modifier.
 * The cards wrap in [Balanced Rows](balanced-rows.md), so five cards that do not fit in one row become three and two, never four and one. A card with `hidden` takes no place.
-* A card in balanced rows fits the column `balanceRows` gives it, and a count too wide for its card ends in an ellipsis.
+* A card in balanced rows fits the column `balanceRows` gives it. At 600px and below the count takes a smaller size from the scale. When any count is still wider than its card, the row takes `stolon-fit` and every count in it takes the large text size, so they keep one size. Only a count too wide even then ends in an ellipsis.
+* `even` gives every card in the row one width, on as many columns as fit. Use it when a page shows many cards, such as a dashboard of ten, where balanced rows of six and four would give two card widths. A last row of one is avoided by taking a column fewer.
 * `words` is for cards whose values are words, such as Running, rather than numbers. The value takes the large text size and wraps, so it reads whole.
 * `compact` makes a tighter row of small cards, with a smaller gap, padding, and label, for many counts on a phone.
 * `--stolon-balance-max` caps the cards in a row. `style="--stolon-balance-max: 4"` never shows more than four.
@@ -42,6 +43,7 @@ Classes: `stolon-cards`, `stolon-card`, `stolon-card-count`, `stolon-card-label`
 
 ## Gotchas
 
+* `stolon-fit` is set by Stolon as the row lays out. A plugin never sets it or overrides the count's size or overflow.
 * `renderCards` draws only a known color name or a hex code. Any other color leaves the count in the text color.
 * There is no keyboard behavior.
 
@@ -61,6 +63,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 | `stolon-cards.stolon-compact` | A tighter row of small count cards, for many counts in little room, such as on a phone |
 | `stolon-cards.stolon-balanced` | A card in balanced rows fits its column, which balanceRows sizes, whatever the card's own least width |
 | `stolon-cards.stolon-words` | A row of cards whose values are words, such as Running, in a smaller size that wraps, so each word reads whole |
+| `stolon-cards.stolon-fit` | A row with a count wider than its card, which fitCounts marks, gives every count the large text size, so they keep one size and read whole |
 
 <!-- reference:end -->
 

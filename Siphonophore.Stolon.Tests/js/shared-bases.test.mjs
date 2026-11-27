@@ -8,7 +8,8 @@ var dom = installFakeDom();
 var { createList, createMediaCard, createOrderedList, createBanner } = await import('../../src/js/index.js');
 var { fillRowParts } = await import('../../src/js/list.js');
 var { createSelection, bindChecks } = await import('../../src/js/lib/selection.js');
-var { buildCard } = await import('../../src/js/lib/card.js');
+var { buildCard, fitCounts } = await import('../../src/js/lib/card.js');
+var { balanceRows } = await import('../../src/js/lib/balance.js');
 var { bindPressedGroup } = await import('../../src/js/lib/pressed-group.js');
 var { MESSAGE_ICONS, dismissButton } = await import('../../src/js/lib/message.js');
 
@@ -127,4 +128,34 @@ test('a row media card narrower than its wide layout draws one compact text colu
     assert.equal(root.classList.contains('stolon-compact'), false);
     assert.ok(root.querySelector('.stolon-media-card-side'));
     delete globalThis.ResizeObserver;
+});
+
+// A row of count cards whose counts measure the given widths inside cards 100 wide.
+function countRow(widths) {
+    var row = dom.el('div', { class: 'stolon-cards' });
+    widths.forEach(function (w) {
+        var card = buildCard({ count: 'x', label: 'y' });
+        Object.defineProperty(card.count, 'scrollWidth', { value: w });
+        Object.defineProperty(card.count, 'clientWidth', { value: 100 });
+        row.appendChild(card.element);
+    });
+    return row;
+}
+
+test('fitCounts marks the row stolon-fit when any count is wider than its card, and clears it when all fit', function () {
+    var tight = countRow([80, 140]);
+    fitCounts(tight);
+    assert.equal(tight.classList.contains('stolon-fit'), true);
+    var roomy = countRow([80, 100]);
+    roomy.classList.add('stolon-fit');
+    fitCounts(roomy);
+    assert.equal(roomy.classList.contains('stolon-fit'), false);
+});
+
+test('balanceRows runs onLayout after each layout, so count cards fit their columns', function () {
+    var row = countRow([140]);
+    var seen = [];
+    balanceRows(row, { onLayout: function (el) { seen.push(el); fitCounts(el); } });
+    assert.deepEqual(seen, [row]);
+    assert.equal(row.classList.contains('stolon-fit'), true);
 });

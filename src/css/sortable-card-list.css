@@ -20,7 +20,7 @@
 .stolon-card-item.stolon-drop-after { box-shadow: 0 3px 0 0 var(--stolon-accent); }
 .stolon-card-item.stolon-disabled .stolon-card-item-main { opacity: 0.55; }
 
-/* Clickable head row: grip, number, main text, arrows, and the collapsible chevron, which turns by its aria-expanded. Tinted when the card is open */
+/* Clickable head row: grip, number or icon tile, main text, arrows, and the collapsible chevron, which turns by its aria-expanded. Tinted when the card is open */
 /* Example: <div class="stolon-card-item-head" draggable="true" role="button" tabindex="0"></div> */
 .stolon-card-item-head {
     display: flex;
@@ -65,6 +65,10 @@
     border-color: var(--stolon-accent);
     color: var(--stolon-on-accent);
 }
+
+/* Icon tile that leads a card in place of its number, the Collapsible Section's tile, spaced by the head's own gap */
+/* Example: <span class="stolon-collapsible-tile stolon-card-item-tile stolon-blue" aria-hidden="true"><span class="material-icons">terminal</span></span> */
+.stolon-card-item-head > .stolon-card-item-tile { margin-right: 0; }
 
 /* Title line and sub line that take the remaining width and clip */
 /* Example: <div class="stolon-card-item-main"><div class="stolon-card-item-title">Name</div><div class="stolon-card-item-sub">detail</div></div> */

@@ -78,7 +78,17 @@
     overflow-wrap: anywhere;
 }
 
+/* A row with a count wider than its card, which fitCounts marks, gives every count the large text size, so they keep one size and read whole */
+/* Example: <div class="stolon-cards stolon-fit"><div class="stolon-card"><span class="stolon-card-count">460.5 GB</span></div></div> */
+.stolon-cards.stolon-fit .stolon-card-count { font-size: var(--stolon-font-large); }
+
 @media (max-width: 768px) {
     .stolon-cards { gap: var(--stolon-gap-narrow); }
     .stolon-card { min-width: calc(var(--stolon-size-large) * 2); padding: var(--stolon-pad-small) var(--stolon-pad-medium); }
+}
+
+@media (max-width: 600px) {
+    /* A phone card is narrow, so its count takes a size step down from the scale before it would need an ellipsis. */
+    .stolon-card-count { font-size: calc(var(--stolon-font-large) * 1.25); }
+    .stolon-cards.stolon-compact .stolon-card-count { font-size: var(--stolon-font-large); }
 }

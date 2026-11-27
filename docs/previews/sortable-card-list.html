@@ -11,6 +11,8 @@
         <div class="inputContainer"><label for="txtEditName">Name</label><input is="emby-input" type="text" id="txtEditName" value="Edited in place" /></div>
     </div>
 </div>
+<h3 class="stolon-subsection-title">Steps with icon tiles</h3>
+<div id="stepList" class="stolon-card-list"></div>
 <script type="module">
 const base = await window.__baseReady;
 const shared = base.createShared(document.getElementById('view'), 'preview-plugin', 'Preview');
@@ -33,4 +35,13 @@ const cards = base.createSortableCardList(document.getElementById('serverList'),
     onMove: (from, to) => shared.setStatus('orderStatus', 'Moved ' + (from + 1) + ' to ' + (to + 1) + '.', false, { timeout: 0 })
 });
 cards.setSelected(0);
+const steps = [
+    { icon: 'notifications', color: 'blue', title: 'Send a notification', subtitle: 'To every admin' },
+    { icon: 'schedule', color: 'gray', title: 'Wait', subtitle: '5 minutes' },
+    { icon: 'terminal', title: 'Run a command', subtitle: 'curl -X POST http://hooks.local/refresh-library-with-a-long-address' }
+];
+base.createSortableCardList(document.getElementById('stepList'), {
+    items: steps,
+    render: (step) => ({ icon: step.icon, iconColor: step.color, title: step.title, subtitle: step.subtitle })
+}).render();
 </script>

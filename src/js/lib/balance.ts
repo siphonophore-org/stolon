@@ -1,9 +1,11 @@
 import { listen, runAll } from './dom.js';
 
-/** How balanceRows sizes a group. minWidth is the least a tile takes, and maxColumns caps a row. */
+/** How balanceRows sizes a group. minWidth is the least a tile takes, maxColumns caps a row, even gives every tile one width, and onLayout runs after each layout. */
 export interface BalanceOptions {
+    onLayout?(container: HTMLElement): void;
     minWidth?: number;
     maxColumns?: number;
+    even?: boolean;
     gap?: number;
     skip?: string;
 }
@@ -36,6 +38,20 @@ export function rowSizes(count: number, columns: number): number[] {
     return sizes;
 }
 
+/**
+ * Picks one column count for a group whose tiles all share a width. It takes as many columns as fit, then fewer while
+ * the last row would hold a single tile.
+ *
+ * @param count the number of tiles
+ * @param columns the most tiles a row fits
+ * @returns the number of columns
+ */
+export function evenColumns(count: number, columns: number): number {
+    var c = Math.max(1, Math.min(Math.floor(columns), count));
+    while (c > 2 && count % c === 1) c -= 1;
+    return c;
+}
+
 function gcd(a: number, b: number): number { return b ? gcd(b, a % b) : a; }
 
 /**
@@ -43,7 +59,7 @@ function gcd(a: number, b: number): number { return b ? gcd(b, a % b) : a; }
  * so every tile in a row spans the same share. It lays out again when the group resizes or its tiles change.
  *
  * @param container the element that holds the tiles
- * @param options minWidth (default 160), maxColumns, gap (default the container's column gap, else 12), and skip, a selector for children that are not tiles
+ * @param options minWidth (default 160), maxColumns, gap (default the container's column gap, else 12), skip, a selector for children that are not tiles, even, which gives every tile one width on a fixed column count, as stolon-even on the container does, and onLayout, a function(container) called after each layout
  * @returns { update, destroy }
  */
 export function balanceRows(container: HTMLElement, options?: BalanceOptions): BalanceHandle {
@@ -73,6 +89,17 @@ export function balanceRows(container: HTMLElement, options?: BalanceOptions): B
         var max = cssMax > 0 ? cssMax : opts.maxColumns;
         var columns = width ? Math.floor((width + gap) / (min + gap)) : list.length;
         if (max) columns = Math.min(columns, max);
+        if (opts.even || container.classList.contains('stolon-even')) {
+            container.style.setProperty('--stolon-balance-columns', String(evenColumns(list.length, Math.max(1, columns))));
+            list.forEach(function (tile) { tile.style.setProperty('--stolon-balance-span', '1'); });
+        } else {
+            spread(list, columns);
+        }
+        if (opts.onLayout) opts.onLayout(container);
+    }
+
+    // Gives each row its share of a grid whose columns are the least common multiple of the row sizes.
+    function spread(list: HTMLElement[], columns: number): void {
         var sizes = rowSizes(list.length, Math.max(1, columns));
         var total = sizes.reduce(function (acc, n) { return acc * n / gcd(acc, n); }, 1);
         container.style.setProperty('--stolon-balance-columns', String(total));

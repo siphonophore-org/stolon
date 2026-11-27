@@ -88,12 +88,12 @@ A color means the same thing in every component and every plugin. Use "orange" f
 
 | Color | Means | Callout | Badge states |
 | :--- | :--- | :--- | :--- |
-| Green | Done, healthy, on | `stolon-callout-success` | Active, Synced, Downloaded, Completed, Enabled |
-| Red | Failed, blocked, destructive | `stolon-callout-error` | Disabled, Errored, Error, Deleting, Pending-Deletion, Failed |
-| Orange | Waiting, caution | `stolon-callout-warn` | Expired, Queued, Paused |
+| Green | Done, healthy, on | `stolon-callout-success` | Active, Synced, Downloaded, Completed, Enabled, On, Online |
+| Red | Failed, blocked, destructive | `stolon-callout-error` | Disabled, Errored, Error, Deleting, Pending-Deletion, Failed, Offline |
+| Orange | Waiting, caution | `stolon-callout-warn` | Expired, Queued, Paused, Warning, Needs-Attention |
 | Purple | Working, held | None | Locked, Running, Downloading, Pending, Pending-Download |
 | Blue | Information, role | `stolon-callout-info` | Admin, Imported, Pending-Replacement |
-| Gray | Inactive, muted | `stolon-callout-neutral` | Ignored, Group, Skipped, Unknown |
+| Gray | Inactive, muted | `stolon-callout-neutral` | Ignored, Group, Skipped, Unknown, Off, Idle |
 
 Never use color alone. A badge always has a word, and a dot always has a `title`. See [Badge](badge.md) and [Status Dot](status-dot.md).
 

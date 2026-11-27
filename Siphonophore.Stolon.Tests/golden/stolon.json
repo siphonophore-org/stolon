@@ -281,8 +281,8 @@
     "audio-player": 3748,
     "avatar-stack": 1490,
     "avatar": 3002,
-    "badge": 850,
-    "balanced-rows": 801,
+    "badge": 1022,
+    "balanced-rows": 820,
     "banner": 2804,
     "bar-chart": 911,
     "bound-sidecar": 1532,
@@ -300,7 +300,7 @@
     "config-page": 1939,
     "confirm-dialog": 2106,
     "copy-field": 2908,
-    "count-cards": 347,
+    "count-cards": 366,
     "data-table": 14922,
     "date-range-picker": 4131,
     "definition-list": 2767,
@@ -322,9 +322,9 @@
     "inherit-field": 3951,
     "key-value-editor": 2115,
     "lib/badge": 1348,
-    "lib/balance": 2447,
+    "lib/balance": 2912,
     "lib/canvas": 998,
-    "lib/card": 366,
+    "lib/card": 619,
     "lib/chart": 12614,
     "lib/check": 473,
     "lib/chips": 830,
@@ -389,7 +389,7 @@
     "sidecar": 3010,
     "skeleton": 1196,
     "slider-field": 1217,
-    "sortable-card-list": 6905,
+    "sortable-card-list": 7289,
     "sparkline": 1719,
     "spinner": 576,
     "status-card": 5070,
@@ -418,5 +418,5 @@
     "web-push": 3842,
     "world-map": 6264
   },
-  "bytes": 619536
+  "bytes": 620848
 }

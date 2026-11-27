@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { installFakeDom } from './fake-dom.mjs';
 
 var dom = installFakeDom();
-var { rowSizes, balanceRows } = await import('../../src/js/lib/balance.js');
+var { rowSizes, evenColumns, balanceRows } = await import('../../src/js/lib/balance.js');
 
 test('rows split evenly in the fewest rows the columns allow', function () {
     assert.deepEqual(rowSizes(3, 3), [3]);
@@ -59,4 +59,31 @@ test('balanceRows leaves out hidden children and the ones skip names', function 
     balanceRows(box, { minWidth: 160, gap: 12, skip: '.empty-note' });
     assert.equal(box.style['--stolon-balance-columns'], '3');
     assert.equal(empty.style['--stolon-balance-span'], undefined);
+});
+
+test('even columns take as many as fit, one fewer while the last row would hold one tile', function () {
+    assert.equal(evenColumns(10, 6), 6);
+    assert.equal(evenColumns(9, 8), 7);
+    assert.equal(evenColumns(4, 6), 4);
+    assert.equal(evenColumns(3, 2), 2);
+    assert.equal(evenColumns(0, 4), 1);
+});
+
+test('stolon-even gives every tile one span on a fixed column count, so ten cards in six columns share one width', function () {
+    var box = dom.document.createElement('div');
+    box.className = 'stolon-cards stolon-even';
+    for (var i = 0; i < 10; i++) box.appendChild(dom.document.createElement('div'));
+    Object.defineProperty(box, 'clientWidth', { value: 6 * 110 + 5 * 12 });
+    balanceRows(box, { minWidth: 110, gap: 12 });
+    assert.equal(box.style['--stolon-balance-columns'], '6');
+    assert.deepEqual(box.children.map(function (c) { return c.style['--stolon-balance-span']; }), Array(10).fill('1'));
+});
+
+test('the even option does what stolon-even does', function () {
+    var box = dom.document.createElement('div');
+    for (var i = 0; i < 5; i++) box.appendChild(dom.document.createElement('div'));
+    Object.defineProperty(box, 'clientWidth', { value: 520 });
+    balanceRows(box, { minWidth: 160, gap: 12, even: true });
+    assert.equal(box.style['--stolon-balance-columns'], '3');
+    assert.deepEqual(box.children.map(function (c) { return c.style['--stolon-balance-span']; }), ['1', '1', '1', '1', '1']);
 });

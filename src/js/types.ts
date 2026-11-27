@@ -26,7 +26,7 @@ export interface ComponentHandle {
 export type BadgeState = 'Active' | 'Synced' | 'Downloaded' | 'Imported' | 'Queued' | 'Downloading' | 'Pending' |
     'Pending-Download' | 'Pending-Replacement' | 'Errored' | 'Error' | 'Disabled' | 'Deleting' | 'Pending-Deletion' |
     'Expired' | 'Locked' | 'Admin' | 'Ignored' | 'Group' | 'Completed' | 'Enabled' | 'Failed' | 'Paused' | 'Running' |
-    'Skipped' | 'Unknown';
+    'Skipped' | 'Unknown' | 'On' | 'Online' | 'Off' | 'Offline' | 'Warning' | 'Needs-Attention' | 'Idle';
 
 /** A color modifier that stolon-badge takes. */
 export type BadgeColor = 'green' | 'red' | 'orange' | 'purple' | 'blue' | 'gray' | 'yellow' | 'pink' | 'teal';

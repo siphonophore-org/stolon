@@ -40,3 +40,19 @@
     margin: 2px 0 0 !important;
     padding-left: 0;
 }
+
+@media (max-width: 600px) {
+    /* A phone has no room for the text beside the button, so the button moves under the text and starts where the text starts. */
+    .stolon-reset-row {
+        flex-wrap: wrap;
+        row-gap: var(--stolon-gap-narrow);
+    }
+    .stolon-reset-info {
+        flex: 1 1 100%;
+        min-width: 0;
+        margin-right: 0;
+    }
+    .stolon-reset-row > .stolon-collapsible-tile ~ .stolon-reset-info { flex-basis: calc(100% - var(--stolon-size-large) - var(--stolon-gap-narrow)); }
+    .stolon-reset-info ~ * { flex: 0 0 auto; }
+    .stolon-reset-row > .stolon-collapsible-tile ~ .stolon-reset-info ~ * { margin-left: calc(var(--stolon-size-large) + var(--stolon-gap-narrow)); }
+}

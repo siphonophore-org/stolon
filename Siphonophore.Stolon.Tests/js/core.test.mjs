@@ -234,6 +234,19 @@ test('BADGE_STATES names Locked, Expired, and the extra state names, and lists p
     assert.ok(BADGE_STATES.colors.indexOf('teal') >= 0);
 });
 
+test('BADGE_STATES maps the common state words to their meaning colors, with Pending purple', function () {
+    var want = { Pending: 'purple', On: 'green', Online: 'green', Off: 'gray', Idle: 'gray', Offline: 'red', Warning: 'orange', 'Needs-Attention': 'orange' };
+    Object.keys(want).forEach(function (name) {
+        assert.ok(BADGE_STATES.names.indexOf(name) >= 0, name);
+        assert.equal(BADGE_STATES.stateColors[name], want[name], name);
+    });
+});
+
+test('every BADGE_STATES name has a color and every state color is a listed color', function () {
+    assert.deepEqual(Object.keys(BADGE_STATES.stateColors).sort(), BADGE_STATES.names.slice().sort());
+    BADGE_STATES.names.forEach(function (name) { assert.ok(BADGE_STATES.colors.indexOf(BADGE_STATES.stateColors[name]) >= 0, name); });
+});
+
 test('every BADGE_STATES name and color has a rule in badge.css', function () {
     var css = readFileSync(new URL('../../src/css/badge.css', import.meta.url), 'utf8');
     BADGE_STATES.names.forEach(function (name) {

@@ -1,6 +1,6 @@
 import { balanceRows } from './lib/balance.js';
 import { clear } from './lib/dom.js';
-import { buildCard } from './lib/card.js';
+import { buildCard, fitCounts } from './lib/card.js';
 import type { Shared, CardData } from './types.js';
 
 /**
@@ -14,7 +14,7 @@ export function renderCards(this: Shared, containerId: string | Element, cards: 
     if (!el) return;
     el.classList.add('stolon-cards');
     // A row of cards never leaves one card alone when it wraps.
-    if (!el.classList.contains('stolon-balanced')) balanceRows(el as HTMLElement, { minWidth: 110 });
+    if (!el.classList.contains('stolon-balanced')) balanceRows(el as HTMLElement, { minWidth: 110, onLayout: fitCounts });
     clear(el);
     (cards || []).forEach(function (c) { el!.appendChild(buildCard({ count: c.count, label: c.label, color: c.color }).element); });
 }

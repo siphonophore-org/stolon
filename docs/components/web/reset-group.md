@@ -42,6 +42,7 @@ Classes: `stolon-reset-group`, `stolon-reset-row`, `stolon-reset-row-nuclear`, `
 
 * `stolon-reset-row-nuclear` gives the one dangerous row a red tint and no rule.
 * The last row has no rule.
+* At 600px and below the button moves under the text and starts where the text starts, so the text keeps the full width.
 * A row leads with an icon tile. It takes the accent, red for a `destructive` row, and gray while the row is `empty`, with nothing to reset. `setEmpty(empty)` changes it later, and `getValue()` reads it.
 * `button` is the label (default "Reset") or a button already built. A built button is an `emby-button`, destructive for a destructive row and secondary otherwise, with `action` as its `data-action`.
 * `createResetGroup(rows)` takes row handles or the options for new ones, and its `rows` are the handles in order. `destroy()` stops every row's `onClick`.

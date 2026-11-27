@@ -1,6 +1,6 @@
 # Sortable Card List
 
-Records as cards in priority order. Each card has a numbered head with a status dot, badges, up and down arrows, and a drag handle, plus a body that the open card shows. One editor element moves into whichever card is open.
+Records as cards in priority order. Each card has a head led by its number or an icon tile, with a status dot, badges, up and down arrows, and a drag handle, plus a body that the open card shows. One editor element moves into whichever card is open.
 
 ## Decision
 
@@ -42,11 +42,13 @@ cards.setSelected(0);
 
 The handle is `{ render, setItems, getSelected, setSelected, setHeight, destroy }`.
 
-Classes: `stolon-card-list`, `stolon-card-item`, `stolon-card-item-head`, `stolon-card-item-head-static`, `stolon-card-item-grip`, `stolon-card-item-num`, `stolon-card-item-main`, `stolon-card-item-title`, `stolon-card-item-sub`, `stolon-card-item-sub-text`, `stolon-card-item-tags`, `stolon-card-item-arrows`, `stolon-card-item-chevron`, `stolon-card-item-body`, `stolon-card-list-actions`. The dot is a [Status Dot](status-dot.md), `stolon-dot`, the badges are [Badges](badge.md), and the chevron is the [Collapsible Section](collapsible-section.md) chevron, `stolon-collapsible-icon`, which turns by the head's `aria-expanded`.
+Classes: `stolon-card-list`, `stolon-card-item`, `stolon-card-item-head`, `stolon-card-item-head-static`, `stolon-card-item-grip`, `stolon-card-item-num`, `stolon-card-item-tile`, `stolon-card-item-main`, `stolon-card-item-title`, `stolon-card-item-sub`, `stolon-card-item-sub-text`, `stolon-card-item-tags`, `stolon-card-item-arrows`, `stolon-card-item-chevron`, `stolon-card-item-body`, `stolon-card-list-actions`. The dot is a [Status Dot](status-dot.md), `stolon-dot`, the badges are [Badges](badge.md), and the chevron is the [Collapsible Section](collapsible-section.md) chevron, `stolon-collapsible-icon`, which turns by the head's `aria-expanded`.
 
 ## States and Modifiers
 
-* `render(item, index)` returns `{ title, subtitle, badges: [{ label, cls }], dot, dotTitle, disabled }`. `dot` is `'ok'` (green), `'bad'` (red), `'checking'` (orange), `'unknown'` (gray), a status color name or hex code, or `'none'` to omit it, and any other word gives a gray dot. `dotTitle` names the dot as its title and `aria-label`, and defaults to Active, Error, Checking, Unknown, or the color's meaning. `cls` is a badge color or hex code, with `medium`, `large`, or other classes beside it, `gray` by default.
+* `render(item, index)` returns `{ icon, iconColor, title, subtitle, badges: [{ label, cls }], dot, dotTitle, disabled }`. `dot` is `'ok'` (green), `'bad'` (red), `'checking'` (orange), `'unknown'` (gray), a status color name or hex code, or `'none'` to omit it, and any other word gives a gray dot. `dotTitle` names the dot as its title and `aria-label`, and defaults to Active, Error, Checking, Unknown, or the color's meaning. `cls` is a badge color or hex code, with `medium`, `large`, or other classes beside it, `gray` by default.
+* `icon` leads the card with a Material icon in the [Collapsible Section](collapsible-section.md) tile, `stolon-collapsible-tile`, in place of its number. `iconColor` is a status color name or a hex code, and the accent by default. Steps and other records whose place is not a rank lead with a tile, never a number.
+* `numbered` (default true) leads a card with no `icon` with its place in the list. False leads it with nothing.
 * The editor parks in a hidden holder after the list while the list re-renders, so its fields and bindings survive.
 * `setSelected(index, { collapsed })` opens a card and calls `onSelect`. A bad index clears the selection. `setItems(next)` re-renders and clamps the selection. `getSelected()` is the open index or -1.
 * `height`, `maxHeight`, and `minHeight` set the height of the list as a [List](list.md) takes them, `'auto'` by default so the list grows with the page. `setHeight(height, maxHeight)` changes them later.
@@ -74,18 +76,19 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createSortableCardList&lt;T = any&gt;(listEl: HTMLElement, options: SortableCardListOptions&lt;T&gt;): SortableCardListHandle&lt;T&gt;</code>
 
-Renders records as numbered cards with a status dot, badges, arrow and drag reordering, and a body the open card shows. One editor element moves into whichever card is open, so its fields and bindings survive a re-render.
+Renders records as cards, each led by its number or an icon tile, with a status dot, badges, arrow and drag reordering, and a body the open card shows. One editor element moves into whichever card is open, so its fields and bindings survive a re-render.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `items` | <code>T[]</code> | array of records in priority order, replaced with setItems [optional] |
-| `render` (required) | <code>(item: T, index: number): CardSpec &#124; null &#124; undefined</code> | function(item, index) returning { title, subtitle, badges: [{ label, cls }], dot: 'ok'&#124;'bad'&#124;'checking'&#124;'unknown'&#124;'none', dotTitle, disabled } [required] |
+| `render` (required) | <code>(item: T, index: number): CardSpec &#124; null &#124; undefined</code> | function(item, index) returning { icon, iconColor, title, subtitle, badges: [{ label, cls }], dot: 'ok'&#124;'bad'&#124;'checking'&#124;'unknown'&#124;'none', dotTitle, disabled } [required] |
 | `editor` | <code>HTMLElement &#124; null</code> | element placed inside the open card's body [optional] |
 | `onSelect` | <code>(index: number): void</code> | function(index) called when a card opens, before the editor is placed [optional] |
 | `onBeforeLeave` | <code>(index: number): void</code> | function(index) called when the open card is left, to read the editor back [optional] |
 | `onMove` | <code>(fromIndex: number, toIndex: number): void</code> | function(fromIndex, toIndex) called after a reorder, so the caller can save [optional] |
 | `reorder` | <code>boolean</code> | allow arrows and drag (default true) |
 | `collapsible` | <code>boolean</code> | clicking the open head folds it and a chevron shows the state, where false keeps the open card open (default true) |
+| `numbered` | <code>boolean</code> | lead a card with its place in the list when render gives no icon, where false leads it with nothing (default true) |
 | `escapeHtml` | <code>(str: unknown): string</code> | function(str) returning a safe string (default the built in escaper) |
 | `moveUpTitle` | <code>string</code> | tooltip of an up arrow (default 'Move up') |
 | `moveDownTitle` | <code>string</code> | tooltip of a down arrow (default 'Move down') |
@@ -106,13 +109,13 @@ Renders records as numbered cards with a status dot, badges, arrow and drag reor
 
 | Type | What it is |
 | :--- | :--- |
-| `CardSpec` | What render returns for one card. dot picks the status dot, and a disabled card is dimmed. |
+| `CardSpec` | What render returns for one card. icon leads it with an icon tile in place of its number, dot picks the status dot, and a disabled card is dimmed. |
 
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-card-list` | Vertical list of record cards in priority order, each with a head row and a body the open card shows |
 | `stolon-card-item` | One record card. selected marks the open one, collapsed folds it, disabled dims its text, dragging fades it |
-| `stolon-card-item-head` | Clickable head row: grip, number, main text, arrows, and the collapsible chevron, which turns by its aria-expanded. Tinted when the card is open |
+| `stolon-card-item-head` | Clickable head row: grip, number or icon tile, main text, arrows, and the collapsible chevron, which turns by its aria-expanded. Tinted when the card is open |
 | `stolon-card-item-grip` | Drag handle icon at the left of the head |
 | `stolon-card-item-num` | Round priority number, filled with the accent on the open card |
 | `stolon-card-item-main` | Title line and sub line that take the remaining width and clip |

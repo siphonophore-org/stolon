@@ -1,12 +1,13 @@
 import { balanceRows } from './lib/balance.js';
 import type { BalanceHandle, BalanceOptions } from './lib/balance.js';
+import { fitCounts } from './lib/card.js';
 
 export { balanceRows };
 export type { BalanceHandle, BalanceOptions };
 
 /** The tile groups bindBalancedRows balances, with the least width a tile takes and the most tiles a row holds. */
 var GROUPS: Array<{ selector: string; options: BalanceOptions }> = [
-    { selector: '.stolon-cards', options: { minWidth: 110 } },
+    { selector: '.stolon-cards', options: { minWidth: 110, onLayout: fitCounts } },
     { selector: '.stolon-status-cards', options: { minWidth: 200 } },
     { selector: '.stolon-choice-group', options: { minWidth: 200, maxColumns: 3 } },
     { selector: '.stolon-check-grid', options: { minWidth: 160 } }

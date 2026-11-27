@@ -7,15 +7,16 @@ export var BADGE_STATES: { names: BadgeState[]; colors: BadgeColor[]; stateColor
         'Queued', 'Downloading', 'Pending', 'Pending-Download', 'Pending-Replacement',
         'Errored', 'Error', 'Disabled', 'Deleting', 'Pending-Deletion',
         'Expired', 'Locked', 'Admin', 'Ignored', 'Group',
-        'Completed', 'Enabled', 'Failed', 'Paused', 'Running', 'Skipped', 'Unknown'
+        'Completed', 'Enabled', 'Failed', 'Paused', 'Running', 'Skipped', 'Unknown',
+        'On', 'Online', 'Off', 'Offline', 'Warning', 'Needs-Attention', 'Idle'
     ],
     colors: ['green', 'red', 'orange', 'purple', 'blue', 'gray', 'yellow', 'pink', 'teal'],
     stateColors: {
-        'Active': 'green', 'Synced': 'green', 'Downloaded': 'green', 'Completed': 'green', 'Enabled': 'green',
-        'Disabled': 'red', 'Errored': 'red', 'Error': 'red', 'Deleting': 'red', 'Pending-Deletion': 'red', 'Failed': 'red',
-        'Expired': 'orange', 'Queued': 'orange', 'Paused': 'orange',
+        'Active': 'green', 'Synced': 'green', 'Downloaded': 'green', 'Completed': 'green', 'Enabled': 'green', 'On': 'green', 'Online': 'green',
+        'Disabled': 'red', 'Errored': 'red', 'Error': 'red', 'Deleting': 'red', 'Pending-Deletion': 'red', 'Failed': 'red', 'Offline': 'red',
+        'Expired': 'orange', 'Queued': 'orange', 'Paused': 'orange', 'Warning': 'orange', 'Needs-Attention': 'orange',
         'Locked': 'purple', 'Running': 'purple', 'Downloading': 'purple', 'Pending': 'purple', 'Pending-Download': 'purple',
         'Admin': 'blue', 'Imported': 'blue', 'Pending-Replacement': 'blue',
-        'Ignored': 'gray', 'Group': 'gray', 'Skipped': 'gray', 'Unknown': 'gray'
+        'Ignored': 'gray', 'Group': 'gray', 'Skipped': 'gray', 'Unknown': 'gray', 'Off': 'gray', 'Idle': 'gray'
     }
 };

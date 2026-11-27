@@ -32,7 +32,8 @@ Classes: `stolon-badge`, `stolon-table-status-badge`.
 ## States and Modifiers
 
 * Color names for `stolon-badge`: `green`, `red`, `orange`, `purple`, `blue`, `gray`, `yellow`, `pink`, and `teal`.
-* State names for `stolon-table-status-badge`: Active, Synced, Downloaded, Completed, and Enabled are green. Disabled, Errored, Error, Deleting, Pending-Deletion, and Failed are red. Expired, Queued, and Paused are orange. Locked, Running, Downloading, Pending, and Pending-Download are purple. Admin, Imported, and Pending-Replacement are blue. Ignored, Group, Skipped, and Unknown are gray.
+* State names for `stolon-table-status-badge`: Active, Synced, Downloaded, Completed, Enabled, On, and Online are green. Disabled, Errored, Error, Deleting, Pending-Deletion, Failed, and Offline are red. Expired, Queued, Paused, Warning, and Needs-Attention are orange. Locked, Running, Downloading, Pending, and Pending-Download are purple. Admin, Imported, and Pending-Replacement are blue. Ignored, Group, Skipped, Unknown, Off, and Idle are gray.
+* Each state takes the color its meaning has in the [Design Tokens](design-tokens.md), so one word reads the same everywhere. Pending is held, so purple. Offline cannot be reached, so red. Off and Idle are inactive, so gray.
 * `BADGE_STATES` is `{ names, colors, stateColors }`, the one source of truth for mapping a status code to a badge. `stateColors` gives the color each state name draws in.
 * `badgeHtml(label, color, size, className)` builds the badge markup every component draws. It escapes the label, and `color` is a color name, a hex code, or a state name such as `Errored`. `size` is `small` (default), `medium`, or `large`, and `className` adds the caller's classes.
 * `shared.badge(cls, label)` escapes the label. A color name or hex code in `cls` colors it, `medium` or `large` sizes it, and any other word stays as a class reduced to letters, digits, `_`, and `-`.

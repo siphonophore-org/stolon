@@ -8,9 +8,12 @@ import type { ListHandle, ListHeight } from './list.js';
 import { stolonText } from './lib/stolon-text.js';
 import { fillAll } from './lib/dom.js';
 import type { BASE_TEXT } from './lib/stolon-text.js';
+import { colorClass, colorStyle } from './lib/color.js';
 
-/** What render returns for one card. dot picks the status dot, and a disabled card is dimmed. */
+/** What render returns for one card. icon leads it with an icon tile in place of its number, dot picks the status dot, and a disabled card is dimmed. */
 export interface CardSpec {
+    icon?: string;
+    iconColor?: string;
     title?: unknown;
     subtitle?: unknown;
     badges?: Array<{ label: unknown; cls?: string }>;
@@ -29,6 +32,7 @@ export interface SortableCardListOptions<T = any> {
     onMove?(fromIndex: number, toIndex: number): void;
     reorder?: boolean;
     collapsible?: boolean;
+    numbered?: boolean;
     escapeHtml?(str: unknown): string;
     moveUpTitle?: string;
     moveDownTitle?: string;
@@ -63,18 +67,19 @@ function dotHtml(dot: string, title: unknown): string {
 }
 
 /**
- * Renders records as numbered cards with a status dot, badges, arrow and drag reordering, and a body the open card shows. One editor element moves into whichever card is open, so its fields and bindings survive a re-render.
+ * Renders records as cards, each led by its number or an icon tile, with a status dot, badges, arrow and drag reordering, and a body the open card shows. One editor element moves into whichever card is open, so its fields and bindings survive a re-render.
  *
  * @param listEl container element the cards render into
  * @param options {
  *   items         : array of records in priority order, replaced with setItems [optional]
- *   render        : function(item, index) returning { title, subtitle, badges: [{ label, cls }], dot: 'ok'|'bad'|'checking'|'unknown'|'none', dotTitle, disabled } [required]
+ *   render        : function(item, index) returning { icon, iconColor, title, subtitle, badges: [{ label, cls }], dot: 'ok'|'bad'|'checking'|'unknown'|'none', dotTitle, disabled } [required]
  *   editor        : element placed inside the open card's body [optional]
  *   onSelect      : function(index) called when a card opens, before the editor is placed [optional]
  *   onBeforeLeave : function(index) called when the open card is left, to read the editor back [optional]
  *   onMove        : function(fromIndex, toIndex) called after a reorder, so the caller can save [optional]
  *   reorder       : allow arrows and drag (default true)
  *   collapsible   : clicking the open head folds it and a chevron shows the state, where false keeps the open card open (default true)
+ *   numbered      : lead a card with its place in the list when render gives no icon, where false leads it with nothing (default true)
  *   escapeHtml    : function(str) returning a safe string (default the built in escaper)
  *   moveUpTitle   : tooltip of an up arrow (default 'Move up')
  *   moveDownTitle : tooltip of a down arrow (default 'Move down')
@@ -97,6 +102,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
     var dragIndex = -1;
     var reorder = options.reorder !== false;
     var collapsible = options.collapsible !== false;
+    var numbered = options.numbered !== false;
     var esc = options.escapeHtml || escapeHtml;
     var height: ListHeight | undefined = options.height;
     var maxHeight = options.maxHeight;
@@ -122,6 +128,16 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         else parkEditor();
     }
 
+    // The icon tile the card names, else its number, else nothing.
+    function leadHtml(spec: CardSpec, index: number): string {
+        if (spec.icon) {
+            var color = colorClass(spec.iconColor);
+            return '<span class="stolon-collapsible-tile stolon-card-item-tile' + (color ? ' ' + color : '') + '"' + colorStyle(spec.iconColor) + ' aria-hidden="true">' +
+                '<span class="material-icons" aria-hidden="true">' + escapeHtml(spec.icon) + '</span></span>';
+        }
+        return numbered ? '<span class="stolon-card-item-num">' + (index + 1) + '</span>' : '';
+    }
+
     // Builds one card from a record.
     function renderCard(item: T, index: number): HTMLDivElement {
         var spec: CardSpec = options.render(item, index) || {};
@@ -134,7 +150,7 @@ export function createSortableCardList<T = any>(listEl: HTMLElement, options: So
         card.innerHTML =
             '<div class="stolon-card-item-head"' + (reorder ? ' draggable="true"' : '') + ' role="button" tabindex="0" aria-expanded="' + (isSelected && !collapsed ? 'true' : 'false') + '">' +
                 (reorder ? '<span class="stolon-card-item-grip material-icons" title="' + escapeHtml(stolonText('Stolon.DragToReorder')) + '">drag_indicator</span>' : '') +
-                '<span class="stolon-card-item-num">' + (index + 1) + '</span>' +
+                leadHtml(spec, index) +
                 '<div class="stolon-card-item-main stolon-item-row-parts">' +
                     '<div class="stolon-card-item-title stolon-item-row-primary">' +
                         (dot !== 'none' ? dotHtml(dot, spec.dotTitle) : '') +

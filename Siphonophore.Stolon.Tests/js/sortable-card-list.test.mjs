@@ -117,3 +117,35 @@ test('destroy stops clicks from moving cards', function () {
     assert.deepEqual(titles(ui), ['a', 'b', 'c']);
     assert.equal(ui.moves.length, 0);
 });
+
+test('a card is numbered by default, so existing lists keep their numbers', function () {
+    var ui = build();
+    ui.cards.render();
+    assert.match(cardsOf(ui)[1].innerHTML, /<span class="stolon-card-item-num">2<\/span>/);
+    assert.doesNotMatch(cardsOf(ui)[1].innerHTML, /stolon-collapsible-tile/);
+});
+
+test('a card whose render gives an icon leads with an icon tile in its color in place of its number', function () {
+    var ui = build({ render: function (item) { return { title: item, icon: 'terminal', iconColor: item === 'b' ? 'green' : item === 'c' ? '#e91e63' : undefined }; } });
+    ui.cards.render();
+    var html = cardsOf(ui).map(function (c) { return c.innerHTML; });
+    html.forEach(function (h) { assert.doesNotMatch(h, /stolon-card-item-num/); });
+    assert.match(html[0], /<span class="stolon-collapsible-tile stolon-card-item-tile" aria-hidden="true"><span class="material-icons" aria-hidden="true">terminal<\/span><\/span>/);
+    assert.match(html[1], /class="stolon-collapsible-tile stolon-card-item-tile stolon-green"/);
+    assert.match(html[2], /class="stolon-collapsible-tile stolon-card-item-tile stolon-custom" style="--stolon-custom: #e91e63;/);
+});
+
+test('an icon name is escaped', function () {
+    var ui = build({ render: function () { return { title: 'x', icon: '<b>' }; } });
+    ui.cards.render();
+    assert.match(cardsOf(ui)[0].innerHTML, /&lt;b&gt;/);
+});
+
+test('numbered false leads a card with no icon with nothing', function () {
+    var ui = build({ numbered: false });
+    ui.cards.render();
+    cardsOf(ui).forEach(function (c) {
+        assert.doesNotMatch(c.innerHTML, /stolon-card-item-num|stolon-collapsible-tile/);
+    });
+    assert.deepEqual(titles(ui), ['a', 'b', 'c']);
+});
