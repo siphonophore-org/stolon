@@ -47,11 +47,29 @@ if (base.adoptDetailsTemplate(view)) {
 }
 ```
 
+### States, Rows, and Limits
+
+* `webDetailStatus(icon, title)` shows where an item stands when there is nothing to do, such as a request on its way, among the detail buttons. It is the button's icon as a plain image with its words as the tooltip and the accessible name, never a disabled button, so it is never greyed out.
+* `webStatusTag(text)` is a tag in the info row's outlined text style, in the row's text color.
+* `webNoteRow` is a row in the web client's list look that reads as text, with an aside at its end and notes under it, such as a reported problem and its replies.
+* `webNoticeBlock` heads a form as a settings page heads a group, and `webLimitsBox` shows limits as the dashboard's storage bars, green, orange from 80 percent, and red from 90.
+* `webListLinks` is `webPersonLinks` for links that open a list, such as a genre, with `data-stolon-list` in place of `data-stolon-card`.
+* `webOverlayButton` and `webMuiIcon` are the pieces `webCard` and the filter popover build with, for a page that builds its own.
+
+```js
+document.getElementById('detailButtons').innerHTML = base.webDetailButton('play', 'play_arrow', 'Play')
+    + base.webDetailStatus('schedule', 'Waiting for approval');
+document.getElementById('issues').innerHTML = base.webPaperList(reports.map(function (r) {
+    return base.webNoteRow({ title: r.Title, secondary: r.When, asideHtml: base.webStatusTag(r.State), notes: r.Notes });
+}).join(''));
+```
+
 ## Gotchas
 
 * A builder's markup is the web client's at version 12.4. When the web client changes, `WebClientCheck` reports a class it lacks, and the parity check shows what moved. Compare against the file named above the builder.
 * A card's hover menu shows on a desktop layout, `layout-desktop` on the root, and its corner buttons always show on a phone. Build cards after `startWebClientShell` sets the layout.
 * Markup passed into a builder, such as `buttonHtml` or a row's `inner`, is placed as given, so pass only what another builder returned.
+* The detail buttons wrap onto a second line in the shell when they do not fit, as on a phone.
 * The docs preview shows the markup as text, since the web client's stylesheets are not in the docs.
 
 ## Reference
@@ -241,6 +259,12 @@ A form dialog's footer of several actions side by side, each as wide as Cancel a
 
 The message dialog's text, with a place for an error under it.
 
+### `webMuiIcon`
+
+<code>function webMuiIcon(path: string, classes: string): string</code>
+
+A Material UI icon, its SVG path in Material UI's icon box, as the web client's Material UI parts draw them.
+
 ### `webResetFiltersButton`
 
 <code>function webResetFiltersButton(id: string, label: string, disabled?: boolean): string</code>
@@ -375,6 +399,19 @@ The played indicator's round badge, with the page's own icon and color class.
 <code>function webProgressBar(share: number): string</code>
 
 A card's progress bar.
+
+### `webOverlayButton`
+
+<code>function webOverlayButton(button: WebOverlayButton, placement?: WebOverlayPlacement): string</code>
+
+A button of a card's hover menu, answered by the page through data-stolon-action.
+
+| Option | Type | What it does |
+| :--- | :--- | :--- |
+| `action` (required) | <code>string</code> |  |
+| `icon` (required) | <code>string</code> |  |
+| `title` (required) | <code>string</code> |  |
+| `key` | <code>string</code> |  |
 
 ### `webCard`
 
@@ -511,6 +548,12 @@ The info row's community rating, a star and the score to one place.
 
 The info row's critic rating, fresh from 60.
 
+### `webStatusTag`
+
+<code>function webStatusTag(text: string, className?: string): string</code>
+
+A tag in the info row's outlined text style, such as where an item stands. It takes the row's text color, and a class of the page's own may set another.
+
 ### `webInfoRow`
 
 <code>function webInfoRow(html: string, className?: string): string</code>
@@ -522,6 +565,12 @@ A row of the details page's info, with a class of the page's own.
 <code>function webDetailButton(id: string &#124; null, iconName: string, title: string, disabled?: boolean): string</code>
 
 A flat detail button with an icon, its words as the tooltip and the accessible name.
+
+### `webDetailStatus`
+
+<code>function webDetailStatus(iconName: string, title: string): string</code>
+
+Where an item stands when there is nothing to do, such as a request on its way: the detail button's icon, plain, with its words as the tooltip and the accessible name. It is an image, never a disabled button, so it is never greyed out.
 
 ### `webDetailLinkButton`
 
@@ -571,11 +620,43 @@ An item of the details group, a label then its values.
 
 A line of links, such as directors or genres, separated by commas.
 
+### `webListLinks`
+
+<code>function webListLinks(links: WebListLink[]): string</code>
+
+A line of links that each open a list, such as genres or studios, separated by commas as webPersonLinks.
+
 ### `webExternalLinks`
 
 <code>function webExternalLinks(links: WebLink[]): string</code>
 
 The external links line, each opening in a new tab.
+
+### `webNoteRow`
+
+<code>function webNoteRow(options: WebNoteRowOptions): string</code>
+
+A row in the web client's list look, its title as the dashboard's lists title a row, a second line, an aside at its end, then who it is from and each note under who wrote it, across the row. It reads as text, with no hover.
+
+| Option | Type | What it does |
+| :--- | :--- | :--- |
+| `title` (required) | <code>string</code> | the row's title |
+| `secondary` | <code>string</code> | the line under it, such as when [optional] |
+| `asideHtml` | <code>string</code> | markup at the row's end, such as from webStatusTag, which the caller has escaped [optional] |
+| `by` | <code>string</code> | who the row is from, a line across it [optional] |
+| `notes` | <code>WebNote[]</code> | notes under it, each who wrote it and its text [optional] |
+
+### `webNoticeBlock`
+
+<code>function webNoticeBlock(title: string, text: string): string</code>
+
+A heading over a form with its description under it, as the web client's settings pages head a group.
+
+### `webLimitsBox`
+
+<code>function webLimitsBox(label: string, rows: WebLimit[]): string</code>
+
+A box of limits in the web client's paper list, each a line of what it is and what is left over a thin bar of how much is used, green, then orange from 80 percent and red from 90, as the dashboard's storage bars.
 
 | Type | What it is |
 | :--- | :--- |
@@ -586,9 +667,12 @@ The external links line, each opening in a new tab.
 | `WebDescription` | A line of webTextareaField's descriptions, with an id for one the page writes into. |
 | `WebCardLink` | The card's link, for webCardImage: its attributes, its accessible name, and markup laid over the picture. |
 | `WebIndicator` | A card's round badge: a Material icon, its words as the tooltip, and a class of the page's own for its color. |
-| `WebOverlayButton` | A button of a card's hover menu, answered by the page through data-stolon-action. |
+| `WebOverlayPlacement` | Where a card's hover menu button sits: in the corner on a phone, in the hover menu's corner, or as its middle button. |
 | `WebLink` | One link of webSearchSuggestions. |
 | `WebItemLink` | One link of a details group line, with a data-stolon-card value for the page to open it by. |
+| `WebListLink` | One link of a line that opens a list, such as a genre, with a data-stolon-list value for the page to open it by. |
+| `WebNote` | One note under a row, who wrote it and what. |
+| `WebLimit` | One limit of webLimitsBox: what it is, what is left, and how much is used. |
 
 | Class | What it looks like |
 | :--- | :--- |
@@ -600,6 +684,10 @@ The external links line, each opening in a new tab.
 | `stolon-web-filters` | The filter popover, Material UI's popover paper with a section per filter, each a heading that opens its checkboxes |
 | `stolon-web-skeleton-padder` | A loading placeholder card or line, a pulsing bar in place of text and a pulsing picture |
 | `stolon-web-appear` | Content that fades in once it has waited a moment, so a quick answer never flashes a placeholder |
+| `stolon-web-detail-status` | Where an item stands among the details page's buttons, the detail button's icon as plain text, never greyed out as a disabled button |
+| `stolon-web-note-row` | A row in the web client's list look that reads as text: its title, a second line, an aside at its end, then who it is from and its notes across it |
+| `stolon-web-notice` | A settings page's group heading over a form, with its description under it |
+| `stolon-web-limits` | A box of limits, each a line of what it is and what is left over a thin bar of how much is used, green, orange from 80 percent, and red from 90 |
 
 <!-- reference:end -->
 

@@ -234,3 +234,78 @@ test('an anyone page starts with no viewer and keeps the bar to the server alone
     assert.equal(typeof session.toast.show, 'function');
     session.destroy();
 });
+
+// The signed out frame as HostedPage writes it, on top of the frame above.
+function signedOutFrame(access, follow) {
+    var parts = frame(access);
+    document.body.classList.add('stolon-shell-signed-out');
+    document.body.setAttribute('data-stolon-session', follow ? 'follow' : '');
+    parts.column = dom.el('div', { class: 'stolon-shell-column standalonePage padded-left padded-right padded-bottom-page' });
+    parts.form = dom.el('div', { class: 'stolon-shell-form readOnlyContent margin-auto-x' });
+    document.body.appendChild(parts.column);
+    document.body.appendChild(parts.form);
+    return parts;
+}
+
+test('the signed out frame shows no viewer, even with a stored sign-in', async function () {
+    var parts = signedOutFrame('anyone', false);
+    globalThis.localStorage = store({ jellyfin_credentials: JSON.stringify({ Servers: [{ Id: SERVER, AccessToken: TOKEN, UserId: USER }] }) });
+    serve(true);
+    var session = await startWebClientShell();
+    await settle();
+    assert.equal(session.user, null);
+    assert.equal(parts.avatar.hidden, true);
+    assert.equal(parts.nav.hidden, true);
+    assert.ok(document.body.classList.contains('stolon-shell-signed-out'));
+    session.destroy();
+});
+
+test('a status page moves into the signed in shell once it finds the viewer\'s sign-in', async function () {
+    var parts = signedOutFrame('anyone', true);
+    globalThis.localStorage = store({ jellyfin_credentials: JSON.stringify({ Servers: [{ Id: SERVER, AccessToken: TOKEN, UserId: USER }] }) });
+    serve(true);
+    var session = await startWebClientShell();
+    await settle();
+    assert.equal(document.body.classList.contains('stolon-shell-signed-out'), false);
+    assert.equal(parts.column.classList.contains('standalonePage'), false);
+    assert.equal(parts.form.classList.contains('readOnlyContent'), false);
+    assert.equal(parts.avatar.hidden, false);
+    assert.equal(session.user.Name, 'Ana');
+    assert.equal(session.token, TOKEN);
+    assert.match(parts.userMenu.querySelector('ul').innerHTML, /Sign out/);
+    session.destroy();
+});
+
+test('a status page with no stored sign-in stays signed out', async function () {
+    var parts = signedOutFrame('anyone', true);
+    globalThis.localStorage = store({});
+    serve(true);
+    var session = await startWebClientShell();
+    await settle();
+    assert.ok(document.body.classList.contains('stolon-shell-signed-out'));
+    assert.ok(parts.column.classList.contains('standalonePage'));
+    assert.equal(parts.avatar.hidden, true);
+    session.destroy();
+});
+
+test('setWebClientFrame moves the page between the signed out frame and the shell', function () {
+    var parts = signedOutFrame('anyone', false);
+    shell.setWebClientFrame(false);
+    assert.equal(parts.form.classList.contains('margin-auto-x'), false);
+    shell.setWebClientFrame(true);
+    assert.ok(document.body.classList.contains('stolon-shell-signed-out'));
+    assert.ok(parts.column.classList.contains('padded-bottom-page'));
+    assert.ok(parts.form.classList.contains('readOnlyContent'));
+});
+
+test('a viewer with no picture keeps the person icon and the page asks for no image', async function () {
+    frame('user');
+    globalThis.localStorage = store({ jellyfin_credentials: JSON.stringify({ Servers: [{ Id: SERVER, AccessToken: TOKEN, UserId: USER }] }) });
+    serve(false);
+    var made = [];
+    globalThis.Image = function () { var i = {}; made.push(i); return i; };
+    var session = await startWebClientShell();
+    await settle();
+    assert.equal(made.length, 0);
+    session.destroy();
+});

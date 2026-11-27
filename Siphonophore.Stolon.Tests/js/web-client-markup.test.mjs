@@ -37,7 +37,11 @@ function everything(desktop) {
         m.webDetailButton('d', 'info', 'Info'), m.webDetailLinkButton('#', 'link', 'Link', true), m.webFavoriteButton('f', true), m.webFavoriteButton('g', false),
         m.webMediaInfoContent(m.webMediaInfoSource('File', m.webMediaInfoStream('Video', m.webMediaInfoAttribute('Codec', 'h264')))),
         m.webDetailsGroupItem('Genres', m.webPersonLinks([{ href: '#', name: 'A', key: 'k' }]), true), m.webDetailsGroupItem('Studio', 'X'),
-        m.webExternalLinks([{ href: 'https://example.com', text: 'IMDb' }])
+        m.webExternalLinks([{ href: 'https://example.com', text: 'IMDb' }]),
+        m.webOverlayButton(button), m.webOverlayButton(button, 'hover'), m.webOverlayButton(button, 'fab'), m.webMuiIcon('<path d="M0 0"></path>', 'MuiSvgIcon-root'),
+        m.webStatusTag('Requested', 'mine'), m.webDetailStatus('schedule', 'Requested'), m.webListLinks([{ href: '#', name: 'Drama', key: 'g' }]),
+        m.webNoteRow({ title: 'No sound', secondary: 'Today', asideHtml: m.webStatusTag('Open'), by: 'Ana', notes: [{ by: 'Bo', text: 'Fixed' }] }),
+        m.webNoticeBlock('Report', 'Say what is wrong.'), m.webLimitsBox('Limits', [{ label: 'Movies', amount: '2 left', percent: 60 }])
     ].join('\n');
 }
 
@@ -66,7 +70,7 @@ function jellyfinOnly(name) {
     return !/^(stolon-|Mui|Private)/.test(name) && ['mine', 'lazy', 'cardContent', 'personCard', 'smoothScrollY', 'no-grow', 'align-items-center',
         'justify-content-center', 'list', 'check', 'person', 'tv', 'movie', 'more_vert', 'info', 'link', 'favorite', 'star', 'chevron_left',
         'chevron_right', 'keyboard_arrow_down', 'text', 'label', 'content', 'mediaInfo', 'secondary', 'mdl-spinner__layer-1', 'mdl-spinner__layer-2',
-        'mdl-spinner__layer-3', 'mdl-spinner__layer-4', 'defaultCardBackground', 'detail-clamp-text', 'hide'].indexOf(name) === -1;
+        'mdl-spinner__layer-3', 'mdl-spinner__layer-4', 'defaultCardBackground', 'detail-clamp-text', 'hide', 'two-line', 'schedule', 'add'].indexOf(name) === -1;
 }
 
 test('every Jellyfin class the builders write is in the startup check list, so a renamed one is reported', function () {
@@ -213,4 +217,54 @@ test('a link to an address that runs script goes nowhere, and an ordinary one ke
     assert.match(m.webDrawerItem('data:text/html,x', icon, 'Bad'), /href="#"/);
     assert.match(m.webMenuItem(icon, 'Good', 'web/#/home'), /href="web\/#\/home"/);
     assert.match(m.webNavButton('https://example.com/a?b=1', icon, 'Out', false, true), /href="https:\/\/example.com\/a\?b=1"/);
+});
+
+test('webDetailStatus is a plain icon with its words, never a disabled button', function () {
+    var html = m.webDetailStatus('schedule', 'Waiting <for> approval');
+    assert.match(html, /^<span class="detailButton stolon-web-detail-status" role="img" title="Waiting &lt;for&gt; approval" aria-label="Waiting &lt;for&gt; approval">/);
+    assert.match(html, /detailButton-icon schedule/);
+    assert.doesNotMatch(html, /<button|disabled/);
+});
+
+test('webOverlayButton places a button in the corner, in the hover menu, or as its middle button', function () {
+    var b = { action: 'request', icon: 'add', title: 'Request "it"', key: 'k1' };
+    assert.match(m.webOverlayButton(b), /^<button type="button" class="cardOverlayButton itemAction paper-icon-button-light" data-stolon-action="request" data-stolon-key="k1" title="Request &quot;it&quot;"/);
+    assert.doesNotMatch(m.webOverlayButton(b), /hover/);
+    assert.match(m.webOverlayButton(b, 'hover'), /paper-icon-button-light cardOverlayButton-hover".*cardOverlayButtonIcon cardOverlayButtonIcon-hover add/);
+    assert.match(m.webOverlayButton(b, 'fab'), /cardOverlayButton-hover cardOverlayFab-primary/);
+});
+
+test('webStatusTag and webListLinks escape their text and keep their keys', function () {
+    assert.equal(m.webStatusTag('<b>', 'mine'), '<div class="mediaInfoText mine mediaInfoItem">&lt;b&gt;</div>');
+    assert.equal(m.webStatusTag('Open'), '<div class="mediaInfoText mediaInfoItem">Open</div>');
+    var links = m.webListLinks([{ href: 'a?x=1&y=2', name: 'A&B', key: 'g1' }, { href: '#', name: 'C' }]);
+    assert.match(links, /href="a\?x=1&amp;y=2" data-stolon-list="g1">A&amp;B<\/a>/);
+    assert.match(links, /<span>, <\/span>/);
+    assert.doesNotMatch(links.split('<span>, </span>')[1], /data-stolon-list/);
+});
+
+test('webNoteRow shows its title, aside, and notes, and leaves out what it is not given', function () {
+    var full = m.webNoteRow({ title: '<No sound>', secondary: 'Today', asideHtml: '<i>raw</i>', by: 'Ana', notes: [{ by: 'Bo', text: 'Line 1\nLine 2' }] });
+    assert.match(full, /stolon-web-note-title">&lt;No sound&gt;<\/h3>/);
+    assert.match(full, /stolon-web-note-aside"><i>raw<\/i>/);
+    assert.match(full, /stolon-web-note-from">Ana</);
+    assert.match(full, /stolon-web-note-by">Bo<\/div><div class="stolon-web-note-text">Line 1\nLine 2/);
+    var bare = m.webNoteRow({ title: 'Only' });
+    assert.doesNotMatch(bare, /stolon-web-notes|stolon-web-note-aside|secondary/);
+});
+
+test('webNoticeBlock heads a form as a settings page does', function () {
+    assert.equal(m.webNoticeBlock('A<', 'B&'), '<div class="verticalSection stolon-web-notice"><h2 class="sectionTitle">A&lt;</h2><div class="fieldDescription">B&amp;</div></div>');
+});
+
+test('webLimitsBox colors each bar by how much is used and keeps it in range', function () {
+    var html = m.webLimitsBox('Limits', [{ label: 'A', amount: '9 left', percent: 10 }, { label: 'B', amount: '1 left', percent: 85 }, { label: 'C', amount: '0 left', percent: 140 }]);
+    assert.match(html, /^<div class="checkboxListContainer"><h3 class="checkboxListLabel">Limits<\/h3>/);
+    assert.match(html, /stolon-web-limit-success" role="progressbar" aria-label="A" aria-valuemin="0" aria-valuemax="100" aria-valuenow="10">.*translateX\(-90%\)/);
+    assert.match(html, /stolon-web-limit-warning/);
+    assert.match(html, /stolon-web-limit-error" role="progressbar" aria-label="C" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">.*translateX\(0%\)/);
+});
+
+test('webMuiIcon draws a Material UI icon box around its path', function () {
+    assert.equal(m.webMuiIcon('<path d="M0 0"></path>', 'MuiSvgIcon-root mine'), '<svg class="MuiSvgIcon-root mine" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M0 0"></path></svg>');
 });

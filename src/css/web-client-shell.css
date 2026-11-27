@@ -273,9 +273,10 @@
     .stolon-shell-scrim { display: none; }
 }
 
-/* The page under the bar, which the plugin's content fills, and the gate where the page script asks the viewer to sign in */
+/* The page under the bar, which the plugin's content fills, and the gate where the page script asks the viewer to sign in. It stacks over the web client's fixed background, as the web client's own pages do */
 /* Example: <main class="stolon-shell-main"><div class="stolon-user-page-gate stolon-shell-gate" hidden></div><div class="stolon-shell-content"></div></main> */
 .stolon-shell-main {
+    position: relative;
     display: block;
     padding-top: calc(var(--stolon-shell-bar) + env(safe-area-inset-top));
 }
@@ -284,6 +285,53 @@
     margin: 0 auto;
     padding: calc(var(--stolon-gap-wide) * 2) var(--stolon-gap-wide);
 }
+
+/* The column and form the page's gate and content sit in. Signed out they take the web client login page's classes, its page's padding and its form's width */
+/* Example: <div class="stolon-shell-column standalonePage padded-left padded-right"><div class="stolon-shell-form readOnlyContent margin-auto-x"><div class="stolon-shell-content"></div></div></div> */
+.stolon-shell-column,
+.stolon-shell-form { display: block; }
+
+/* The signed out frame, as the web client's login page: the bar holds the server's logo alone, a link home, and the page sits in the login form's column */
+/* Example: <body class="stolon-shell stolon-shell-signed-out"><header class="stolon-shell-bar"><div class="stolon-shell-toolbar"><a class="stolon-shell-server" href="web/"><span class="stolon-shell-server-icon"><img src="web/icon.png" alt=""></span><span class="stolon-shell-server-name">Jellyfin</span></a></div></header></body> */
+.stolon-shell-signed-out .stolon-shell-toolbar > .stolon-shell-server { display: inline-flex; }
+.stolon-shell-signed-out .stolon-shell-server-name,
+.stolon-shell-signed-out .stolon-shell-toolbar > .stolon-shell-drawer-button,
+.stolon-shell-signed-out .stolon-shell-nav,
+.stolon-shell-signed-out .stolon-shell-end,
+.stolon-shell-signed-out .stolon-shell-menu,
+.stolon-shell-signed-out .stolon-shell-drawer,
+.stolon-shell-signed-out .stolon-shell-scrim { display: none; }
+.stolon-shell-signed-out .stolon-shell-server-icon { margin: 0; }
+.stolon-shell-signed-out .stolon-shell-gate { max-width: none; padding: 0; }
+.stolon-shell-signed-out .stolon-screen { max-width: none; }
+.stolon-shell-signed-out .stolon-screen.stolon-screen-web { padding: 0; }
+.stolon-shell-signed-out .stolon-screen-logo { display: none; }
+
+/* A status page's spinner under its sentence, the web client's loading spinner placed in the screen */
+/* Example: <div class="mdl-spinner mdlSpinnerActive stolon-screen-spinner" role="status" aria-label="Loading"></div> */
+.stolon-screen-spinner { align-self: center; }
+
+/* The web client's rules a page in the shell needs that the web client keeps in its own scripts: keyboard focus shown on its buttons and links, which its stylesheets turn off */
+/* Example: <button class="emby-button raised">Retry</button> */
+.stolon-shell .emby-button:focus-visible,
+.stolon-shell .paper-icon-button-light:focus-visible,
+.stolon-shell .textActionButton:focus-visible,
+.stolon-shell .itemAction:focus-visible { outline: 2px solid currentColor !important; outline-offset: 2px; }
+.stolon-shell [tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
+.stolon-shell .emby-button:disabled { opacity: 0.45; cursor: default; }
+.stolon-shell .emby-checkbox:disabled + .checkboxLabel,
+.stolon-shell .emby-checkbox:disabled + .checkboxLabel + .checkboxOutline { opacity: 0.5; }
+.stolon-shell .emby-checkbox:disabled ~ * { cursor: default; }
+/* The details group's labels, Material UI body text at its line height */
+.stolon-shell .detailsGroupItem .label { line-height: 1.5; }
+/* A form dialog's footer buttons share its width and center their labels, up to a button's width each, so neither runs past a phone */
+.stolon-shell .formDialogFooter .formDialogFooterItem:not(.formDialogFooterItem-autosize) { justify-content: center; }
+.stolon-shell .formDialogFooter-flex { box-sizing: border-box; }
+.stolon-shell .formDialogFooter-flex .formDialogFooterItem:not(.formDialogFooterItem-autosize) { flex: 1 1 0; min-width: 0; max-width: 12em; }
+/* The details page's buttons wrap onto a second line when they do not fit, as the web client's fit a phone */
+.stolon-shell .mainDetailButtons { flex-wrap: wrap; row-gap: calc(var(--stolon-shell-unit) / 2); }
+.stolon-shell .detailPagePrimaryContainer,
+.stolon-shell .detailPageWrapperContainer { min-width: 0; max-width: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
     .stolon-shell-bar,

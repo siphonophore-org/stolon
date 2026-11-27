@@ -41,7 +41,7 @@
 <!-- styles, the plugin's shared Stolon CSS. The page script adds the server's and the viewer's custom CSS after the content -->
 <link rel="stylesheet" href="{{STYLESHEET}}" />
 </head>
-<body class="stolon-shell" data-stolon-access="{{ACCESS}}" data-stolon-access-check="{{ACCESS_CHECK}}" data-stolon-screen="{{SCREEN}}" data-stolon-mark="{{MARK}}" data-stolon-mark-icon="{{MARK_ICON}}">
+<body class="stolon-shell{{FRAME}}" data-stolon-access="{{ACCESS}}" data-stolon-access-check="{{ACCESS_CHECK}}" data-stolon-screen="{{SCREEN}}" data-stolon-session="{{SESSION}}" data-stolon-mark="{{MARK}}" data-stolon-mark-icon="{{MARK_ICON}}">
 <!-- backdrop, the web client's page backdrop behind the theme's background -->
 <div class="backdropContainer"><div class="backdropImage"></div></div>
 <div class="backgroundContainer"></div>
@@ -49,7 +49,7 @@
 <header class="skinHeader MuiPaper-root MuiAppBar-root stolon-shell-bar">
 <div class="MuiToolbar-root MuiToolbar-dense padded-left padded-right stolon-shell-toolbar">
 <button type="button" class="paper-icon-button-light stolon-shell-icon-button stolon-shell-drawer-button" aria-controls="stolon-shell-drawer" aria-expanded="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"></path></svg></button>
-<a class="stolon-shell-server" href="web/"><span class="MuiButton-startIcon stolon-shell-server-icon">{{LOGO}}</span><span class="stolon-shell-server-name">{{SERVER}}</span></a>
+<a class="stolon-shell-server" href="web/" title="{{SERVER}}"><span class="MuiButton-startIcon stolon-shell-server-icon">{{LOGO}}</span><span class="stolon-shell-server-name">{{SERVER}}</span></a>
 <nav class="stolon-shell-nav" hidden></nav>
 <div class="stolon-shell-end">
 <button type="button" class="MuiAvatar-root stolon-shell-avatar" aria-haspopup="true" aria-controls="stolon-shell-user-menu" aria-expanded="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4m0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4"></path></svg></button>
@@ -70,11 +70,17 @@
 </nav>
 <!-- main, under the bar -->
 <main class="stolon-shell-main">
-<!-- gate, where the page script asks the viewer to sign in -->
-<div class="stolon-user-page-gate stolon-shell-gate" hidden></div>
+<!-- column, the web client login page's padding while the page is signed out -->
+<div class="stolon-shell-column{{COLUMN}}">
+<!-- form, as wide as the web client's login form while the page is signed out -->
+<div class="stolon-shell-form{{FORM}}">
+<!-- gate, where the page script asks the viewer to sign in, or a status page's screen -->
+<div class="stolon-user-page-gate stolon-shell-gate"{{GATE_HIDDEN}}>{{GATE}}</div>
 <!-- content -->
 <div class="stolon-shell-content">
 {{CONTENT}}
+</div>
+</div>
 </div>
 </main>
 {{DETAILS}}

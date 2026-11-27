@@ -32,6 +32,7 @@
                 TITLE: encode(options.title || options.server || 'Jellyfin'),
                 FAVICON: '',
                 ICONS: '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-icons-iconfont@6.7.0/dist/material-design-icons.min.css" />',
+                FONTS: '',
                 STYLESHEET: './base/stolon.css',
                 SCRIPT: './base/stolon.js',
                 SERVER: encode(options.server || 'Jellyfin'),
@@ -59,7 +60,8 @@
     }
     // Fills the web client shell template the way HostedPage.RenderShell does, with no web client stylesheets, and answers the
     // shell's calls with a signed in viewer, so the bar, the user menu, and the drawer fill. It shows in a frame of a fixed height.
-    // Options: content (the template element), frame (the iframe), server, mark, markIcon.
+    // Options: content (the template element), frame (the iframe), server, mark, markIcon, signedOut (the signed out frame, with
+    // no stored sign-in), gate (a status screen's markup, as StatusPage.ServeWebClient places it), logo (the bar's logo address).
     function webClientShell(options) {
         var encode = function (value) { return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); };
         var answers = {
@@ -69,18 +71,19 @@
             'UserViews?userId=u1': { Items: [{ Id: 'm', Name: 'Movies', CollectionType: 'movies' }, { Id: 't', Name: 'Shows', CollectionType: 'tvshows' }, { Id: 'a', Name: 'Music', CollectionType: 'music' }, { Id: 'b', Name: 'Books', CollectionType: 'books' }] },
             'QuickConnect/Enabled': true
         };
+        var signedOut = !!(options.signedOut || options.gate);
         // The frame's own fetch and storage answer for a server, so the preview writes nothing to the site's storage.
         var stub = '<script>(function () { var answers = ' + JSON.stringify(answers) + ';'
             + 'window.fetch = function (url) { var key = String(url); var found = Object.prototype.hasOwnProperty.call(answers, key);'
             + 'return Promise.resolve({ ok: found, status: found ? 200 : 404, json: function () { return Promise.resolve(found ? answers[key] : null); } }); };'
             + 'var read = Storage.prototype.getItem; Storage.prototype.getItem = function (key) {'
-            + 'return key === "jellyfin_credentials" ? JSON.stringify({ Servers: [{ Id: "preview", AccessToken: "' + 'a'.repeat(32) + '", UserId: "u1" }] }) : read.call(this, key); }; })();<\/script>';
+            + 'return key === "jellyfin_credentials" ? ' + (options.signedOut ? '"{}"' : 'JSON.stringify({ Servers: [{ Id: "preview", AccessToken: "' + 'a'.repeat(32) + '", UserId: "u1" }] })') + ' : read.call(this, key); }; })();<\/script>';
         return fetch('./base/webclient.html').then(function (r) { return r.text(); }).then(function (template) {
             var values = {
                 LANGUAGE: 'en-us',
                 ROOT: './',
                 SERVER_ID: 'preview',
-                ACCESS: 'user',
+                ACCESS: signedOut ? 'anyone' : 'user',
                 ACCESS_CHECK: '',
                 TITLE: encode(options.mark || 'Jellyfin'),
                 FAVICON: '',
@@ -90,12 +93,18 @@
                 STYLESHEET: './base/stolon.css',
                 SCRIPT: './base/stolon.js',
                 SERVER: encode(options.server || 'Jellyfin'),
-                LOGO: '',
+                LOGO: options.logo ? '<img src="' + encode(options.logo) + '" alt="" />' : '',
+                FRAME: signedOut ? ' stolon-shell-signed-out' : '',
+                SESSION: options.gate ? 'follow' : '',
+                COLUMN: signedOut ? ' standalonePage padded-left padded-right padded-bottom-page' : '',
+                FORM: signedOut ? ' readOnlyContent margin-auto-x' : '',
+                GATE_HIDDEN: options.gate ? '' : ' hidden',
+                GATE: options.gate || '',
                 MARK: encode(options.mark || ''),
                 MARK_ICON: encode(options.markIcon || ''),
                 DETAILS: '',
                 OPTIONS: '',
-                CONTENT: options.content.innerHTML
+                CONTENT: options.gate ? '' : options.content.innerHTML
             };
             var html = template.replace(/\{\{(\w+)\}\}/g, function (all, key) { return key in values ? values[key] : all; }).replace('<head>', '<head>' + stub);
             options.frame.srcdoc = html;

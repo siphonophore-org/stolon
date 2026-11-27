@@ -1,12 +1,13 @@
 # Status Page
 
-A standalone, themed card page that the C# `StatusPage.Render` renders. It has a logo, a heading, a message, an optional spinner, an optional button, and an optional raw content slot. It needs none of the dashboard assets and is not part of the CSS and JS bundle.
+A standalone, themed card page that the C# `StatusPage.Render` renders. It has a logo, a heading, a message, an optional spinner, an optional button, and an optional raw content slot. It needs none of the dashboard assets and is not part of the CSS and JS bundle. `StatusPage.ServeWebClient` draws the same screens in the web client's own look instead.
 
 ## Decision
 
 | When | Use |
 | :--- | :--- |
 | Served pages such as a sign in prompt or a loading page | Status Page. |
+| The same screens in the web client's look, beside other web client pages | `StatusPage.ServeWebClient`, below |
 | Anything inside a config page | Not the Status Page. It is a whole HTML page. |
 
 ## Usage
@@ -29,6 +30,35 @@ The template is `src/templates/status.html`, embedded as `<RootNamespace>.Templa
 * `{{CONTENT}}`: raw HTML that is not encoded. Pass only markup the plugin owns.
 
 Classes, all defined in the template's own `<style>` block: `stolon-status-page-card`, `stolon-logo`, `stolon-spinner`, `stolon-btn`, `stolon-fields`, `stolon-hint`, `stolon-field-pair`, `stolon-submit`, `stolon-note`, and `stolon-hidden`.
+
+## In the Web Client Shell
+
+`StatusPage.ServeWebClient` serves loading, sign in required, not authorized, or not found in the [Web Client Shell](web-client-shell.md). The page starts signed out, as the web client's login page. When this browser has a sign-in the server still knows, the page script moves it into the signed in shell, with the viewer's libraries and user menu.
+
+```csharp
+[HttpGet("/pages/{slug}")]
+[AllowAnonymous]
+public IActionResult Page(string slug) => Exists(slug)
+    ? StatusPage.ServeWebClient(this, "myplugin", StatusPageScreen.Loading, content: LoaderScript(slug))
+    : StatusPage.ServeWebClient(this, "myplugin", StatusPageScreen.NotFound);
+```
+
+| Screen | Look | Button | Status code |
+| :--- | :--- | :--- | :--- |
+| `Loading` | The web client's spinner alone in the middle, or over the message when there is one | None | 200 |
+| `SignIn` | "Please sign in" and a sentence | Sign in, to the web client | 401 |
+| `Unauthorized` | "You can't open this page" and Jellyfin's unauthorized sentence | Home | 403 |
+| `NotFound` | "Page not found" and Jellyfin's not found sentence | Home | 404 |
+
+* Each screen is the markup of the [Page Screens](page-screens.md) in the web client frame: `stolon-screen stolon-screen-web`, a `sectionTitle` heading, a `secondaryText` sentence, and a `raised block emby-button button-submit` button. The texts follow the request's language.
+* The screen sits in the shell's gate. A script in `content` that imports the bundle can replace it with `showScreen`, such as `showScreen(createUnauthorized())` once it knows.
+* The other overload takes the plugin's own heading, message, button, spinner, content, and status code.
+
+<iframe class="stolon-preview" src="../../../assets/previews/status-page-web-client.html" title="Status Page in the web client shell example" loading="lazy"></iframe>
+
+```html
+--8<-- "status-page-web-client.html"
+```
 
 ## States and Modifiers
 

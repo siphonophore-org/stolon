@@ -62,7 +62,7 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `HostedPage` | Serves a page at a root path of the server, in the user page frame or the web client shell, for anyone, signed in users, or administrators. | [Pages and Templates](pages-and-templates.md#hostedpage) |
 | `HostedPageAccess` | Who may open a hosted page. | [Pages and Templates](pages-and-templates.md#hostedpageaccess) |
 | `HostedPageContent` | What a hosted page serves, a template or an embedded fragment. | [Pages and Templates](pages-and-templates.md#hostedpagecontent) |
-| `HostedPageFrame` | The frame a hosted page is drawn in, the user page or the web client shell. | [Pages and Templates](pages-and-templates.md#hostedpageframe) |
+| `HostedPageFrame` | The frame a hosted page is drawn in, the user page, the web client shell, or the shell signed out. | [Pages and Templates](pages-and-templates.md#hostedpageframe) |
 | `HttpResult` | The status and body that `StolonHttp` returns. | [HTTP and Resilience](http-and-resilience.md#httpresult) |
 | `HttpRetry` | Names the statuses worth asking again and reads Retry-After. | [HTTP and Resilience](http-and-resilience.md#httpretry) |
 | `INotifyHeldStore` | The plugin's store for Jellyfin messages that wait for a device. | [Notifications](notifications.md#inotifyheldstore) |
@@ -104,7 +104,8 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `SpeedBucket` | A bytes per second rate that several streams share. | [Streams and Throttling](streams-and-throttling.md#speedbucket) |
 | `SsrfGuard` | Refuses private, loopback, link local, and other unsafe targets. | [HTTP and Resilience](http-and-resilience.md#ssrfguard) |
 | `StableSecretProtection` | Builds the provider and protector with launch-independent keys. | [Security and Secrets](security-and-secrets.md#stablesecretprotection) |
-| `StatusPage` | Renders the themed standalone status card. | [Pages and Templates](pages-and-templates.md#statuspage) |
+| `StatusPage` | Renders the themed standalone status card, or serves its screens in the web client shell. | [Pages and Templates](pages-and-templates.md#statuspage) |
+| `StatusPageScreen` | A screen of the web client status page. | [Pages and Templates](pages-and-templates.md#statuspagescreen) |
 | `StreamLimits` | Reads a stream into memory with a size limit. | [Streams and Throttling](streams-and-throttling.md#streamlimits) |
 | `StreamUtilities` | Copies a stream, alone or under a shared speed limit. | [Streams and Throttling](streams-and-throttling.md#streamutilities) |
 | `StringNormalizationUtility` | Puts a list of strings in a canonical form. | [Text and Formatting](text-and-formatting.md#stringnormalizationutility) |
@@ -117,6 +118,7 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `UtcTime` | Formats and parses stored times as UTC. | [Text and Formatting](text-and-formatting.md#utctime) |
 | `WebClientApp` | The manifest and service worker that install a web client shell page as an app. | [Pages and Templates](pages-and-templates.md#webclientapp) |
 | `WebClientAppIcon` | One icon of a web app manifest. | [Pages and Templates](pages-and-templates.md#webclientappicon) |
+| `WebClientContentStyle` | The web client's look for author content in a frame. | [Pages and Templates](pages-and-templates.md#webclientcontentstyle) |
 | `WebClientCheck` | Warns at startup about classes the web client lacks, and about a changed web client. | [Pages and Templates](pages-and-templates.md#webclientcheck) |
 | `WebClientDetailsTemplate` | The web client's details page template, with Stolon's copy when the web client has none. | [Pages and Templates](pages-and-templates.md#webclientdetailstemplate) |
 | `WebClientJson` | JSON options that read what the web client posts, as Jellyfin does. | [Data and Storage](data-and-storage.md#webclientjson) |

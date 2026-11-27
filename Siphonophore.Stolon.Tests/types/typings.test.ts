@@ -265,6 +265,15 @@ var markup: string = B.webCssUrl('a.jpg') + B.WEB_SPINNER + B.webEmptyState('Not
     + B.webDetailsGroupItem('Genres', B.webPersonLinks([{ href: '#', name: 'A' }]), true) + B.webExternalLinks([{ href: '#', text: 'IMDb' }]);
 var adopted: boolean = B.adoptDetailsTemplate(view);
 B.webFillDetailSection(view, 'cast', 'Cast', markup);
+var placement: B.WebOverlayPlacement = 'fab';
+var moreMarkup: string = B.webOverlayButton(webButton, placement) + B.webMuiIcon('<path d="M0 0"></path>', 'MuiSvgIcon-root') + B.webStatusTag('Open')
+    + B.webDetailStatus('schedule', 'Requested') + B.webListLinks([{ href: '#', name: 'Drama', key: 'g' }])
+    + B.webNoteRow({ title: 'No sound', notes: [{ by: 'Ana', text: 'Still' }] }) + B.webNoticeBlock('Report', 'Say what is wrong.')
+    + B.webLimitsBox('Limits', [{ label: 'Movies', amount: '2 left', percent: 60 }]);
+// @ts-expect-error A note row needs its title.
+B.webNoteRow({ secondary: 'Today' });
+// @ts-expect-error A placement is corner, hover, or fab.
+B.webOverlayButton(webButton, 'middle');
 var toaster: B.WebToasterHandle = B.createWebToaster(view);
 // @ts-expect-error A card needs its title.
 B.webCard({ image: 'a.jpg' });

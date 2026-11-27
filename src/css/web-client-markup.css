@@ -153,3 +153,59 @@
     .stolon-web-skeleton-bar,
     .stolon-web-appear { animation: none; }
 }
+
+/* Where an item stands among the details page's buttons, the detail button's icon as plain text, never greyed out as a disabled button */
+/* Example: <span class="detailButton stolon-web-detail-status" role="img" aria-label="Requested"><div class="detailButton-content"><span class="material-icons detailButton-icon schedule"></span></div></span> */
+.stolon-web-detail-status { cursor: default; }
+
+/* A row in the web client's list look that reads as text: its title, a second line, an aside at its end, then who it is from and its notes across it */
+/* Example: <div class="listItem listItem-border stolon-web-note-row"><div class="listItem-content"><div class="listItemBody stolon-web-note-body"><h3 class="stolon-web-note-title">No sound</h3></div></div><div class="stolon-web-notes"><div class="stolon-web-note"><div class="stolon-web-note-by">Ana</div><div class="stolon-web-note-text">From the start.</div></div></div></div> */
+.stolon-web-note-row { flex-direction: column; align-items: stretch; cursor: default; }
+.stolon-web-note-row:hover,
+.stolon-web-note-row:focus { background: transparent; }
+.stolon-web-note-row > .listItem-content { gap: var(--stolon-gap-narrow); align-items: flex-start; }
+.stolon-web-note-body { padding: 0.85em 0 0.85em 1em; }
+.stolon-web-note-title { margin: 0 0 0.15em; font-size: 1.15em; font-weight: 500; }
+.stolon-web-note-aside { padding: 0.85em 1em 0 0; }
+.stolon-web-note-aside .mediaInfoItem { margin: 0; }
+.stolon-web-notes { box-sizing: border-box; width: 100%; padding: 0 1em 1em; }
+.stolon-web-note-from { margin-bottom: calc(var(--stolon-shell-unit) / 2); }
+.stolon-web-note { display: flex; flex-direction: column; gap: 0.15em; margin-top: calc(var(--stolon-shell-unit) * 1.5); }
+.stolon-web-note-by { font-size: 85%; }
+.stolon-web-note-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* A settings page's group heading over a form, with its description under it */
+/* Example: <div class="verticalSection stolon-web-notice"><h2 class="sectionTitle">Report a problem</h2><div class="fieldDescription">Say what is wrong.</div></div> */
+.stolon-web-notice { margin: 0 0 var(--stolon-gap-wide); }
+.stolon-web-notice > .sectionTitle { display: block; margin: 0 0 calc(var(--stolon-shell-unit) / 2); }
+.stolon-web-notice > .fieldDescription { margin: 0; padding: 0; }
+
+/* A box of limits, each a line of what it is and what is left over a thin bar of how much is used, green, orange from 80 percent, and red from 90 */
+/* Example: <div class="paperList stolon-web-limits"><div class="stolon-web-limit"><div class="stolon-web-limit-head"><span>Movies</span><span>2 of 5 left</span></div><span class="stolon-web-limit-bar stolon-web-limit-success" role="progressbar"><span class="stolon-web-limit-fill"></span></span></div></div> */
+.stolon-web-limits { padding: 0.5em 1em; }
+.stolon-web-limit { padding: 0.5em 0; }
+.stolon-web-limit-head { display: flex; flex-wrap: wrap; column-gap: var(--stolon-shell-unit); justify-content: space-between; margin-bottom: calc(var(--stolon-shell-unit) * 0.75); }
+.stolon-web-limit-bar {
+    --stolon-web-limit-color: var(--stolon-green);
+    position: relative;
+    z-index: 0;
+    display: block;
+    height: calc(var(--stolon-shell-unit) / 2);
+    overflow: hidden;
+    background-color: var(--stolon-wash-strong);
+}
+.stolon-web-limit-warning { --stolon-web-limit-color: var(--stolon-orange); }
+.stolon-web-limit-error { --stolon-web-limit-color: var(--stolon-red); }
+.stolon-web-limit-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--stolon-web-limit-color);
+    transform-origin: left;
+    transition: transform 0.4s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+    .stolon-web-limit-fill { transition: none; }
+}
