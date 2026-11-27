@@ -1,9 +1,23 @@
 <!-- title: Save Bar -->
 <div id="mount" style="display: grid; gap: 24px;"></div>
+<h3 class="stolon-subsection-title">One bar per section</h3>
+<div id="sections"></div>
 <script type="module">
 const base = await window.__baseReady;
 const mount = document.getElementById('mount');
 ['pending', 'saving', 'saved', 'failed'].forEach((state) => {
     mount.appendChild(base.createSaveBar({ state, savedMs: 3600000 }).element);
+});
+const bars = base.createSaveBars();
+const host = document.getElementById('sections');
+[
+    { title: 'Proxy', icon: 'swap_horiz', field: base.createInputField({ label: 'Address', value: 'proxy.example', help: 'Edit it to mark this section unsaved.' }) },
+    { title: 'DDNS', icon: 'public', field: base.createCheckboxField({ label: 'Enabled', help: 'Each section saves on its own.', checked: true }), line: 'Saved, the next update runs in 5 minutes.' }
+].forEach((s) => {
+    const content = document.createElement('div');
+    content.appendChild(s.field.element);
+    const section = base.createCollapsibleSection({ title: s.title, icon: s.icon, content: content });
+    host.appendChild(section.element);
+    bars.add(content, { onSave: () => new Promise((done) => setTimeout(() => done(s.line), 600)) });
 });
 </script>

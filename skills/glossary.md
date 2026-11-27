@@ -95,6 +95,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Code block | A monospace code editor textarea, or a read only block for a preview | `stolon-code` | Code editor, pre block |
 | Edit input | A compact input on the surface color, at the field height, that the Combo Box, the Chip Select, and the dialog and sidecar text boxes build with | `stolon-edit-input` | Inline input, small input |
 | Form fields | Jellyfin's own field containers, restyled so every field on a config page or in a dialog shares one surface, border, focus ring, chevron, and left edge, with no kit class | `.pluginConfigurationPage`, `.stolon-dialog` | Form theme, field skin |
+| Field builder | A function that writes one of Jellyfin's own field containers from code, with its label, control, and description, and returns a handle | `createInputField`, `createSelectField`, `createTextareaField`, `createCheckboxField`, `createSecretField` | Field factory, input helper |
 | Field | A compact label over its control | `stolon-field` | Form item, input group |
 | Field row | Several fields side by side on one line | `stolon-field-row` | Form row, inline fields |
 | Indent | A group of sub fields under a toggle, indented with a left rule | `stolon-indent` | Nested group, sub form |
@@ -124,6 +125,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Divider | A horizontal rule with an optional label in the middle | `createDivider` | Separator, hr |
 | Sub tabs | Tabs inside a page, with panels | `createSubTabs` | Tab bar, nav |
 | Tool shell | The outer layout of a page of several tools, a sidebar of tools when wide and a title menu of tools when narrow | `createToolShell` | App shell, frame, master page |
+| Tool app | One config page that holds a plugin's tools in a Tool Shell and swaps them in place | `createToolApp` | Host page, router |
+| Hidden tool | A tool of a Tool App left out of the sidebar while its `visibleWhen` is false for the plugin's configuration | `visibleWhen`, `applyConfig`, `refreshToolConfig` | Disabled tool, tool switch, tool flag |
 | Title menu | The heading of a narrow Tool Shell as a menu button that lists every tool | `stolon-tool-shell-switcher` | Back link, hamburger |
 | Banner | A callout with a close button | `createBanner` | Alert, notice |
 | Toast | A short message that appears for a moment and goes away | `createToaster` | Snackbar, notification |
@@ -208,6 +211,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Status line | A line of an icon and a sentence in its state's color, on the message core | `stolon-status-text` | Status label, message bar |
 | Status text | The component that writes a status line into an element after a save or an error, colored by class. The shared bag's `setStatus` calls it | `setStatus`, `status-text.ts` | Status message, flash text |
 | Save bar | A Save button with a status line above it | `createSaveBar` | Action bar, footer |
+| Save bars | One Save Bar per section of a page, each saving on its own, under one unsaved guard | `createSaveBars` | Section savers, bar registry |
 | Confirm dialog | A dialog that asks before an action, with a button that repeats the verb | `confirmDialog` | Alert, yes no dialog |
 | Typed confirm | A Confirm dialog that enables its button only once the reader types the asked text | `typeToConfirm`, `typedMatches` | Type to confirm |
 | Prompt sidecar | A small form in a sidecar that resolves to its values, or null when cancelled | `promptSidecar` | Prompt dialog, input dialog |
@@ -315,6 +319,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Held message | A Jellyfin message kept until one of its recipient's devices is online | `NotifyHeldMessage`, `INotifyHeldStore` | Queued message, pending message |
 | Notify preview | What a destination would get, built by the code that sends it, and drawn on a page | `NotifyPreview`, `createNotifyPreview` | Mockup, sample |
 | Web push | A browser notification sent through the browser's push service, by RFC 8030, 8291, and 8292 | `WebPushEncryption`, `subscribeWebPush` | Push notification, browser alert |
+| Web push toggle | A status line of where a browser stands with web push and a button that turns it on or off | `createWebPushToggle` | Push switch, notification button |
 | VAPID keys | The server's key pair that signs every web push | `WebPushKeys` | Push keys, server keys |
 | Subscription | One browser signed up for a user's web push | `WebPushSubscription`, `IWebPushStore` | Registration, device token |
 | Worker script | The service worker script that shows a web push | `WebPushWorker` | Push handler |

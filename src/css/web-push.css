@@ -1,0 +1,12 @@
+/* A web push status line with the button that turns notifications on or off under it */
+/* Example: <div class="stolon-web-push"><div class="stolon-status-text stolon-icon-text stolon-info" role="status"></div><button class="raised stolon-button stolon-secondary">Turn on notifications</button></div> */
+.stolon-web-push {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--stolon-gap-narrow);
+}
+.stolon-web-push[hidden],
+.stolon-web-push > [hidden] { display: none; }
+.stolon-web-push > .stolon-status-text { margin-top: 0; }
+.stolon-web-push > .stolon-button { margin: 0 !important; }

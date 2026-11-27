@@ -9,6 +9,7 @@ One config page that holds every tool of a plugin in a [Tool Shell](tool-shell.m
 | A plugin with more than one page | Tool App, with a dashboard first |
 | A plugin with one page | [Config Page](config-page.md) alone |
 | Sections inside one tool | [Sub Tabs](sub-tabs.md) or [Collapsible Section](collapsible-section.md) inside the tool's page |
+| A tool that a setting turns on and off | `visibleWhen` on the tool, with `pluginId` |
 
 ## Usage
 
@@ -40,6 +41,28 @@ openTool(view, 'vpn', 'peers');       // open another tool, such as from a dashb
 refreshTools(view);                   // read the tool list again, such as after a setting hides a tool
 ```
 
+A tool that shows only while a setting is on names it with `visibleWhen`. The app reads the plugin's configuration through `ApiClient` with `pluginId`, or through `loadConfig`.
+
+```js
+createToolApp(view, {
+    storageKey: 'myplugin',
+    pluginId: 'a1b2c3d4-0000-0000-0000-000000000000',
+    tools: [
+        { key: 'dashboard', name: 'Dashboard', icon: 'dashboard', page: 'myplugin_dashboard' },
+        { key: 'vpn', name: 'VPN', icon: 'vpn_lock', page: 'myplugin_vpn', visibleWhen: function (config) { return config.Vpn.Enabled; } },
+        { key: 'settings', name: 'Settings', icon: 'settings', page: 'myplugin_settings' }
+    ]
+});
+```
+
+After a save, a tool tells the app, so the sidebar follows at once.
+
+```js
+import { refreshToolConfig } from './configurationpage?name=myplugin_stolon.js';
+
+shared.saveConfig(config).then(function () { refreshToolConfig(view, config); });
+```
+
 ## States and Modifiers
 
 * The first tool opens unless the address names one as `tool=key`, such as `#/configurationpage?name=myplugin&tool=vpn`. The open tool is written into the address in place, so a reload opens it again.
@@ -48,6 +71,9 @@ refreshTools(view);                   // read the tool list again, such as after
 * The sidebar's top row is the fold button with the plugin's `name` beside it. It folds the sidebar to its icons, and the name hides while folded. The choice is kept per browser under `storageKey`.
 * A tool still loading is shown only once it is ready, and the last tool chosen wins.
 * A tool that leaves the list while it is on screen hands over to the first tool.
+* A tool with `visibleWhen` shows while it returns true for the configuration. One that throws shows its tool. The answers are kept per browser under `storageKey`, so the sidebar is drawn right before the configuration loads, and a tool with no answer yet shows.
+* The configuration is read once the app is built, each time the host page shows, and each time another tool opens, so a tool turned on from another browser joins without a reload. A later read wins over a slow one.
+* `refreshToolConfig(view, config)` applies a saved configuration, and `refreshToolConfig(view)` reads it again. The handle's `applyConfig(config)` and `reloadConfig()` do the same from the host page, and each tells whether the sidebar changed.
 
 ## Gotchas
 
@@ -82,6 +108,12 @@ The event a tool's view sends to open another tool. detail is { key, param }.
 
 The attribute that carries the param show was given, set on the tool's view before it shows.
 
+### `TOOL_CONFIG_EVENT`
+
+<code>var TOOL_CONFIG_EVENT: string</code>
+
+The event a tool's view sends after the plugin's configuration changed. detail is the configuration, or null to read it again.
+
 ### `setToolTitle`
 
 <code>function setToolTitle(element: HTMLElement, text?: string): void</code>
@@ -100,6 +132,12 @@ Tells the tool app around element to read its list of tools again, such as after
 
 Opens another tool of the tool app around element, such as from a dashboard card.
 
+### `refreshToolConfig`
+
+<code>function refreshToolConfig(element: HTMLElement, config?: unknown): void</code>
+
+Tells the tool app around element that the plugin's configuration changed, such as after a save, so the tools that show for it join or leave the sidebar.
+
 ### `createToolApp`
 
 <code>function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolAppHandle</code>
@@ -115,10 +153,12 @@ One config page that holds a plugin's tools in a tool shell and swaps them in pl
 | `show` | <code>(key: string, param?: string): Promise&lt;HTMLElement &#124; null&gt;</code> |
 | `getCurrent` | <code>(): string &#124; null</code> |
 | `refreshTools` | <code>(): void</code> |
+| `applyConfig` | <code>(config: unknown): boolean</code> |
+| `reloadConfig` | <code>(): Promise&lt;boolean&gt;</code> |
 | `destroy` | <code>(): void</code> |
 
 | Type | What it is |
 | :--- | :--- |
-| `ToolAppTool` | One tool in a tool app. page is the registered config page whose markup and controller the tool shows. |
+| `ToolAppTool` | One tool in a tool app. page is the registered config page whose markup and controller the tool shows. visibleWhen says from the plugin's configuration whether the tool shows. |
 
 <!-- reference:end -->
