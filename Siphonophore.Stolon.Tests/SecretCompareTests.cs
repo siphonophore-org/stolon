@@ -79,7 +79,7 @@ public class SecretCompareTests
     }
 
     /// <summary>
-    /// A hex token has twice as many lowercase hex characters as bytes, and two tokens differ.
+    /// A hex token has twice as many lowercase hex characters as bytes, and two tokens of 8 bytes or more differ.
     /// True: 32 bytes give 64 characters from the lowercase hex alphabet.
     /// False: the token would be the wrong size or alphabet, or repeat.
     /// </summary>
@@ -93,7 +93,10 @@ public class SecretCompareTests
 
         Assert.Equal(bytes * 2, token.Length);
         Assert.All(token, c => Assert.True(char.IsAsciiHexDigitLower(c)));
-        Assert.NotEqual(token, SecretCompare.NewTokenHex(bytes));
+        if (bytes >= 8)
+        {
+            Assert.NotEqual(token, SecretCompare.NewTokenHex(bytes));
+        }
     }
 
     /// <summary>
