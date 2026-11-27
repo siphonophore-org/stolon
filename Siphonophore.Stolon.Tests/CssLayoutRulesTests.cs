@@ -85,6 +85,20 @@ public class CssLayoutRulesTests
     }
 
     /// <summary>
+    /// A dialog button keeps its label on one line, and its row wraps the buttons when they do not fit.
+    /// True: Keep editing beside Discard stays on one line in a narrow dialog, with the buttons stacked.
+    /// False: the label would break onto two lines inside a squeezed button.
+    /// </summary>
+    [Fact]
+    public void DialogButtons_WrapInsteadOfTheirLabels()
+    {
+        var button = RuleFor("dialog.css", ".stolon-modal-button");
+        Assert.Equal("nowrap", Value(button, "white-space"));
+        Assert.Equal("max-content", Value(button, "min-width"));
+        Assert.Equal("wrap", Value(RuleFor("dialog.css", ".stolon-modal-button-row"), "flex-wrap"));
+    }
+
+    /// <summary>
     /// A badge is capped at its container's width and ends in an ellipsis.
     /// True: a badge never runs past the edge of a narrow cell or card.
     /// False: a long label would spill out of its frame on a phone.

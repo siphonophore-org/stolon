@@ -35,8 +35,7 @@
 .stolon-dialog-content.stolon-full { max-width: 560px; }
 
 @media (max-width: 600px) {
-    /* Buttons wrap on a narrow screen, with a destructive one last rather than alone on the first line. */
-    .stolon-modal-button-row { flex-wrap: wrap; row-gap: var(--stolon-gap-narrow); }
+    /* On a narrow screen a destructive button goes last when the buttons wrap, rather than alone on the first line. */
     .stolon-modal-button-row .stolon-modal-button.stolon-button.stolon-destructive { order: 1; }
 }
 
@@ -86,12 +85,14 @@
 
 /* A dialog's row of equal width buttons */
 /* Example: <div class="stolon-modal-button-row"><button class="stolon-modal-button"></button></div> */
-.stolon-modal-button-row { display: flex; gap: var(--stolon-gap-narrow); margin-top: calc(var(--stolon-gap-wide) * 1.5); }
+.stolon-modal-button-row { display: flex; flex-wrap: wrap; gap: var(--stolon-gap-narrow); margin-top: calc(var(--stolon-gap-wide) * 1.5); }
 
-/* A dialog or sidecar button */
+/* A dialog or sidecar button. Its label stays on one line, and a row too narrow for every label wraps its buttons instead. */
 /* Example: <button class="stolon-modal-button raised">Save</button> */
 .stolon-modal-button {
     flex: 1;
+    min-width: max-content;
+    white-space: nowrap;
     display: inline-flex;
     align-items: center;
     justify-content: center;
