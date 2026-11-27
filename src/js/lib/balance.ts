@@ -39,8 +39,8 @@ export function rowSizes(count: number, columns: number): number[] {
 }
 
 /**
- * Picks one column count for a group of even tiles. It takes as many columns as fit, or one fewer when that fills
- * every row, then fewer while the last row would hold a single tile.
+ * Picks one column count for a group of even tiles. It takes the most columns that fit and fill every row, as long as
+ * that is at least half of what fits. Otherwise it takes as many as fit, fewer while the last row would hold a single tile.
  *
  * @param count the number of tiles
  * @param columns the most tiles a row fits
@@ -48,7 +48,9 @@ export function rowSizes(count: number, columns: number): number[] {
  */
 export function evenColumns(count: number, columns: number): number {
     var c = Math.max(1, Math.min(Math.floor(columns), count));
-    if (count % c !== 0 && c - 1 >= 2 && count % (c - 1) === 0) return c - 1;
+    for (var d = c; d >= 2 && d * 2 >= c; d--) {
+        if (count % d === 0) return d;
+    }
     while (c > 2 && count % c === 1) c -= 1;
     return c;
 }

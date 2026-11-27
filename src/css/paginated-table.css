@@ -18,6 +18,12 @@
 /* Example: <span class="stolon-table-header-spacer"></span> */
 .stolon-table-header-spacer { flex: 1; }
 
+/* On a narrow screen the bulk actions take a line of their own under the select all, the count, and the reload button, so the reload button never wraps alone */
+@media (max-width: 800px) {
+    .stolon-table-selection-header > .stolon-table-bulk-actions { order: 2; flex: 1 0 100%; }
+    .stolon-table-selection-header > .stolon-table-bulk-actions:empty { display: none; }
+}
+
 /* The reload row button, whose icon turns while the table reloads */
 /* Example: <button class="stolon-row-btn stolon-table-reload-btn stolon-spinning" title="Reload"><span class="material-icons" aria-hidden="true">refresh</span></button> */
 .stolon-table-reload-btn.stolon-spinning .material-icons { animation: stolon-spin 0.8s linear infinite; }

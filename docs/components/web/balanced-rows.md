@@ -28,7 +28,7 @@ balance.destroy();
 * A group's CSS may set `--stolon-balance-min` and `--stolon-balance-max` instead, which win over the options, such as `style="--stolon-balance-max: 4"` in page markup.
 * The rows stay within one tile of each other. When a row would hold one tile, the group uses fewer, fuller rows instead.
 * Below two columns, as on a phone, each tile takes its own row.
-* `even`, or `stolon-even` on the group, gives every tile in a full row one width. The group takes as many columns as fit, or one fewer when that fills every row, and fewer while the last row would hold a single tile. A shorter last row stretches its tiles to fill the row, so no slot is left empty. Use it when a page shows many tiles, such as a dashboard of count cards.
+* `even`, or `stolon-even` on the group, gives every tile in a full row one width. The group takes the most columns that fit and fill every row, down to half of what fits, such as three and three for six tiles where five fit. Otherwise it takes as many as fit, fewer while the last row would hold a single tile. A shorter last row stretches its tiles to fill the row, so no slot is left empty. Use it when a page shows many tiles, such as a dashboard of count cards.
 * It lays out again when the group resizes or its tiles change. `update()` lays it out on demand. `onLayout(container)` runs after each layout, as count cards use it to fit their counts.
 
 ## Gotchas

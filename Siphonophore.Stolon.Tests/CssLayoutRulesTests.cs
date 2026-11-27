@@ -85,6 +85,19 @@ public class CssLayoutRulesTests
     }
 
     /// <summary>
+    /// On a narrow screen a table's bulk actions move to a line of their own after the reload button.
+    /// True: select all, the count, and reload share the first line, and the actions sit under them.
+    /// False: the reload button would wrap alone onto a second line.
+    /// </summary>
+    [Fact]
+    public void TableBulkActions_TakeTheirOwnLineOnANarrowScreen()
+    {
+        var css = CssRules.StripComments(Sources["paginated-table.css"]);
+        Assert.Contains("@media (max-width: 800px)", css, StringComparison.Ordinal);
+        Assert.Contains(".stolon-table-selection-header > .stolon-table-bulk-actions { order: 2; flex: 1 0 100%; }", css, StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// A dialog button keeps its label on one line, and its row wraps the buttons when they do not fit.
     /// True: Keep editing beside Discard stays on one line in a narrow dialog, with the buttons stacked.
     /// False: the label would break onto two lines inside a squeezed button.

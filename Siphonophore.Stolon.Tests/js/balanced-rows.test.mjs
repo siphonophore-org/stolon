@@ -61,9 +61,13 @@ test('balanceRows leaves out hidden children and the ones skip names', function 
     assert.equal(empty.style['--stolon-balance-span'], undefined);
 });
 
-test('even columns take as many as fit, one fewer when that fills every row, and fewer while the last row would hold one tile', function () {
+test('even columns take the most that fill every row, down to half of what fits, else as many as fit without a lone last tile', function () {
     assert.equal(evenColumns(10, 6), 5);
     assert.equal(evenColumns(6, 4), 3);
+    assert.equal(evenColumns(6, 5), 3);
+    assert.equal(evenColumns(6, 6), 6);
+    assert.equal(evenColumns(8, 5), 4);
+    assert.equal(evenColumns(7, 6), 5);
     assert.equal(evenColumns(5, 3), 3);
     assert.equal(evenColumns(9, 8), 7);
     assert.equal(evenColumns(4, 6), 4);
