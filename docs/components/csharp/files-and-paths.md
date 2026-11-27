@@ -1,6 +1,6 @@
 # Files and Paths
 
-Safe file names, atomic writes, and folder containment checks.
+Safe file names, atomic and owner only writes, folder probes, free space, and folder containment checks.
 
 ## FileNameSanitizer
 
@@ -41,9 +41,52 @@ AtomicFile.WriteAllBytes(keyPath, key, ownerOnly: true);
 * `WriteOnce` creates the file only when it is absent and returns whether it did. Several writers in one process racing on one path give exactly one `true`. A second process racing on the same path can still replace the file on Unix. It takes `ownerOnly` too.
 * Replacing a file keeps its Unix permissions unless `ownerOnly` is set. A symbolic link at the path is replaced by a regular file and its target is left alone.
 * A name whose temp file would be too long throws `ArgumentException` before anything is written. That is a file name over 255 bytes, or a full path over the OS limit.
-* `ownerOnly` makes the temp file readable by its owner alone on Linux and macOS. It does nothing on Windows, where `beforeMove` receives the temp path so you can set access rules.
+* `ownerOnly` creates the temp file private through `OwnerOnly`, mode 600 on Linux and macOS, and on Windows an access list of the server's account, SYSTEM, and Administrators. `beforeMove` receives the temp path so you can set other access rules.
 * `flushToDisk` is on by default, so a power loss cannot leave an empty file.
 * A writer given to `WriteAsync` must not dispose the stream or keep it after it returns.
+
+## OwnerOnly
+
+Keeps a folder private to the account the server runs as. `ProtectFolder` creates the folder, or narrows an existing one, to mode 700 on Linux and macOS, and on Windows to an access list of the server's account, SYSTEM, and Administrators that files created inside inherit.
+
+Use it for a folder of keys or certificates. For a single file, `AtomicFile` with `ownerOnly` or a `ProtectedJsonFileStore` is enough.
+
+```csharp
+OwnerOnly.ProtectFolder(Path.Join(paths.DataPath, "myplugin", "certs"));
+```
+
+**Gotchas**
+
+* Files already in the folder keep their own rights.
+* An I/O or access failure is not caught.
+
+## FolderProbe
+
+Checks whether the server's account can create files in a folder by creating and removing a small file there. `CanWrite` creates a missing folder first.
+
+Use it to check a download or export folder when it is saved, before a long job fails on it.
+
+```csharp
+if (!FolderProbe.CanWrite(config.DownloadPath)) { return BadRequest("The server cannot write to that folder."); }
+```
+
+**Gotchas**
+
+* The probe file is `.stolon-write-<guid>`, opened to delete on close, so nothing is left behind.
+* It never throws. A blank path, a path that is a file, or a folder it cannot create or write gives `false`.
+
+## DiskSpace
+
+Reads the bytes free to the server's account on the volume that holds a path. `TryGetFreeBytes` returns `false` and zero when the space cannot be read.
+
+```csharp
+if (DiskSpace.TryGetFreeBytes(target, out var free) && free < needed) { return Skip("Not enough free space."); }
+```
+
+**Gotchas**
+
+* The path need not exist. On Linux and macOS it is measured at its nearest folder that exists, and on Windows at its drive root.
+* It never throws. Treat an unknown result as room enough or not, as the caller sees fit.
 
 ## PathContainment
 

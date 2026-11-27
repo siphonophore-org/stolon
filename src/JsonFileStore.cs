@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
@@ -22,6 +23,9 @@ public sealed class JsonFileStore<T>
     private readonly string _path;
     private readonly ILogger? _logger;
     private readonly object _lock = new();
+    private readonly bool _ownerOnly;
+    private readonly Func<string, string>? _seal;
+    private readonly Func<string, string>? _open;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="JsonFileStore{T}"/> class.
@@ -29,10 +33,26 @@ public sealed class JsonFileStore<T>
     /// <param name="path">The absolute path of the backing JSON file. Its directory is created on the first save.</param>
     /// <param name="logger">An optional logger. When given, an unreadable file is logged as a warning before a fresh value is returned.</param>
     public JsonFileStore(string path, ILogger? logger = null)
+        : this(path, logger, ownerOnly: false, seal: null, open: null)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="JsonFileStore{T}"/> class that writes an owner only file and turns the JSON text on its way to and from the disk.
+    /// </summary>
+    /// <param name="path">The absolute path of the backing JSON file.</param>
+    /// <param name="logger">An optional logger for an unreadable file.</param>
+    /// <param name="ownerOnly">Whether the file is private to its owner.</param>
+    /// <param name="seal">Turns the JSON text into what is written, or <c>null</c> to write it as it is.</param>
+    /// <param name="open">Turns what was read back into JSON text, or <c>null</c> to read it as it is.</param>
+    internal JsonFileStore(string path, ILogger? logger, bool ownerOnly, Func<string, string>? seal, Func<string, string>? open)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
         _path = path;
         _logger = logger;
+        _ownerOnly = ownerOnly;
+        _seal = seal;
+        _open = open;
     }
 
     /// <summary>
@@ -52,6 +72,11 @@ public sealed class JsonFileStore<T>
                 }
 
                 var json = File.ReadAllText(_path);
+                if (_open is not null)
+                {
+                    json = _open(json);
+                }
+
                 if (string.IsNullOrWhiteSpace(json))
                 {
                     return new T();
@@ -84,8 +109,10 @@ public sealed class JsonFileStore<T>
                 Directory.CreateDirectory(dir);
             }
 
-            var json = JsonSerializer.SerializeToUtf8Bytes(value, _options);
-            AtomicFile.WriteAllBytes(_path, json, logger: _logger);
+            var json = _seal is null
+                ? JsonSerializer.SerializeToUtf8Bytes(value, _options)
+                : Encoding.UTF8.GetBytes(_seal(JsonSerializer.Serialize(value, _options)));
+            AtomicFile.WriteAllBytes(_path, json, ownerOnly: _ownerOnly, logger: _logger);
         }
     }
 

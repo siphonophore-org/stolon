@@ -61,8 +61,8 @@ public static partial class WebClientCheck
     /// <param name="paths">The server's paths, for the web client's folder and the plugin configuration folder.</param>
     /// <param name="logger">The plugin's logger.</param>
     /// <param name="pageName">The page's name for the log, such as <c>request page</c>, and for the file that keeps the build last seen.</param>
-    /// <param name="markup">The plugin's own markup and scripts for the page, whose <c>class="..."</c> attributes are checked, or <c>null</c>.</param>
-    /// <param name="classes">Classes the plugin builds from parts, which reading its markup cannot see, or <c>null</c>.</param>
+    /// <param name="markup">The plugin's own markup and scripts for the page, whose <c>class="..."</c> attributes are checked as <see cref="ClassesToCheck"/> reads them, or <c>null</c>.</param>
+    /// <param name="classes">The web client's classes the plugin builds from parts, which reading its markup cannot see, or <c>null</c>. They are always checked.</param>
     /// <param name="checkDetailsTemplate">Whether the page uses the details page template.</param>
     /// <param name="cancellationToken">Stops the check.</param>
     /// <returns>A task that completes once the check is done.</returns>
@@ -99,6 +99,36 @@ public static partial class WebClientCheck
         used.UnionWith(names);
 
         return used.ToList();
+    }
+
+    /// <summary>
+    /// Lists the classes of some markup to check against the web client: those <see cref="ClassesIn"/> finds, less the page's own.
+    /// A page's own class is one its own <c>&lt;style&gt;</c> blocks style, or one its scripts only look up, such as with <c>querySelector('.myplugin-row')</c>.
+    /// </summary>
+    /// <remarks>
+    /// A class Stolon's shell list or <paramref name="webClientClasses"/> names is always kept, so a web client class the page restyles is still checked.
+    /// Name any other web client class the page restyles or looks up in <paramref name="webClientClasses"/>.
+    /// </remarks>
+    /// <param name="markup">The markup, which may hold styles and scripts.</param>
+    /// <param name="webClientClasses">Classes the plugin knows are the web client's, or <c>null</c>.</param>
+    /// <returns>The classes, each once, sorted.</returns>
+    public static IReadOnlyList<string> ClassesToCheck(string markup, IEnumerable<string>? webClientClasses = null)
+    {
+        ArgumentNullException.ThrowIfNull(markup);
+        var known = new HashSet<string>(ShellClasses, StringComparer.Ordinal);
+        known.UnionWith(webClientClasses ?? []);
+        var own = new HashSet<string>(StringComparer.Ordinal);
+        foreach (Match style in StyleBlock().Matches(markup))
+        {
+            own.UnionWith(CssClass().Matches(style.Groups[1].Value).Select(m => m.Groups[1].Value));
+        }
+
+        foreach (Match lookup in SelectorLookup().Matches(markup))
+        {
+            own.UnionWith(CssClass().Matches(lookup.Groups[2].Value).Select(m => m.Groups[1].Value));
+        }
+
+        return ClassesIn(markup).Where(c => known.Contains(c) || !own.Contains(c)).ToList();
     }
 
     /// <summary>
@@ -215,7 +245,7 @@ public static partial class WebClientCheck
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var used = ShellClasses.Concat(markup is null ? [] : ClassesIn(markup)).Concat(classes ?? []).ToList();
+            var used = ShellClasses.Concat(markup is null ? [] : ClassesToCheck(markup, classes)).Concat(classes ?? []).ToList();
             var missing = MissingClasses(web, used);
             if (missing.Count > 0)
             {
@@ -297,6 +327,13 @@ public static partial class WebClientCheck
 
     [GeneratedRegex(@"\.(-?[A-Za-z_][\w-]*)")]
     private static partial Regex CssClass();
+
+    [GeneratedRegex(@"<style[^>]*>([\s\S]*?)</style>", RegexOptions.IgnoreCase)]
+    private static partial Regex StyleBlock();
+
+    // The selector a script finds elements by, such as querySelectorAll('.row .name') or closest(".row").
+    [GeneratedRegex(@"\b(?:querySelector|querySelectorAll|closest|matches)\(\s*(['""`])([^'""`]*)\1")]
+    private static partial Regex SelectorLookup();
 
     /// <summary>The web client build a plugin last saw.</summary>
     internal sealed class SeenBuild

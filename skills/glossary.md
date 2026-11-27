@@ -293,6 +293,12 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Paged result | A page of items with a total count | `PagedResult<T>` | Page, list result |
 | Schema version | The version a helper stamps into a SQLite file | `DatabaseSchema` | Migration number |
 | Minimum reader | The oldest version that can still read the file | `DatabaseSchema` | Compat version |
+| Server copy | JSON of the configuration kept on the server, the one JSON that writes a secret setting's stored value | `SecretJson.ServerCopyOptions`, `SecretJson.Copy` | Raw copy, internal JSON |
+| Owner only | Private to the account the server runs as, with SYSTEM and Administrators on Windows | `OwnerOnly`, `ownerOnly` | Private mode, locked down |
+| Protected store | A JSON file for one value, encrypted and owner only, for secrets | `ProtectedJsonFileStore` | Vault, secret file |
+| Meter | What a metered stream charges each byte read to, such as a daily allowance | `MeteredReadStream` | Quota, budget |
+| Per run lookup | A lookup's answers kept for each key until a run ends | `PerRunLookup` | Cache, memo |
+| Dot segment | A `.` or `..` step in a URL's path | `SsrfGuard.RefuseDotSegments`, `HasDotSegment` | Traversal sequence, path climb |
 
 ## Notifications
 

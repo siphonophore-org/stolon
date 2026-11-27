@@ -236,6 +236,7 @@
   "Stolon.Song": "Song",
   "Stolon.SparklineSummary": "from {first} to {last}, low {low}, high {high}",
   "Stolon.SsrfBroadcast": "the broadcast address is not allowed",
+  "Stolon.SsrfDotSegment": "a URL with a . or .. path segment is not allowed",
   "Stolon.SsrfEmpty": "the URL is empty",
   "Stolon.SsrfHostPublic": "{0} is a public address, and {1}",
   "Stolon.SsrfHostRefused": "{0} is refused, {1}",

@@ -1239,4 +1239,59 @@ public class SsrfGuardTests
     {
         Assert.Equal(expected, SsrfGuard.IsPrivateOrLoopback(IPAddress.Parse(address)));
     }
+
+    /// <summary>
+    /// With dot segments refused, a . or .. path segment is refused, plainly or percent encoded, and the default guard keeps accepting them.
+    /// True: a caller can stop a typed URL from climbing out of its base path, and no existing caller changes.
+    /// False: a ../ would be folded away and pass, or every guard would start refusing.
+    /// </summary>
+    [Theory]
+    [InlineData("https://example.com/../admin")]
+    [InlineData("https://example.com/a/./b")]
+    [InlineData("https://example.com/a/..")]
+    [InlineData("https://example.com/%2e%2e/admin")]
+    [InlineData("https://example.com/%2E./admin")]
+    [InlineData("https://example.com/a\\..\\b")]
+    public void ValidateUrl_DotSegment_RefusedOnlyWhenAsked(string url)
+    {
+        var strict = new SsrfGuard(allowPrivateNetwork: false, refuseDotSegments: true);
+
+        Assert.True(strict.RefuseDotSegments);
+        Assert.NotNull(strict.ValidateUrl(url));
+        Assert.Null(SsrfGuard.PublicOnly.ValidateUrl(url));
+    }
+
+    /// <summary>
+    /// A dot only in a name, the query, or the fragment is not a dot segment.
+    /// True: a search for a.. or a file named a..b still passes.
+    /// False: ordinary URLs would be refused.
+    /// </summary>
+    [Theory]
+    [InlineData("https://example.com/a..b/c.d")]
+    [InlineData("https://example.com/search?q=../x")]
+    [InlineData("https://example.com/#/../x")]
+    [InlineData("https://example.com")]
+    [InlineData("https://example.com/...")]
+    public void HasDotSegment_OnlyRealSegments(string url)
+    {
+        Assert.False(SsrfGuard.HasDotSegment(url));
+        Assert.Null(new SsrfGuard(refuseDotSegments: true).ValidateUrl(url));
+    }
+
+    /// <summary>
+    /// The async check refuses a dot segment before any lookup.
+    /// True: the name is never resolved for a URL that is refused anyway.
+    /// False: the async path would skip the dot segment check.
+    /// </summary>
+    [Fact]
+    public async Task ValidateUrlAsync_DotSegment_RefusedWithoutLookup()
+    {
+        var lookups = 0;
+        var guard = new SsrfGuard(false, (_, _) => { lookups++; return Task.FromResult(new[] { IPAddress.Parse("93.184.216.34") }); }, refuseDotSegments: true);
+
+        var error = await guard.ValidateUrlAsync("https://example.com/../x");
+
+        Assert.NotNull(error);
+        Assert.Equal(0, lookups);
+    }
 }

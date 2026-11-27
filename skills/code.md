@@ -222,6 +222,8 @@ Several helpers guard security for every plugin. A change to one is a [stop and 
 
 * `SecretProtector` and `StableSecretProtection` keep credentials out of configuration files. Never write a secret in plain text, never return one to the browser except as `SecretProtector.KeptSentinel`, and keep the `enc:v1:` prefix and the key ring location stable, or existing secrets become unreadable.
 * The browser half is `bindSecretField`, `readSecretField`, and `clearSecretField`. They post `SECRET_KEPT` for a field left untouched.
+* `KeptSecretConverter` writes the kept sentinel in every JSON but `SecretJson.ServerCopyOptions`. Never send JSON written with those options to a browser.
+* `OwnerOnly`, `AtomicFile` with `ownerOnly`, and `ProtectedJsonFileStore` keep a secret file private to the server's account on every OS, with SYSTEM and Administrators on Windows.
 * `PathContainment.IsUnderAny` compares whole folder names, so `/media/a` is not under `/media/ab`. Keep it that way.
 * `FileNameSanitizer` replaces the same set of characters on every OS.
 * `PublicPage.ApplyHardeningHeaders` sets `no-referrer`, `no-store`, and `noindex`. A standalone page calls it.

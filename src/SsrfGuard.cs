@@ -38,15 +38,17 @@ public sealed class SsrfGuard
     /// </summary>
     /// <param name="allowPrivateNetwork">Whether loopback, private, carrier grade NAT, and unique local addresses are allowed. Link local, multicast, unspecified, and broadcast addresses are refused either way.</param>
     /// <param name="requireHttpsForPublic">Whether a plain http URL is refused unless every address it reaches is loopback or private, for a caller that sends a key or password. With <paramref name="allowPrivateNetwork"/> off, every plain http URL is refused.</param>
-    public SsrfGuard(bool allowPrivateNetwork = false, bool requireHttpsForPublic = false)
-        : this(allowPrivateNetwork, ResolveAsync, requireHttpsForPublic)
+    /// <param name="refuseDotSegments">Whether <see cref="ValidateUrl"/> and <see cref="ValidateUrlAsync"/> refuse a URL whose path has a <c>.</c> or <c>..</c> segment, written plainly or percent encoded, before the parser folds it away. <c>false</c> by default.</param>
+    public SsrfGuard(bool allowPrivateNetwork = false, bool requireHttpsForPublic = false, bool refuseDotSegments = false)
+        : this(allowPrivateNetwork, ResolveAsync, requireHttpsForPublic, refuseDotSegments)
     {
     }
 
-    internal SsrfGuard(bool allowPrivateNetwork, Func<string, CancellationToken, Task<IPAddress[]>> resolver, bool requireHttpsForPublic = false)
+    internal SsrfGuard(bool allowPrivateNetwork, Func<string, CancellationToken, Task<IPAddress[]>> resolver, bool requireHttpsForPublic = false, bool refuseDotSegments = false)
     {
         AllowPrivateNetwork = allowPrivateNetwork;
         RequireHttpsForPublic = requireHttpsForPublic;
+        RefuseDotSegments = refuseDotSegments;
         _resolver = resolver;
     }
 
@@ -67,6 +69,9 @@ public sealed class SsrfGuard
 
     /// <summary>Gets a value indicating whether a plain http URL may only reach loopback and private network addresses.</summary>
     public bool RequireHttpsForPublic { get; }
+
+    /// <summary>Gets a value indicating whether a URL's text is refused when its path has a <c>.</c> or <c>..</c> segment.</summary>
+    public bool RefuseDotSegments { get; }
 
     /// <summary>Gets the shared client that sends through a guard with the same private network setting. It never follows a redirect.</summary>
     /// <remarks>The client does not use a system proxy, since a proxy would resolve and connect to the target itself.</remarks>
@@ -172,7 +177,51 @@ public sealed class SsrfGuard
             return StolonTranslations.Text("Stolon.SsrfNotAbsolute", "the URL is not a valid absolute URL");
         }
 
+        if (RefuseDotSegments && HasDotSegment(url))
+        {
+            return StolonTranslations.Text("Stolon.SsrfDotSegment", "a URL with a . or .. path segment is not allowed");
+        }
+
         return ValidateUri(uri);
+    }
+
+    /// <summary>
+    /// Checks whether a URL's text has a <c>.</c> or <c>..</c> segment in its path, written plainly or as <c>%2e</c>, with a backslash read as a slash.
+    /// The query and the fragment are not read, and a name such as <c>a..b</c> is an ordinary segment.
+    /// </summary>
+    /// <param name="url">The URL as it was written, before a parser folds its dot segments away.</param>
+    /// <returns><c>true</c> when the path has a dot segment, otherwise <c>false</c>.</returns>
+    public static bool HasDotSegment(string? url)
+    {
+        if (string.IsNullOrEmpty(url))
+        {
+            return false;
+        }
+
+        var text = url.Replace('\\', '/');
+        var end = text.IndexOfAny(['?', '#']);
+        if (end >= 0)
+        {
+            text = text[..end];
+        }
+
+        var scheme = text.IndexOf("://", StringComparison.Ordinal);
+        if (scheme >= 0)
+        {
+            var path = text.IndexOf('/', scheme + 3);
+            text = path < 0 ? string.Empty : text[path..];
+        }
+
+        foreach (var segment in text.Split('/'))
+        {
+            var plain = segment.Replace("%2e", ".", StringComparison.OrdinalIgnoreCase);
+            if (plain is "." or "..")
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>

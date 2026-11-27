@@ -83,6 +83,20 @@ await body.CopyToAsync(file, token).ConfigureAwait(false);
 * It does not own the inner stream and never disposes it. It cannot seek, write, or report a length.
 * A copy that fails has already written the bytes before the limit, so write to a temp file, as `AtomicFile.WriteAsync` does.
 
+## MeteredReadStream
+
+A read through stream that charges every byte read to a meter, such as a daily allowance, and throws an `IOException` once the meter refuses. Seeks pass through, so a response that serves byte ranges is charged only for the bytes it sends.
+
+```csharp
+await using var metered = new MeteredReadStream(File.OpenRead(path), bytes => allowance.TryTake(bytes));
+```
+
+**Gotchas**
+
+* The meter is asked after the read, so the refused read's bytes are already charged.
+* It owns the inner stream and disposes it. It cannot write.
+* A read at the end of the stream charges nothing.
+
 ## ProgressReportingStream
 
 A write through stream that reports the share of the expected bytes written, from 0 to 1, in whole percent steps. Wrap the file a long download writes to, so one transfer moves a task's progress bar.

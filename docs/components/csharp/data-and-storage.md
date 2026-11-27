@@ -84,6 +84,58 @@ var changed = _store.UpdateIf(f => f.Items.RemoveAll(t => t.Expired) > 0);
 * `Save` lets I/O errors propagate.
 * After a corrupt read, `Update` overwrites the damaged file with the mutated fresh value.
 
+## ProtectedJsonFileStore
+
+A `JsonFileStore` for secrets. The whole JSON is encrypted with a `SecretProtector`, and the file is private to the account the server runs as on every OS.
+
+Use it to keep secrets out of the configuration file, such as passwords, private keys, and addresses with tokens in them, while the configuration keeps the rest.
+
+```csharp
+private readonly ProtectedJsonFileStore<MySecrets> _secretsFile = new(Path.Join(paths.PluginConfigurationsPath, "MyPlugin.Secrets.json"), secrets, logger);
+
+_secretsFile.Update(s => s.SmtpPassword = incoming.Smtp.Password);
+var password = _secretsFile.Load().SmtpPassword;
+```
+
+**Gotchas**
+
+* A file of plain JSON reads too, so the store can take over a file written before it. The next save encrypts it.
+* Without a Data Protection provider the JSON is written in plain text, still owner only. Check `SecretProtector.IsAvailable` when that must not happen.
+* A file that cannot be decrypted, such as after the key ring was lost, reads as a fresh value, and the next save replaces it.
+* The lock is per instance, as for `JsonFileStore`.
+
+## PerRunLookup
+
+Remembers what a lookup answered for each key until `Clear`, so a run that asks the same question for every item asks it once. Threads that ask at the same moment share one lookup.
+
+```csharp
+private readonly PerRunLookup<string, BaseItem?> _folders = new(StringComparer.OrdinalIgnoreCase);
+
+var folder = _folders.Get(path, p => _library.FindByPath(p, true));
+// When the run ends:
+_folders.Clear();
+```
+
+**Gotchas**
+
+* Nothing expires. Clear it when a run ends, or it grows with every key asked.
+* A `null` answer is remembered. A lookup that throws is remembered too, and throws again for its key until `Clear`.
+
+## WebClientJson
+
+`WebClientJson.Options` read JSON the web client posts as Jellyfin reads a plugin configuration: Jellyfin's default JSON options, such as a Guid written without dashes, with property names matched in any case.
+
+Use them in a controller that takes a configuration, or part of one, as the web client sends it.
+
+```csharp
+var config = await JsonSerializer.DeserializeAsync<MyConfiguration>(Request.Body, WebClientJson.Options, token).ConfigureAwait(false);
+```
+
+**Gotchas**
+
+* The options are read only. Copy them with `new JsonSerializerOptions(WebClientJson.Options)` to add a converter.
+* They come from `Jellyfin.Extensions`, which `Jellyfin.Model` brings.
+
 ## PagedResult
 
 One page of results with the total count and the page metadata. It serializes in the shape `createPaginatedTable` reads, and the shape the `fetch` of `createDataTable` and `createFilteredList` may return.

@@ -116,6 +116,21 @@ Where the plugin keeps held Jellyfin messages, such as a table in its database. 
 * `Take` must remove what it returns, so two devices that connect at once never show a message twice.
 * A message that cannot be shown is held again through `Hold`.
 
+## JsonNotifyHeldStore
+
+A ready made `INotifyHeldStore` that keeps held messages in a JSON file. It keeps at most `maxPerUser` messages for one user, 50 by default, dropping the oldest, and drops a message older than `maxAge`, 30 days by default.
+
+```csharp
+services.AddSingleton<INotifyHeldStore>(sp => new JsonNotifyHeldStore(
+    Path.Join(sp.GetRequiredService<IApplicationPaths>().PluginConfigurationsPath, "MyPlugin.Held.json")));
+```
+
+**Gotchas**
+
+* `Counts`, `Clear`, `RemoveSubject`, and `RemoveUser` are for the plugin's own pages and cleanup, such as dropping the messages about a request that was removed.
+* `isStillDue` decides whether a held message is still worth showing. Without it every message is.
+* A cap or age of zero or less throws.
+
 ## NotifyHeldWatcher
 
 A hosted service that shows held messages as soon as one of their recipient's devices that can show messages starts a session or reports what it can do. `AddBaseNotifier` registers it.
@@ -157,6 +172,29 @@ One browser that signed up for a user's web push. `TryCreate` checks what a page
 ## IWebPushStore
 
 Where the plugin keeps its VAPID keys and its users' subscriptions. `StolonNotifier` reads the keys and subscriptions, saves a subscription a page sends, and removes one a push service answers 404 or 410 for.
+
+## JsonWebPushStore
+
+A ready made `IWebPushStore` that keeps the subscriptions in a JSON file, and the VAPID keys wherever the plugin's two delegates put them, such as the public key in the configuration and the private key in a `ProtectedJsonFileStore`. It makes a key pair the first time one is needed.
+
+```csharp
+var store = new JsonWebPushStore(
+    Path.Join(paths.PluginConfigurationsPath, "MyPlugin.Push.json"),
+    secrets,
+    () => new WebPushStoredKeys(config.PushPublicKey, secretsFile.Load().PushPrivateKey, config.PushContact, config.ServerUrl),
+    keys => { config.PushPublicKey = keys.PublicKey; secretsFile.Update(s => s.PushPrivateKey = keys.ProtectedPrivateKey); });
+```
+
+**Gotchas**
+
+* New keys are made only when the protector can encrypt, so `GetKeys` never stores a private key in plain text. Without a provider it returns `null`.
+* The keys are checked to pair once, then kept until a value `readKeys` returns changes.
+* `ResetKeys` makes a new pair and forgets every subscription, since a browser signed up with the old key cannot get a web push signed with the new one.
+* `RemoveUser` forgets a deleted user's browsers. `All` lists every subscription, oldest first.
+
+## WebPushStoredKeys
+
+The VAPID keys as a plugin stores them, with the contact and the server address, which `JsonWebPushStore` reads and saves through its delegates. The private key is the encrypted value `WebPushKeys.ProtectPrivateKey` gives.
 
 ## WebPushWorker
 

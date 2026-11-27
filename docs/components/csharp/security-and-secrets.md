@@ -35,6 +35,45 @@ var apiKey = _secrets.Unprotect(server.ApiKey);
 * The class holds no mutable state, so it is safe to share.
 * The browser half is `bindSecretField`, `readSecretField`, and `clearSecretField` in the shared JS bundle.
 
+## KeptSecretConverter
+
+A JSON converter for a secret setting. It writes `SecretProtector.KeptSentinel` when a secret is set and empty when none is, so the configuration the server sends a page never carries the secret. Only `SecretJson.ServerCopyOptions` write the stored value.
+
+Put it on each secret property of the configuration. The page posts the sentinel back for a field it left alone, and `ResolveIncoming` keeps the stored value.
+
+```csharp
+public sealed class MyServer
+{
+    [JsonConverter(typeof(KeptSecretConverter))]
+    public string ApiKey { get; set; } = string.Empty;
+}
+
+server.ApiKey = _secrets.ResolveIncoming(incoming.ApiKey, stored.ApiKey);
+```
+
+**Gotchas**
+
+* It reads a value as it is, and `null` as empty. Resolve what a page posts with `ResolveIncoming`, or the sentinel is stored as the secret.
+* It only covers JSON. Jellyfin writes the configuration file with its own XML serializer, which ignores the converter, so encrypt the stored value with `SecretProtector` as well.
+* Any JSON written with other options, such as a backup or a log, carries the sentinel and loses the secret.
+
+## SecretJson
+
+The JSON options of a server copy, the one JSON that writes a `KeptSecretConverter` setting's stored value, and `Copy`, which copies a value whole through them.
+
+Use `Copy` to hold part of the configuration outside the configuration lock, so a caller never reads a list a save is changing, and never writes into the stored configuration by accident.
+
+```csharp
+var servers = SecretJson.Copy(Plugin.Instance.Configuration.Servers);
+var json = JsonSerializer.Serialize(config, SecretJson.ServerCopyOptions);
+```
+
+**Gotchas**
+
+* Never send JSON written with `ServerCopyOptions` to a browser. It carries every stored secret.
+* The options are read only. `new JsonSerializerOptions(SecretJson.ServerCopyOptions)` makes a copy that keeps the mark, and `IsServerCopy` says whether options carry it.
+* `Copy` needs a type that round trips through `System.Text.Json`, and a `null` value throws.
+
 ## StableSecretProtection
 
 Builds the Data Protection provider and the protector so encrypted secrets survive changes in how Jellyfin is launched, such as an update, the desktop app versus a service, or Docker. ASP.NET derives its key location and application name from the host, and both can move, which makes every stored secret fail to decrypt. This class pins both.
@@ -78,11 +117,15 @@ var token = SecretCompare.NewTokenBase64Url(32);
 
 Checks a URL that a user typed or a peer sent before a plugin uses it. `TryGetHttpUri` accepts only an absolute http or https URL with a host and no user name or password.
 
+`SameServer` says whether two server addresses name the same server, by scheme, host, port, and path, so a server entered twice in slightly different forms is seen as one.
+
 ```csharp
 if (!UrlUtilities.TryGetHttpUri(config.ServerUrl, out var uri)) { return BadRequest("Enter a full http or https address."); }
+var duplicate = config.Servers.Any(s => UrlUtilities.SameServer(s.Url, incoming.Url));
 ```
 
 **Gotchas**
 
 * It checks the shape only. Pair it with `SsrfGuard` when the address must not be on a private network.
 * The scheme is matched in any case. A relative URL, another scheme such as `file` or `javascript`, user info, and an empty host are refused, and the output is null.
+* `SameServer` ignores case and a trailing slash, and a default port matches the same port written out. Text that is not an absolute URL is compared as text.

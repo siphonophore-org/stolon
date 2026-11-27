@@ -193,7 +193,8 @@ public sealed class WebClientCheckService(IServerApplicationPaths paths, ILogger
 
 **Gotchas**
 
-* `markup` is the plugin's own page and scripts. The check reads their `class="..."` attributes. A class built from parts, such as `'button-' + type`, is invisible to it, so pass it in `classes`.
+* `markup` is the plugin's own page and scripts. The check reads their `class="..."` attributes, as `ClassesToCheck` lists them. A class built from parts, such as `'button-' + type`, is invisible to it, so pass it in `classes`.
+* The page's own classes are left out: a class its own `<style>` blocks style, or one its scripts only look up, such as with `querySelector('.thingRow')`. A class in Stolon's shell list or in `classes` is always checked, so name any other web client class the page restyles or looks up in `classes`.
 * Material UI's classes, which the web client builds at runtime, and Stolon's own `stolon-` classes are never reported.
 * The build last seen is kept in `stolon-webclient-<page>.json` in the plugin configuration folder. The first start only notes it.
 * It runs on a background task, reads every stylesheet and script of the web client, and never throws.

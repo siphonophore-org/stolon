@@ -56,4 +56,36 @@ public class UrlUtilitiesTests
         Assert.False(ok);
         Assert.Null(uri);
     }
+
+    /// <summary>
+    /// Addresses that differ only by case, a trailing slash, or a written default port name the same server.
+    /// True: a server entered twice in slightly different forms is seen as one.
+    /// False: the same server would be added twice.
+    /// </summary>
+    [Theory]
+    [InlineData("https://Media.Example.com/jellyfin/", "https://media.example.com/Jellyfin")]
+    [InlineData("https://a.example", "https://a.example:443/")]
+    [InlineData(" http://10.0.0.2:8096 ", "http://10.0.0.2:8096/")]
+    [InlineData("not a url/", "NOT A URL")]
+    [InlineData(null, "")]
+    public void SameServer_SameServer_True(string? a, string? b)
+    {
+        Assert.True(UrlUtilities.SameServer(a, b));
+    }
+
+    /// <summary>
+    /// A different scheme, host, port, or path is another server.
+    /// True: two servers behind one host stay apart.
+    /// False: a second server would be taken for the first.
+    /// </summary>
+    [Theory]
+    [InlineData("http://a.example", "https://a.example")]
+    [InlineData("https://a.example", "https://b.example")]
+    [InlineData("http://a.example:8096", "http://a.example:8920")]
+    [InlineData("https://a.example/one", "https://a.example/two")]
+    [InlineData("https://a.example", "a.example")]
+    public void SameServer_Different_False(string a, string b)
+    {
+        Assert.False(UrlUtilities.SameServer(a, b));
+    }
 }

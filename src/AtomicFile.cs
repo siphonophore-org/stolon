@@ -30,15 +30,15 @@ public static class AtomicFile
     /// A failure leaves the old file as it was.
     /// </summary>
     /// <remarks>
-    /// With <paramref name="ownerOnly"/> the temp file is created readable by its owner alone on Linux and macOS, so there is no moment when it is wider, and the move keeps that.
-    /// Without it, an existing file's Unix permissions are copied to the new file, so replacing a file does not change its mode.
-    /// It has no effect on Windows, where <paramref name="beforeMove"/> can set the access rules.
+    /// With <paramref name="ownerOnly"/> the temp file is created private to its owner through <see cref="OwnerOnly"/>, so there is no moment when it is wider, and the move keeps that.
+    /// That is mode 600 on Linux and macOS, and on Windows an access list of the owner, SYSTEM, and Administrators.
+    /// Without it, an existing file's Unix permissions are copied to the new file, so replacing a file does not change its mode. <paramref name="beforeMove"/> can still change the access rules.
     /// An I/O failure is not caught, and the temp file is removed before it propagates.
     /// </remarks>
     /// <param name="path">The file to write.</param>
     /// <param name="data">The new content.</param>
     /// <param name="flushToDisk">Whether to flush the data to the disk before the move, so a power loss cannot leave an empty file. <c>true</c> by default.</param>
-    /// <param name="ownerOnly">Whether the file is private to its owner on Linux and macOS. <c>false</c> by default.</param>
+    /// <param name="ownerOnly">Whether the file is private to its owner. <c>false</c> by default.</param>
     /// <param name="beforeMove">An optional action that receives the temp file path after the data is written, such as to set the access rules.</param>
     /// <param name="logger">An optional logger that reports a temp file that could not be removed.</param>
     public static void WriteAllBytes(
@@ -86,7 +86,7 @@ public static class AtomicFile
     /// <param name="write">The writer, which receives the temp file's stream and the cancellation token.</param>
     /// <param name="cancellationToken">The cancellation token, which stops the write and removes the temp file.</param>
     /// <param name="flushToDisk">Whether to flush the data to the disk before the move. <c>true</c> by default.</param>
-    /// <param name="ownerOnly">Whether the file is private to its owner on Linux and macOS. <c>false</c> by default.</param>
+    /// <param name="ownerOnly">Whether the file is private to its owner. <c>false</c> by default.</param>
     /// <param name="beforeMove">An optional action that receives the temp file path after the data is written.</param>
     /// <param name="logger">An optional logger that reports a temp file that could not be removed.</param>
     /// <returns>A task that completes when the file is in place.</returns>
@@ -137,7 +137,7 @@ public static class AtomicFile
     /// </remarks>
     /// <param name="path">The file to create.</param>
     /// <param name="text">The text to write.</param>
-    /// <param name="ownerOnly">Whether the file is private to its owner on Linux and macOS. <c>false</c> by default.</param>
+    /// <param name="ownerOnly">Whether the file is private to its owner. <c>false</c> by default.</param>
     /// <returns><c>true</c> when this call created the file, <c>false</c> when it was already there.</returns>
     public static bool WriteOnce(string path, string text, bool ownerOnly = false)
     {
@@ -216,19 +216,17 @@ public static class AtomicFile
 
     private static FileStream CreateTemp(string temp, bool ownerOnly)
     {
-        var options = new FileStreamOptions
+        if (ownerOnly)
+        {
+            return OwnerOnly.CreateFile(temp);
+        }
+
+        return new FileStream(temp, new FileStreamOptions
         {
             Mode = FileMode.CreateNew,
             Access = FileAccess.Write,
             Share = FileShare.None
-        };
-
-        if (ownerOnly && !OperatingSystem.IsWindows())
-        {
-            options.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
-        }
-
-        return new FileStream(temp, options);
+        });
     }
 
     private static void TryDeleteTemp(string temp, ILogger? logger)

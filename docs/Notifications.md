@@ -157,6 +157,7 @@ public sealed class MyHeldStore : INotifyHeldStore
 * `IsStillDue` drops a message that is no longer worth showing, such as a reminder about something already decided. Every message is due by default.
 * `OneDevice` sends to each recipient's most recent device only, and a held one shows only on the first device that comes online.
 * `Subject` is the plugin's own key, kept with a held message, so the plugin can drop it when its subject is removed.
+* `JsonNotifyHeldStore` is a ready made store in a JSON file, with a cap per user and an age limit. See [JsonNotifyHeldStore](components/csharp/notifications.md#jsonnotifyheldstore).
 
 ## Web Push
 
@@ -179,6 +180,8 @@ if (WebPushKeys.FromStored(config.PushPublicKey, config.PushPrivateKey, _secrets
 public WebPushKeys? GetKeys()
     => WebPushKeys.FromStored(_config.PushPublicKey, _config.PushPrivateKey, _secrets, _config.PushContact, _config.ServerUrl);
 ```
+
+`JsonWebPushStore` is a ready made store that makes the keys the first time they are needed and keeps the subscriptions in a JSON file. See [JsonWebPushStore](components/csharp/notifications.md#jsonwebpushstore).
 
 The contact is how a push service reaches the server's administrator. It is a `mailto:` or https address the administrator sets, else the server's address when it is https, else `https://jellyfin.org`.
 

@@ -246,6 +246,38 @@ public sealed class WebClientShellTests : IDisposable
     }
 
     /// <summary>
+    /// The page's own classes, those its style blocks style or its scripts only look up, are left out, and a web client class it restyles is kept.
+    /// True: the warning names only web client classes, and a renamed one the page restyles is still caught.
+    /// False: every plugin class would be reported missing, or a restyled web client class would go unchecked.
+    /// </summary>
+    [Fact]
+    public void ClassesToCheck_LeavesOutOwnKeepsRestyledWebClient()
+    {
+        var markup = "<style>.myRow{x:1} .myRow .emby-textarea{y:2} .detailLogo{z:3}</style>"
+            + "<div class=\"myRow cardBox detailLogo\"><textarea class=\"emby-textarea\"></textarea><span class=\"myHook\"></span></div>"
+            + "<script>view.querySelectorAll('.myHook'); el.closest(\"[data-x] .cardBox\");</script>";
+
+        var plain = WebClientCheck.ClassesToCheck(markup);
+        var named = WebClientCheck.ClassesToCheck(markup, ["detailLogo"]);
+
+        Assert.Equal(["cardBox", "emby-textarea"], plain);
+        Assert.Equal(["cardBox", "detailLogo", "emby-textarea"], named);
+    }
+
+    /// <summary>
+    /// Markup with no styles or lookups keeps every class.
+    /// True: a plain page is checked as before.
+    /// False: classes would be dropped for no reason.
+    /// </summary>
+    [Fact]
+    public void ClassesToCheck_NoStyles_SameAsClassesIn()
+    {
+        const string markup = "<div class=\"card gone\"></div>";
+
+        Assert.Equal(WebClientCheck.ClassesIn(markup), WebClientCheck.ClassesToCheck(markup));
+    }
+
+    /// <summary>
     /// A class is missing only when no stylesheet and no script of the web client names it. Stolon's and Material UI's never are.
     /// True: the warning names exactly the classes a web client update renamed.
     /// False: the log would cry wolf on every start, or miss a rename.

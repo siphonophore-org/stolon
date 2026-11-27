@@ -53,8 +53,10 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `CircuitBreaker` | Stops calls to a named service after repeated failures, for a cooldown. | [HTTP and Resilience](http-and-resilience.md#circuitbreaker) |
 | `ConcurrentTaskRunner` | Runs a worker over items with bounded parallelism and progress. | [Plugin and Tasks](plugin-and-tasks.md#concurrenttaskrunner) |
 | `DatabaseSchema` | Versions a SQLite database with a minimum reader and a backup. | [Data and Storage](data-and-storage.md#databaseschema) |
+| `DiskSpace` | Reads the free space on the volume that holds a path. | [Files and Paths](files-and-paths.md#diskspace) |
 | `FaviconResolver` | Finds the web client's favicon on disk. | [Pages and Templates](pages-and-templates.md#faviconresolver) |
 | `FileNameSanitizer` | Makes a string a safe cross-platform file name. | [Files and Paths](files-and-paths.md#filenamesanitizer) |
+| `FolderProbe` | Checks whether a folder can be written by trying it. | [Files and Paths](files-and-paths.md#folderprobe) |
 | `FormatUtilities` | Formats byte counts and makes text safe for a log. | [Text and Formatting](text-and-formatting.md#formatutilities) |
 | `HashUtilities` | Short SHA-256 fingerprints and the full SHA-256 hex of a string. | [Text and Formatting](text-and-formatting.md#hashutilities) |
 | `HostedPage` | Serves a page at a root path of the server, in the user page frame or the web client shell, for anyone, signed in users, or administrators. | [Pages and Templates](pages-and-templates.md#hostedpage) |
@@ -67,6 +69,10 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `ItemTitles` | Names a library item as Jellyfin does. | [Text and Formatting](text-and-formatting.md#itemtitles) |
 | `IWebPushStore` | The plugin's store for the VAPID keys and web push subscriptions. | [Notifications](notifications.md#iwebpushstore) |
 | `JsonFileStore` | A thread-safe atomic JSON file for one value. | [Data and Storage](data-and-storage.md#jsonfilestore) |
+| `JsonNotifyHeldStore` | A ready made held message store in a JSON file, with a cap per user and an age limit. | [Notifications](notifications.md#jsonnotifyheldstore) |
+| `JsonWebPushStore` | A ready made web push store, with the subscriptions in a JSON file and the VAPID keys made and kept through delegates. | [Notifications](notifications.md#jsonwebpushstore) |
+| `KeptSecretConverter` | Writes a secret setting as the kept sentinel in any JSON but a server copy. | [Security and Secrets](security-and-secrets.md#keptsecretconverter) |
+| `MeteredReadStream` | A read through stream that charges every byte to a meter and throws once it refuses. | [Streams and Throttling](streams-and-throttling.md#meteredreadstream) |
 | `NotifyChannel` | The kind of place a destination is. | [Notifications](notifications.md#notifychannel) |
 | `NotifyDestination` | One place messages go, with its secrets encrypted at rest. | [Notifications](notifications.md#notifydestination) |
 | `NotifyField` | One name and value a message carries. | [Notifications](notifications.md#notifyfield) |
@@ -76,19 +82,23 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `NotifyPreview` | What a destination would get, without sending. | [Notifications](notifications.md#notifypreview) |
 | `NotifyResult` | What sending to one destination did. | [Notifications](notifications.md#notifyresult) |
 | `NotifyTemplate` | Placeholders, custom bodies, headers, and escaping for notifications. | [Notifications](notifications.md#notifytemplate) |
+| `OwnerOnly` | Keeps a folder private to the server's account on every OS. | [Files and Paths](files-and-paths.md#owneronly) |
 | `PagedQuery` | The skip, take, search, and filter a list endpoint receives. | [Data and Storage](data-and-storage.md#pagedquery) |
 | `PagedResult` | One page of results with the count and page metadata. | [Data and Storage](data-and-storage.md#pagedresult) |
 | `PagedResultExtensions` | `ToPagedResult` for an already filtered collection. | [Data and Storage](data-and-storage.md#pagedresultextensions) |
 | `PathContainment` | Whether a folder is, or is inside, one of some folders. | [Files and Paths](files-and-paths.md#pathcontainment) |
+| `PerRunLookup` | Remembers a lookup's answer for each key until a run clears it. | [Data and Storage](data-and-storage.md#perrunlookup) |
 | `PluginBase` | The plugin base class with locked configuration and shared pages. | [Plugin and Tasks](plugin-and-tasks.md#pluginbase) |
 | `PluginScheduledTask` | A scheduled task base with defaults and trigger helpers. | [Plugin and Tasks](plugin-and-tasks.md#pluginscheduledtask) |
 | `ProgressReportingStream` | A write through stream that reports a download's progress in whole percent steps. | [Streams and Throttling](streams-and-throttling.md#progressreportingstream) |
+| `ProtectedJsonFileStore` | A JSON file for one value, encrypted and owner only, for secrets. | [Data and Storage](data-and-storage.md#protectedjsonfilestore) |
 | `PublicPage` | Hardening headers and the favicon for standalone pages. | [Pages and Templates](pages-and-templates.md#publicpage) |
 | `RateUtilities` | Converts Mbps and older units to bytes per second. | [Streams and Throttling](streams-and-throttling.md#rateutilities) |
 | `RedirectRefusingHandler` | A handler that refuses a redirect and names the address it pointed to. | [HTTP and Resilience](http-and-resilience.md#redirectrefusinghandler) |
 | `RetryPolicy` | Exponential backoff retry for transient exceptions. | [HTTP and Resilience](http-and-resilience.md#retrypolicy) |
 | `SchemaAction` | What opening a database did or what the caller must do next. | [Data and Storage](data-and-storage.md#schemaaction) |
 | `SecretCompare` | Constant time secret comparison and random tokens. | [Security and Secrets](security-and-secrets.md#secretcompare) |
+| `SecretJson` | The JSON options of a server copy, and a whole copy made through them. | [Security and Secrets](security-and-secrets.md#secretjson) |
 | `SecretProtector` | Encrypts plugin secrets at rest with Data Protection. | [Security and Secrets](security-and-secrets.md#secretprotector) |
 | `ServiceCollectionExtensions` | DI registration for the activity logger, the secret protector, and the notifier. | [Plugin and Tasks](plugin-and-tasks.md#servicecollectionextensions) |
 | `SpeedBucket` | A bytes per second rate that several streams share. | [Streams and Throttling](streams-and-throttling.md#speedbucket) |
@@ -109,8 +119,10 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | `WebClientAppIcon` | One icon of a web app manifest. | [Pages and Templates](pages-and-templates.md#webclientappicon) |
 | `WebClientCheck` | Warns at startup about classes the web client lacks, and about a changed web client. | [Pages and Templates](pages-and-templates.md#webclientcheck) |
 | `WebClientDetailsTemplate` | The web client's details page template, with Stolon's copy when the web client has none. | [Pages and Templates](pages-and-templates.md#webclientdetailstemplate) |
+| `WebClientJson` | JSON options that read what the web client posts, as Jellyfin does. | [Data and Storage](data-and-storage.md#webclientjson) |
 | `WebPushEncryption` | Encrypts a web push as RFC 8291 sets out. | [Notifications](notifications.md#webpushencryption) |
 | `WebPushKeys` | The VAPID key pair that signs every web push. | [Notifications](notifications.md#webpushkeys) |
+| `WebPushStoredKeys` | The VAPID keys and contact as a plugin stores them. | [Notifications](notifications.md#webpushstoredkeys) |
 | `WebPushSubscription` | One browser signed up for a user's web push. | [Notifications](notifications.md#webpushsubscription) |
 | `WebPushWorker` | The service worker script that shows a web push. | [Notifications](notifications.md#webpushworker) |
 
@@ -121,10 +133,10 @@ In these pages, "plugin" means the consuming Jellyfin plugin, "task" means a Jel
 | [Plugin and Tasks](plugin-and-tasks.md) | The plugin base, scheduled tasks, bounded parallel work, and DI registration. |
 | [HTTP and Resilience](http-and-resilience.md) | Outbound HTTP, the SSRF guard, retries, the circuit breaker, and backoff. |
 | [Security and Secrets](security-and-secrets.md) | Secrets at rest, constant time comparison, and URL checks. |
-| [Files and Paths](files-and-paths.md) | File names, atomic writes, and folder containment. |
-| [Streams and Throttling](streams-and-throttling.md) | Speed limits, shared rates, and size caps. |
+| [Files and Paths](files-and-paths.md) | File names, atomic and owner only writes, folder probes, free space, and folder containment. |
+| [Streams and Throttling](streams-and-throttling.md) | Speed limits, shared rates, meters, and size caps. |
 | [Text and Formatting](text-and-formatting.md) | Log and JavaScript escaping, titles, string lists, and hashes. |
-| [Data and Storage](data-and-storage.md) | SQLite versioning, JSON state files, and paged results. |
+| [Data and Storage](data-and-storage.md) | SQLite versioning, JSON state and secret files, per run lookups, web client JSON, and paged results. |
 | [Pages and Templates](pages-and-templates.md) | Standalone status pages, templates, favicons, and the standalone page script. |
 | [Activity Log](activity-log.md) | Single and summed entries in Jellyfin's activity log. |
 | [Translations](translations.md) | The plugin's strings in each language, for C# text and for its pages. |

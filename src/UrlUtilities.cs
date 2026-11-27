@@ -37,4 +37,26 @@ public static class UrlUtilities
         uri = parsed;
         return true;
     }
+
+    /// <summary>
+    /// Checks whether two server addresses name the same server, by scheme, host, port, and path, ignoring case and a trailing slash.
+    /// </summary>
+    /// <remarks>A default port matches the same port written out, so <c>https://a</c> matches <c>https://a:443/</c>. Text that is not an absolute URL is compared as text, trimmed, with case and a trailing slash ignored.</remarks>
+    /// <param name="a">The first address.</param>
+    /// <param name="b">The address compared with it.</param>
+    /// <returns><c>true</c> when they name the same server, otherwise <c>false</c>.</returns>
+    public static bool SameServer(string? a, string? b)
+    {
+        var left = (a ?? string.Empty).Trim();
+        var right = (b ?? string.Empty).Trim();
+        if (Uri.TryCreate(left, UriKind.Absolute, out var ua) && Uri.TryCreate(right, UriKind.Absolute, out var ub))
+        {
+            return string.Equals(ua.Scheme, ub.Scheme, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(ua.Host, ub.Host, StringComparison.OrdinalIgnoreCase)
+                && ua.Port == ub.Port
+                && string.Equals(ua.AbsolutePath.TrimEnd('/'), ub.AbsolutePath.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+        }
+
+        return string.Equals(left.TrimEnd('/'), right.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+    }
 }
