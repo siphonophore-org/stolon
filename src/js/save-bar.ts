@@ -128,3 +128,102 @@ export function createSaveBar(options?: SaveBarOptions): SaveBarHandle {
         destroy: function () { if (timer) clearTimeout(timer); runAll(cleanups); }
     };
 }
+
+/** What a section of createSaveBars takes, beside a Save Bar's own options. tracker decides whether the section is unsaved, in place of any edit. ignore names the controls whose edits change only what shows. */
+export interface SaveBarsSectionOptions extends SaveBarOptions {
+    tracker?: { isDirty(): boolean; markClean(): void } | null;
+    ignore?: string;
+}
+
+/** What createSaveBars returns. add ends a section with its Save Bar, markDirty marks one unsaved from code, clean clears every one, and isDirty says whether any is unsaved. */
+export interface SaveBarsHandle {
+    add(content: HTMLElement | null, options?: SaveBarsSectionOptions): SaveBarHandle | null;
+    markDirty(bar: SaveBarHandle): void;
+    clean(): void;
+    isDirty(): boolean;
+    destroy(): void;
+}
+
+interface SaveBarsEntry {
+    bar: SaveBarHandle;
+    dirty: boolean;
+    tracker: { isDirty(): boolean; markClean(): void } | null;
+    off: () => void;
+}
+
+/**
+ * Ends each section of one page with its own Save Bar, each saving on its own, and asks before the page is left while any is
+ * unsaved. An edit inside a section marks its bar unsaved, except in the bar itself and in a table's search and filters, which
+ * change only what shows. A save that lands clears the bar, and a save that resolves with text shows that text as the saved line.
+ *
+ * @param page the page handle from createConfigPage, whose guardUnsaved asks while any section is unsaved [optional]
+ * @returns { add(content, options), markDirty(bar), clean(), isDirty(), destroy() }. add takes a Save Bar's options, with form
+ * (default the section), fill (default true), tracker, a createChangeTracker tracker that decides when the section is unsaved,
+ * and ignore, a selector of controls whose edits leave it saved (default '.stolon-table-controls'). clean is for after the page loads its values.
+ */
+export function createSaveBars(page?: { guardUnsaved(dirty: () => boolean): void } | null): SaveBarsHandle {
+    var entries: SaveBarsEntry[] = [];
+
+    function entryOf(bar: SaveBarHandle): SaveBarsEntry | null {
+        for (var i = 0; i < entries.length; i++) if (entries[i].bar === bar) return entries[i];
+        return null;
+    }
+
+    function setDirty(entry: SaveBarsEntry, dirty: boolean): void {
+        entry.dirty = dirty;
+        entry.bar.setDirty(dirty);
+    }
+
+    function isDirty(): boolean {
+        return entries.some(function (entry) { return entry.dirty; });
+    }
+
+    if (page) page.guardUnsaved(isDirty);
+
+    return {
+        add: function (content, options) {
+            if (!content) return null;
+            var opts = options || {};
+            var entry: SaveBarsEntry;
+            var bar = createSaveBar(Object.assign({}, opts, {
+                form: opts.form === undefined ? content : opts.form,
+                fill: opts.fill === undefined ? true : opts.fill,
+                onSave: function () {
+                    return Promise.resolve().then(function () { return opts.onSave ? opts.onSave() : undefined; }).then(function (line: unknown) {
+                        if (entry.tracker) entry.tracker.markClean();
+                        entry.dirty = false;
+                        // The bar shows its own saved line once this resolves, so the save's own line follows it.
+                        if (typeof line === 'string' && line) setTimeout(function () { if (bar.getState() === 'saved') bar.setState('saved', line); }, 0);
+                    });
+                }
+            }));
+            var ignore = opts.ignore || '.stolon-table-controls';
+            function mark(event: Event): void {
+                var target = event.target as Element | null;
+                if (!target || bar.element.contains(target) || (target.closest && target.closest(ignore))) return;
+                setDirty(entry, entry.tracker ? entry.tracker.isDirty() : true);
+            }
+            var offInput = listen(content, 'input', mark);
+            var offChange = listen(content, 'change', mark);
+            entry = { bar: bar, dirty: false, tracker: opts.tracker || null, off: function () { offInput(); offChange(); bar.destroy(); } };
+            entries.push(entry);
+            content.appendChild(bar.element);
+            return bar;
+        },
+        markDirty: function (bar) {
+            var entry = entryOf(bar);
+            if (entry) setDirty(entry, true);
+        },
+        clean: function () {
+            entries.forEach(function (entry) {
+                if (entry.tracker) entry.tracker.markClean();
+                setDirty(entry, false);
+            });
+        },
+        isDirty: isDirty,
+        destroy: function () {
+            entries.forEach(function (entry) { entry.off(); });
+            entries = [];
+        }
+    };
+}

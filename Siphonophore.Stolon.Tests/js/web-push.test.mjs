@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { installFakeDom } from './fake-dom.mjs';
 
-installFakeDom();
+var dom = installFakeDom();
 var { webPushState, subscribeWebPush, unsubscribeWebPush, webPushText, webPushLabel } = await import('../../src/js/web-push.js');
 var { urlBase64Bytes } = await import('../../src/js/lib/push.js');
 var { setCurrentTranslations } = await import('../../src/js/lib/stolon-text.js');
@@ -233,4 +233,94 @@ test('a click focuses a window already at the address, or opens one, and never o
     open.handlers.notificationclick(bad);
     await Promise.all(relative.waits.concat(bad.waits));
     assert.deepEqual(open.opened, ['https://jf.example.com/requests/details?id=1', 'https://jf.example.com/requests/']);
+});
+
+var { createWebPushToggle, webPushScope } = await import('../../src/js/web-push.js');
+
+function settle() { return new Promise(function (r) { setTimeout(r, 0); }); }
+
+// A plugin whose routes answer the key and record what is posted to them.
+function plugin(key) {
+    var calls = [];
+    return {
+        calls: calls,
+        request: function (path, init) {
+            calls.push([path, init && init.method || 'GET', init && init.body ? JSON.parse(init.body) : null]);
+            if (path === 'Push/Key') return Promise.resolve({ ok: true, json: function () { return Promise.resolve(key === undefined ? { PublicKey: KEY } : key); } });
+            return Promise.resolve({ ok: true, json: function () { return Promise.resolve(null); } });
+        }
+    };
+}
+
+function toggle(server, reg, extra) {
+    return createWebPushToggle(Object.assign({ keyUrl: 'Push/Key', subscribeUrl: 'Push/Subscribe', unsubscribeUrl: 'Push/Unsubscribe', registration: reg, request: server.request }, extra || {}));
+}
+
+test('the toggle turns notifications on, posting the subscription to the plugin, and off again', async function () {
+    browser();
+    var server = plugin();
+    var reg = registration();
+    var t = toggle(server, reg.reg);
+    await settle();
+    assert.equal(t.getState(), 'off');
+    assert.equal(t.status.textContent.trim().endsWith('Notifications are off.'), true);
+    assert.equal(t.button.textContent, 'Turn on notifications');
+    assert.equal(t.button.hidden, false);
+    t.button.click();
+    await settle(); await settle();
+    assert.equal(t.getState(), 'on');
+    assert.equal(t.button.textContent, 'Turn off notifications');
+    assert.deepEqual(server.calls[1], ['Push/Subscribe', 'POST', { endpoint: 'https://push.example/new', keys: { p256dh: 'p', auth: 'a' }, label: 'Chrome · macOS' }]);
+    t.button.click();
+    await settle(); await settle();
+    assert.equal(t.getState(), 'off');
+    assert.equal(server.calls[2][0], 'Push/Unsubscribe');
+});
+
+test('an unsupported browser and a blocked one show their sentence with no button', async function () {
+    browser({ push: false });
+    var t = toggle(plugin(), registration().reg);
+    await settle();
+    assert.equal(t.getState(), 'unsupported');
+    assert.equal(t.button.hidden, true);
+    assert.match(t.status.textContent, /This browser cannot show notifications\./);
+    browser({ permission: 'denied' });
+    var d = toggle(plugin(), registration().reg);
+    await settle();
+    assert.equal(d.getState(), 'denied');
+    assert.equal(d.button.hidden, true);
+    assert.equal(d.status.getAttribute('role'), 'status');
+});
+
+test('the toggle hides while the server offers no key, and a failed change shows its line', async function () {
+    browser();
+    var none = toggle(plugin({ PublicKey: '' }), registration().reg);
+    await settle();
+    assert.equal(none.element.hidden, true);
+    assert.equal(none.getState(), null);
+    var server = plugin('BAD');
+    server.request = (function (inner) {
+        return function (path, init) { return path === 'Push/Subscribe' ? Promise.reject(new Error('no')) : inner(path, init); };
+    })(plugin().request);
+    var t = toggle(server, registration().reg, { failedText: 'It did not work.' });
+    await settle();
+    t.button.click();
+    await settle(); await settle();
+    assert.match(t.status.textContent, /It did not work\./);
+    assert.equal(t.status.getAttribute('role'), 'alert');
+    assert.equal(t.button.disabled, false);
+});
+
+test('a worker address is registered at the base path of the page', async function () {
+    browser();
+    dom = installFakeDom();
+    document.baseURI = 'https://media.example/jellyfin/web/index.html';
+    var registered = [];
+    navigator.serviceWorker = { register: function (url, o) { registered.push([url, o.scope]); return Promise.resolve(registration().reg); } };
+    var t = toggle(plugin(), undefined, { workerUrl: '../Push/Worker.js', scope: webPushScope('https://media.example/jellyfin/') });
+    await settle();
+    assert.deepEqual(registered, [['https://media.example/jellyfin/Push/Worker.js', '/jellyfin/']]);
+    assert.equal(t.getState(), 'off');
+    assert.equal(webPushScope('https://media.example/jellyfin'), '/jellyfin/');
+    assert.equal(webPushScope('not an address'), '/');
 });

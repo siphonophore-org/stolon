@@ -273,4 +273,42 @@ B.startWebClientShell({ menuItems: [{ icon: 'star' }] });
 
 var thumbColumn: B.TableColumn<Row> = { key: 'name', label: 'Name', image: function () { return function () { return Promise.resolve(new Blob()); }; } };
 
-export { page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn, shellSession, look, palette, markup, adopted, toaster };
+declare var hostView: HTMLElement;
+var toolApp: B.ToolAppHandle = B.createToolApp(hostView, { storageKey: 'p', pluginId: 'guid', tools: [{ key: 'vpn', name: 'VPN', page: 'p_vpn', visibleWhen: function (config: { Vpn: boolean }) { return config.Vpn; } }] });
+var toolChanged: boolean = toolApp.applyConfig({ Vpn: true });
+toolApp.reloadConfig().then(function (changed: boolean) { return changed; });
+B.refreshToolConfig(hostView, { Vpn: false });
+B.refreshToolConfig(hostView);
+// @ts-expect-error loadConfig gives a promise.
+B.createToolApp(hostView, { storageKey: 'p', tools: [], loadConfig: function () { return 1; } });
+
+var portField: B.FormFieldHandle<string, HTMLInputElement> = B.createInputField({ label: 'Port', type: 'number', min: 1, value: 8096, validate: function (v: string) { return v ? null : 'Required.'; } });
+var modeField: B.SelectFieldHandle = B.createSelectField({ label: 'Mode', options: [{ value: 'a', text: 'Allow' }], value: 'a' });
+modeField.setOptions([{ value: 'b', text: 'Block' }], 'b');
+var onField: B.FormFieldHandle<boolean, HTMLInputElement> = B.createCheckboxField({ label: 'Enabled', checked: true });
+var hostsField = B.createTextareaField({ label: 'Hosts', value: ['a', 'b'], rows: 3 });
+var tokenField: B.SecretFieldHandle = B.createSecretField({ label: 'Token', stored: true, clearText: 'Clear' });
+tokenField.setStored(false);
+var portNumber: number | null = B.readNumber(portField.input);
+var hostLines: string[] = B.readLines(hostsField.input);
+var onValue: boolean = onField.getValue();
+// @ts-expect-error A field needs its label.
+B.createInputField({ type: 'text' });
+// @ts-expect-error An option is { value, text }.
+B.createSelectField({ label: 'Mode', options: [{ value: 'a', label: 'Allow' }] });
+
+var pushToggle: B.WebPushToggleHandle = B.createWebPushToggle({ keyUrl: 'Push/Key', subscribeUrl: 'Push/Subscribe', unsubscribeUrl: 'Push/Unsubscribe', workerUrl: 'Push/Worker.js', request: function (path: string) { return fetch(path); }, onChange: function (r: B.WebPushResult) { return r.state; } });
+pushToggle.refresh().then(function (state: B.WebPushState | null) { return state; });
+var pushScope: string = B.webPushScope('https://media.example/jf/');
+// @ts-expect-error The toggle needs its routes.
+B.createWebPushToggle({ keyUrl: 'Push/Key' });
+
+var saveBars: B.SaveBarsHandle = B.createSaveBars(page);
+var sectionBar: B.SaveBarHandle | null = saveBars.add(hostView, { onSave: function () { return Promise.resolve('Saved.'); }, tracker: { isDirty: function () { return false; }, markClean: function () {} }, ignore: '.stolon-table-controls' });
+if (sectionBar) saveBars.markDirty(sectionBar);
+var anyUnsaved: boolean = saveBars.isDirty();
+saveBars.clean();
+// @ts-expect-error A tracker reports isDirty and markClean.
+saveBars.add(hostView, { tracker: { isDirty: true } });
+
+export { toolChanged, modeField, tokenField, portNumber, hostLines, onValue, pushScope, anyUnsaved, page, table, result, secret, label, kept, states, safe, casing, pageStrings, pushed, pushText, viewer, thumbColumn, shellSession, look, palette, markup, adopted, toaster };

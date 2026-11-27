@@ -7,6 +7,7 @@ A Save button with a status line above it. The line says the page has unsaved ch
 | When | Use |
 | :--- | :--- |
 | The bottom of any form that saves with a button | Save Bar. |
+| A page of sections that each save on their own | `createSaveBars`, one bar per section |
 | A field that saves on change | Nothing. The field saves itself. |
 
 ## Usage
@@ -20,6 +21,28 @@ view.addEventListener('input', function () { bar.setDirty(true); });
 ```
 
 The handle is `{ element, button, status, getState, setState, setDirty, save, destroy }`.
+
+A page of sections, such as a settings page with one [Collapsible Section](collapsible-section.md) per tool, ends each section with its own bar through `createSaveBars`. It asks before the page is left while any section is unsaved.
+
+```js
+import { createConfigPage, createSaveBars, createCollapsibleSection } from './configurationpage?name=myplugin_stolon.js';
+
+var bars = null;
+createConfigPage(view, {
+    pluginId: 'a1b2c3d4-0000-0000-0000-000000000000',
+    bind: function (shared, page) {
+        bars = createSaveBars(page);
+        sections.forEach(function (s) {
+            var section = createCollapsibleSection({ title: s.name, icon: s.icon, content: s.content });
+            list.appendChild(section.element);
+            bars.add(s.content, { onSave: function () { return shared.saveConfigWith(s.apply); } });
+        });
+    },
+    load: function (shared) {
+        shared.getConfig().then(function (config) { sections.forEach(function (s) { s.load(config); }); bars.clean(); });
+    }
+});
+```
 
 ## States and Modifiers
 
@@ -37,7 +60,12 @@ The handle is `{ element, button, status, getState, setState, setDirty, save, de
 * Every line and the button label can be replaced: `saveText`, `pendingText`, `savingText`, `savedText`, `failedText`.
 * `fill` makes the button span the width.
 * Save is set at weight 600, as Jellyfin's buttons are. A `stolon-button-row` right above the bar sits one narrow gap above it, and a row's buttons drop Jellyfin's button margin, so they line up with Save.
+* `createSaveBars(page)` returns `{ add, markDirty, clean, isDirty, destroy }`. `add(content, options)` appends a bar to the section and takes a Save Bar's options, with `form` set to the section and `fill` on by default. An `input` or `change` inside the section marks its bar unsaved, except in the bar itself and in the controls `ignore` names, a table's search and filters by default. A save that lands clears the section, and text that `onSave` resolves with is the saved line, such as "Saved, restart to apply.". `tracker`, from `createChangeTracker`, decides whether the section is unsaved, so an edit put back leaves it saved. `markDirty(bar)` marks a section from code, and `clean()` clears every one, for after the page loads its values.
 * With `form`, Save first checks every field in it through the [validation core](field-message.md#validation). While one is invalid it does not run `onSave`, shows every message, focuses the first invalid field, and shows the failed line "Fix the fields marked in red.", which `invalidText` replaces.
+
+## Gotchas
+
+* `createSaveBars(page)` sets the page's `guardUnsaved`, so it replaces any guard the page set before. Fold another check into a section's `tracker` instead.
 
 ## Reference
 
@@ -75,9 +103,24 @@ A Save button with a status line above it, built on the status line every messag
 | `save` | <code>(): Promise&lt;boolean&gt;</code> |
 | `destroy` | <code>(): void</code> |
 
+### `createSaveBars`
+
+<code>function createSaveBars(page?: { guardUnsaved(dirty: () =&gt; boolean): void; } &#124; null): SaveBarsHandle</code>
+
+Ends each section of one page with its own Save Bar, each saving on its own, and asks before the page is left while any is unsaved. An edit inside a section marks its bar unsaved, except in the bar itself and in a table's search and filters, which change only what shows. A save that lands clears the bar, and a save that resolves with text shows that text as the saved line.
+
+| Handle member | Type |
+| :--- | :--- |
+| `add` | <code>(content: HTMLElement &#124; null, options?: SaveBarsSectionOptions): SaveBarHandle &#124; null</code> |
+| `markDirty` | <code>(bar: SaveBarHandle): void</code> |
+| `clean` | <code>(): void</code> |
+| `isDirty` | <code>(): boolean</code> |
+| `destroy` | <code>(): void</code> |
+
 | Type | What it is |
 | :--- | :--- |
 | `SaveBarState` | The states a save bar shows above its button. '' shows nothing. |
+| `SaveBarsSectionOptions` | What a section of createSaveBars takes, beside a Save Bar's own options. tracker decides whether the section is unsaved, in place of any edit. ignore names the controls whose edits change only what shows. |
 
 | Class | What it looks like |
 | :--- | :--- |

@@ -2,29 +2,34 @@ import { createToolShell } from './tool-shell.js';
 import type { ToolShellHandle, ToolShellTool } from './tool-shell.js';
 import type { ComponentHandle } from './types.js';
 
-/** One tool in a tool app. page is the registered config page whose markup and controller the tool shows. */
+/** One tool in a tool app. page is the registered config page whose markup and controller the tool shows. visibleWhen says from the plugin's configuration whether the tool shows. */
 export interface ToolAppTool {
     key: string;
     name: string;
     icon?: string;
     page: string;
     badge?: ToolShellTool['badge'];
+    visibleWhen?(config: any): boolean;
 }
 
-/** What createToolApp takes. tools is a list, or a function that gives the list each time it is read. */
+/** What createToolApp takes. tools is a list, or a function that gives the list each time it is read. pluginId or loadConfig gives the configuration a tool's visibleWhen reads. */
 export interface ToolAppOptions {
     tools: ToolAppTool[] | (() => ToolAppTool[]);
     storageKey: string;
     name?: string;
     label?: string;
+    pluginId?: string;
+    loadConfig?(): PromiseLike<unknown>;
 }
 
-/** What createToolApp returns. show opens a tool and resolves with its view once it shows. */
+/** What createToolApp returns. show opens a tool and resolves with its view once it shows. applyConfig shows and hides the tools for a configuration, and reloadConfig reads it again first. */
 export interface ToolAppHandle extends ComponentHandle {
     shell: ToolShellHandle;
     show(key: string, param?: string): Promise<HTMLElement | null>;
     getCurrent(): string | null;
     refreshTools(): void;
+    applyConfig(config: unknown): boolean;
+    reloadConfig(): Promise<boolean>;
     destroy(): void;
 }
 
@@ -39,6 +44,9 @@ export var TOOL_OPEN_EVENT = 'stolontoolopen';
 
 /** The attribute that carries the param show was given, set on the tool's view before it shows. */
 export var TOOL_PARAM_ATTRIBUTE = 'data-stolon-tool-param';
+
+/** The event a tool's view sends after the plugin's configuration changed. detail is the configuration, or null to read it again. */
+export var TOOL_CONFIG_EVENT = 'stolontoolconfig';
 
 /**
  * Sets the heading over the tool whose view holds element, inside a tool app. An empty text puts back the tool's name.
@@ -68,6 +76,17 @@ export function refreshTools(element: HTMLElement): void {
  */
 export function openTool(element: HTMLElement, key: string, param?: string): void {
     element.dispatchEvent(new CustomEvent(TOOL_OPEN_EVENT, { bubbles: true, detail: { key: key, param: param } }));
+}
+
+/**
+ * Tells the tool app around element that the plugin's configuration changed, such as after a save, so the tools that
+ * show for it join or leave the sidebar.
+ *
+ * @param element any element inside a tool's view
+ * @param config  the saved configuration, or nothing to read it again [optional]
+ */
+export function refreshToolConfig(element: HTMLElement, config?: unknown): void {
+    element.dispatchEvent(new CustomEvent(TOOL_CONFIG_EVENT, { bubbles: true, detail: config === undefined ? null : config }));
 }
 
 interface LoadedTool {
@@ -116,6 +135,24 @@ function saveFolded(storageKey: string, folded: boolean): void {
     }
 }
 
+// Which tools showed for the last configuration read, by key, so the sidebar is right before the configuration loads.
+function readShown(storageKey: string): { [key: string]: boolean } {
+    try {
+        var parsed = JSON.parse(window.localStorage.getItem('stolon.toolApp.' + storageKey + '.shown') || '{}');
+        return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function saveShown(storageKey: string, shown: { [key: string]: boolean }): void {
+    try {
+        window.localStorage.setItem('stolon.toolApp.' + storageKey + '.shown', JSON.stringify(shown));
+    } catch (e) {
+        /* blocked storage shows every tool until the configuration loads */
+    }
+}
+
 // The address a registered config page or its script is served from, next to the dashboard.
 function pageUrl(name: string): string {
     return new URL('configurationpage?name=' + encodeURIComponent(name), document.baseURI).href;
@@ -138,9 +175,14 @@ function send(view: HTMLElement, type: string, cancelable?: boolean): boolean {
  *   storageKey : name the folded sidebar is remembered under, such as the plugin's name
  *   name       : the plugin's name, shown atop the sidebar beside the fold button [optional]
  *   label      : aria-label of the sidebar and the menu (default 'Tools')
+ *   pluginId   : the plugin's GUID, whose configuration ApiClient reads for each tool's visibleWhen [optional]
+ *   loadConfig : function() that gives a promise of the configuration, in place of pluginId [optional]
  * }
- * @returns { element, shell, show, getCurrent, refreshTools, destroy }. show(key, param) opens a tool, sets param on its view as data-stolon-tool-param, and resolves with the view once it shows, or null when the tool on screen refused to leave.
+ * @returns { element, shell, show, getCurrent, refreshTools, applyConfig, reloadConfig, destroy }. show(key, param) opens a tool, sets param on its view as data-stolon-tool-param, and resolves with the view once it shows, or null when the tool on screen refused to leave.
  * The open tool is kept in the address as tool=key, written in place, so a reload opens it again. A tool sets its heading with setToolTitle, opens another tool with openTool, and asks for the tools to be read again with refreshTools.
+ * A tool with visibleWhen shows while it returns true for the configuration. The answers are kept in browser storage under storageKey, so the sidebar
+ * is drawn right before the configuration loads, and a tool with no answer yet shows. The configuration is read once the app is built and each time
+ * a tool shows, so a tool turned on elsewhere joins without a reload. A tool hidden while it is open hands over to the first tool.
  */
 export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolAppHandle {
     var host: HTMLElement = (view.querySelector('.content-primary') as HTMLElement | null) || view;
@@ -149,9 +191,49 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
     var titles: { [key: string]: string } = {};
     var current: string | null = null;
     var request = 0;
+    var shown = readShown(options.storageKey);
+    var configTicket = 0;
+
+    function allTools(): ToolAppTool[] {
+        return (typeof options.tools === 'function' ? options.tools() : options.tools) || [];
+    }
 
     function tools(): ToolAppTool[] {
-        return (typeof options.tools === 'function' ? options.tools() : options.tools) || [];
+        return allTools().filter(function (tool: ToolAppTool): boolean { return typeof tool.visibleWhen !== 'function' || shown[tool.key] !== false; });
+    }
+
+    // Works out which tools show for a configuration, and redraws the sidebar when that changed.
+    function applyConfig(config: unknown): boolean {
+        var next: { [key: string]: boolean } = {};
+        allTools().forEach(function (tool: ToolAppTool): void {
+            if (typeof tool.visibleWhen !== 'function') return;
+            var on = true;
+            try { on = !!tool.visibleWhen(config); } catch (e) { on = true; }
+            next[tool.key] = on;
+        });
+        var changed = JSON.stringify(next) !== JSON.stringify(shown);
+        shown = next;
+        if (!changed) return false;
+        saveShown(options.storageKey, shown);
+        readTools();
+        return true;
+    }
+
+    function fetchConfig(): PromiseLike<unknown> | null {
+        if (options.loadConfig) return options.loadConfig();
+        if (options.pluginId && typeof ApiClient !== 'undefined' && ApiClient && typeof ApiClient.getPluginConfiguration === 'function') return ApiClient.getPluginConfiguration(options.pluginId);
+        return null;
+    }
+
+    // Reads the configuration again. A later read wins, so a slow answer never undoes a newer one.
+    function reloadConfig(): Promise<boolean> {
+        if (!allTools().some(function (tool: ToolAppTool): boolean { return typeof tool.visibleWhen === 'function'; })) return Promise.resolve(false);
+        var loading = fetchConfig();
+        if (!loading) return Promise.resolve(false);
+        var ticket = ++configTicket;
+        return Promise.resolve(loading).then(function (config: unknown): boolean {
+            return ticket === configTicket && !destroyed ? applyConfig(config) : false;
+        }, function (): boolean { return false; });
     }
 
     function toolOf(key: string | null): ToolAppTool | null {
@@ -166,6 +248,7 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
         });
     }
 
+    var destroyed = false;
     var shell = createToolShell({
         tools: shellTools(),
         label: options.label,
@@ -253,6 +336,7 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
             writeToolToAddress(current);
             entry.view.hidden = false;
             if (!again || param) send(entry.view, 'viewshow');
+            if (!again && was) void reloadConfig();
             return entry.view;
         }, function (): null {
             if (ticket === request) mark(current);
@@ -283,6 +367,15 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
         if (current !== null && !toolOf(current) && tools().length) void show(tools()[0].key);
     }
 
+    function onConfig(event: Event): void {
+        var detail = (event as CustomEvent).detail;
+        if (detail === null || detail === undefined) void reloadConfig();
+        else {
+            configTicket++;
+            applyConfig(detail);
+        }
+    }
+
     function onShow(): void {
         if (current === null) {
             void show(toolInAddress() || (tools()[0] ? tools()[0].key : ''));
@@ -290,6 +383,7 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
         }
         writeToolToAddress(current);
         if (current in loaded) send(loaded[current].view, 'viewshow');
+        void reloadConfig();
     }
 
     function onBeforeHide(event: Event): void {
@@ -303,9 +397,11 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
     shell.content.addEventListener(TOOL_TITLE_EVENT, onTitle);
     shell.content.addEventListener(TOOLS_CHANGE_EVENT, readTools);
     shell.content.addEventListener(TOOL_OPEN_EVENT, onOpen);
+    shell.content.addEventListener(TOOL_CONFIG_EVENT, onConfig);
     view.addEventListener('viewshow', onShow);
     view.addEventListener('viewbeforehide', onBeforeHide);
     view.addEventListener('viewhide', onHide);
+    void reloadConfig();
 
     return {
         element: shell.element,
@@ -313,7 +409,14 @@ export function createToolApp(view: HTMLElement, options: ToolAppOptions): ToolA
         show: show,
         getCurrent: function (): string | null { return current; },
         refreshTools: readTools,
+        applyConfig: function (config: unknown): boolean {
+            configTicket++;
+            return applyConfig(config);
+        },
+        reloadConfig: reloadConfig,
         destroy: function (): void {
+            destroyed = true;
+            shell.content.removeEventListener(TOOL_CONFIG_EVENT, onConfig);
             shell.content.removeEventListener(TOOL_TITLE_EVENT, onTitle);
             shell.content.removeEventListener(TOOLS_CHANGE_EVENT, readTools);
             shell.content.removeEventListener(TOOL_OPEN_EVENT, onOpen);

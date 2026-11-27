@@ -1,5 +1,8 @@
 import { stolonText } from './lib/stolon-text.js';
 import { pushState, pushSubscribe, pushUnsubscribe, pushLabel } from './lib/push.js';
+import { make, listen, runAll } from './lib/dom.js';
+import { setStatus } from './status-text.js';
+import type { ComponentHandle } from './types.js';
 
 /**
  * Where a page stands with web push. unsupported has no push in the browser, insecure is a page not on HTTPS, install is an iPhone or
@@ -94,6 +97,175 @@ export function webPushText(state: WebPushState): string {
  */
 export function webPushLabel(userAgent?: string): string {
     return pushLabel(userAgent);
+}
+
+/** What createWebPushToggle takes. Each address is the plugin's own route, read relative to the page's base, and request sends to it. */
+export interface WebPushToggleOptions {
+    keyUrl: string;
+    subscribeUrl: string;
+    unsubscribeUrl: string;
+    workerUrl?: string;
+    scope?: string;
+    registration?: ServiceWorkerRegistration | PromiseLike<ServiceWorkerRegistration>;
+    request?(path: string, init?: RequestInit): PromiseLike<unknown>;
+    onText?: string;
+    offText?: string;
+    failedText?: string;
+    onChange?(result: WebPushResult): void;
+}
+
+/** What createWebPushToggle returns. getState is null until the first check lands, and while the server offers no web push. refresh checks again. */
+export interface WebPushToggleHandle extends ComponentHandle {
+    button: HTMLButtonElement;
+    status: HTMLElement;
+    getState(): WebPushState | null;
+    refresh(): Promise<WebPushState | null>;
+    destroy(): void;
+}
+
+/**
+ * The scope a worker at the server's root is registered at: the path of the page's base, under any base path, ending in a slash.
+ *
+ * @param baseHref the page's base address, such as document.baseURI
+ */
+export function webPushScope(baseHref: string): string {
+    try {
+        var path = new URL(baseHref).pathname;
+        return /\/$/.test(path) ? path : path + '/';
+    } catch (e) {
+        return '/';
+    }
+}
+
+// A fetch answer gives its JSON, and anything else is the answer already read, as the shared bag's apiRequest gives it.
+function body(answer: unknown): unknown {
+    var r = answer as { ok?: boolean; json?(): Promise<unknown> } | null;
+    if (r && typeof r.json === 'function' && typeof r.ok === 'boolean') {
+        if (!r.ok) throw new Error('Request failed');
+        return r.json();
+    }
+    return answer;
+}
+
+function keyOf(answer: unknown): string {
+    if (typeof answer === 'string') return answer;
+    var a = answer as { PublicKey?: string; publicKey?: string } | null;
+    return (a && (a.PublicKey || a.publicKey)) || '';
+}
+
+var TOGGLE_LOOK: Record<WebPushState, 'success' | 'info' | 'warn'> = { on: 'success', off: 'info', denied: 'warn', unsupported: 'warn', insecure: 'warn', install: 'info' };
+
+/**
+ * A status line of where this browser stands with web push, and a button that turns notifications on or off for it. It asks the
+ * plugin for the server's VAPID public key, registers the plugin's service worker, and sends the subscription to the plugin's
+ * routes. A browser with no push, a page not on HTTPS, an iPhone page not on the home screen, and a person who blocked
+ * notifications each show their sentence with no button. While the server offers no key the whole toggle is hidden.
+ *
+ * @param options {
+ *   keyUrl         : the route that answers the VAPID public key, as { PublicKey } or the key as text
+ *   subscribeUrl   : the route that takes a subscription, posted as JSON
+ *   unsubscribeUrl : the route that forgets a subscription, posted as JSON
+ *   workerUrl      : the plugin's service worker script, registered at scope [optional]
+ *   scope          : the worker's scope (default the path of the page's base)
+ *   registration   : the plugin's service worker registration, or a promise of it, in place of workerUrl [optional]
+ *   request        : function(path, init) that sends to a route and gives a fetch Response or the answer's JSON (default fetch against the page's base)
+ *   onText         : the button's label while notifications are off (default 'Turn on notifications')
+ *   offText        : the button's label while notifications are on (default 'Turn off notifications')
+ *   failedText     : the line when turning them on or off fails (default 'Could not change notifications in this browser.')
+ *   onChange       : function({ state, message }) run after each check and each change [optional]
+ * }
+ * @returns { element, button, status, getState, refresh, destroy }
+ */
+export function createWebPushToggle(options: WebPushToggleOptions): WebPushToggleHandle {
+    var opts = options || ({} as WebPushToggleOptions);
+    var cleanups: Array<() => void> = [];
+    var root = make('div', 'stolon-web-push');
+    var status = make('div', 'stolon-status-text');
+    var button = make('button', 'raised stolon-button stolon-secondary', { type: 'button', is: 'emby-button' });
+    root.appendChild(status);
+    root.appendChild(button);
+    button.hidden = true;
+    var state: WebPushState | null = null;
+    var key = '';
+    var destroyed = false;
+
+    function base(): string {
+        return typeof document !== 'undefined' && document.baseURI ? document.baseURI : '/';
+    }
+
+    function send(path: string, init?: RequestInit): Promise<unknown> {
+        if (opts.request) return Promise.resolve(opts.request(path, init)).then(body);
+        return fetch(new URL(path, base()).href, Object.assign({ credentials: 'same-origin' as RequestCredentials }, init || {})).then(body);
+    }
+
+    function post(path: string, subscription: WebPushSubscriptionJson): Promise<unknown> {
+        return send(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(subscription) });
+    }
+
+    var registration: Promise<ServiceWorkerRegistration | null> | null = null;
+    function worker(): Promise<ServiceWorkerRegistration | null> {
+        if (registration) return registration;
+        var nav = typeof navigator !== 'undefined' ? navigator : null;
+        if (opts.registration) registration = Promise.resolve(opts.registration);
+        else if (opts.workerUrl && nav && nav.serviceWorker) registration = Promise.resolve(nav.serviceWorker.register(new URL(opts.workerUrl, base()).href, { scope: opts.scope || webPushScope(base()) }));
+        else registration = Promise.resolve(null);
+        registration = registration.then(null, function () { return null; });
+        return registration;
+    }
+
+    function show(next: WebPushResult): WebPushResult {
+        state = next.state;
+        setStatus(root, status, next.message, false, { timeout: 0, state: TOGGLE_LOOK[next.state] });
+        button.textContent = state === 'on' ? (opts.offText || stolonText('Stolon.PushTurnOff')) : (opts.onText || stolonText('Stolon.PushTurnOn'));
+        button.hidden = !(state === 'on' || state === 'off');
+        if (opts.onChange) opts.onChange(next);
+        return next;
+    }
+
+    function refresh(): Promise<WebPushState | null> {
+        return send(opts.keyUrl).then(function (answer) {
+            key = keyOf(answer);
+            if (destroyed) return null;
+            if (!key) {
+                state = null;
+                root.hidden = true;
+                return null;
+            }
+            root.hidden = false;
+            return worker().then(webPushState).then(function (next) { return destroyed ? null : show(next).state; });
+        }).then(null, function () {
+            state = null;
+            root.hidden = true;
+            return null;
+        });
+    }
+
+    function toggle(): Promise<void> {
+        var push: WebPushOptions = {
+            registration: worker() as PromiseLike<ServiceWorkerRegistration>,
+            publicKey: key,
+            save: function (sub) { sub.label = sub.label || webPushLabel(); return post(opts.subscribeUrl, sub); },
+            remove: function (sub) { return post(opts.unsubscribeUrl, sub); }
+        };
+        button.disabled = true;
+        return (state === 'on' ? unsubscribeWebPush(push) : subscribeWebPush(push)).then(function (next) {
+            if (!destroyed) show(next);
+        }, function () {
+            if (!destroyed) setStatus(root, status, opts.failedText || stolonText('Stolon.PushFailed'), true, { timeout: 0 });
+        }).then(function () { button.disabled = false; });
+    }
+
+    cleanups.push(listen(button, 'click', function () { void toggle(); }));
+    void refresh();
+
+    return {
+        element: root,
+        button: button,
+        status: status,
+        getState: function () { return state; },
+        refresh: refresh,
+        destroy: function () { destroyed = true; runAll(cleanups); }
+    };
 }
 
 function result(state: WebPushState): WebPushResult {

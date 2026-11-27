@@ -1,5 +1,7 @@
 <!-- title: Web Push -->
 <div id="out"></div>
+<h3 class="stolon-subsection-title">Toggle</h3>
+<div id="toggle"></div>
 <script type="module">
 const base = await window.__baseReady;
 const list = base.createDefinitionList({ items: [] });
@@ -10,4 +12,21 @@ base.webPushState().then((r) => {
         .concat({ label: 'This device', value: base.webPushLabel() || 'Unknown' })
         .concat(states.map((s) => ({ label: s, value: base.webPushText(s) }))));
 });
+// The routes and the worker answer from the page, so the toggle shows where this browser stands without a server.
+let held = null;
+const fake = {
+    endpoint: 'https://push.example/preview',
+    options: { applicationServerKey: null },
+    toJSON: () => ({ endpoint: fake.endpoint, keys: { p256dh: 'p', auth: 'a' } }),
+    unsubscribe: () => { held = null; return Promise.resolve(true); }
+};
+const answer = (body) => Promise.resolve(new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } }));
+const toggle = base.createWebPushToggle({
+    keyUrl: 'Push/Key',
+    subscribeUrl: 'Push/Subscribe',
+    unsubscribeUrl: 'Push/Unsubscribe',
+    registration: { pushManager: { getSubscription: () => Promise.resolve(held), subscribe: () => { held = fake; return Promise.resolve(fake); } } },
+    request: (path) => answer(path === 'Push/Key' ? { PublicKey: 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4' } : null)
+});
+document.getElementById('toggle').appendChild(toggle.element);
 </script>

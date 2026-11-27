@@ -9,6 +9,7 @@ The page half of web push. It checks whether a page can get notifications, asks 
 
 | When | Use |
 | :--- | :--- |
+| A page offers notifications on this device with one button | `createWebPushToggle` |
 | A page offers notifications on this device | `subscribeWebPush` from a button's click |
 | A page shows whether this device gets them | `webPushState` and its `message` |
 | A message in the dashboard while a device is online | The Jellyfin channel of `StolonNotifier`, with no page code |
@@ -33,6 +34,21 @@ button.addEventListener('click', function () {
 });
 ```
 
+`createWebPushToggle` builds the status line and a button that turns notifications on and off, from the plugin's three routes and its worker.
+
+```js
+import { createWebPushToggle } from './configurationpage?name=myplugin_stolon.js';
+
+var push = createWebPushToggle({
+    keyUrl: 'MyPlugin/Push/Key',
+    subscribeUrl: 'MyPlugin/Push/Subscribe',
+    unsubscribeUrl: 'MyPlugin/Push/Unsubscribe',
+    workerUrl: 'MyPlugin/Push/Worker.js',
+    request: session.request
+});
+page.appendChild(push.element);
+```
+
 ## States and Modifiers
 
 | State | When | Message |
@@ -46,6 +62,11 @@ button.addEventListener('click', function () {
 
 * `subscribeWebPush` asks for permission, reuses a subscription made with the same key, replaces one made with another, then calls `save` with `{ endpoint, keys: { p256dh, auth }, label }`. It resolves to `on`, or to `denied` or `off` when the person does not allow it.
 * `unsubscribeWebPush` calls `remove` with the subscription, then removes it from the browser, and resolves to `off`.
+* `createWebPushToggle` asks `keyUrl` for the key, as `{ PublicKey }` or text, and hides itself while the server offers none. It registers `workerUrl` at `scope`, the path of the page's base by default, or takes `registration`. It posts each subscription as JSON to `subscribeUrl` and `unsubscribeUrl`.
+* The toggle shows the state's message as a status line. `on` and `off` show the button, "Turn on notifications" or "Turn off notifications", which `onText` and `offText` replace. `unsupported`, `insecure`, `install`, and `denied` show only the line. A change that fails shows "Could not change notifications in this browser.", which `failedText` replaces.
+* `request(path, init)` sends to a route and gives a fetch `Response` or the answer's JSON, such as a user page session's `request`. Without it the toggle fetches against the page's base.
+* The handle is `{ element, button, status, getState, refresh, destroy }`. `refresh()` checks again, and `onChange` hears each state.
+* `webPushScope(baseHref)` gives the path of a base address, ending in a slash.
 * `webPushText(state)` gives a state's message in the page's language, and `webPushLabel()` a short name for the device, such as "Safari · iPhone", which the subscription carries as its `label`.
 
 ## Gotchas
@@ -104,11 +125,49 @@ The sentence a page shows for a web push state, in the page's language.
 
 A short name for the device a page runs on, such as "Safari · iPhone", for the plugin's list of subscriptions.
 
+### `webPushScope`
+
+<code>function webPushScope(baseHref: string): string</code>
+
+The scope a worker at the server's root is registered at: the path of the page's base, under any base path, ending in a slash.
+
+### `createWebPushToggle`
+
+<code>function createWebPushToggle(options: WebPushToggleOptions): WebPushToggleHandle</code>
+
+A status line of where this browser stands with web push, and a button that turns notifications on or off for it. It asks the plugin for the server's VAPID public key, registers the plugin's service worker, and sends the subscription to the plugin's routes. A browser with no push, a page not on HTTPS, an iPhone page not on the home screen, and a person who blocked notifications each show their sentence with no button. While the server offers no key the whole toggle is hidden.
+
+| Option | Type | What it does |
+| :--- | :--- | :--- |
+| `keyUrl` (required) | <code>string</code> | the route that answers the VAPID public key, as { PublicKey } or the key as text |
+| `subscribeUrl` (required) | <code>string</code> | the route that takes a subscription, posted as JSON |
+| `unsubscribeUrl` (required) | <code>string</code> | the route that forgets a subscription, posted as JSON |
+| `workerUrl` | <code>string</code> | the plugin's service worker script, registered at scope [optional] |
+| `scope` | <code>string</code> | the worker's scope (default the path of the page's base) |
+| `registration` | <code>ServiceWorkerRegistration &#124; PromiseLike&lt;ServiceWorkerRegistration&gt;</code> | the plugin's service worker registration, or a promise of it, in place of workerUrl [optional] |
+| `request` | <code>(path: string, init?: RequestInit): PromiseLike&lt;unknown&gt;</code> | function(path, init) that sends to a route and gives a fetch Response or the answer's JSON (default fetch against the page's base) |
+| `onText` | <code>string</code> | the button's label while notifications are off (default 'Turn on notifications') |
+| `offText` | <code>string</code> | the button's label while notifications are on (default 'Turn off notifications') |
+| `failedText` | <code>string</code> | the line when turning them on or off fails (default 'Could not change notifications in this browser.') |
+| `onChange` | <code>(result: WebPushResult): void</code> | function({ state, message }) run after each check and each change [optional] |
+
+| Handle member | Type |
+| :--- | :--- |
+| `button` | <code>HTMLButtonElement</code> |
+| `status` | <code>HTMLElement</code> |
+| `getState` | <code>(): WebPushState &#124; null</code> |
+| `refresh` | <code>(): Promise&lt;WebPushState &#124; null&gt;</code> |
+| `destroy` | <code>(): void</code> |
+
 | Type | What it is |
 | :--- | :--- |
 | `WebPushState` | Where a page stands with web push. unsupported has no push in the browser, insecure is a page not on HTTPS, install is an iPhone or iPad page not yet added to the home screen, denied is a person who blocked notifications, off has none yet, and on is subscribed. |
 | `WebPushSubscriptionJson` | The subscription a page sends its plugin, as PushSubscription.toJSON gives it, with a short name for the device. |
 | `WebPushResult` | What subscribeWebPush, unsubscribeWebPush, and webPushState resolve to: the state, and its sentence for the person. |
+
+| Class | What it looks like |
+| :--- | :--- |
+| `stolon-web-push` | A web push status line with the button that turns notifications on or off under it |
 
 <!-- reference:end -->
 
