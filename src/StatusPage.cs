@@ -32,7 +32,7 @@ public enum StatusPageScreen
 /// </summary>
 /// <remarks>
 /// A plugin controller uses it for pages such as "page not found", "sign in required", or a loading state.
-/// The markup of <see cref="Render"/> is self contained, so it needs none of the dashboard assets. <see cref="ServeWebClient(ControllerBase, string, StatusPageScreen, string?, string?)"/>
+/// The markup of <see cref="Render"/> is self contained, so it needs none of the dashboard assets. <see cref="ServeWebClient(ControllerBase, string, StatusPageScreen, string?, string?, string?)"/>
 /// draws the same screens in the web client's own look instead.
 /// </remarks>
 public static class StatusPage
@@ -103,19 +103,20 @@ public static class StatusPage
     /// <param name="content">
     /// Raw HTML placed after the screen's button, such as a script that checks the viewer. It is not encoded, so pass only markup the plugin owns.
     /// </param>
+    /// <param name="title">The document title, such as the name of the page that is loading, or <c>null</c> for the screen's heading.</param>
     /// <returns>The page, with status code 200 for loading, 401 for sign in, 403 for unauthorized, and 404 for not found.</returns>
-    public static ContentResult ServeWebClient(ControllerBase controller, string prefix, StatusPageScreen screen, string? message = null, string? content = null)
+    public static ContentResult ServeWebClient(ControllerBase controller, string prefix, StatusPageScreen screen, string? message = null, string? content = null, string? title = null)
     {
         ArgumentNullException.ThrowIfNull(controller);
         ArgumentException.ThrowIfNullOrEmpty(prefix);
         var language = StolonTranslations.RequestLanguage(controller.Request);
         var gate = WebClientScreen(screen, language, message, content);
-        var page = new HostedPage(prefix, HostedPageAccess.Anyone, HostedPageContent.Empty) { Title = ScreenTitle(screen, language) };
+        var page = new HostedPage(prefix, HostedPageAccess.Anyone, HostedPageContent.Empty) { Title = string.IsNullOrEmpty(title) ? ScreenTitle(screen, language) : title };
         return page.Status(controller, gate, ScreenStatus(screen));
     }
 
     /// <summary>
-    /// Serves a status screen of the plugin's own in the web client shell, as <see cref="ServeWebClient(ControllerBase, string, StatusPageScreen, string?, string?)"/>
+    /// Serves a status screen of the plugin's own in the web client shell, as <see cref="ServeWebClient(ControllerBase, string, StatusPageScreen, string?, string?, string?)"/>
     /// serves the standard ones.
     /// </summary>
     /// <remarks>The heading, message, and button values are HTML encoded. The <paramref name="content"/> value is not.</remarks>
@@ -220,7 +221,7 @@ public static class StatusPage
     private static string ScreenTitle(StatusPageScreen screen, string? language) => screen switch
     {
         StatusPageScreen.SignIn => Say("HeaderPleaseSignIn", "Please sign in", language),
-        StatusPageScreen.Unauthorized => Say("Stolon.UnauthorizedTitle", "You can't open this page", language),
+        StatusPageScreen.Unauthorized => Say("Stolon.UnauthorizedTitle", "You cannot open this page", language),
         StatusPageScreen.NotFound => Say("HeaderPageNotFound", "Page not found", language),
         _ => Say("Stolon.Loading", "Loading", language)
     };

@@ -275,6 +275,17 @@ B.webNoteRow({ secondary: 'Today' });
 // @ts-expect-error A placement is corner, hover, or fab.
 B.webOverlayButton(webButton, 'middle');
 var toaster: B.WebToasterHandle = B.createWebToaster(view);
+var webDialog: B.WebDialogHandle = B.openWebDialog({ look: 'form', title: 'Report', html: '<p>x</p>', buttons: [{ id: 'dialogSubmit', text: 'Send', type: 'submit' }], onAction: function (id: string) { return id === 'dialogSubmit'; }, onClose: function (id: string | null) { return id; } });
+webDialog.closed.then(function (id: string | null) { return id; });
+webDialog.close('dialogSubmit');
+var confirmed: Promise<boolean> = B.webConfirm('The invite stops working.', { title: 'Delete Den', confirmText: 'Delete', destructive: true });
+// @ts-expect-error A dialog's look is form or message.
+B.openWebDialog({ look: 'popup' });
+B.stopWebClientShell();
+B.startWebClientShell({ follow: false });
+B.applyWebClientLook({ root: '../' });
+var labelled: string = B.webOverlayButton({ action: 'request', icon: 'add', title: 'Request', label: 'Request Charade' });
+B.createSignIn({ serverId: 's', keepSignIn: false, onSignedIn: function () { return undefined; } });
 // @ts-expect-error A card needs its title.
 B.webCard({ image: 'a.jpg' });
 // @ts-expect-error A menu entry needs its text.
@@ -332,6 +343,10 @@ B.createSelectField({ label: 'Mode', options: [{ value: 'a', label: 'Allow' }] }
 var pushToggle: B.WebPushToggleHandle = B.createWebPushToggle({ keyUrl: 'Push/Key', subscribeUrl: 'Push/Subscribe', unsubscribeUrl: 'Push/Unsubscribe', workerUrl: 'Push/Worker.js', request: function (path: string) { return fetch(path); }, onChange: function (r: B.WebPushResult) { return r.state; } });
 pushToggle.refresh().then(function (state: B.WebPushState | null) { return state; });
 var pushScope: string = B.webPushScope('https://media.example/jf/');
+var settingsToggle: B.WebPushToggleHandle = B.createWebPushToggle({ keyUrl: 'Push/Key', subscribeUrl: 'Push/Subscribe', unsubscribeUrl: 'Push/Unsubscribe', look: 'settings', label: 'Notify me here', id: 'chkPush' });
+var pushBox: HTMLInputElement | null = settingsToggle.checkbox;
+// @ts-expect-error The toggle's look is button or settings.
+B.createWebPushToggle({ keyUrl: 'Push/Key', subscribeUrl: 'Push/Subscribe', unsubscribeUrl: 'Push/Unsubscribe', look: 'card' });
 // @ts-expect-error The toggle needs its routes.
 B.createWebPushToggle({ keyUrl: 'Push/Key' });
 

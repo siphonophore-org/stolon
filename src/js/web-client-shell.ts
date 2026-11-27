@@ -2,7 +2,7 @@
 // The page script of the web client shell, the HostedPage frame that looks like Jellyfin's own web client. It checks the
 // viewer through the user page script, then follows the viewer's web client settings, theme and custom CSS, and fills the
 // app bar, user menu, and drawer as jellyfin-web 12.4 draws them (GPL-2.0-or-later).
-import { startUserPage, storedTokens, userPageSession, pageAccess } from './user-page.js';
+import { startUserPage, storedTokens, userPageSession, pageAccess, resetUserPage } from './user-page.js';
 import type { UserPageOptions, UserPageSession, UserPageUser } from './user-page.js';
 import { stolonText } from './lib/stolon-text.js';
 import {
@@ -19,12 +19,13 @@ export interface WebClientMenuItem {
     select?: () => void;
 }
 
-/** What startWebClientShell takes: the user page's options, and the plugin's own user menu entries. */
+/** What startWebClientShell takes: the user page's options, the plugin's own user menu entries, and whether a status page follows the viewer's sign-in. */
 export interface WebClientShellOptions extends UserPageOptions {
     menuItems?: WebClientMenuItem[];
+    follow?: boolean;
 }
 
-/** What startWebClientShell resolves to: the viewer's session, a toast in the web client's look, and destroy. */
+/** What startWebClientShell resolves to: the viewer's session, a toast in the web client's look, and destroy, which stops the shell's listeners and every answer still on its way. */
 export interface WebClientShellSession extends UserPageSession {
     toast: WebToasterHandle;
     destroy(): void;
@@ -41,6 +42,7 @@ export interface WebClientLookOptions {
     userId?: string | null;
     themes?: WebClientTheme[] | null;
     storage?: Storage | null;
+    root?: string | null;
 }
 
 /** What applyWebClientLook applied: the theme, and whether the server's and the viewer's custom CSS are on the page. */
@@ -112,6 +114,14 @@ export function storedUserId(serverId: string | null, storage?: Storage | null):
     }
 }
 
+// The server root as a prefix for the shell's addresses, ending in a slash, or empty for the page's base address. An address with
+// a scheme other than http or https is refused, so a stylesheet can never point at script.
+function serverRootOf(root: string | null | undefined): string {
+    var value = typeof root === 'string' ? root.trim() : '';
+    if (!value || (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(value) && !/^https?:/i.test(value))) return '';
+    return /\/$/.test(value) ? value : value + '/';
+}
+
 function element(selector: string): HTMLElement | null {
     return document.querySelector(selector) as HTMLElement | null;
 }
@@ -120,12 +130,14 @@ function element(selector: string): HTMLElement | null {
  * Follows the viewer's web client look in the order the web client applies it: their theme, then the server's custom CSS
  * from Branding/Css unless they turned it off, then their own custom CSS from Display settings. Both custom stylesheets go
  * last in the page, after Stolon's and the plugin's styles, so they win as in the web client. The viewer's CSS is set as the
- * text of a style element. Call it again once the viewer is known.
+ * text of a style element. Call it again once the viewer is known. A page whose base address is not the server root, such as
+ * one at /requests/ with no base element, passes the server root, so the theme and the server's CSS load from any page path.
  *
  * @param options {
  *   userId  : the viewer, whose settings it reads, or null for no signed in viewer [optional]
  *   themes  : the themes the web client's config.json lists (default the web client's six)
  *   storage : where the web client keeps its settings (default localStorage)
+ *   root    : the server root, relative to the page or absolute, such as '../' (default the page's base address)
  * }
  */
 export function applyWebClientLook(options?: WebClientLookOptions): WebClientLook {
@@ -140,6 +152,7 @@ export function applyWebClientLook(options?: WebClientLookOptions): WebClientLoo
 
     var root = document.documentElement;
     var head = (document as Document & { head?: HTMLElement }).head || root;
+    var server = serverRootOf(opts.root);
     var link = element('#stolon-shell-theme') as HTMLLinkElement | null;
     if (!link) {
         link = document.createElement('link');
@@ -147,7 +160,7 @@ export function applyWebClientLook(options?: WebClientLookOptions): WebClientLoo
         link.setAttribute('rel', 'stylesheet');
         head.appendChild(link);
     }
-    var href = 'web/themes/' + theme + '/theme.css';
+    var href = server + 'web/themes/' + theme + '/theme.css';
     if (link.getAttribute('href') !== href) link.setAttribute('href', href);
     root.setAttribute('data-theme', theme);
     var vars = WEB_CLIENT_PALETTES[theme] || WEB_CLIENT_PALETTES.dark;
@@ -161,8 +174,8 @@ export function applyWebClientLook(options?: WebClientLookOptions): WebClientLoo
             branding = document.createElement('link');
             branding.id = 'stolon-shell-branding';
             branding.setAttribute('rel', 'stylesheet');
-            branding.setAttribute('href', 'Branding/Css');
         }
+        if (branding.getAttribute('href') !== server + 'Branding/Css') branding.setAttribute('href', server + 'Branding/Css');
         parent.appendChild(branding);
     } else if (branding) {
         branding.remove();
@@ -256,6 +269,7 @@ function menuKeys(e: KeyboardEvent, menu: HTMLElement, close: (refocus: boolean)
 }
 
 var started: Promise<WebClientShellSession | null> | null = null;
+var stopStarted: (() => void) | null = null;
 
 // The signed out frame's classes, the web client login page's, the same lists HostedPage writes into the template.
 var SIGNED_OUT = 'stolon-shell-signed-out';
@@ -279,6 +293,21 @@ export function setWebClientFrame(signedOut: boolean): void {
 /** Forgets the started shell, for tests. Internal to the web components. */
 export function resetWebClientShell(): void {
     started = null;
+    stopStarted = null;
+}
+
+/**
+ * Stops the web client shell this page started and forgets it, for a page that hands the document over, such as a loading page
+ * that writes the page it fetched into the document. Every listener and timer stops, every answer still on its way is dropped
+ * so nothing more is fetched or added to the page, and the toaster goes. The page as drawn stays, and the next
+ * startWebClientShell call, such as the written page's own, starts afresh.
+ */
+export function stopWebClientShell(): void {
+    var stop = stopStarted;
+    started = null;
+    stopStarted = null;
+    resetUserPage();
+    if (stop) stop();
 }
 
 /**
@@ -286,11 +315,13 @@ export function resetWebClientShell(): void {
  * viewer as startUserPage does, and fills the app bar with their libraries, the user menu, and the drawer. A viewer who may
  * not see the page gets the user page's card. In the signed out frame the page keeps the web client login page's header and
  * shows no viewer, and a status page moves into the signed in shell once it finds the viewer's sign-in. Later calls return
- * the same promise, so the page's own script calls it for the session.
+ * the same promise, so the page's own script calls it for the session. A page that hands the document over to another calls
+ * stopWebClientShell first.
  *
  * @param options {
  *   translations       : address of the plugin's translations relative to the server root [optional]
  *   menuItems          : the plugin's own user menu entries, after Settings [optional]
+ *   follow             : false keeps a status page signed out, even with the viewer's sign-in in this browser (default true)
  *   signInMessage      : the sentence on the sign in screen for a viewer who is not signed in (default 'Sign in to Jellyfin to open this page.')
  *   notFoundMessage    : the sentence on the not found screen (default 'This is not the page you are looking for.')
  *   deniedMessage      : the sentence for a viewer who is not an administrator (default 'Only administrators can open this page.')
@@ -306,6 +337,8 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
     var body = document.body;
     var root = document.documentElement;
     var cleanups: Array<() => void> = [];
+    // Set once the shell stops, so an answer that lands later changes nothing on the page.
+    var stopped = false;
     function on(target: EventTarget, type: string, fn: (e: any) => void): void {
         target.addEventListener(type, fn);
         cleanups.push(function () { target.removeEventListener(type, fn); });
@@ -314,11 +347,18 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
     root.classList.add('layout-' + webClientLayout());
     var signedOut = body.classList.contains(SIGNED_OUT);
     // A status page starts signed out and follows the viewer's sign-in when this browser has one.
-    var follow = body.getAttribute('data-stolon-session') === 'follow';
+    var follow = opts.follow !== false && body.getAttribute('data-stolon-session') === 'follow';
     var meta = element('meta[name="stolon-server-id"]');
     var serverId = meta ? meta.getAttribute('content') : null;
     applyWebClientLook({ userId: storedUserId(serverId) });
     var toast = createWebToaster(body);
+    function stop(): void {
+        if (stopped) return;
+        stopped = true;
+        cleanups.splice(0).forEach(function (fn) { fn(); });
+        toast.destroy();
+    }
+    stopStarted = stop;
 
     var bar = element('.stolon-shell-bar');
     var drawer = element('.stolon-shell-drawer');
@@ -341,6 +381,7 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
     fetch('System/Info/Public', { headers: { Accept: 'application/json' } })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (info: { Version?: unknown } | null) {
+            if (stopped) return;
             var version = element('.stolon-shell-drawer-server-version');
             if (version && info && typeof info.Version === 'string') version.textContent = info.Version;
         })
@@ -461,7 +502,7 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
         var quick = list.querySelector('[data-stolon-menu="quickconnect"]') as HTMLElement | null;
         if (quick && quick.parentElement) quick.parentElement.hidden = true;
         session.request('QuickConnect/Enabled').then(function (r) { return r.ok ? r.json() : false; }).then(function (enabled: unknown) {
-            if (enabled === true && quick && quick.parentElement) quick.parentElement.hidden = false;
+            if (enabled === true && !stopped && quick && quick.parentElement) quick.parentElement.hidden = false;
         }).catch(function () { return null; });
         on(list, 'click', function (e: Event) {
             var target = e.target as Element | null;
@@ -486,6 +527,7 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
             .then(function (r) { return r.ok ? r.json() : null; })
             .catch(function () { return null; })
             .then(function (views: { Items?: WebUserView[] } | null) {
+                if (stopped) return;
                 var libraries = ((views && views.Items) || []).map(function (v) { return { href: 'web/' + webLibraryRoute(v), icon: webLibraryIcon(v), name: v.Name || '' }; });
                 entries = links.concat(libraries);
                 renderNav();
@@ -503,6 +545,7 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
             .then(function (r) { return r.ok ? r.json() : {}; })
             .catch(function () { return {}; })
             .then(function (config: { themes?: WebClientTheme[]; menuLinks?: MenuLink[] }) {
+                if (stopped) return;
                 applyWebClientLook({ userId: user!.Id, themes: config && config.themes });
                 fillNav(session, user!, config || {});
             });
@@ -511,7 +554,7 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
             if (user.PrimaryImageTag) {
                 var picture = new Image();
                 picture.alt = '';
-                picture.onload = function () { if (avatar) { avatar.innerHTML = ''; avatar.appendChild(picture); } };
+                picture.onload = function () { if (avatar && !stopped) { avatar.innerHTML = ''; avatar.appendChild(picture); } };
                 picture.src = 'Users/' + encodeURIComponent(user.Id) + '/Images/Primary?height=80&quality=90&tag=' + encodeURIComponent(user.PrimaryImageTag);
             }
             avatar.setAttribute('title', user.Name);
@@ -527,10 +570,11 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
     function followSession(shell: WebClientShellSession): void {
         var tokens = storedTokens(serverId);
         function tryToken(index: number): void {
-            if (index >= tokens.length) return;
+            if (stopped || index >= tokens.length) return;
             fetch('Users/Me', { headers: { Authorization: 'MediaBrowser Token="' + tokens[index] + '"', Accept: 'application/json' } })
                 .then(function (r) { return r.ok ? r.json() : null; })
                 .then(function (user: UserPageUser | null) {
+                    if (stopped) return;
                     if (!user || typeof user.Id !== 'string') { tryToken(index + 1); return; }
                     Object.assign(shell, userPageSession(pageAccess(body), serverId, user, tokens[index]));
                     setWebClientFrame(false);
@@ -543,15 +587,9 @@ export function startWebClientShell(options?: WebClientShellOptions): Promise<We
     }
 
     started = startUserPage(opts).then(function (session) {
-        if (!session) return null;
+        if (!session || stopped) return null;
         var user = session.user;
-        var shell: WebClientShellSession = Object.assign({}, session, {
-            toast: toast,
-            destroy: function () {
-                cleanups.splice(0).forEach(function (fn) { fn(); });
-                toast.destroy();
-            }
-        });
+        var shell: WebClientShellSession = Object.assign({}, session, { toast: toast, destroy: stop });
         if (!user && follow) followSession(shell);
         if (!user || signedOut) return shell;
         fillViewer(session, user);

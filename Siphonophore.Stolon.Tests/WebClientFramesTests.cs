@@ -224,6 +224,59 @@ public sealed class WebClientFramesTests : IDisposable
     }
 
     /// <summary>
+    /// Content fetched from a deeper path than the page that shows it takes its fonts relative to the holding page.
+    /// True: a page at /pages/hello that writes in content from /pages/hello/user loads the fonts under any base path.
+    /// False: the fonts would resolve one folder too high, above the server's base path.
+    /// </summary>
+    [Theory]
+    [InlineData("/pages/hello", "url(../web/noto.1.woff2)")]
+    [InlineData("pages/hello", "url(../web/noto.1.woff2)")]
+    [InlineData("/wireguard", "url(./web/noto.1.woff2)")]
+    [InlineData("/a/b/c", "url(../../web/noto.1.woff2)")]
+    public void ContentStyle_HoldingPagePathSetsTheRoot(string holdingPage, string expected)
+    {
+        var (controller, _) = Controller("/pages/hello/user");
+
+        var style = WebClientContentStyle.Style(controller, holdingPage);
+        var injected = WebClientContentStyle.Inject(controller, "<head></head>", holdingPage);
+
+        Assert.Contains(expected, style, StringComparison.Ordinal);
+        Assert.Contains(expected, injected, StringComparison.Ordinal);
+        Assert.Contains("url(../../web/noto.1.woff2)", WebClientContentStyle.Style(controller), StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// A holding page path is required.
+    /// True: a missing path fails at once.
+    /// False: an empty path would silently fall back to the server root.
+    /// </summary>
+    [Fact]
+    public void ContentStyle_HoldingPagePathIsRequired()
+    {
+        var (controller, _) = Controller("/pages/hello/user");
+
+        Assert.Throws<ArgumentException>(() => WebClientContentStyle.Style(controller, string.Empty));
+        Assert.Throws<ArgumentNullException>(() => WebClientContentStyle.Style(controller, null!));
+    }
+
+    /// <summary>
+    /// A standard screen takes the document title it is given, and its heading without one.
+    /// True: a loading screen for a page names the page in the browser's tab.
+    /// False: every loading page would read Loading in the tab.
+    /// </summary>
+    [Fact]
+    public void ServeWebClient_TakesTheDocumentTitle()
+    {
+        var (controller, _) = Controller("/pages/hello");
+
+        var named = StatusPage.ServeWebClient(controller, "myplugin", StatusPageScreen.Loading, title: "<Hello>").Content!;
+        var plain = StatusPage.ServeWebClient(controller, "myplugin", StatusPageScreen.NotFound).Content!;
+
+        Assert.Contains("<title>&lt;Hello&gt;</title>", named, StringComparison.Ordinal);
+        Assert.Contains("<title>Page not found</title>", plain, StringComparison.Ordinal);
+    }
+
+    /// <summary>
     /// The user page frame loads the web client's Noto Sans faces, and none of its font stacks.
     /// True: the user page's font stack finds Noto Sans, as the web client shows it.
     /// False: the page would fall back to the system font, or take the web client's stack in place of its own.

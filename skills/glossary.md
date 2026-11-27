@@ -82,6 +82,8 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Count card | A count over a label inside `stolon-cards`, the count in its status color, in the status card's look | `stolon-card` | Tile, counter |
 | Status page | The themed standalone card page that `StatusPage` renders, or one of its screens in the web client shell | `StatusPage`, `status.html`, `StatusPage.ServeWebClient`, `StatusPageScreen` | Error page, landing page |
 | Signed out frame | The web client shell drawn as the web client's login page, with the server's logo alone in the bar, for a page anyone with a link opens | `HostedPageFrame.WebClientSignedOut`, `stolon-shell-signed-out`, `setWebClientFrame` | Login frame, anonymous shell, guest page |
+| Hand over | A page stopping the web client shell before it writes another page into its document, so the shell fetches and adds nothing more | `stopWebClientShell`, `follow: false` | Teardown, unload, detach |
+| Web dialog | A dialog built as the web client builds one, over its backdrop in its dialog container, for a page in the web client shell | `openWebDialog`, `webConfirm`, `stolon-web-dialog` | Modal, popup, web modal |
 | Content style | The web client's look for author content a plugin shows in a frame | `WebClientContentStyle`, `webclient-content.html` | Iframe CSS, base stylesheet, reset |
 | Detail status | Where an item stands among the details page's buttons, the button's icon as a plain image, never a disabled button | `webDetailStatus`, `stolon-web-detail-status` | Disabled button, state button |
 | Note row | A row in the web client's list look that reads as text, with an aside and notes under it | `webNoteRow`, `stolon-web-note-row` | Issue row, comment row |
@@ -326,7 +328,7 @@ The agreed name for every concept in Stolon. Components, default labels, docs, a
 | Held message | A Jellyfin message kept until one of its recipient's devices is online | `NotifyHeldMessage`, `INotifyHeldStore` | Queued message, pending message |
 | Notify preview | What a destination would get, built by the code that sends it, and drawn on a page | `NotifyPreview`, `createNotifyPreview` | Mockup, sample |
 | Web push | A browser notification sent through the browser's push service, by RFC 8030, 8291, and 8292 | `WebPushEncryption`, `subscribeWebPush` | Push notification, browser alert |
-| Web push toggle | A status line of where a browser stands with web push and a button that turns it on or off | `createWebPushToggle` | Push switch, notification button |
+| Web push toggle | A status line of where a browser stands with web push and a button that turns it on or off, or in the settings look a web client settings checkbox with its state line | `createWebPushToggle`, `look: 'settings'` | Push switch, notification button |
 | VAPID keys | The server's key pair that signs every web push | `WebPushKeys` | Push keys, server keys |
 | Subscription | One browser signed up for a user's web push | `WebPushSubscription`, `IWebPushStore` | Registration, device token |
 | Worker script | The service worker script that shows a web push | `WebPushWorker` | Push handler |

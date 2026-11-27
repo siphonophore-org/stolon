@@ -220,6 +220,13 @@ test('Stolon\'s own text in the bundle is the text strings/ ships to every plugi
     });
 });
 
+test('Stolon\'s own text has no contractions, as the house style asks', function () {
+    var local = JSON.parse(fs.readFileSync(new URL('../../strings/en-us.json', import.meta.url), 'utf8'));
+    var contraction = /n't\b|'(?:re|ll|ve|m|d)\b|\b(?:that|it|there|here|what|who|let|he|she)'s\b/i;
+    var own = Object.keys(local).filter(function (k) { return k.indexOf('Stolon.') === 0; });
+    assert.deepEqual(own.filter(function (k) { return contraction.test(local[k]) || contraction.test(BASE_TEXT[k] || ''); }), []);
+});
+
 test('every key of Stolon\'s own text is drawn by some component', function () {
     var dir = new URL('../../src/js/', import.meta.url);
     var sources = fs.readdirSync(dir).filter(function (f) { return f.endsWith('.ts'); }).map(function (f) { return fs.readFileSync(new URL(f, dir), 'utf8'); })

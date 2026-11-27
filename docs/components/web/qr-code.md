@@ -30,7 +30,7 @@ The handle is `{ element, getValue, setValue, toBlob, destroy }`. `toBlob()` res
 * An inline code as a [Record List](record-list.md) row's aside is at most a code's width, so the row's title keeps its room, and the link wraps inside it.
 * The PNG takes the shapes and colors the code shows on the page, drawn at 12 pixels per module so the dots stay smooth.
 * The eyes take `--stolon-accent`. A page can restyle them with `.stolon-qr-code-eyes { fill: ... }`, and the PNG follows.
-* `showValue: false` hides the Copy Field.
+* `showValue: false` hides the Copy Field. With `layout: 'inline'` it draws the QR button alone, `stolon-button-only`, for a row whose own buttons copy the text, and the button hides while there is no text.
 * The frame is an image named by `label`, or "QR code for" and the text.
 
 ## Reference
@@ -43,7 +43,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createQrCode(options?: QrCodeOptions): QrCodeHandle</code>
 
-With layout 'inline' it draws only the text as a wrapped Copy Field that shows all of it, with a QR button beside Copy that opens the full code, with its Copy image and Download, in a sidecar. A text too long to encode disables that button and shows the message.
+With layout 'inline' it draws only the text as a wrapped Copy Field that shows all of it, with a QR button beside Copy that opens the full code, with its Copy image and Download, in a sidecar. With showValue false as well it draws the QR button alone, with no Copy Field. A text too long to encode disables that button and shows the message.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -52,7 +52,7 @@ With layout 'inline' it draws only the text as a wrapped Copy Field that shows a
 | `showText` | <code>string</code> | the inline QR button's title and aria-label (default 'Show QR code') |
 | `sidecarTitle` | <code>string</code> | the sidecar's title (default 'QR code') |
 | `label` | <code>string</code> | the code's accessible name (default 'QR code for' and the text) |
-| `showValue` | <code>boolean</code> | false hides the Copy Field under the code (default true) |
+| `showValue` | <code>boolean</code> | false hides the Copy Field under the code, or inline leaves the QR button alone with no Copy Field (default true) |
 | `showActions` | <code>boolean</code> | false hides Copy image and Download, for a page that offers its own download (default true) |
 | `fileName` | <code>string</code> | the name of the downloaded PNG (default 'qr-code.png') |
 | `copyImageText` | <code>string</code> | the copy button's label (default 'Copy image') |
@@ -75,6 +75,7 @@ With layout 'inline' it draws only the text as a wrapped Copy Field that shows a
 | `stolon-qr-code.stolon-compact` | A narrow QR code stacks: the code the full width, then the buttons and the text under it at the same width |
 | `stolon-qr-code.stolon-qr-code-sidecar` | The code in its dialog: stacked, a code-sized column centered in the dialog |
 | `stolon-qr-code.stolon-inline` | An inline QR code: its whole text as a wrapped Copy Field with a QR button beside Copy that opens the code in a dialog |
+| `stolon-qr-code.stolon-inline.stolon-button-only` | An inline QR code with no Copy Field, the QR button alone, for a row whose own buttons copy the text |
 | `stolon-record-list-aside` | An inline QR code at the end of a record row, a code's width at most, so the row's text keeps its room and the link wraps inside it |
 | `stolon-qr-code-actions` | The Copy Image and Download buttons, two equal halves of a button row the code's width, a field tall like the Copy Field under them |
 

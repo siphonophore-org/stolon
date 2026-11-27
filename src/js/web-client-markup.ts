@@ -5,6 +5,8 @@
 import { escapeHtml } from './browser-helpers.js';
 import { formatText } from './translations.js';
 import { stolonText } from './lib/stolon-text.js';
+import { make, listen, runAll, nextId } from './lib/dom.js';
+import { bindModalBehavior } from './lib/dialog.js';
 
 /** Attributes a builder writes on an element, each name a plain attribute name and each value escaped. */
 export type WebAttributes = Record<string, string | number | boolean | null | undefined>;
@@ -426,6 +428,205 @@ export function webConfirmDialogBody(text: string): string {
     return '<div class="text">' + esc(text) + '</div><div class="stolon-web-error" id="dialogError" role="alert"></div>';
 }
 
+/** What openWebDialog takes. Every text is set as text, and html is placed as given, so pass only what a builder returned. */
+export interface WebDialogOptions {
+    look?: 'form' | 'message';
+    title?: string;
+    label?: string;
+    html?: string;
+    content?: Node | null;
+    text?: string;
+    buttons?: WebDialogAction[];
+    footerHtml?: string;
+    dismissable?: boolean;
+    onAction?(id: string, dialog: WebDialogHandle): boolean | void;
+    onClose?(id: string | null): void;
+}
+
+/** What openWebDialog returns. closed resolves with the id of the button that closed the dialog, or null for Back, Escape, or a click outside. */
+export interface WebDialogHandle {
+    element: HTMLElement;
+    container: HTMLElement;
+    content: HTMLElement;
+    footer: HTMLElement;
+    closed: Promise<string | null>;
+    close(id?: string | null): void;
+}
+
+// The exit animation's length and the backdrop's fade, as dialogHelper.js waits for them before it removes either.
+var DIALOG_EXIT_MS = 120;
+var BACKDROP_FADE_MS = 300;
+
+function reducedMotion(): boolean {
+    try { return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+}
+
+function dialogButton(b: WebDialogAction, message: boolean): HTMLButtonElement {
+    var cls = 'btnOption raised formDialogFooterItem' + (message ? ' formDialogFooterItem-autosize' : '') + (b.type ? ' button-' + b.type : '') + ' emby-button';
+    return make('button', cls, { type: 'button', id: b.id }, b.text) as HTMLButtonElement;
+}
+
+// src/components/dialogHelper/dialogHelper.js open, src/components/dialog/dialog.js, and components/prompt/prompt.template.html (12.4):
+// the backdrop, the dialog container, and the dialog, with its header, content, and footer.
+/**
+ * Opens a dialog as the web client builds one, for a page in the web client shell: the dimmed backdrop, the dialog container, and
+ * the focuscontainer dialog with its formDialogHeader, formDialogContent, and formDialogFooter, so the web client's stylesheets, the
+ * viewer's theme, and custom CSS draw it. The form look is the web client's form dialog, with Back and its title in the header, for
+ * side content or a form. The message look is its centered message dialog, such as a confirmation. It scales in and out as the web
+ * client's does, at once under prefers-reduced-motion. Focus moves into it and stays there, Escape and a click outside close it
+ * when dismissable, and focus goes back to the control that opened it.
+ *
+ * @param options {
+ *   look        : 'form', the form dialog with Back and its title, or 'message', the centered message dialog (default 'form')
+ *   title       : the title in the header [optional]
+ *   label       : the dialog's accessible name when it has no title [optional]
+ *   html        : the content's markup, from the builders, placed as given [optional]
+ *   content     : a node placed in the content after html [optional]
+ *   text        : a message set as text, the message look's sentence [optional]
+ *   buttons     : the footer's buttons, each { id, text, type } with type the web client's button color, such as submit or delete [optional]
+ *   footerHtml  : the footer's markup in place of buttons, such as webCancelDialogFooter [optional]
+ *   dismissable : false keeps it open on Escape and a click outside, and hides Back (default true)
+ *   onAction    : function(id, dialog) run on a click of a footer button with an id. It closes the dialog with that id unless it returns false [optional]
+ *   onClose     : function(id) run once it closes, with the id of the button that closed it or null [optional]
+ * }
+ * @returns { element, container, content, footer, closed, close }
+ */
+export function openWebDialog(options: WebDialogOptions): WebDialogHandle {
+    var opts = options || ({} as WebDialogOptions);
+    var message = opts.look === 'message';
+    var classes = message ? WEB_CONFIRM_DIALOG : WEB_FORM_DIALOG;
+    var dismissable = opts.dismissable !== false;
+    var cleanups: Array<() => void> = [];
+
+    var backdrop = make('div', 'dialogBackdrop');
+    var container = make('div', 'dialogContainer stolon-web-dialog');
+    var box = make('div', classes.box + (message ? ' centeredDialog' : '') + ' opened stolon-web-dialog-box', { role: message ? 'alertdialog' : 'dialog', 'aria-modal': 'true', tabindex: '-1' });
+    var header = make('div', classes.header);
+    var titleId = nextId('web-dialog-title');
+    if (message) {
+        var heading = make('h1', 'formDialogHeaderTitle stolon-web-dialog-title' + (opts.title ? '' : ' hide'), { id: titleId }, opts.title || '');
+        header.appendChild(heading);
+    } else {
+        var back = make('button', 'paper-icon-button-light btnCancel autoSize stolon-web-dialog-back', { type: 'button', title: stolonText('ButtonBack'), 'aria-label': stolonText('ButtonBack') }) as HTMLButtonElement;
+        back.appendChild(make('span', 'material-icons arrow_back', { 'aria-hidden': 'true' }));
+        back.hidden = !dismissable;
+        header.appendChild(back);
+        header.appendChild(make('h3', 'formDialogHeaderTitle', { id: titleId }, opts.title || ''));
+        cleanups.push(listen(back, 'click', function () { close(null); }));
+    }
+    if (opts.title) box.setAttribute('aria-labelledby', titleId);
+    else if (opts.label) box.setAttribute('aria-label', opts.label);
+
+    var content = make('div', classes.content);
+    var inner = make('div', 'dialogContentInner dialog-content-centered' + (message ? ' stolon-web-dialog-message' : ''));
+    if (opts.html) inner.innerHTML = opts.html;
+    if (opts.text) inner.appendChild(make('div', 'text', null, opts.text));
+    if (opts.content) inner.appendChild(opts.content);
+    if (message && !opts.html && !opts.text && !opts.content) inner.classList.add('hide');
+    content.appendChild(inner);
+    // The message dialog's content grows only as wide as its buttons need, as dialog.js sets it.
+    var count = opts.buttons ? opts.buttons.length : 2;
+    if (message) content.style.setProperty('--stolon-web-dialog-width', Math.max(0, Math.min(150 * count + 200, (window.innerWidth || 0) - 50)) + 'px');
+
+    var footer = make('div', classes.footer + (message ? ' stolon-web-dialog-footer' : ''));
+    if (opts.footerHtml) footer.innerHTML = opts.footerHtml;
+    else (opts.buttons || []).forEach(function (b) { footer.appendChild(dialogButton(b, message)); });
+    if (opts.footerHtml || (opts.buttons && opts.buttons.length)) {
+        cleanups.push(listen(footer, 'click', function (e: Event) {
+            var target = e.target as Element | null;
+            var button = target && target.closest ? target.closest('button') as HTMLButtonElement | null : null;
+            if (!button || !button.id || button.disabled) return;
+            if (opts.onAction && opts.onAction(button.id, handle) === false) return;
+            close(button.id);
+        }));
+    } else {
+        footer.hidden = true;
+    }
+
+    box.appendChild(header);
+    box.appendChild(content);
+    box.appendChild(footer);
+    container.appendChild(box);
+
+    var settled = false;
+    var resolveClosed: (id: string | null) => void = function () { return undefined; };
+    var closed = new Promise<string | null>(function (resolve) { resolveClosed = resolve; });
+    var modal = bindModalBehavior(container, box, {
+        dismissable: dismissable,
+        autofocus: (box.querySelector('[autofocus]') as HTMLElement | null) || (footer.querySelector('button') as HTMLElement | null) || null,
+        onDismiss: function () { close(null); }
+    });
+
+    function remove(el: HTMLElement): void { if (el.parentNode) el.parentNode.removeChild(el); }
+
+    function close(id?: string | null): void {
+        if (settled) return;
+        settled = true;
+        var value = id === undefined ? null : id;
+        runAll(cleanups);
+        backdrop.classList.remove('dialogBackdropOpened');
+        box.classList.remove('opened', 'stolon-web-dialog-opening');
+        modal.release();
+        modal.destroy();
+        if (reducedMotion()) {
+            remove(container);
+            remove(backdrop);
+        } else {
+            box.classList.add('stolon-web-dialog-closing');
+            setTimeout(function () { remove(container); }, DIALOG_EXIT_MS);
+            setTimeout(function () { remove(backdrop); }, BACKDROP_FADE_MS);
+        }
+        if (opts.onClose) opts.onClose(value);
+        resolveClosed(value);
+    }
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(container);
+    void backdrop.offsetWidth;
+    backdrop.classList.add('dialogBackdropOpened');
+    if (!reducedMotion()) box.classList.add('stolon-web-dialog-opening');
+    modal.activate();
+
+    var handle: WebDialogHandle = { element: box, container: container, content: inner, footer: footer, closed: closed, close: close };
+    return handle;
+}
+
+/** What webConfirm takes. */
+export interface WebConfirmOptions {
+    title?: string;
+    confirmText?: string;
+    cancelText?: string;
+    destructive?: boolean;
+}
+
+// src/components/confirm/confirm.js (12.4): the message dialog with Cancel and the action, as autosized buttons.
+/**
+ * Asks a yes or no question in the web client's own confirmation dialog, the centered message dialog with Cancel and the action,
+ * for a page in the web client shell. The title names the action and what it acts on, and the message says what follows from it.
+ *
+ * @param text the message, set as text
+ * @param options {
+ *   title       : the title, which names the action and what it acts on [optional]
+ *   confirmText : the action's label (default 'Confirm')
+ *   cancelText  : the cancel button's label (default 'Cancel')
+ *   destructive : true draws the action in the web client's delete color (default false)
+ * } [optional]
+ * @returns a promise of true once confirmed, and false otherwise
+ */
+export function webConfirm(text: string, options?: WebConfirmOptions): Promise<boolean> {
+    var opts = options || {};
+    return openWebDialog({
+        look: 'message',
+        title: opts.title,
+        label: opts.title ? undefined : text,
+        text: text,
+        buttons: [
+            { id: 'dialogCancel', text: opts.cancelText || stolonText('ButtonCancel') },
+            { id: 'dialogSubmit', text: opts.confirmText || stolonText('Stolon.Confirm'), type: opts.destructive ? 'delete' : 'submit' }
+        ]
+    }).closed.then(function (id) { return id === 'dialogSubmit'; });
+}
+
 // ---------- filters ----------
 
 // apps/experimental/components/library/filter/FilterButton.tsx (12.4): Material UI accordions, each a column of checkboxes.
@@ -724,11 +925,12 @@ export function webProgressBar(share: number): string {
     return '<div class="itemProgressBar"><div class="itemProgressBarForeground" style="width:' + percent + '%;"></div></div>';
 }
 
-/** A button of a card's hover menu, answered by the page through data-stolon-action. */
+/** A button of a card's hover menu, answered by the page through data-stolon-action. title is its tooltip, and label its accessible name when that says more. */
 export interface WebOverlayButton {
     action: string;
     icon: string;
     title: string;
+    label?: string;
     key?: string;
 }
 
@@ -739,13 +941,13 @@ export type WebOverlayPlacement = 'corner' | 'hover' | 'fab';
 /**
  * A button of a card's hover menu, answered by the page through data-stolon-action.
  *
- * @param button the button's action, icon, words, and key
+ * @param button the button's action, icon, tooltip as title, a longer accessible name as label (default the title), and key
  * @param placement where it sits (default 'corner', always shown)
  */
 export function webOverlayButton(button: WebOverlayButton, placement?: WebOverlayPlacement): string {
     var b = button;
     var extra = placement === 'fab' ? ' cardOverlayButton-hover cardOverlayFab-primary' : placement === 'hover' ? ' cardOverlayButton-hover' : '';
-    return '<button type="button" class="cardOverlayButton itemAction paper-icon-button-light' + extra + '"' + attrs({ 'data-stolon-action': b.action, 'data-stolon-key': b.key || null, title: b.title, 'aria-label': b.title })
+    return '<button type="button" class="cardOverlayButton itemAction paper-icon-button-light' + extra + '"' + attrs({ 'data-stolon-action': b.action, 'data-stolon-key': b.key || null, title: b.title, 'aria-label': b.label || b.title })
         + '><span class="material-icons cardOverlayButtonIcon' + (extra ? ' cardOverlayButtonIcon-hover' : '') + ' ' + esc(b.icon) + '" aria-hidden="true"></span></button>';
 }
 

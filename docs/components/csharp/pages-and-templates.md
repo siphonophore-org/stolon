@@ -288,7 +288,7 @@ return Content(html, "text/html");
 
 ### In the Web Client Shell
 
-`ServeWebClient` serves a status screen in the [Web Client Shell](../web/web-client-shell.md) instead, with the hardening headers, in the request's language. `StatusPageScreen` picks loading, sign in required, not authorized, or not found, and the other overload takes the plugin's own heading, message, button, spinner, content, and status code.
+`ServeWebClient` serves a status screen in the [Web Client Shell](../web/web-client-shell.md) instead, with the hardening headers, in the request's language. `StatusPageScreen` picks loading, sign in required, not authorized, or not found, `title` sets the document title, and the other overload takes the plugin's own heading, message, button, spinner, content, and status code.
 
 ```csharp
 [HttpGet("/pages/{slug}")]
@@ -321,7 +321,7 @@ var frame = "<iframe sandbox srcdoc=\"" + WebUtility.HtmlEncode(document) + "\">
 **Gotchas**
 
 * `Inject` puts the style block first in the head, so the author's own styles win. A document with no head gets it after its `html` tag, or before everything.
-* The font addresses are relative to the page the request opened, since a `srcdoc` frame resolves addresses against the page that holds it. Jellyfin answers the web client's fonts to any origin, so a sandboxed frame loads them too.
+* The font addresses are relative to the page the request opened, since a `srcdoc` frame resolves addresses against the page that holds it. Content fetched from another path than the page that shows it, such as `/pages/{slug}/user` for the page at `/pages/{slug}`, passes the holding page's path to `Style` or `Inject`, so the fonts resolve under any base path. Jellyfin answers the web client's fonts to any origin, so a sandboxed frame loads them too.
 * Without a web client folder the block has no font faces, and the text falls back to the font stack.
 
 ## PublicPage

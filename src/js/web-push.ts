@@ -1,6 +1,6 @@
 import { stolonText } from './lib/stolon-text.js';
 import { pushState, pushSubscribe, pushUnsubscribe, pushLabel } from './lib/push.js';
-import { make, listen, runAll } from './lib/dom.js';
+import { make, listen, runAll, nextId } from './lib/dom.js';
 import { setStatus } from './status-text.js';
 import type { ComponentHandle } from './types.js';
 
@@ -112,11 +112,18 @@ export interface WebPushToggleOptions {
     offText?: string;
     failedText?: string;
     onChange?(result: WebPushResult): void;
+    look?: 'button' | 'settings';
+    label?: string;
+    id?: string;
 }
 
-/** What createWebPushToggle returns. getState is null until the first check lands, and while the server offers no web push. refresh checks again. */
+/**
+ * What createWebPushToggle returns. getState is null until the first check lands, and while the server offers no web push. refresh
+ * checks again. In the settings look checkbox is the control and button is not on the page, and without it checkbox is null.
+ */
 export interface WebPushToggleHandle extends ComponentHandle {
     button: HTMLButtonElement;
+    checkbox: HTMLInputElement | null;
     status: HTMLElement;
     getState(): WebPushState | null;
     refresh(): Promise<WebPushState | null>;
@@ -159,7 +166,9 @@ var TOGGLE_LOOK: Record<WebPushState, 'success' | 'info' | 'warn'> = { on: 'succ
  * A status line of where this browser stands with web push, and a button that turns notifications on or off for it. It asks the
  * plugin for the server's VAPID public key, registers the plugin's service worker, and sends the subscription to the plugin's
  * routes. A browser with no push, a page not on HTTPS, an iPhone page not on the home screen, and a person who blocked
- * notifications each show their sentence with no button. While the server offers no key the whole toggle is hidden.
+ * notifications each show their sentence with no button. While the server offers no key the whole toggle is hidden. The settings
+ * look draws it as a checkbox row of the web client's settings pages, for a page in the web client shell, with the sentence as
+ * the row's description, and the checkbox turns on only while notifications can be turned on or off.
  *
  * @param options {
  *   keyUrl         : the route that answers the VAPID public key, as { PublicKey } or the key as text
@@ -173,17 +182,39 @@ var TOGGLE_LOOK: Record<WebPushState, 'success' | 'info' | 'warn'> = { on: 'succ
  *   offText        : the button's label while notifications are on (default 'Turn off notifications')
  *   failedText     : the line when turning them on or off fails (default 'Could not change notifications in this browser.')
  *   onChange       : function({ state, message }) run after each check and each change [optional]
+ *   look           : 'button', the status line and a button, or 'settings', a web client settings checkbox with its state line (default 'button')
+ *   label          : the settings checkbox's label (default 'Notifications in this browser')
+ *   id             : the settings checkbox's id [optional]
  * }
- * @returns { element, button, status, getState, refresh, destroy }
+ * @returns { element, button, checkbox, status, getState, refresh, destroy }
  */
 export function createWebPushToggle(options: WebPushToggleOptions): WebPushToggleHandle {
     var opts = options || ({} as WebPushToggleOptions);
     var cleanups: Array<() => void> = [];
-    var root = make('div', 'stolon-web-push');
-    var status = make('div', 'stolon-status-text');
+    var settings = opts.look === 'settings';
+    var root = make('div', settings ? 'checkboxContainer checkboxContainer-withDescription stolon-web-push-settings' : 'stolon-web-push');
+    var status = make('div', settings ? 'fieldDescription checkboxFieldDescription' : 'stolon-status-text');
     var button = make('button', 'raised stolon-button stolon-secondary', { type: 'button', is: 'emby-button' });
-    root.appendChild(status);
-    root.appendChild(button);
+    var checkbox: HTMLInputElement | null = null;
+    if (settings) {
+        // A settings page's checkbox once the web client's emby-checkbox upgrades it, with its description under it.
+        var row = make('label', 'emby-checkbox-label');
+        checkbox = make('input', 'emby-checkbox', { type: 'checkbox', 'data-embycheckbox': 'true', id: opts.id || nextId('web-push') }) as HTMLInputElement;
+        checkbox.disabled = true;
+        row.appendChild(checkbox);
+        row.appendChild(make('span', 'checkboxLabel', null, opts.label || stolonText('Stolon.PushInThisBrowser')));
+        var outline = make('span', 'checkboxOutline');
+        outline.appendChild(make('span', 'material-icons checkboxIcon checkboxIcon-checked check', { 'aria-hidden': 'true' }));
+        outline.appendChild(make('span', 'material-icons checkboxIcon checkboxIcon-unchecked', { 'aria-hidden': 'true' }));
+        row.appendChild(outline);
+        status.id = checkbox.id + '-state';
+        checkbox.setAttribute('aria-describedby', status.id);
+        root.appendChild(row);
+        root.appendChild(status);
+    } else {
+        root.appendChild(status);
+        root.appendChild(button);
+    }
     button.hidden = true;
     var state: WebPushState | null = null;
     var key = '';
@@ -213,11 +244,21 @@ export function createWebPushToggle(options: WebPushToggleOptions): WebPushToggl
         return registration;
     }
 
+    // The state line: the status text's look by state, or in the settings look the row's plain description.
+    function line(text: string, error: boolean, look?: 'success' | 'info' | 'warn'): void {
+        if (settings) status.textContent = text;
+        else setStatus(root, status, text, error, { timeout: 0, state: look });
+    }
+
     function show(next: WebPushResult): WebPushResult {
         state = next.state;
-        setStatus(root, status, next.message, false, { timeout: 0, state: TOGGLE_LOOK[next.state] });
+        line(next.message, false, TOGGLE_LOOK[next.state]);
         button.textContent = state === 'on' ? (opts.offText || stolonText('Stolon.PushTurnOff')) : (opts.onText || stolonText('Stolon.PushTurnOn'));
         button.hidden = !(state === 'on' || state === 'off');
+        if (checkbox) {
+            checkbox.checked = state === 'on';
+            checkbox.disabled = !(state === 'on' || state === 'off');
+        }
         if (opts.onChange) opts.onChange(next);
         return next;
     }
@@ -248,19 +289,27 @@ export function createWebPushToggle(options: WebPushToggleOptions): WebPushToggl
             remove: function (sub) { return post(opts.unsubscribeUrl, sub); }
         };
         button.disabled = true;
+        if (checkbox) checkbox.disabled = true;
         return (state === 'on' ? unsubscribeWebPush(push) : subscribeWebPush(push)).then(function (next) {
             if (!destroyed) show(next);
         }, function () {
-            if (!destroyed) setStatus(root, status, opts.failedText || stolonText('Stolon.PushFailed'), true, { timeout: 0 });
-        }).then(function () { button.disabled = false; });
+            if (destroyed) return;
+            line(opts.failedText || stolonText('Stolon.PushFailed'), true);
+            if (checkbox) checkbox.checked = state === 'on';
+        }).then(function () {
+            button.disabled = false;
+            if (checkbox) checkbox.disabled = !(state === 'on' || state === 'off');
+        });
     }
 
     cleanups.push(listen(button, 'click', function () { void toggle(); }));
+    if (checkbox) cleanups.push(listen(checkbox, 'change', function () { void toggle(); }));
     void refresh();
 
     return {
         element: root,
         button: button,
+        checkbox: checkbox,
         status: status,
         getState: function () { return state; },
         refresh: refresh,

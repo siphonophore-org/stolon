@@ -26,7 +26,20 @@ Classes: `sectionTitleContainer`, `sectionTitle`.
 
 ## Gotchas
 
+* The look applies only outside the [Web Client Shell](web-client-shell.md), `body:not(.stolon-shell)`, so the web client's own `sectionTitleContainer` headings on a shell page keep the web client's look.
 * The underline needs the container to be a flex row (`flex align-items-center` from Jellyfin), or the heading does not fill it.
+
+## Reference
+
+Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this section.
+
+<!-- reference:start -->
+
+| Class | What it looks like |
+| :--- | :--- |
+| `stolon-shell` | Page section heading with a full width underline rule, spaced from the heading before it. A page in the web client shell keeps the web client's own headings |
+
+<!-- reference:end -->
 
 ## Example
 

@@ -16,7 +16,8 @@ var ALLOWED = {
     chevron_left: 'scrolls a row of cards back, as the web client does',
     arrow_upward: 'a rising trend, or the folder above',
     arrow_downward: 'a falling trend',
-    arrow_forward: 'a route from one place to the next, turned down when the places stack'
+    arrow_forward: 'a route from one place to the next, turned down when the places stack',
+    arrow_back: 'goes back out of a web client form dialog, as the web client does'
 };
 
 function files(dir, ext) {

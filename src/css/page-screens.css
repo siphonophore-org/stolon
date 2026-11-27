@@ -56,7 +56,7 @@ div.stolon-screen-logo { width: calc(var(--stolon-size-large) * 8); background-p
 .stolon-sign-in-remember label { display: inline-flex; align-items: center; gap: var(--stolon-gap-narrow); cursor: pointer; }
 
 /* A warning before signing in, such as on a connection that is not secure, and a sign in error, both in their status colors */
-/* Example: <p class="stolon-screen-warning" role="note">This connection isn't secure.</p><div class="stolon-screen-error" role="alert">Invalid username or password.</div> */
+/* Example: <p class="stolon-screen-warning" role="note">This connection is not secure.</p><div class="stolon-screen-error" role="alert">Invalid username or password.</div> */
 .stolon-screen-warning { margin: 0; color: var(--stolon-orange-fg); }
 .stolon-screen-error { color: var(--stolon-red-fg); min-height: var(--stolon-line-medium); }
 .stolon-screen-error:empty { display: none; }

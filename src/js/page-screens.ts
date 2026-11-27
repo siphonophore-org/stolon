@@ -20,6 +20,7 @@ export interface SignInOptions {
     message?: string;
     client?: string;
     version?: string;
+    keepSignIn?: boolean;
     onSignedIn: (result: SignInResult, remember: boolean) => void;
 }
 
@@ -40,6 +41,7 @@ export interface MessageScreenOptions {
 // Where the web client keeps its sign-ins and its device id. They are the web client's own storage, not a public API.
 var CREDENTIALS = 'jellyfin_credentials';
 var DEVICE = '_deviceId2';
+var AUTO_LOGIN = 'enableAutoLogin';
 var TOKEN = /^[A-Za-z0-9]{16,128}$/;
 var QUICK_CONNECT_CODE = /^[A-Za-z0-9]{4,12}$/;
 var POLL_MS = 5000;
@@ -91,6 +93,16 @@ export function saveSignIn(serverId: string, serverName: string | null, result: 
     } catch (e) {
         return false;
     }
+}
+
+// Whether the web client signs in on its own next time, its Remember me, which its login page reads and writes. It is on
+// unless the viewer turned it off.
+function autoLogin(): boolean {
+    try { return !storage() || storage()!.getItem(AUTO_LOGIN) !== 'false'; } catch (e) { return true; }
+}
+
+function setAutoLogin(on: boolean): void {
+    try { if (storage()) storage()!.setItem(AUTO_LOGIN, on ? 'true' : 'false'); } catch (e) { /* the choice lasts for this page only */ }
 }
 
 // The server's address, from the page's base address, which HostedPage points at the server root under any base path.
@@ -181,7 +193,9 @@ function field(id: string, label: string, type: string, autocomplete: string, we
 /**
  * The sign in screen, copied from the web client's own login page: user and password, Remember me, Sign in, Quick Connect
  * when the server has it on, Forgot password, and the server's login disclaimer. It signs in through Jellyfin's own API,
- * never keeps the password past the request, and hands the result to onSignedIn with whether to remember it.
+ * never keeps the password past the request, and hands the result to onSignedIn with whether to remember it. As the web
+ * client's login page, it keeps a remembered sign-in where the web client keeps its own, so the viewer is signed in to the
+ * web client too, and keeps the Remember me choice for the web client's next start.
  *
  * @param options {
  *   serverId   : the server's id, which the answer must match (required)
@@ -190,6 +204,7 @@ function field(id: string, label: string, type: string, autocomplete: string, we
  *   message    : the sentence under it (default none)
  *   client     : the client name Jellyfin shows in its devices list (default 'Jellyfin Web')
  *   version    : the client version (default '1.0')
+ *   keepSignIn : false keeps nothing in the web client's storage, for a page that keeps the sign-in itself (default true)
  *   onSignedIn : called with Jellyfin's answer and whether Remember me was on (required)
  * }
  * @returns { element, destroy }
@@ -214,14 +229,27 @@ export function createSignIn(options: SignInOptions): ScreenHandle {
     form.appendChild(user.row);
     form.appendChild(password.row);
 
-    var rememberRow = make('div', web ? 'checkboxContainer stolon-sign-in-remember' : 'stolon-sign-in-remember');
-    var rememberLabel = make('label', web ? 'emby-checkbox-label' : 'stolon-check-row');
     var remember = make('input', web ? 'emby-checkbox' : null, { type: 'checkbox', id: 'stolonSignInRemember' }) as HTMLInputElement;
-    remember.checked = true;
-    rememberLabel.appendChild(remember);
-    rememberLabel.appendChild(make('span', web ? 'checkboxLabel' : null, null, stolonText('RememberMe')));
-    rememberRow.appendChild(rememberLabel);
-    form.appendChild(rememberRow);
+    remember.checked = autoLogin();
+    if (web) {
+        // The web client login page's Remember me once its emby-checkbox upgrades: the label is the container, and the box is its outline.
+        var webRemember = make('label', 'checkboxContainer emby-checkbox-label stolon-sign-in-remember');
+        remember.setAttribute('data-embycheckbox', 'true');
+        webRemember.appendChild(remember);
+        webRemember.appendChild(make('span', 'checkboxLabel', null, stolonText('RememberMe')));
+        var outline = make('span', 'checkboxOutline');
+        outline.appendChild(make('span', 'material-icons checkboxIcon checkboxIcon-checked check', { 'aria-hidden': 'true' }));
+        outline.appendChild(make('span', 'material-icons checkboxIcon checkboxIcon-unchecked', { 'aria-hidden': 'true' }));
+        webRemember.appendChild(outline);
+        form.appendChild(webRemember);
+    } else {
+        var rememberRow = make('div', 'stolon-sign-in-remember');
+        var rememberLabel = make('label', 'stolon-check-row');
+        rememberLabel.appendChild(remember);
+        rememberLabel.appendChild(make('span', null, null, stolonText('RememberMe')));
+        rememberRow.appendChild(rememberLabel);
+        form.appendChild(rememberRow);
+    }
 
     var submit = button(stolonText('ButtonSignIn'), true, web, 'submit');
     var quick = button(stolonText('ButtonUseQuickConnect'), false, web);
@@ -281,6 +309,11 @@ export function createSignIn(options: SignInOptions): ScreenHandle {
         stopQuickConnect();
         password.input.value = '';
         if (destroyed) return;
+        // As the web client's login page: Remember me is kept for its next start, and a remembered sign-in is kept where it keeps its own.
+        if (opts.keepSignIn !== false) {
+            setAutoLogin(remember.checked);
+            if (remember.checked) saveSignIn(opts.serverId, opts.serverName || null, result);
+        }
         opts.onSignedIn(result, remember.checked);
     }
 
@@ -400,7 +433,7 @@ function messageScreen(title: string, message: string, linkText: string, href: s
 /**
  * The screen for a signed in viewer the page does not admit, such as a page for administrators or for selected people.
  *
- * @param options { title (default 'You can't open this page'), message (default Jellyfin's unauthorized sentence), linkText (default 'Home'), href (default 'web/') } [optional]
+ * @param options { title (default 'You cannot open this page'), message (default Jellyfin's unauthorized sentence), linkText (default 'Home'), href (default 'web/') } [optional]
  * @returns { element, destroy }
  */
 export function createUnauthorized(options?: MessageScreenOptions): ScreenHandle {

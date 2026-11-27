@@ -62,6 +62,24 @@ The bar's entries are Favorites, the menu links of the web client's `config.json
 
 The access rules are `HostedPage`'s, checked by the same page script as the [User Page](user-page.md). A signed out viewer of a `User` page gets the sign in card under the bar, and the content stays hidden. An `Anyone` page starts with no viewer, so its bar shows the server alone.
 
+### Handing the Page Over
+
+A status page follows the viewer's sign-in, so its shell keeps fetching, the libraries, `config.json`, and the theme, and adds stylesheets to the page as answers land. A page that writes another page into its document, such as a loading page that fetched the page it stands in for, stops the shell first.
+
+```js
+const base = await import('./web/configurationpage?name=myplugin_stolon.js');
+await base.startWebClientShell({ follow: false });
+const html = await (await fetch(contentUrl, { headers: { Authorization: auth } })).text();
+base.stopWebClientShell();
+document.open();
+document.write(html);
+document.close();
+```
+
+* `stopWebClientShell()` stops every listener and timer, drops every answer still on its way so nothing more is fetched or added, and removes the toaster. The page as drawn stays, and the next `startWebClientShell` call, such as the written page's own, starts afresh.
+* `follow: false` keeps a status page signed out, so it never looks for the viewer's sign-in at all.
+* A session's `destroy()` stops the same way, and keeps the started shell, so later calls on the same page still return it.
+
 ## Signed Out
 
 `Frame = HostedPageFrame.WebClientSignedOut` draws the page as the web client's login page, for a page anyone with a link opens, such as an invite sign up, an invite that is no longer good, or the page after sign up.
@@ -106,7 +124,12 @@ await base.startWebClientShell();
 var html = WebClientContentStyle.Inject(this, authorDocument);
 ```
 
-`Inject` puts the style block first in the document's head, so the author's own styles after it win. `Style` returns the block alone. The font addresses are relative to the page the request opened, which a `srcdoc` frame resolves its addresses against.
+`Inject` puts the style block first in the document's head, so the author's own styles after it win. `Style` returns the block alone. The font addresses are relative to the page the request opened, which a `srcdoc` frame resolves its addresses against. Content the page fetches from a deeper path and writes into itself passes the path of the page that shows it, without the server's base path.
+
+```csharp
+// Served at /pages/{slug}/user, shown in the page at /pages/{slug}.
+var html = WebClientContentStyle.Inject(this, authorDocument, "/pages/" + slug);
+```
 
 <iframe class="stolon-preview" src="../../../assets/previews/web-client-content.html" title="Web Client content style example" loading="lazy"></iframe>
 
@@ -138,6 +161,13 @@ The shell follows every way an administrator or a viewer changes the web client'
 * `data-theme` on the root names the theme, and the page script sets the palette variables the web client's Material UI theme writes at runtime, such as `--jf-palette-background-paper`, for each of the web client's six themes.
 * Both custom stylesheets go at the end of the page, after the content, so they win as in the web client. The viewer's CSS is the text of a style element, never markup.
 * `applyWebClientLook` applies all of this, and `startWebClientShell` calls it.
+* A page whose base address is not the server root, such as one at `/requests/` with no `base` element, passes the server root, such as `applyWebClientLook({ userId, root: '../' })`, so the theme and `Branding/Css` load from any page path.
+
+### The Web Client's Helper Rules
+
+The web client keeps some rules outside the stylesheets `HostedPage` links: its scroll arrows, `emby-scrollbuttons`, in a stylesheet chunk it loads with its scrolling rows, and `hide-desktop`, `hide-mobile`, and `hide-tv` in its `index.html`. The shell's CSS carries them, so a page in the web client's look that does not use `HostedPage` gets them too.
+
+Stolon's [Section Title](section-title.md) look applies outside the shell only, so the web client's own `sectionTitleContainer` headings in a shell page keep the web client's look.
 
 Custom CSS reaches the shell because its markup keeps Jellyfin's class names exactly. CSS aimed at Material UI's generated class names, such as `css-1x2y3z`, or at a part of the web client the shell does not copy, cannot match.
 
@@ -206,28 +236,36 @@ The variables the web client's Material UI theme sets for each of its themes, by
 
 <code>function applyWebClientLook(options?: WebClientLookOptions): WebClientLook</code>
 
-Follows the viewer's web client look in the order the web client applies it: their theme, then the server's custom CSS from Branding/Css unless they turned it off, then their own custom CSS from Display settings. Both custom stylesheets go last in the page, after Stolon's and the plugin's styles, so they win as in the web client. The viewer's CSS is set as the text of a style element. Call it again once the viewer is known.
+Follows the viewer's web client look in the order the web client applies it: their theme, then the server's custom CSS from Branding/Css unless they turned it off, then their own custom CSS from Display settings. Both custom stylesheets go last in the page, after Stolon's and the plugin's styles, so they win as in the web client. The viewer's CSS is set as the text of a style element. Call it again once the viewer is known. A page whose base address is not the server root, such as one at /requests/ with no base element, passes the server root, so the theme and the server's CSS load from any page path.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `userId` | <code>string &#124; null</code> | the viewer, whose settings it reads, or null for no signed in viewer [optional] |
 | `themes` | <code>WebClientTheme[] &#124; null</code> | the themes the web client's config.json lists (default the web client's six) |
 | `storage` | <code>Storage &#124; null</code> | where the web client keeps its settings (default localStorage) |
+| `root` | <code>string &#124; null</code> | the server root, relative to the page or absolute, such as '../' (default the page's base address) |
+
+### `stopWebClientShell`
+
+<code>function stopWebClientShell(): void</code>
+
+Stops the web client shell this page started and forgets it, for a page that hands the document over, such as a loading page that writes the page it fetched into the document. Every listener and timer stops, every answer still on its way is dropped so nothing more is fetched or added to the page, and the toaster goes. The page as drawn stays, and the next startWebClientShell call, such as the written page's own, starts afresh.
 
 ### `startWebClientShell`
 
 <code>function startWebClientShell(options?: WebClientShellOptions): Promise&lt;WebClientShellSession &#124; null&gt;</code>
 
-Starts a page HostedPage serves in the web client shell. It follows the viewer's layout, theme, and custom CSS, checks the viewer as startUserPage does, and fills the app bar with their libraries, the user menu, and the drawer. A viewer who may not see the page gets the user page's card. In the signed out frame the page keeps the web client login page's header and shows no viewer, and a status page moves into the signed in shell once it finds the viewer's sign-in. Later calls return the same promise, so the page's own script calls it for the session.
+Starts a page HostedPage serves in the web client shell. It follows the viewer's layout, theme, and custom CSS, checks the viewer as startUserPage does, and fills the app bar with their libraries, the user menu, and the drawer. A viewer who may not see the page gets the user page's card. In the signed out frame the page keeps the web client login page's header and shows no viewer, and a status page moves into the signed in shell once it finds the viewer's sign-in. Later calls return the same promise, so the page's own script calls it for the session. A page that hands the document over to another calls stopWebClientShell first.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
 | `menuItems` | <code>WebClientMenuItem[]</code> | the plugin's own user menu entries, after Settings [optional] |
+| `follow` | <code>boolean</code> | false keeps a status page signed out, even with the viewer's sign-in in this browser (default true) |
 
 | Type | What it is |
 | :--- | :--- |
 | `WebClientMenuItem` | An entry a plugin adds to the user menu, after Settings: a link with href, or select for one the page answers itself. |
-| `WebClientShellSession` | What startWebClientShell resolves to: the viewer's session, a toast in the web client's look, and destroy. |
+| `WebClientShellSession` | What startWebClientShell resolves to: the viewer's session, a toast in the web client's look, and destroy, which stops the shell's listeners and every answer still on its way. |
 | `WebClientTheme` | A theme of the web client's config.json. |
 | `WebClientLook` | What applyWebClientLook applied: the theme, and whether the server's and the viewer's custom CSS are on the page. |
 

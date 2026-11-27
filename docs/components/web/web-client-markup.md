@@ -64,6 +64,30 @@ document.getElementById('issues').innerHTML = base.webPaperList(reports.map(func
 }).join(''));
 ```
 
+### Dialogs
+
+`openWebDialog` opens a dialog as the web client builds one, for a page in the shell: the `dialogBackdrop`, the `dialogContainer`, and the `focuscontainer dialog` with its `formDialogHeader`, `formDialogContent`, and `formDialogFooter`, so the web client's stylesheets, the viewer's theme, and custom CSS draw it. `webConfirm` asks a yes or no question in its message dialog.
+
+```js
+const ok = await base.webConfirm('The invite stops working.', { title: 'Delete Den', confirmText: 'Delete', destructive: true });
+const dialog = base.openWebDialog({
+    title: 'Report a problem',
+    html: base.webTextareaField({ id: 'note', label: 'What is wrong', maxLength: 500 }),
+    buttons: [{ id: 'dialogSubmit', text: 'Send', type: 'submit' }],
+    onAction: function (id) { return send(document.getElementById('note').value); }
+});
+```
+
+* `look: 'form'`, the default, is the web client's form dialog, `WEB_FORM_DIALOG`, with Back and the title in its header, for side content or a form. `look: 'message'` is its centered message dialog, `WEB_CONFIRM_DIALOG`, its content as wide as its buttons need.
+* A footer button with an id closes the dialog with that id, unless `onAction` returns false. Back, Escape, and a click outside close it with null, unless `dismissable` is false. `closed` resolves with the id.
+* Focus moves into the dialog and stays there, and goes back to the control that opened it. Cancel takes focus first in `webConfirm`, never the action.
+* It scales in and out with the web client's `scaleup` and `scaledown` and its backdrop fades, at once under `prefers-reduced-motion`.
+
+### Cards and Filters
+
+* `webOverlayButton` takes a `label` for a longer accessible name than its tooltip, such as "Request Charade (1963)" under the tooltip "Request".
+* The filter popover grows in from its corner as the web client's Material UI popover does, each time it shows, and at once under `prefers-reduced-motion`.
+
 ## Gotchas
 
 * A builder's markup is the web client's at version 12.4. When the web client changes, `WebClientCheck` reports a class it lacks, and the parity check shows what moved. Compare against the file named above the builder.
@@ -259,6 +283,48 @@ A form dialog's footer of several actions side by side, each as wide as Cancel a
 
 The message dialog's text, with a place for an error under it.
 
+### `openWebDialog`
+
+<code>function openWebDialog(options: WebDialogOptions): WebDialogHandle</code>
+
+Opens a dialog as the web client builds one, for a page in the web client shell: the dimmed backdrop, the dialog container, and the focuscontainer dialog with its formDialogHeader, formDialogContent, and formDialogFooter, so the web client's stylesheets, the viewer's theme, and custom CSS draw it. The form look is the web client's form dialog, with Back and its title in the header, for side content or a form. The message look is its centered message dialog, such as a confirmation. It scales in and out as the web client's does, at once under prefers-reduced-motion. Focus moves into it and stays there, Escape and a click outside close it when dismissable, and focus goes back to the control that opened it.
+
+| Option | Type | What it does |
+| :--- | :--- | :--- |
+| `look` | <code>'form' &#124; 'message'</code> | 'form', the form dialog with Back and its title, or 'message', the centered message dialog (default 'form') |
+| `title` | <code>string</code> | the title in the header [optional] |
+| `label` | <code>string</code> | the dialog's accessible name when it has no title [optional] |
+| `html` | <code>string</code> | the content's markup, from the builders, placed as given [optional] |
+| `content` | <code>Node &#124; null</code> | a node placed in the content after html [optional] |
+| `text` | <code>string</code> | a message set as text, the message look's sentence [optional] |
+| `buttons` | <code>WebDialogAction[]</code> | the footer's buttons, each { id, text, type } with type the web client's button color, such as submit or delete [optional] |
+| `footerHtml` | <code>string</code> | the footer's markup in place of buttons, such as webCancelDialogFooter [optional] |
+| `dismissable` | <code>boolean</code> | false keeps it open on Escape and a click outside, and hides Back (default true) |
+| `onAction` | <code>(id: string, dialog: WebDialogHandle): boolean &#124; void</code> | function(id, dialog) run on a click of a footer button with an id. It closes the dialog with that id unless it returns false [optional] |
+| `onClose` | <code>(id: string &#124; null): void</code> | function(id) run once it closes, with the id of the button that closed it or null [optional] |
+
+| Handle member | Type |
+| :--- | :--- |
+| `element` | <code>HTMLElement</code> |
+| `container` | <code>HTMLElement</code> |
+| `content` | <code>HTMLElement</code> |
+| `footer` | <code>HTMLElement</code> |
+| `closed` | <code>Promise&lt;string &#124; null&gt;</code> |
+| `close` | <code>(id?: string &#124; null): void</code> |
+
+### `webConfirm`
+
+<code>function webConfirm(text: string, options?: WebConfirmOptions): Promise&lt;boolean&gt;</code>
+
+Asks a yes or no question in the web client's own confirmation dialog, the centered message dialog with Cancel and the action, for a page in the web client shell. The title names the action and what it acts on, and the message says what follows from it.
+
+| Option | Type | What it does |
+| :--- | :--- | :--- |
+| `title` | <code>string</code> | the title, which names the action and what it acts on [optional] |
+| `confirmText` | <code>string</code> | the action's label (default 'Confirm') |
+| `cancelText` | <code>string</code> | the cancel button's label (default 'Cancel') |
+| `destructive` | <code>boolean</code> | true draws the action in the web client's delete color (default false) |
+
 ### `webMuiIcon`
 
 <code>function webMuiIcon(path: string, classes: string): string</code>
@@ -411,6 +477,7 @@ A button of a card's hover menu, answered by the page through data-stolon-action
 | `action` (required) | <code>string</code> |  |
 | `icon` (required) | <code>string</code> |  |
 | `title` (required) | <code>string</code> |  |
+| `label` | <code>string</code> |  |
 | `key` | <code>string</code> |  |
 
 ### `webCard`
@@ -684,6 +751,7 @@ A box of limits in the web client's paper list, each a line of what it is and wh
 | `stolon-web-filters` | The filter popover, Material UI's popover paper with a section per filter, each a heading that opens its checkboxes |
 | `stolon-web-skeleton-padder` | A loading placeholder card or line, a pulsing bar in place of text and a pulsing picture |
 | `stolon-web-appear` | Content that fades in once it has waited a moment, so a quick answer never flashes a placeholder |
+| `stolon-web-dialog-box.stolon-web-dialog-opening` | A dialog from openWebDialog: it scales in and out as the web client's dialogs do, its message dialog's title and text spaced and centered as dialog.js sets them, and its content as wide as its buttons need |
 | `stolon-web-detail-status` | Where an item stands among the details page's buttons, the detail button's icon as plain text, never greyed out as a disabled button |
 | `stolon-web-note-row` | A row in the web client's list look that reads as text: its title, a second line, an aside at its end, then who it is from and its notes across it |
 | `stolon-web-notice` | A settings page's group heading over a form, with its description under it |

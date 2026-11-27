@@ -1,12 +1,12 @@
-/* Page section heading with a full width underline rule, spaced from the heading before it */
+/* Page section heading with a full width underline rule, spaced from the heading before it. A page in the web client shell keeps the web client's own headings */
 /* Example: <div class="sectionTitleContainer flex align-items-center"><h2 class="sectionTitle">Settings</h2></div> */
-.sectionTitleContainer {
+body:not(.stolon-shell) .sectionTitleContainer {
     margin-top: var(--stolon-gap-wide);
 }
-.sectionTitleContainer:first-child {
+body:not(.stolon-shell) .sectionTitleContainer:first-child {
     margin-top: var(--stolon-gap-wide);
 }
-.sectionTitleContainer .sectionTitle {
+body:not(.stolon-shell) .sectionTitleContainer .sectionTitle {
     flex: 1;
     width: 100%;
     border-bottom: 1px solid var(--stolon-border);

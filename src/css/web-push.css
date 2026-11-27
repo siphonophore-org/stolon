@@ -10,3 +10,7 @@
 .stolon-web-push > [hidden] { display: none; }
 .stolon-web-push > .stolon-status-text { margin-top: 0; }
 .stolon-web-push > .stolon-button { margin: 0 !important; }
+
+/* Web push as a web client settings checkbox, the web client's checkbox row with the state line as its description */
+/* Example: <div class="checkboxContainer checkboxContainer-withDescription stolon-web-push-settings"><label class="emby-checkbox-label"><input type="checkbox" class="emby-checkbox"><span class="checkboxLabel">Notifications in this browser</span></label><div class="fieldDescription checkboxFieldDescription">Notifications are off.</div></div> */
+.stolon-web-push-settings[hidden] { display: none; }

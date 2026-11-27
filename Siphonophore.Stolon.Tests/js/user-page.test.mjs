@@ -206,7 +206,7 @@ test('an administrator page turns away a signed in viewer who is not an administ
     var session = await startUserPage({ deniedMessage: 'Admins only.' });
     assert.equal(session, null);
     var screen = parts.gate.querySelector('.stolon-unauthorized');
-    assert.equal(screen.querySelector('.stolon-screen-title').textContent, "You can't open this page");
+    assert.equal(screen.querySelector('.stolon-screen-title').textContent, "You cannot open this page");
     assert.equal(screen.querySelector('.stolon-screen-text').textContent, 'Admins only.');
     assert.equal(screen.querySelector('a').textContent, 'Home');
 });
@@ -282,4 +282,71 @@ test('setUserPageMessage draws a callout with the state icon and hides when empt
     setUserPageMessage(box, 'warn', '');
     assert.equal(box.hidden, true);
     assert.equal(box.children.length, 0);
+});
+
+var { createSignIn } = await import('../../src/js/page-screens.js');
+
+// Signs in on a screen created alone, as a page's own loader does, and waits for the answer.
+async function signInAlone(options) {
+    globalThis.localStorage = storage([]);
+    server({});
+    var results = [];
+    var screen = createSignIn(Object.assign({ serverId: SERVER, serverName: 'Den', onSignedIn: function (result, remember) { results.push(remember); } }, options || {}));
+    document.body.appendChild(screen.element);
+    return { screen: screen, results: results, submit: async function (remember) {
+        screen.element.querySelector('#stolonSignInRemember').checked = remember;
+        screen.element.querySelector('#stolonSignInUser').value = 'ana';
+        screen.element.querySelector('#stolonSignInPassword').value = 'secret';
+        screen.element.querySelector('form').dispatch('submit');
+        await settle(); await settle(); await settle();
+    } };
+}
+
+test('createSignIn alone keeps a remembered sign-in where the web client keeps its own, with Remember me for its next start', async function () {
+    var alone = await signInAlone();
+    await alone.submit(true);
+    assert.deepEqual(alone.results, [true]);
+    var kept = JSON.parse(saved.jellyfin_credentials).Servers.filter(function (s) { return s.Id === SERVER; })[0];
+    assert.deepEqual([kept.AccessToken, kept.UserId, kept.Name], [GOOD, 'u1', 'Den']);
+    assert.equal(saved.enableAutoLogin, 'true');
+});
+
+test('createSignIn with Remember me off keeps no sign-in and turns the web client\'s Remember me off', async function () {
+    var alone = await signInAlone();
+    await alone.submit(false);
+    assert.deepEqual(alone.results, [false]);
+    assert.equal(saved.jellyfin_credentials, undefined);
+    assert.equal(saved.enableAutoLogin, 'false');
+});
+
+test('createSignIn with keepSignIn false leaves the web client\'s storage alone', async function () {
+    var alone = await signInAlone({ keepSignIn: false });
+    await alone.submit(true);
+    assert.deepEqual(alone.results, [true]);
+    // The device id is the client's own, kept as the web client keeps it, and nothing of the sign-in is.
+    assert.deepEqual(Object.keys(saved), ['_deviceId2']);
+});
+
+test('Remember me starts as the web client\'s own choice', function () {
+    globalThis.localStorage = { getItem: function (k) { return k === 'enableAutoLogin' ? 'false' : null; }, setItem: function () {} };
+    server({});
+    var screen = createSignIn({ serverId: SERVER, onSignedIn: function () {} });
+    assert.equal(screen.element.querySelector('#stolonSignInRemember').checked, false);
+    screen.destroy();
+});
+
+test('in the web client frame Remember me is the web client\'s upgraded emby-checkbox, with its outline', function () {
+    document.body.classList.add('stolon-shell');
+    globalThis.localStorage = storage([]);
+    server({});
+    var screen = createSignIn({ serverId: SERVER, onSignedIn: function () {} });
+    var label = screen.element.querySelector('label.checkboxContainer.emby-checkbox-label.stolon-sign-in-remember');
+    assert.ok(label, 'the label is the container, as the login page has it');
+    var input = label.querySelector('input.emby-checkbox#stolonSignInRemember');
+    assert.equal(input.getAttribute('data-embycheckbox'), 'true');
+    assert.equal(label.querySelector('span.checkboxLabel').textContent, 'Remember me');
+    assert.ok(label.querySelector('.checkboxOutline > .checkboxIcon.checkboxIcon-checked.check'));
+    assert.ok(label.querySelector('.checkboxOutline > .checkboxIcon.checkboxIcon-unchecked'));
+    assert.deepEqual(label.children.map(function (c) { return c.tagName; }), ['INPUT', 'SPAN', 'SPAN']);
+    screen.destroy();
 });

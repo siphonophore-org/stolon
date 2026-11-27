@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MediaBrowser.Controller;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Siphonophore.Stolon;
@@ -13,7 +14,9 @@ namespace Siphonophore.Stolon;
 /// </summary>
 /// <remarks>
 /// The style reads the <c>--jf-palette-*</c> variables first, so a document that sets them follows another theme. The font
-/// addresses are relative to the page that holds the frame, since a <c>srcdoc</c> frame resolves addresses against it.
+/// addresses are relative to the page that holds the frame, since a <c>srcdoc</c> frame resolves addresses against it. When the
+/// content is fetched from another path than the page that shows it, such as <c>/pages/{slug}/user</c> for the page at
+/// <c>/pages/{slug}</c>, pass the holding page's path.
 /// </remarks>
 public static partial class WebClientContentStyle
 {
@@ -31,6 +34,21 @@ public static partial class WebClientContentStyle
     }
 
     /// <summary>
+    /// Writes the style block for a frame on another page than the one the request opened, such as content a page fetches from
+    /// a deeper path and writes into itself.
+    /// </summary>
+    /// <param name="controller">The controller whose request serves the content.</param>
+    /// <param name="holdingPagePath">The path of the page that shows the content, without the server's base path, such as <c>/pages/hello</c>.</param>
+    /// <returns>A <c>style</c> element.</returns>
+    public static string Style(ControllerBase controller, string holdingPagePath)
+    {
+        ArgumentNullException.ThrowIfNull(controller);
+        ArgumentException.ThrowIfNullOrEmpty(holdingPagePath);
+        var paths = controller.HttpContext?.RequestServices?.GetService(typeof(IServerApplicationPaths)) as IServerApplicationPaths;
+        return Render(paths?.WebPath, HostedPage.RootFor(new PathString(holdingPagePath.StartsWith('/') ? holdingPagePath : "/" + holdingPagePath)));
+    }
+
+    /// <summary>
     /// Puts the style block first in a document's head, so the author's own styles after it win. A document with no head gets it
     /// before everything else.
     /// </summary>
@@ -41,6 +59,20 @@ public static partial class WebClientContentStyle
     {
         ArgumentNullException.ThrowIfNull(html);
         return InjectInto(html, Style(controller));
+    }
+
+    /// <summary>
+    /// Puts the style block for another page than the one the request opened first in a document's head, as
+    /// <see cref="Style(ControllerBase, string)"/> writes it.
+    /// </summary>
+    /// <param name="controller">The controller whose request serves the content.</param>
+    /// <param name="html">The author's document.</param>
+    /// <param name="holdingPagePath">The path of the page that shows the content, without the server's base path, such as <c>/pages/hello</c>.</param>
+    /// <returns>The document with the style block.</returns>
+    public static string Inject(ControllerBase controller, string html, string holdingPagePath)
+    {
+        ArgumentNullException.ThrowIfNull(html);
+        return InjectInto(html, Style(controller, holdingPagePath));
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { installFakeDom } from './fake-dom.mjs';
 
 var dom = installFakeDom();
@@ -308,4 +309,101 @@ test('a viewer with no picture keeps the person icon and the page asks for no im
     await settle();
     assert.equal(made.length, 0);
     session.destroy();
+});
+
+test('a page off the server root passes the root, and the theme and the server\'s CSS load from it', function () {
+    applyWebClientLook({ userId: null, root: '../', storage: store({}) });
+    assert.equal(document.querySelector('#stolon-shell-theme').getAttribute('href'), '../web/themes/dark/theme.css');
+    assert.equal(document.querySelector('#stolon-shell-branding').getAttribute('href'), '../Branding/Css');
+    applyWebClientLook({ userId: null, root: 'https://jf.example/base', storage: store({}) });
+    assert.equal(document.querySelector('#stolon-shell-theme').getAttribute('href'), 'https://jf.example/base/web/themes/dark/theme.css');
+    assert.equal(document.querySelector('#stolon-shell-branding').getAttribute('href'), 'https://jf.example/base/Branding/Css');
+    applyWebClientLook({ userId: null, root: 'javascript:alert(1)//', storage: store({}) });
+    assert.equal(document.querySelector('#stolon-shell-theme').getAttribute('href'), 'web/themes/dark/theme.css');
+    assert.equal(document.querySelector('#stolon-shell-branding').getAttribute('href'), 'Branding/Css');
+});
+
+test('a status page started with follow false stays signed out with the viewer\'s sign-in in the browser', async function () {
+    var parts = signedOutFrame('anyone', true);
+    globalThis.localStorage = store({ jellyfin_credentials: JSON.stringify({ Servers: [{ Id: SERVER, AccessToken: TOKEN, UserId: USER }] }) });
+    serve(true);
+    var asked = [];
+    var answer = globalThis.fetch;
+    globalThis.fetch = function (url, init) { asked.push(url); return answer(url, init); };
+    var session = await startWebClientShell({ follow: false });
+    await settle();
+    assert.ok(document.body.classList.contains('stolon-shell-signed-out'));
+    assert.equal(parts.avatar.hidden, true);
+    assert.equal(asked.indexOf('Users/Me'), -1);
+    session.destroy();
+});
+
+test('stopWebClientShell hands the page over: nothing more is fetched or added, and the next start is fresh', async function () {
+    signedOutFrame('anyone', true);
+    globalThis.localStorage = store({ jellyfin_credentials: JSON.stringify({ Servers: [{ Id: SERVER, AccessToken: TOKEN, UserId: USER }] }) });
+    serve(true);
+    var asked = [];
+    var answer = globalThis.fetch;
+    var held = [];
+    // Users/Me waits, so the shell is mid-way through following the sign-in when the page hands over.
+    globalThis.fetch = function (url, init) {
+        asked.push(url);
+        if (url === 'Users/Me') return new Promise(function (resolve) { held.push(function () { resolve(answer(url, init)); }); });
+        return answer(url, init);
+    };
+    var first = await startWebClientShell();
+    assert.ok(first);
+    await settle();
+    assert.equal(held.length, 1, 'the sign-in check is on its way');
+    shell.stopWebClientShell();
+    var before = asked.length;
+    var links = document.querySelectorAll('link').length;
+    held.forEach(function (go) { go(); });
+    await settle();
+    assert.equal(asked.length, before, 'no UserViews, config.json, or QuickConnect after the hand over');
+    assert.equal(document.querySelectorAll('link').length, links, 'no theme or Branding/Css added after the hand over');
+    assert.ok(document.body.classList.contains('stolon-shell-signed-out'));
+    assert.equal(document.querySelector('.toastContainer'), null, 'the toaster goes');
+
+    var second = startWebClientShell();
+    assert.notEqual(second, Promise.resolve(first));
+    assert.notEqual(await second, first);
+    (await second).destroy();
+});
+
+test('destroy drops the answers still on their way', async function () {
+    var parts = frame('user');
+    globalThis.localStorage = store({ jellyfin_credentials: JSON.stringify({ Servers: [{ Id: SERVER, AccessToken: TOKEN, UserId: USER }] }) });
+    serve(true);
+    var answer = globalThis.fetch;
+    var held = [];
+    globalThis.fetch = function (url, init) {
+        if (url === 'web/config.json') return new Promise(function (resolve) { held.push(function () { resolve(answer(url, init)); }); });
+        return answer(url, init);
+    };
+    var session = await startWebClientShell();
+    await settle();
+    assert.equal(held.length, 1);
+    session.destroy();
+    held.forEach(function (go) { go(); });
+    await settle();
+    assert.equal(parts.nav.hidden, true, 'the libraries never fill in');
+});
+
+function css(name) {
+    return readFileSync(new URL('../../src/css/' + name, import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+}
+
+test('Stolon\'s section title never restyles the web client\'s own headings on a shell page', function () {
+    var selectors = css('section-title.css').match(/[^{}]+(?=\{)/g).map(function (s) { return s.trim(); });
+    assert.ok(selectors.length > 0);
+    selectors.forEach(function (s) { assert.match(s, /^body:not\(\.stolon-shell\) \.sectionTitleContainer/, s); });
+});
+
+test('the web client\'s scroll arrows and layout helpers are in the shell\'s CSS, for pages that do not load them', function () {
+    var shellCss = css('web-client-shell.css');
+    assert.match(shellCss, /\n\.emby-scrollbuttons \{[^}]*position: absolute;[^}]*min-width: 104px;/);
+    assert.match(shellCss, /\[dir="ltr"\] \.emby-scrollbuttons \{ right: 0; \}/);
+    assert.match(shellCss, /\.emby-scrollbuttons-button > \.material-icons \{ display: block;/);
+    assert.match(shellCss, /\.layout-desktop \.hide-desktop,\s*\.layout-mobile \.hide-mobile,\s*\.layout-tv \.hide-tv \{ display: none !important; \}/);
 });

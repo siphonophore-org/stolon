@@ -324,3 +324,41 @@ test('a worker address is registered at the base path of the page', async functi
     assert.equal(webPushScope('https://media.example/jellyfin'), '/jellyfin/');
     assert.equal(webPushScope('not an address'), '/');
 });
+
+test('the settings look is a web client settings checkbox whose description is the state line', async function () {
+    browser();
+    var server = plugin();
+    var t = toggle(server, registration().reg, { look: 'settings', id: 'chkPush' });
+    var box = t.checkbox;
+    assert.ok(t.element.classList.contains('checkboxContainer'));
+    assert.ok(t.element.classList.contains('checkboxContainer-withDescription'));
+    assert.ok(t.element.querySelector('label.emby-checkbox-label > input.emby-checkbox#chkPush'));
+    assert.equal(t.element.querySelector('.checkboxLabel').textContent, 'Notifications in this browser');
+    assert.ok(t.element.querySelector('.checkboxOutline .checkboxIcon-checked'));
+    assert.equal(t.status.className, 'fieldDescription checkboxFieldDescription');
+    assert.equal(box.getAttribute('aria-describedby'), t.status.id);
+    assert.equal(t.button.parentNode, null, 'the button is not on the page');
+    assert.equal(box.disabled, true, 'off until the first check lands');
+    await settle();
+    assert.equal(t.status.textContent, 'Notifications are off.');
+    assert.equal(box.checked, false);
+    assert.equal(box.disabled, false);
+    box.checked = true;
+    box.dispatch('change');
+    await settle(); await settle();
+    assert.equal(t.getState(), 'on');
+    assert.equal(box.checked, true);
+    assert.equal(t.status.textContent, 'Notifications are on.');
+    assert.equal(server.calls[1][0], 'Push/Subscribe');
+});
+
+test('the settings look turns its checkbox off where notifications cannot change', async function () {
+    browser({ push: false });
+    var t = toggle(plugin(), registration().reg, { look: 'settings', label: 'Tell me here' });
+    await settle();
+    assert.equal(t.checkbox.disabled, true);
+    assert.equal(t.checkbox.checked, false);
+    assert.equal(t.element.querySelector('.checkboxLabel').textContent, 'Tell me here');
+    assert.equal(t.status.textContent, 'This browser cannot show notifications.');
+    assert.equal(toggle(plugin(), registration().reg).checkbox, null);
+});

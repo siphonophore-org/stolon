@@ -281,6 +281,7 @@ Icons come from the Material Icons font that Jellyfin's dashboard loads, drawn t
 | Opens a row for editing | `edit` |
 | A rising or falling trend, a sort direction, and the folder above | `arrow_upward`, `arrow_downward` |
 | A route from one place to the next, turned down when the places stack | `arrow_forward` |
+| Goes back out of a web client form dialog, in the web client's markup | `arrow_back` |
 | Removes, clears, or closes | `close` |
 | Shows a link as a QR code | `qr_code_2` |
 | Reloads | `refresh` |

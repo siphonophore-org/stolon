@@ -181,3 +181,19 @@ test('inline with a text too long disables the QR button and shows the message',
     assert.equal(qr.open(), null);
     assert.match(qr.element.querySelector('.stolon-field-message').textContent, /too long for a QR code/);
 });
+
+test('inline with showValue false draws the QR button alone, with no Copy Field', function () {
+    var qr = createQrCode({ value: 'https://example.com', layout: 'inline', showValue: false, showText: 'Show the invite as a QR code' });
+    assert.ok(qr.element.classList.contains('stolon-button-only'));
+    assert.equal(qr.element.querySelector('.stolon-copy-field'), null);
+    var btn = qr.element.querySelector('.stolon-qr-code-open');
+    assert.equal(btn.parentNode, qr.element);
+    assert.equal(btn.getAttribute('aria-label'), 'Show the invite as a QR code');
+    assert.equal(btn.hidden, false);
+    var dialog = qr.open();
+    assert.ok(dialog.content.querySelector('.stolon-qr-code-frame svg'));
+    dialog.close();
+    qr.setValue('');
+    assert.equal(btn.hidden, true, 'no text, no button');
+    qr.destroy();
+});

@@ -35,7 +35,8 @@ Classes: `stolon-screen` for every screen, with `stolon-sign-in`, `stolon-unauth
 ## Signing In
 
 * The screen signs in through Jellyfin's own API, `Users/AuthenticateByName`, or Quick Connect through `QuickConnect/Initiate`, `QuickConnect/Connect`, and `Users/AuthenticateWithQuickConnect`. The password goes only in the request body and is cleared from the field after every try.
-* With **Remember me** on, the sign in is kept where the web client keeps its own, so the viewer is signed in to the web client too. With it off, the page goes on with the sign in and keeps nothing.
+* With **Remember me** on, the sign in is kept where the web client keeps its own, so the viewer is signed in to the web client too. With it off, the page goes on with the sign in and keeps nothing. Either way the choice is kept as the web client's own Remember me, `enableAutoLogin`, which the box also starts from, as the web client's login page does. The screen does this in every frame and from any script, and `keepSignIn: false` leaves the web client's storage alone for a page that keeps the sign-in itself.
+* In the web client frame Remember me is the login page's checkbox once the web client upgrades it: `label.checkboxContainer.emby-checkbox-label` with the `emby-checkbox`, its `checkboxLabel`, and its `checkboxOutline`, so the web client's stylesheets draw its box.
 * The page then checks the viewer with `Users/Me` and the page's access rule, and goes on with the session as if the viewer had been signed in already.
 * **Use Quick Connect** shows only when the server has Quick Connect on. The code expires after ten minutes.
 * The server's login disclaimer from the branding configuration shows under the form, as text.
@@ -59,7 +60,7 @@ Generated from the code by `scripts/build-docs.mjs`. Edit the code, not this sec
 
 <code>function createSignIn(options: SignInOptions): ScreenHandle</code>
 
-The sign in screen, copied from the web client's own login page: user and password, Remember me, Sign in, Quick Connect when the server has it on, Forgot password, and the server's login disclaimer. It signs in through Jellyfin's own API, never keeps the password past the request, and hands the result to onSignedIn with whether to remember it.
+The sign in screen, copied from the web client's own login page: user and password, Remember me, Sign in, Quick Connect when the server has it on, Forgot password, and the server's login disclaimer. It signs in through Jellyfin's own API, never keeps the password past the request, and hands the result to onSignedIn with whether to remember it. As the web client's login page, it keeps a remembered sign-in where the web client keeps its own, so the viewer is signed in to the web client too, and keeps the Remember me choice for the web client's next start.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -69,6 +70,7 @@ The sign in screen, copied from the web client's own login page: user and passwo
 | `message` | <code>string</code> | the sentence under it (default none) |
 | `client` | <code>string</code> | the client name Jellyfin shows in its devices list (default 'Jellyfin Web') |
 | `version` | <code>string</code> | the client version (default '1.0') |
+| `keepSignIn` | <code>boolean</code> | false keeps nothing in the web client's storage, for a page that keeps the sign-in itself (default true) |
 
 | Handle member | Type |
 | :--- | :--- |

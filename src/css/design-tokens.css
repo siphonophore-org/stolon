@@ -133,6 +133,8 @@
     --stolon-shell-text-secondary: var(--jf-palette-text-secondary, rgba(255, 255, 255, 0.7));
     --stolon-shell-avatar-bg: var(--jf-palette-primary-dark, rgb(0, 114, 154));
     --stolon-shell-selected: rgba(0, 164, 220, 0.2);
+    /* The web client's scroll arrows over a row of cards, white in every theme as the web client draws them. */
+    --stolon-shell-scroll-arrows: #fff;
     /* Material UI's paper overlays at elevations 1, 8, and 16, which only its dark themes have. The shell's script sets them per theme. */
     --stolon-shell-overlay-1: none;
     --stolon-shell-overlay-8: none;

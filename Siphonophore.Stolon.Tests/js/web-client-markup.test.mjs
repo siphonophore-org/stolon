@@ -70,7 +70,8 @@ function jellyfinOnly(name) {
     return !/^(stolon-|Mui|Private)/.test(name) && ['mine', 'lazy', 'cardContent', 'personCard', 'smoothScrollY', 'no-grow', 'align-items-center',
         'justify-content-center', 'list', 'check', 'person', 'tv', 'movie', 'more_vert', 'info', 'link', 'favorite', 'star', 'chevron_left',
         'chevron_right', 'keyboard_arrow_down', 'text', 'label', 'content', 'mediaInfo', 'secondary', 'mdl-spinner__layer-1', 'mdl-spinner__layer-2',
-        'mdl-spinner__layer-3', 'mdl-spinner__layer-4', 'defaultCardBackground', 'detail-clamp-text', 'hide', 'two-line', 'schedule', 'add'].indexOf(name) === -1;
+        'mdl-spinner__layer-3', 'mdl-spinner__layer-4', 'defaultCardBackground', 'detail-clamp-text', 'hide', 'two-line', 'schedule', 'add',
+        'centeredDialog', 'opened', 'btnCancel', 'autoSize', 'arrow_back'].indexOf(name) === -1;
 }
 
 test('every Jellyfin class the builders write is in the startup check list, so a renamed one is reported', function () {
@@ -267,4 +268,120 @@ test('webLimitsBox colors each bar by how much is used and keeps it in range', f
 
 test('webMuiIcon draws a Material UI icon box around its path', function () {
     assert.equal(m.webMuiIcon('<path d="M0 0"></path>', 'MuiSvgIcon-root mine'), '<svg class="MuiSvgIcon-root mine" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M0 0"></path></svg>');
+});
+
+// Every class in a built element and its children.
+function classesOfTree(el, names) {
+    var out = names || new Set();
+    (el.className || '').split(/\s+/).forEach(function (n) { if (n) out.add(n); });
+    (el.children || []).forEach(function (c) { classesOfTree(c, out); });
+    return out;
+}
+
+function wait(ms) {
+    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+}
+
+test('openWebDialog builds the web client\'s form dialog in its container over its backdrop', function () {
+    var opener = dom.el('button', {});
+    document.body.appendChild(opener);
+    opener.focus();
+    var d = m.openWebDialog({ title: 'Report a problem', html: '<p>x</p>', buttons: [{ id: 'dialogSubmit', text: 'Send', type: 'submit' }] });
+    var kids = document.body.children;
+    assert.ok(kids[kids.length - 2].classList.contains('dialogBackdrop'));
+    assert.ok(kids[kids.length - 2].classList.contains('dialogBackdropOpened'));
+    assert.equal(kids[kids.length - 1], d.container);
+    assert.ok(d.container.classList.contains('dialogContainer'));
+    m.WEB_FORM_DIALOG.box.split(' ').forEach(function (c) { assert.ok(d.element.classList.contains(c), c); });
+    assert.equal(d.element.getAttribute('aria-modal'), 'true');
+    var header = d.element.querySelector('.formDialogHeader');
+    assert.ok(header.querySelector('button.btnCancel .material-icons.arrow_back'));
+    assert.equal(header.querySelector('h3.formDialogHeaderTitle').textContent, 'Report a problem');
+    assert.equal(d.element.getAttribute('aria-labelledby'), header.querySelector('h3').id);
+    assert.ok(d.element.querySelector('.formDialogContent.smoothScrollY > .dialogContentInner.dialog-content-centered'));
+    var send = d.footer.querySelector('#dialogSubmit');
+    assert.equal(send.className, 'btnOption raised formDialogFooterItem button-submit emby-button');
+    assert.ok(d.element.contains(document.activeElement), 'focus moves into the dialog');
+    d.close();
+});
+
+test('every Jellyfin class the dialogs build is in the startup check list', function () {
+    var form = m.openWebDialog({ title: 'T', text: 'x', buttons: [{ id: 'a', text: 'A' }] });
+    var message = m.openWebDialog({ look: 'message', title: 'T', text: 'x', buttons: [{ id: 'b', text: 'B', type: 'delete' }] });
+    var names = new Set();
+    [form.container, message.container].forEach(function (c) { classesOfTree(c, names); });
+    names.add('dialogBackdrop'); names.add('dialogBackdropOpened');
+    var listed = shellClasses();
+    assert.deepEqual([...names].filter(jellyfinOnly).filter(function (n) { return !listed.has(n); }).sort(), []);
+    form.close(); message.close();
+});
+
+test('a footer button closes the dialog with its id, Back with null, and onAction can keep it open', async function () {
+    var seen = [];
+    var d = m.openWebDialog({ buttons: [{ id: 'dialogCancel', text: 'Cancel' }, { id: 'dialogSubmit', text: 'Save' }], onAction: function (id) { seen.push(id); return id !== 'dialogSubmit' || seen.length > 1; } });
+    d.footer.querySelector('#dialogSubmit').click();
+    assert.ok(d.element.classList.contains('opened'), 'onAction kept it open');
+    d.footer.querySelector('#dialogSubmit').click();
+    assert.equal(await d.closed, 'dialogSubmit');
+    assert.deepEqual(seen, ['dialogSubmit', 'dialogSubmit']);
+    await wait(320);
+    assert.equal(document.querySelector('.dialogContainer'), null, 'the container goes after its exit animation');
+    assert.equal(document.querySelector('.dialogBackdrop'), null, 'the backdrop goes after its fade');
+
+    var back = m.openWebDialog({ title: 'T' });
+    back.element.querySelector('.btnCancel').click();
+    assert.equal(await back.closed, null);
+});
+
+test('Escape closes a web dialog, and a dialog that is not dismissable stays and hides Back', async function () {
+    var d = m.openWebDialog({ title: 'T', buttons: [{ id: 'ok', text: 'Done' }] });
+    document.dispatch('keydown', { key: 'Escape' });
+    assert.equal(await d.closed, null);
+    var kept = m.openWebDialog({ title: 'T', dismissable: false, buttons: [{ id: 'ok', text: 'Done' }] });
+    document.dispatch('keydown', { key: 'Escape' });
+    assert.equal(kept.element.querySelector('.btnCancel').hidden, true);
+    assert.ok(kept.element.classList.contains('opened'));
+    kept.close('ok');
+    assert.equal(await kept.closed, 'ok');
+});
+
+test('webConfirm opens the web client\'s message dialog and resolves to whether the action was chosen', async function () {
+    var asked = m.webConfirm('The invite stops working.', { title: 'Delete Den', confirmText: 'Delete', destructive: true });
+    var box = document.querySelector('.dialogContainer .dialog');
+    m.WEB_CONFIRM_DIALOG.box.split(' ').forEach(function (c) { assert.ok(box.classList.contains(c), c); });
+    assert.ok(box.classList.contains('centeredDialog'));
+    assert.equal(box.querySelector('h1.formDialogHeaderTitle').textContent, 'Delete Den');
+    assert.equal(box.querySelector('.dialogContentInner .text').textContent, 'The invite stops working.');
+    var buttons = box.querySelectorAll('.formDialogFooter button');
+    assert.deepEqual([buttons[0].textContent, buttons[1].textContent], ['Cancel', 'Delete']);
+    assert.equal(buttons[1].className, 'btnOption raised formDialogFooterItem formDialogFooterItem-autosize button-delete emby-button');
+    assert.equal(document.activeElement, buttons[0], 'Cancel takes focus, never the destructive action');
+    buttons[1].click();
+    assert.equal(await asked, true);
+
+    var cancelled = m.webConfirm('Sure?');
+    var next = document.querySelectorAll('.dialogContainer .dialog');
+    var last = next[next.length - 1];
+    assert.ok(last.querySelector('h1.formDialogHeaderTitle').classList.contains('hide'), 'no title hides the heading');
+    assert.equal(last.getAttribute('aria-label'), 'Sure?');
+    last.querySelector('#dialogCancel').click();
+    assert.equal(await cancelled, false);
+});
+
+test('webOverlayButton takes a longer accessible name than its tooltip', function () {
+    var html = m.webOverlayButton({ action: 'request', icon: 'add', title: 'Request', label: 'Request Charade (1963)' });
+    assert.match(html, /title="Request"/);
+    assert.match(html, /aria-label="Request Charade \(1963\)"/);
+    assert.match(m.webOverlayButton({ action: 'more', icon: 'more_vert', title: 'More' }), /aria-label="More"/);
+});
+
+test('the filter popover grows in as the web client\'s does, and not under reduced motion', function () {
+    var css = readFileSync(new URL('../../src/css/web-client-markup.css', import.meta.url), 'utf8');
+    var rule = /\n\.stolon-web-filters \{([^}]*)\}/.exec(css)[1];
+    assert.match(rule, /animation: stolon-web-grow-fade [^,]+, stolon-web-grow-scale/);
+    assert.match(rule, /transform-origin: top left/);
+    assert.match(css, /@keyframes stolon-web-grow-scale \{ from \{ transform: scale\(0\.75, 0\.5625\); \} \}/);
+    var reduced = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/.exec(css)[1];
+    assert.match(reduced, /\.stolon-web-filters,[\s\S]*animation: none/);
+    assert.match(reduced, /stolon-web-dialog-opening/);
 });

@@ -2,6 +2,8 @@
 <div id="out"></div>
 <h3 class="stolon-subsection-title">Toggle</h3>
 <div id="toggle"></div>
+<h3 class="stolon-subsection-title">Settings look</h3>
+<div id="settings"></div>
 <script type="module">
 const base = await window.__baseReady;
 const list = base.createDefinitionList({ items: [] });
@@ -29,4 +31,13 @@ const toggle = base.createWebPushToggle({
     request: (path) => answer(path === 'Push/Key' ? { PublicKey: 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4' } : null)
 });
 document.getElementById('toggle').appendChild(toggle.element);
+const settings = base.createWebPushToggle({
+    keyUrl: 'Push/Key',
+    subscribeUrl: 'Push/Subscribe',
+    unsubscribeUrl: 'Push/Unsubscribe',
+    look: 'settings',
+    registration: { pushManager: { getSubscription: () => Promise.resolve(held), subscribe: () => { held = fake; return Promise.resolve(fake); } } },
+    request: (path) => answer(path === 'Push/Key' ? { PublicKey: 'BCVxsr7N_eNgVRqvHtD0zTZsEc6-VV-JvLexhqUzORcxaOzi6-AYWXvTBHm4bjyPjs7Vd8pZGH6SRpkNtoIAiw4' } : null)
+});
+document.getElementById('settings').appendChild(settings.element);
 </script>

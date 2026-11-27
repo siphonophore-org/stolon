@@ -14,6 +14,13 @@ const samples = {
     webEmptyState: () => base.webEmptyState('Nothing here', 'Add one to start.'),
     webDetailStatus: () => base.webDetailStatus('schedule', 'Waiting for approval'),
     webNoteRow: () => base.webNoteRow({ title: 'No sound', secondary: 'Today', asideHtml: base.webStatusTag('Open'), by: 'Ana', notes: [{ by: 'Bo', text: 'Fixed in the new copy.' }] }),
+    webOverlayButton: () => base.webOverlayButton({ action: 'request', icon: 'add', title: 'Request', label: 'Request Example Movie (2010)' }, 'hover'),
+    openWebDialog: () => {
+        const dialog = base.openWebDialog({ look: 'message', title: 'Delete Den', text: 'The invite stops working.', buttons: [{ id: 'dialogCancel', text: 'Cancel' }, { id: 'dialogSubmit', text: 'Delete', type: 'delete' }] });
+        const html = dialog.container.outerHTML;
+        dialog.close();
+        return html;
+    },
     webLimitsBox: () => base.webLimitsBox('Limits', [{ label: 'Movies', amount: '2 of 5 left', percent: 60 }, { label: 'Shows', amount: '0 of 2 left', percent: 100 }])
 };
 const select = document.getElementById('builder');

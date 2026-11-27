@@ -47,11 +47,12 @@ public IActionResult Page(string slug) => Exists(slug)
 | :--- | :--- | :--- | :--- |
 | `Loading` | The web client's spinner alone in the middle, or over the message when there is one | None | 200 |
 | `SignIn` | "Please sign in" and a sentence | Sign in, to the web client | 401 |
-| `Unauthorized` | "You can't open this page" and Jellyfin's unauthorized sentence | Home | 403 |
+| `Unauthorized` | "You cannot open this page" and Jellyfin's unauthorized sentence | Home | 403 |
 | `NotFound` | "Page not found" and Jellyfin's not found sentence | Home | 404 |
 
 * Each screen is the markup of the [Page Screens](page-screens.md) in the web client frame: `stolon-screen stolon-screen-web`, a `sectionTitle` heading, a `secondaryText` sentence, and a `raised block emby-button button-submit` button. The texts follow the request's language.
 * The screen sits in the shell's gate. A script in `content` that imports the bundle can replace it with `showScreen`, such as `showScreen(createUnauthorized())` once it knows.
+* `title` sets the document title, such as the name of the page that is loading, in place of the screen's heading.
 * The other overload takes the plugin's own heading, message, button, spinner, content, and status code.
 
 <iframe class="stolon-preview" src="../../../assets/previews/status-page-web-client.html" title="Status Page in the web client shell example" loading="lazy"></iframe>

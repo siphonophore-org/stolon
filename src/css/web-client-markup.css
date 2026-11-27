@@ -81,7 +81,10 @@
     background-color: var(--stolon-surface);
     background-image: var(--stolon-shell-overlay-8);
     box-shadow: var(--stolon-shell-shadow-menu);
+    transform-origin: top left;
+    animation: stolon-web-grow-fade 0.3s var(--stolon-shell-ease), stolon-web-grow-scale 0.2s var(--stolon-shell-ease);
 }
+[dir="rtl"] .stolon-web-filters { transform-origin: top right; }
 .stolon-web-filter { position: relative; border-top: 1px solid var(--stolon-shell-divider); }
 .stolon-web-filter-heading { margin: 0; font: inherit; }
 .stolon-web-filter-summary {
@@ -146,12 +149,26 @@
 /* Content that fades in once it has waited a moment, so a quick answer never flashes a placeholder */
 /* Example: <span class="stolon-web-appear"></span> */
 .stolon-web-appear { animation: stolon-web-appear 0.25s ease-out 0.3s both; }
+/* A dialog from openWebDialog: it scales in and out as the web client's dialogs do, its message dialog's title and text spaced and centered as dialog.js sets them, and its content as wide as its buttons need */
+/* Example: <div class="dialogContainer stolon-web-dialog"><div class="focuscontainer dialog formDialog stolon-web-dialog-box stolon-web-dialog-opening" role="dialog"><div class="formDialogHeader"><h1 class="formDialogHeaderTitle stolon-web-dialog-title">Delete Den</h1></div></div></div> */
+.stolon-web-dialog-box.stolon-web-dialog-opening { animation: scaleup 180ms ease-out normal both; }
+.stolon-web-dialog-box.stolon-web-dialog-closing { animation: scaledown 120ms ease-out normal both; }
+.stolon-web-dialog .stolon-web-dialog-title { margin-top: var(--stolon-shell-unit); padding: 0 calc(var(--stolon-shell-unit) * 2); }
+.stolon-web-dialog .formDialogContent.no-grow { max-width: var(--stolon-web-dialog-width, none); }
+.stolon-web-dialog .stolon-web-dialog-message { padding-top: 1em; padding-bottom: 1em; text-align: center; }
+.stolon-web-dialog .stolon-web-dialog-footer { margin: calc(var(--stolon-shell-unit) * 2); }
+.stolon-web-dialog .formDialogFooter[hidden] { display: none; }
 @keyframes stolon-web-pulse { 50% { opacity: 0.45; } }
+@keyframes stolon-web-grow-fade { from { opacity: 0; } }
+@keyframes stolon-web-grow-scale { from { transform: scale(0.75, 0.5625); } }
 @keyframes stolon-web-appear { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
     .stolon-web-skeleton-padder,
     .stolon-web-skeleton-bar,
-    .stolon-web-appear { animation: none; }
+    .stolon-web-appear,
+    .stolon-web-filters,
+    .stolon-web-dialog-box.stolon-web-dialog-opening,
+    .stolon-web-dialog-box.stolon-web-dialog-closing { animation: none; }
 }
 
 /* Where an item stands among the details page's buttons, the detail button's icon as plain text, never greyed out as a disabled button */

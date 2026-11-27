@@ -123,9 +123,9 @@ export function restoreFocus(previouslyFocused: HTMLElement | null, opts?: { ret
     }
 }
 
-/** Returns the rendered dialog on top, skipping in-page dialogs that stay in the markup while closed. */
+/** Returns the rendered dialog on top, Stolon's or a web client dialog from openWebDialog, skipping in-page dialogs that stay in the markup while closed. */
 export function topDialog(): HTMLElement | null {
-    var all: HTMLElement[] = Array.prototype.filter.call(document.querySelectorAll<HTMLElement>('.stolon-dialog'), function (d: HTMLElement): boolean {
+    var all: HTMLElement[] = Array.prototype.filter.call(document.querySelectorAll<HTMLElement>('.stolon-dialog, .stolon-web-dialog'), function (d: HTMLElement): boolean {
         return !d.classList.contains('stolon-hidden') && !d.hidden && d.getClientRects().length > 0;
     });
     return all.length ? all[all.length - 1] : null;

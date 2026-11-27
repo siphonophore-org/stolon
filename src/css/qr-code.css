@@ -47,6 +47,11 @@
 .pluginConfigurationPage .stolon-qr-code.stolon-inline > [class],
 .stolon-dialog .stolon-qr-code.stolon-inline > [class] { margin: 0 !important; }
 
+/* An inline QR code with no Copy Field, the QR button alone, for a row whose own buttons copy the text */
+/* Example: <div class="stolon-qr-code stolon-inline stolon-button-only"><button class="stolon-row-btn stolon-qr-code-open" aria-label="Show QR code"><span class="material-icons" aria-hidden="true">qr_code_2</span></button></div> */
+.stolon-qr-code.stolon-inline.stolon-button-only { flex-direction: row; align-items: center; flex-wrap: wrap; }
+.stolon-qr-code.stolon-button-only > .stolon-qr-code-open[hidden] { display: none; }
+
 /* An inline QR code at the end of a record row, a code's width at most, so the row's text keeps its room and the link wraps inside it */
 /* Example: <div class="stolon-record-list-aside"><div class="stolon-qr-code stolon-inline"><div class="stolon-copy-field stolon-wrap"></div></div></div> */
 .stolon-record-list-aside > .stolon-qr-code.stolon-inline { width: calc(var(--stolon-size-large) * 8); min-width: 0; max-width: 100%; }

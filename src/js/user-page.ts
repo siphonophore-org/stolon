@@ -3,7 +3,7 @@ import { MESSAGE_ICONS } from './lib/message.js';
 import { stolonText } from './lib/stolon-text.js';
 import { loadTranslations } from './translations.js';
 import { createSpinner } from './spinner.js';
-import { createSignIn, createUnauthorized, createNotFound, showScreen, saveSignIn } from './page-screens.js';
+import { createSignIn, createUnauthorized, createNotFound, showScreen } from './page-screens.js';
 
 /** Who may open a user page, as HostedPage writes it into data-stolon-access. */
 export type UserPageAccess = 'anyone' | 'user' | 'administrator' | 'selected';
@@ -188,8 +188,7 @@ export function startUserPage(options?: UserPageOptions): Promise<UserPageSessio
                                 serverId: serverId as string,
                                 serverName: info && typeof (info as { ServerName?: unknown }).ServerName === 'string' ? (info as { ServerName: string }).ServerName : null,
                                 message: hadSignIn ? stolonText('Stolon.SignInExpired') : opts.signInMessage || stolonText('Stolon.SignInToOpen'),
-                                onSignedIn: function (result, keep) {
-                                    if (keep) saveSignIn(serverId as string, null, result);
+                                onSignedIn: function (result) {
                                     screen.destroy();
                                     tokens.push(result.AccessToken);
                                     resolve(tryToken(tokens.length - 1));

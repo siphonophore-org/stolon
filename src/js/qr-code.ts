@@ -92,7 +92,8 @@ function qrPaths(grid: boolean[][]): { dots: string; eyes: string } {
 
 /**
  * With layout 'inline' it draws only the text as a wrapped Copy Field that shows all of it, with a QR button beside Copy that opens the full code,
- * with its Copy image and Download, in a sidecar. A text too long to encode disables that button and shows the message.
+ * with its Copy image and Download, in a sidecar. With showValue false as well it draws the QR button alone, with no Copy Field. A text too
+ * long to encode disables that button and shows the message.
  *
  * A QR code of a short text, such as a URL, drawn as SVG in the text color on the surface in a rounded style: round dots, solid alignment patterns, and rounded finder eyes in the accent color, with Copy image and Download buttons for a PNG and the text under it as a Copy Field.
  * It encodes in byte mode at error correction level M, up to 412 bytes, and shows a message under the frame for a longer text.
@@ -103,7 +104,7 @@ function qrPaths(grid: boolean[][]): { dots: string; eyes: string } {
  *   showText       : the inline QR button's title and aria-label (default 'Show QR code')
  *   sidecarTitle   : the sidecar's title (default 'QR code')
  *   label          : the code's accessible name (default 'QR code for' and the text)
- *   showValue      : false hides the Copy Field under the code (default true)
+ *   showValue      : false hides the Copy Field under the code, or inline leaves the QR button alone with no Copy Field (default true)
  *   showActions    : false hides Copy image and Download, for a page that offers its own download (default true)
  *   fileName       : the name of the downloaded PNG (default 'qr-code.png')
  *   copyImageText  : the copy button's label (default 'Copy image')
@@ -123,7 +124,8 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
     var timer: ReturnType<typeof setTimeout> | null = null;
 
     var inline = opts.layout === 'inline';
-    var root = make('div', 'stolon-qr-code' + (inline ? ' stolon-inline' : ''));
+    var buttonOnly = inline && opts.showValue === false;
+    var root = make('div', 'stolon-qr-code' + (inline ? ' stolon-inline' : '') + (buttonOnly ? ' stolon-button-only' : ''));
     var sidecar: SidecarHandle | null = null;
     var frame = make('div', 'stolon-qr-code-frame', { role: 'img' });
     var actions = make('div', 'stolon-button-row stolon-qr-code-actions');
@@ -144,12 +146,16 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
     var field: CopyFieldHandle | null = null;
     var showBtn: HTMLButtonElement | null = null;
     if (inline) {
-        // Inline, the text is the component, and its QR button opens the full code in a sidecar.
-        field = createCopyField({ value: '', label: opts.label || stolonText('Stolon.Link'), wrap: true });
+        // Inline, the text is the component, and its QR button opens the full code in a sidecar. With showValue false the button stands alone.
         var showLabel = opts.showText || stolonText('Stolon.ShowQrCode');
         showBtn = iconButton('stolon-row-btn stolon-qr-code-open', 'qr_code_2', showLabel);
-        field.element.appendChild(showBtn);
-        root.appendChild(field.element);
+        if (buttonOnly) {
+            root.appendChild(showBtn);
+        } else {
+            field = createCopyField({ value: '', label: opts.label || stolonText('Stolon.Link'), wrap: true });
+            field.element.appendChild(showBtn);
+            root.appendChild(field.element);
+        }
         root.appendChild(message.element);
         cleanups.push(listen(showBtn, 'click', function () { open(); }));
     } else {
@@ -255,6 +261,7 @@ export function createQrCode(options?: QrCodeOptions): QrCodeHandle {
         value = toText(next);
         if (field) field.setValue(value);
         if (field) field.element.hidden = !value;
+        if (buttonOnly && showBtn) showBtn.hidden = !value;
         draw();
     }
 

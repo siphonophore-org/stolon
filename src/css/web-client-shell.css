@@ -333,6 +333,28 @@
 .stolon-shell .detailPagePrimaryContainer,
 .stolon-shell .detailPageWrapperContainer { min-width: 0; max-width: 100%; }
 
+/* The web client's rules for its scroll arrows and its layout helpers, which it keeps in a stylesheet chunk and in its index.html, for a page in the web client's look that does not load them */
+/* Example: <div class="emby-scrollbuttons padded-right"><button class="emby-scrollbuttons-button paper-icon-button-light"><span class="material-icons chevron_right"></span></button></div> */
+.emby-scrollbuttons {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 104px;
+    min-height: 24px;
+    padding-top: 0.85em;
+    color: var(--stolon-shell-scroll-arrows);
+}
+[dir="ltr"] .emby-scrollbuttons { right: 0; }
+[dir="rtl"] .emby-scrollbuttons { left: 0; }
+.detailVerticalSection .emby-scrollbuttons { padding-top: 0.4em; }
+.emby-scrollbuttons-button > .material-icons { display: block; min-width: 24px; min-height: 24px; }
+.layout-desktop .hide-desktop,
+.layout-mobile .hide-mobile,
+.layout-tv .hide-tv { display: none !important; }
+
 @media (prefers-reduced-motion: reduce) {
     .stolon-shell-bar,
     .stolon-shell-menu,

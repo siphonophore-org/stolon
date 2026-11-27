@@ -64,8 +64,9 @@ page.appendChild(push.element);
 * `unsubscribeWebPush` calls `remove` with the subscription, then removes it from the browser, and resolves to `off`.
 * `createWebPushToggle` asks `keyUrl` for the key, as `{ PublicKey }` or text, and hides itself while the server offers none. It registers `workerUrl` at `scope`, the path of the page's base by default, or takes `registration`. It posts each subscription as JSON to `subscribeUrl` and `unsubscribeUrl`.
 * The toggle shows the state's message as a status line. `on` and `off` show the button, "Turn on notifications" or "Turn off notifications", which `onText` and `offText` replace. `unsupported`, `insecure`, `install`, and `denied` show only the line. A change that fails shows "Could not change notifications in this browser.", which `failedText` replaces.
+* `look: 'settings'` draws the toggle as a checkbox row of the web client's settings pages, for a page in the [Web Client Shell](web-client-shell.md): `checkboxContainer checkboxContainer-withDescription` with the web client's upgraded `emby-checkbox`, labeled by `label` ("Notifications in this browser"), and the state's message as its `fieldDescription`. The checkbox is the control and turns on only in `on` and `off`, `checkbox` in the handle is it, and `button` is not on the page. `id` sets the checkbox's id.
 * `request(path, init)` sends to a route and gives a fetch `Response` or the answer's JSON, such as a user page session's `request`. Without it the toggle fetches against the page's base.
-* The handle is `{ element, button, status, getState, refresh, destroy }`. `refresh()` checks again, and `onChange` hears each state.
+* The handle is `{ element, button, checkbox, status, getState, refresh, destroy }`, with `checkbox` null outside the settings look. `refresh()` checks again, and `onChange` hears each state.
 * `webPushScope(baseHref)` gives the path of a base address, ending in a slash.
 * `webPushText(state)` gives a state's message in the page's language, and `webPushLabel()` a short name for the device, such as "Safari · iPhone", which the subscription carries as its `label`.
 
@@ -135,7 +136,7 @@ The scope a worker at the server's root is registered at: the path of the page's
 
 <code>function createWebPushToggle(options: WebPushToggleOptions): WebPushToggleHandle</code>
 
-A status line of where this browser stands with web push, and a button that turns notifications on or off for it. It asks the plugin for the server's VAPID public key, registers the plugin's service worker, and sends the subscription to the plugin's routes. A browser with no push, a page not on HTTPS, an iPhone page not on the home screen, and a person who blocked notifications each show their sentence with no button. While the server offers no key the whole toggle is hidden.
+A status line of where this browser stands with web push, and a button that turns notifications on or off for it. It asks the plugin for the server's VAPID public key, registers the plugin's service worker, and sends the subscription to the plugin's routes. A browser with no push, a page not on HTTPS, an iPhone page not on the home screen, and a person who blocked notifications each show their sentence with no button. While the server offers no key the whole toggle is hidden. The settings look draws it as a checkbox row of the web client's settings pages, for a page in the web client shell, with the sentence as the row's description, and the checkbox turns on only while notifications can be turned on or off.
 
 | Option | Type | What it does |
 | :--- | :--- | :--- |
@@ -150,10 +151,14 @@ A status line of where this browser stands with web push, and a button that turn
 | `offText` | <code>string</code> | the button's label while notifications are on (default 'Turn off notifications') |
 | `failedText` | <code>string</code> | the line when turning them on or off fails (default 'Could not change notifications in this browser.') |
 | `onChange` | <code>(result: WebPushResult): void</code> | function({ state, message }) run after each check and each change [optional] |
+| `look` | <code>'button' &#124; 'settings'</code> | 'button', the status line and a button, or 'settings', a web client settings checkbox with its state line (default 'button') |
+| `label` | <code>string</code> | the settings checkbox's label (default 'Notifications in this browser') |
+| `id` | <code>string</code> | the settings checkbox's id [optional] |
 
 | Handle member | Type |
 | :--- | :--- |
 | `button` | <code>HTMLButtonElement</code> |
+| `checkbox` | <code>HTMLInputElement &#124; null</code> |
 | `status` | <code>HTMLElement</code> |
 | `getState` | <code>(): WebPushState &#124; null</code> |
 | `refresh` | <code>(): Promise&lt;WebPushState &#124; null&gt;</code> |
@@ -168,6 +173,7 @@ A status line of where this browser stands with web push, and a button that turn
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-web-push` | A web push status line with the button that turns notifications on or off under it |
+| `stolon-web-push-settings` | Web push as a web client settings checkbox, the web client's checkbox row with the state line as its description |
 
 <!-- reference:end -->
 
