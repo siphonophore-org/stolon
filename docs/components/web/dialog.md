@@ -156,7 +156,7 @@ Builds the usual context of a full dialog: the artwork of the item it acts on be
 | `stolon-modal-field` | Field block with a label inside a dialog or a sidecar |
 | `stolon-modal-field-label` | Dimmed label above such a field |
 | `stolon-modal-button-row` | A dialog's row of equal width buttons |
-| `stolon-modal-button` | A dialog or sidecar button |
+| `stolon-modal-button` | A dialog or sidecar button. Its label stays on one line, and a row too narrow for every label wraps its buttons instead. |
 
 <!-- reference:end -->
 

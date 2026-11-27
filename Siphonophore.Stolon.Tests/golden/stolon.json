@@ -334,7 +334,7 @@
     "inherit-field": 4335,
     "key-value-editor": 2115,
     "lib/badge": 1348,
-    "lib/balance": 2912,
+    "lib/balance": 3177,
     "lib/canvas": 998,
     "lib/card": 810,
     "lib/chart": 12443,
@@ -430,5 +430,5 @@
     "web-push": 5144,
     "world-map": 6264
   },
-  "bytes": 635140
+  "bytes": 635405
 }

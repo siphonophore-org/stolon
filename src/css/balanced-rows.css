@@ -11,7 +11,3 @@
 }
 
 .stolon-balanced > [hidden] { display: none; }
-
-/* Tiles that all share one width on a fixed column count, so a short last row lines up with the rows above it */
-/* Example: <div class="stolon-cards stolon-even"><div class="stolon-card"></div></div> */
-.stolon-balanced.stolon-even > * { grid-column: span 1; }

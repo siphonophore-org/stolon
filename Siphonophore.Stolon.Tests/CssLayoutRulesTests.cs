@@ -353,15 +353,4 @@ public class CssLayoutRulesTests
         Assert.True(CssRules.Specificity(".stolon-cards.stolon-fit .stolon-card-count").CompareTo(CssRules.Specificity(".stolon-cards.stolon-compact .stolon-card-count")) >= 0);
         Assert.Equal("ellipsis", Value(RuleFor("count-cards.css", ".stolon-card-count"), "text-overflow"));
     }
-
-    /// <summary>
-    /// Every tile in an even group spans one column.
-    /// True: every card on a dashboard shares one width.
-    /// False: a short last row would stretch its cards wider than the rows above.
-    /// </summary>
-    [Fact]
-    public void EvenGroup_GivesEveryTileOneColumn()
-    {
-        Assert.Equal("span 1", Value(RuleFor("balanced-rows.css", ".stolon-balanced.stolon-even > *"), "grid-column"));
-    }
 }
