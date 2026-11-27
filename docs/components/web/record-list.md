@@ -30,7 +30,8 @@ Classes: `stolon-record-list`, `stolon-record-list-row`, `stolon-record-list-bod
 
 * An item is `{ id, title, secondary, tags, aside }`. A tag is `{ label, icon, color, off }`, where `color` is a status color name or a hex code that tints it. An off tag is faded and struck through, `stolon-tag-off`, with a hidden word, "off" by `offText`.
 * With `onOpen` a row opens by a click, by Enter or Space, and by its chevron, "Open {value}" by `openLabel`.
-* `aside` is a node or a handle with an `element`, such as a button, drawn in place of the chevron. A click on it opens nothing.
+* `aside` is a node or a handle with an `element`, such as a button, drawn in place of the chevron. A click on it opens nothing. An aside too wide to sit beside the row's text moves under it, so the title and the secondary line keep their room.
+* An inline [QR Code](qr-code.md) as an aside is at most a code's width, and its link wraps inside it.
 * `label` sets the list's `aria-label`.
 * `rowKey` names a row, `id` by default, so `setItems` keeps a row whose content did not change.
 * `emptyText` shows while there is no row, "Nothing to show." by default. `height`, `maxHeight`, and `minHeight` work as a List's do.
@@ -69,7 +70,7 @@ A List of static rows, each a title, a secondary line, tags with an icon and an 
 | `stolon-record-list.stolon-list.stolon-plain` | A List of boxed record rows a gap apart |
 | `stolon-record-list-row` | One record row: its title and secondary line, its tags under them, and a chevron or an aside control at its end. A row that opens takes the shared hover and focus ring |
 | `stolon-record-list-tags` | The row's tags, each an icon and a label, which wrap under the text |
-| `stolon-record-list-open` | The chevron at the end of a row that opens, and the aside control that takes its place |
+| `stolon-record-list-open` | The chevron at the end of a row that opens, and the aside control that takes its place. An aside too wide to sit beside the row's text moves under it |
 
 <!-- reference:end -->
 

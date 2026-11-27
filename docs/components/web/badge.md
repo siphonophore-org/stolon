@@ -34,6 +34,7 @@ Classes: `stolon-badge`, `stolon-table-status-badge`.
 * Every badge Stolon draws, in the bag, the [Media Card](media-card.md), and the [Sortable Card List](sortable-card-list.md), comes from one badge maker, so they look the same.
 * A plugin may set the class on an existing element, such as `el.className = 'stolon-table-status-badge ' + status`.
 * The swatches are the same in light and dark themes.
+* A badge stays on one line. In a container narrower than its label it ends in an ellipsis, so it never runs past the edge. Give it a `title` with the full label when that can happen.
 
 ## Gotchas
 
@@ -55,7 +56,7 @@ The state names a badge knows, in names, the color modifiers that stolon-badge t
 
 | Class | What it looks like |
 | :--- | :--- |
-| `stolon-badge` | Pill that shows a short status label in a status color |
+| `stolon-badge` | Pill that shows a short status label in a status color, on one line, ending in an ellipsis only when its container is narrower than its label |
 | `stolon-badge.stolon-medium` | A badge at the medium or large size of the scale |
 
 <!-- reference:end -->

@@ -105,6 +105,107 @@
 .stolon-icon-text.stolon-large { font-size: var(--stolon-font-large); line-height: var(--stolon-line-large); }
 .stolon-icon-text.stolon-large > .material-icons { height: var(--stolon-line-large); font-size: var(--stolon-icon-large); }
 
+/* A column of blocks a wide gap apart, such as fields, checkboxes, tables, and meters, whose own margins give way to the gap. stolon-flow on a section's content lays the open section out the same way */
+/* Example: <div class="stolon-stack"><div class="inputContainer"><label for="host">Host</label><input is="emby-input" id="host"></div><div class="fieldDescription">The server to connect to.</div></div> */
+.stolon-stack,
+.stolon-flow:not(.stolon-collapsed) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--stolon-gap-wide);
+}
+.stolon-stack > *,
+.stolon-flow > * {
+    flex: none;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+/* Field containers, descriptions, and kit blocks carry their own margins on a config page and in a dialog, so the column takes those over too */
+.pluginConfigurationPage .stolon-stack > [class],
+.pluginConfigurationPage .stolon-flow > [class],
+.stolon-dialog .stolon-stack > [class],
+.stolon-dialog .stolon-flow > [class] {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+/* A button or a badge in the column keeps its own width */
+.stolon-stack > button,
+.stolon-flow > button,
+.stolon-stack > .stolon-badge,
+.stolon-flow > .stolon-badge {
+    align-self: flex-start;
+}
+/* A description right after its field sits a narrow gap under it, and a description that ends a field container adds no space below it */
+.stolon-stack > :not(.stolon-subsection-title):not(.stolon-status-text):not(.stolon-hidden):not([hidden]) + .fieldDescription,
+.stolon-flow > :not(.stolon-subsection-title):not(.stolon-status-text):not(.stolon-hidden):not([hidden]) + .fieldDescription {
+    margin-top: calc(var(--stolon-gap-narrow) - var(--stolon-gap-wide)) !important;
+}
+.stolon-stack > .fieldDescription,
+.stolon-flow > .fieldDescription {
+    padding-left: 0;
+}
+.stolon-stack > .inputContainer > .fieldDescription,
+.stolon-flow > .inputContainer > .fieldDescription,
+.stolon-stack > .selectContainer > .fieldDescription,
+.stolon-flow > .selectContainer > .fieldDescription,
+.stolon-stack > .checkboxContainer > .fieldDescription,
+.stolon-flow > .checkboxContainer > .fieldDescription {
+    margin-bottom: 0 !important;
+}
+/* A subsection title after other blocks takes a second gap above it, so it groups with the blocks under it */
+.stolon-stack > .stolon-subsection-title:not(:first-child),
+.stolon-flow > .stolon-subsection-title:not(:first-child),
+.pluginConfigurationPage .stolon-stack > .stolon-subsection-title:not(:first-child),
+.pluginConfigurationPage .stolon-flow > .stolon-subsection-title:not(:first-child),
+.stolon-dialog .stolon-stack > .stolon-subsection-title:not(:first-child),
+.stolon-dialog .stolon-flow > .stolon-subsection-title:not(:first-child) {
+    margin-top: var(--stolon-gap-wide) !important;
+}
+/* An empty status line takes no room. A hidden block takes no gap, since it is not laid out */
+.stolon-stack > .stolon-status-text:empty,
+.stolon-flow > .stolon-status-text:empty {
+    display: none;
+}
+
+/* A stack a narrow gap apart, for the parts of one group */
+/* Example: <div class="stolon-stack stolon-narrow"><div class="stolon-item-row"></div><div class="stolon-item-row"></div></div> */
+.stolon-stack.stolon-narrow { gap: var(--stolon-gap-narrow); }
+
+/* A stack or a flowing section whose blocks are split by a line, with the same gap on each side of it, such as groups of settings */
+/* Example: <div class="stolon-stack stolon-divided"><div class="stolon-stack"></div><div class="stolon-stack"></div></div> */
+.stolon-stack.stolon-divided > * + *,
+.stolon-flow.stolon-divided > * + * {
+    padding-top: var(--stolon-gap-wide);
+    border-top: 1px solid var(--stolon-line);
+}
+
+/* Text in the muted color, for a placeholder such as None or a secondary note */
+/* Example: <span class="stolon-muted">None</span> */
+.stolon-muted { color: var(--stolon-text-muted); }
+
+/* An element waiting for an answer, dimmed, such as a row that shows dashes until a check answers */
+/* Example: <div class="stolon-item-row stolon-pending"><span class="stolon-item-row-text">–</span><span class="stolon-badge stolon-gray">–</span></div> */
+.stolon-pending { opacity: 0.7; }
+
+/* The gap between the children of a flex or grid box, narrow or wide */
+/* Example: <div class="stolon-button-row stolon-gap-narrow"></div> */
+.stolon-gap-narrow { gap: var(--stolon-gap-narrow); }
+.stolon-gap-wide { gap: var(--stolon-gap-wide); }
+
+/* A narrow or wide gap above or below one block, which wins over the field spacing and a stack's own gap */
+/* Example: <div class="fieldDescription stolon-gap-below-wide">Changes sent between servers.</div> */
+.stolon-gap-above-narrow,
+.pluginConfigurationPage .stolon-gap-above-narrow[class],
+.stolon-dialog .stolon-gap-above-narrow[class] { margin-top: var(--stolon-gap-narrow) !important; }
+.stolon-gap-above-wide,
+.pluginConfigurationPage .stolon-gap-above-wide[class],
+.stolon-dialog .stolon-gap-above-wide[class] { margin-top: var(--stolon-gap-wide) !important; }
+.stolon-gap-below-narrow,
+.pluginConfigurationPage .stolon-gap-below-narrow[class],
+.stolon-dialog .stolon-gap-below-narrow[class] { margin-bottom: var(--stolon-gap-narrow) !important; }
+.stolon-gap-below-wide,
+.pluginConfigurationPage .stolon-gap-below-wide[class],
+.stolon-dialog .stolon-gap-below-wide[class] { margin-bottom: var(--stolon-gap-wide) !important; }
+
 /* The surface every floating box shares, a menu, a filter panel, a help bubble, a tooltip, a dropdown, or a toast, over the page. anchorPopover adds it to the box it places */
 /* Example: <div class="stolon-menu-list stolon-float" role="menu"></div> */
 .stolon-float {

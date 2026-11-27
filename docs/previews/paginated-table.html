@@ -29,8 +29,9 @@ const table = base.createPaginatedTable(view, shared, {
             '<div class="stolon-table-item-sub">' + shared.formatSize(item.sizeBytes) + '</div></div>' },
         { key: 'status', type: 'status' }
     ],
-    getDisplayStatus: (item) => item.status,
-    getStatusClass: (item) => item.status,
+    // One row shows a long status, so its column grows to keep the badge inside the row.
+    getDisplayStatus: (item) => item.id === 'item-3' ? 'Ignored (Copy to Link)' : item.status,
+    getStatusClass: (item) => item.id === 'item-3' ? 'Ignored' : item.status,
     actions: { onRowClick: (item) => shared.showAlert('Opened ' + item.name) },
     emptyState: { message: 'No items found.' }
 });

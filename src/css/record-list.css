@@ -4,13 +4,13 @@
 
 /* One record row: its title and secondary line, its tags under them, and a chevron or an aside control at its end. A row that opens takes the shared hover and focus ring */
 /* Example: <div class="stolon-item-row stolon-record-list-row stolon-openable" tabindex="0"><div class="stolon-record-list-body"><span class="stolon-item-row-text stolon-item-row-parts"></span><div class="stolon-tags stolon-record-list-tags"></div></div><button class="stolon-row-btn stolon-record-list-open"></button></div> */
-.stolon-record-list-row { padding-top: var(--stolon-pad-small); padding-bottom: var(--stolon-pad-small); padding-right: var(--stolon-field-pad); }
+.stolon-record-list-row { flex-wrap: wrap; padding-top: var(--stolon-pad-small); padding-bottom: var(--stolon-pad-small); padding-right: var(--stolon-field-pad); }
 .stolon-record-list-row.stolon-openable { cursor: pointer; }
 .stolon-record-list-row.stolon-openable:hover { background: var(--stolon-wash); }
 .stolon-record-list-row.stolon-openable:focus { outline: none; }
 .stolon-record-list-row.stolon-openable:focus-visible { box-shadow: inset 0 0 0 2px var(--stolon-accent); }
 .stolon-record-list-body {
-    flex: 1;
+    flex: 1 1 calc(var(--stolon-size-large) * 4);
     display: flex;
     flex-direction: column;
     gap: calc(var(--stolon-gap-narrow) / 2);
@@ -22,7 +22,7 @@
 .stolon-record-list-tags { margin-top: 0; }
 .stolon-record-list-tags .stolon-tag .material-icons { font-size: var(--stolon-icon-small); opacity: 0.8; }
 
-/* The chevron at the end of a row that opens, and the aside control that takes its place */
+/* The chevron at the end of a row that opens, and the aside control that takes its place. An aside too wide to sit beside the row's text moves under it */
 /* Example: <div class="stolon-record-list-aside"><button class="raised stolon-button stolon-small">Unblock</button></div> */
 .stolon-record-list-open .material-icons { font-size: var(--stolon-chevron-secondary); }
-.stolon-record-list-aside { flex: 0 0 auto; display: flex; align-items: center; }
+.stolon-record-list-aside { flex: 0 1 auto; min-width: 0; max-width: 100%; display: flex; align-items: center; }

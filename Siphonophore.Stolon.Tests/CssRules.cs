@@ -48,6 +48,23 @@ internal static class CssRules
         return Parse(css).FirstOrDefault(r => r.Selectors.Contains(wanted))?.Body;
     }
 
+    /// <summary>
+    /// The specificity of one selector as (ids, classes, types), where attributes and pseudo-classes count as classes,
+    /// a pseudo-element counts as a type, and <c>:not()</c> counts its argument. Compare two with <c>CompareTo</c>.
+    /// </summary>
+    public static (int Ids, int Classes, int Types) Specificity(string selector)
+    {
+        int ids = 0, classes = 0, types = 0;
+        var s = Regex.Replace(selector, @":not\(([^()]*)\)", "$1");
+        s = Regex.Replace(s, @"\[[^\]]*\]", _ => { classes++; return " "; });
+        s = Regex.Replace(s, @"::[\w-]+", _ => { types++; return " "; });
+        s = Regex.Replace(s, @":[\w-]+(\([^)]*\))?", _ => { classes++; return " "; });
+        s = Regex.Replace(s, @"#[\w-]+", _ => { ids++; return " "; });
+        s = Regex.Replace(s, @"\.[\w-]+", _ => { classes++; return " "; });
+        types += Regex.Count(s, @"[A-Za-z][\w-]*");
+        return (ids, classes, types);
+    }
+
     public static string StripComments(string css) => Regex.Replace(css, @"/\*.*?\*/", string.Empty, RegexOptions.Singleline);
 
     public static string Normalize(string selector) => Regex.Replace(selector.Trim(), @"\s+", " ");

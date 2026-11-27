@@ -41,6 +41,8 @@ Read and write them with the bag: `getValue(id, fallback)`, `setValue(id, value)
 
 * The rules apply only inside `.pluginConfigurationPage` and `.stolon-dialog`. A field outside both looks like stock Jellyfin.
 * The three containers and the kit blocks that sit in a form, such as a [Record Selector](record-selector.md), a callout, a [Panel](panel.md), a [Copy Field](copy-field.md), a [String List](string-list.md), or a [Stepper](stepper.md), take one wide gap below them. The last block in a record card or a panel body takes none.
+* A [stack](utility-classes.md), `stolon-stack`, takes the same wide gap below it, and the blocks inside it give their margins up to its own gap.
+* A label is a block over its control, unless it carries `stolon-hidden` or `hidden`, or is empty.
 * Inside a field container the label, input, select, button, and any `stolon-` child lose their margins. A child with no kit class keeps its spacing.
 * Text, number, password, search, url, email, date, and time inputs, textareas, and selects share one surface, border, radius, and accent focus border. They are full width. A checkbox or radio inside a field container keeps its own size.
 * Every select hides its native arrow and paints one chevron. The arrow container that emby injects is hidden, so a select never shows two.
