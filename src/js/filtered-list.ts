@@ -561,7 +561,8 @@ export function createFilteredList<T = any>(options: FilteredListOptions<T>): Fi
         if (checks) checks.paint();
         var count = selection.size();
         if (selectBar) selectBar.classList.toggle('stolon-active', count > 0);
-        if (selectAllRow) selectAllRow.classList.toggle('stolon-hidden', !list.getItems().length);
+        // Select all stays in its place with nothing to pick, off, so the bar keeps its shape.
+        if (selectAllBox) selectAllBox.disabled = !list.getItems().length;
         if (countEl) countEl.textContent = fillAll(opts.selectedText || stolonText('Stolon.CountSelected'), { count: String(count) });
         bulkButtons.forEach(function (btn) { btn.disabled = count === 0; });
     }

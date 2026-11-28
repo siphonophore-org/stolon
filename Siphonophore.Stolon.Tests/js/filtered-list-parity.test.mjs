@@ -177,3 +177,10 @@ test('every variation builds with items, a sort, filters, and a selection set fr
     await paged.load();
     assert.equal(paged.getItems().length, 3);
 });
+
+test('select all stays in the bar, off, while there is nothing to pick', async function () {
+    var list = build({ selectable: 'multiple', items: [] });
+    var row = list.selectBar.querySelector('.stolon-filtered-selectall');
+    assert.equal(row.classList.contains('stolon-hidden'), false);
+    assert.equal(list.selectBar.querySelector('.stolon-filtered-selectall-box').disabled, true);
+});
