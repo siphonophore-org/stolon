@@ -201,7 +201,7 @@ export function createShared(view: HTMLElement, pluginId: string, apiPrefix?: st
         generateGuid: generateGuid,
 
         getConfig: function (): Promise<any> {
-            return ApiClient!.getPluginConfiguration(this.pluginId);
+            return trackRequest(Promise.resolve(ApiClient!.getPluginConfiguration(this.pluginId)));
         },
 
         saveConfig: function (config: unknown): Promise<any> {

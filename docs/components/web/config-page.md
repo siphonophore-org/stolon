@@ -1,6 +1,6 @@
 # Config Page
 
-`createConfigPage` wires what every config page repeats. It builds the shared bag, sets the dashboard tabs, runs `bind` once, runs `load` on every `viewshow`, and tears everything down on `viewhide`. When `load` returns a promise, the page stays behind a spinner the first time it shows, until that promise and every request it started have come back, so it draws all at once.
+`createConfigPage` wires what every config page repeats. It builds the shared bag, sets the dashboard tabs, runs `bind` once, runs `load` on every `viewshow`, and tears everything down on `viewhide`. When `load` returns a promise, the page stays behind a spinner the first time it shows, until that promise and every request it started have come back, so it draws all at once. `trackRequest(promise)` counts a request made some other way, such as a direct `ApiClient` call, toward that wait, and `whenSettled()` resolves once no counted request has been on its way for a moment.
 
 ## Decision
 

@@ -214,3 +214,4 @@ export { openWebDialog, webConfirm } from './web-client-markup.js';
 export { startWebClientShell, applyWebClientLook, WEB_CLIENT_PALETTES } from './web-client-shell.js';
 export { stopWebClientShell } from './web-client-shell.js';
 export type * from './web-client-shell.js';
+export { trackRequest, whenSettled } from './lib/settle.js';
