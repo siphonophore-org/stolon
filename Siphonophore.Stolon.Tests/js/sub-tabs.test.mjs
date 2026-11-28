@@ -120,3 +120,18 @@ test('destroy removes the list listeners', function () {
     assert.equal(list.listeners.click.length, 0);
     assert.equal(list.listeners.keydown.length, 0);
 });
+
+test('a tab whose render returns a promise stays behind a spinner until it settles', async function () {
+    var { createSubTabs } = await import('../../src/js/sub-tabs.js');
+    var release;
+    var pending = new Promise(function (resolve) { release = resolve; });
+    var tabs = createSubTabs({ tabs: [{ id: 'a', label: 'A' }], render: function () { return pending; } });
+    var panel = tabs.getPanel('a');
+    assert.ok(panel.classList.contains('stolon-settling'));
+    assert.ok(panel.querySelector('.stolon-settle-cover'));
+    release();
+    await new Promise(function (r) { setTimeout(r, 300); });
+    assert.equal(panel.classList.contains('stolon-settling'), false);
+    assert.equal(panel.querySelector('.stolon-settle-cover'), null);
+    tabs.destroy();
+});

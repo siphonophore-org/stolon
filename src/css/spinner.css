@@ -21,3 +21,17 @@
 @media (prefers-reduced-motion: reduce) {
     .stolon-loading-ring { animation-duration: 2.4s; }
 }
+
+/* A page or a tab held until its data has come in: what it holds stays laid out but unseen, under a spinner */
+/* Example: <div class="stolon-settling"><div class="content-primary"></div><div class="stolon-settle-cover" role="status"><span class="stolon-loading-ring"></span></div></div> */
+.stolon-settling { position: relative; min-height: calc(var(--stolon-size-large) * 4); }
+.stolon-settling > *:not(.stolon-settle-cover) { visibility: hidden; }
+.stolon-settle-cover {
+    position: absolute;
+    top: calc(var(--stolon-size-large) * 2);
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+.stolon-settle-cover > .stolon-loading-ring { width: 40px; height: 40px; border-width: 4px; }

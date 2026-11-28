@@ -1,6 +1,7 @@
 import { make, nextId, listen, runAll, clear } from './lib/dom.js';
 import type { ComponentHandle } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
+import { coverUntilSettled } from './lib/settle-cover.js';
 
 /** One tab of a sub tab list. text is plain text for its panel. */
 export interface SubTab {
@@ -15,7 +16,7 @@ export interface SubTabsOptions {
     tabs?: SubTab[];
     value?: string | number;
     label?: string;
-    render?(tab: SubTab, panel: HTMLElement): Node | string | void;
+    render?(tab: SubTab, panel: HTMLElement): Node | string | void | PromiseLike<unknown>;
     onChange?(id: string, tab: SubTab): void;
 }
 
@@ -35,7 +36,7 @@ export interface SubTabsHandle extends ComponentHandle {
  *   tabs     : array of { id, label, text, disabled } where text is plain text for the panel [optional]
  *   value    : id of the tab to open first (default the first enabled tab)
  *   label    : aria-label of the tab list (default 'Sections')
- *   render   : function(tab, panel) called once, the first time the tab opens, that returns a node or an escaped HTML string for the panel or fills the panel itself [optional]
+ *   render   : function(tab, panel) called once, the first time the tab opens, that returns a node or an escaped HTML string for the panel or fills the panel itself. When it returns a promise, the panel stays behind a spinner until that promise and every request it started have come back [optional]
  *   onChange : function(id, tab) called when the selected tab changes [optional]
  * }
  * @returns { element, getValue, setValue, setItems, getPanel, destroy }. getPanel(id) returns the panel element of a tab. getValue returns the selected id as a string.
@@ -88,6 +89,7 @@ export function createSubTabs(options?: SubTabsOptions): SubTabsHandle {
             var content = options!.render(tab, panel);
             if (content instanceof Node) panel.appendChild(content);
             else if (typeof content === 'string') panel.innerHTML = content;
+            else if (content && typeof (content as PromiseLike<unknown>).then === 'function') coverUntilSettled(panel, content as PromiseLike<unknown>);
         }
     }
 

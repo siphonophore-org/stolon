@@ -4,6 +4,7 @@ import { createShared } from './shared-bag.js';
 import { setTabs } from './tabs.js';
 import type { PageHandle, ConfigPageOptions, UnsavedEditor } from './types.js';
 import { stolonText } from './lib/stolon-text.js';
+import { coverUntilSettled } from './lib/settle-cover.js';
 
 /**
  * Wires the config page lifecycle by building the shared bag, setting the tabs, running bind once, and running load on every viewshow. On viewhide it runs the registered cleanups and onHide.
@@ -16,7 +17,7 @@ import { stolonText } from './lib/stolon-text.js';
  *   tabIndex     : active tab index (default 0)
  *   tabs         : array of { href, name }, or a function returning one that runs each time the tabs are shown, set only when tabsKey is also given [optional]
  *   bind         : function(shared, page) run once, for event wiring [optional]
- *   load         : function(shared, page) run on every viewshow, for loading data [optional]
+ *   load         : function(shared, page) run on every viewshow, for loading data. When it returns a promise, the first time the page shows it stays behind a spinner until that promise and every request it started have come back, so it draws all at once [optional]
  *   onHide       : function(shared, page) run on viewhide, after the automatic cleanups [optional]
  *   isDirty      : function() returning whether there are unsaved changes, so leaving the page asks first and closing the tab warns [optional]
  *   leaveMessage : the question asked before leaving with unsaved changes (default 'You have unsaved changes. Leave without saving?')
@@ -29,6 +30,8 @@ export function createConfigPage(view: HTMLElement, opts: ConfigPageOptions): Pa
     var shared = createShared(view, opts.pluginId, opts.apiPrefix);
     var cleanups: Array<() => void> = [];
     var bound = false;
+    // Whether the page has been held behind its spinner, which happens on the first viewshow only.
+    var covered = false;
     var isDirty: (() => boolean) | null = opts.isDirty || null;
     // Editor sidecars from openEditorSidecar, whose unsaved edits count as the page.
     var editors: UnsavedEditor[] = [];
@@ -83,7 +86,11 @@ export function createConfigPage(view: HTMLElement, opts: ConfigPageOptions): Pa
             bound = true;
             if (opts.bind) opts.bind(shared, page);
         }
-        if (opts.load) opts.load(shared, page);
+        var loading = opts.load ? opts.load(shared, page) : undefined;
+        if (!covered && loading && typeof (loading as PromiseLike<unknown>).then === 'function') {
+            covered = true;
+            coverUntilSettled(view, loading as PromiseLike<unknown>);
+        }
         var balance = bindBalancedRows(view);
         cleanups.push(function () { balance.destroy(); });
         var adornments = bindFieldAdornments(view);

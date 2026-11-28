@@ -1,4 +1,5 @@
 import { formatBytes, clockText } from './lib/dom.js';
+import { trackRequest } from './lib/settle.js';
 import { copyToClipboard, debounce, downloadJson, pickJsonFile, escapeHtml, plural, errorText, generateGuid } from './browser-helpers.js';
 import { badgeHtml, classBadgeHtml } from './lib/badge.js';
 import { createUserSelector } from './user-selector.js';
@@ -275,10 +276,10 @@ export function createShared(view: HTMLElement, pluginId: string, apiPrefix?: st
                 options.contentType = 'application/json';
                 options.data = JSON.stringify(data);
             }
-            return ApiClient!.fetch(options).catch(function (error) {
+            return trackRequest(ApiClient!.fetch(options).catch(function (error) {
                 if (error && error.message && error.message.indexOf('JSON') !== -1) return null;
                 throw error;
-            });
+            }));
         },
 
         showAlert: function (message: string): void {

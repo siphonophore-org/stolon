@@ -94,7 +94,7 @@ export interface ConfigPageOptions {
     tabIndex?: number;
     tabs?: Tabs;
     bind?(shared: Shared, page: PageHandle): void;
-    load?(shared: Shared, page: PageHandle): void;
+    load?(shared: Shared, page: PageHandle): void | PromiseLike<unknown>;
     onHide?(shared: Shared, page: PageHandle): void;
     isDirty?(): boolean;
     leaveMessage?: string;

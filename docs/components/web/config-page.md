@@ -1,6 +1,6 @@
 # Config Page
 
-`createConfigPage` wires what every config page repeats. It builds the shared bag, sets the dashboard tabs, runs `bind` once, runs `load` on every `viewshow`, and tears everything down on `viewhide`.
+`createConfigPage` wires what every config page repeats. It builds the shared bag, sets the dashboard tabs, runs `bind` once, runs `load` on every `viewshow`, and tears everything down on `viewhide`. When `load` returns a promise, the page stays behind a spinner the first time it shows, until that promise and every request it started have come back, so it draws all at once.
 
 ## Decision
 

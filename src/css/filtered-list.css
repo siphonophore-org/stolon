@@ -48,6 +48,10 @@
 .stolon-filtered-sort { flex: 0 1 auto; width: auto; min-width: calc(var(--stolon-size-large) * 3.5); }
 .stolon-filtered-toolbar > .stolon-search ~ .stolon-filtered-select,
 .stolon-filtered-toolbar > .stolon-search ~ .stolon-filtered-sort { flex-grow: 1; }
+/* A button in the toolbar takes no margin of its own above or below, the web client's included, so a toolbar with a button is as tall as one without and its search sits at the same height */
+/* Example: <div class="stolon-filtered-toolbar"><div class="stolon-search"></div><button class="raised stolon-button stolon-primary">Add</button></div> */
+.stolon-filtered-toolbar > .stolon-button,
+.stolon-filtered-toolbar > .emby-button { margin-top: 0 !important; margin-bottom: 0 !important; }
 /* With three selects or more, a toolbar too narrow for them all beside the search gives the search the first line and the selects the next, so no select wraps alone */
 /* Example: <div class="stolon-filtered-toolbar"><div class="stolon-search"></div><select class="stolon-filtered-select"></select><select class="stolon-filtered-select"></select><select class="stolon-filtered-select"></select></div> */
 .stolon-filtered-toolbar:has(> .stolon-filtered-select ~ .stolon-filtered-select ~ .stolon-filtered-select) { container-type: inline-size; }

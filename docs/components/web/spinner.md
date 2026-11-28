@@ -63,6 +63,7 @@ An inline spinner with a hidden status label. Its size is small, medium, or larg
 | Class | What it looks like |
 | :--- | :--- |
 | `stolon-loading` | Inline spinner, a ring with one accent edge that turns, in three sizes |
+| `stolon-settling` | A page or a tab held until its data has come in: what it holds stays laid out but unseen, under a spinner |
 
 <!-- reference:end -->
 

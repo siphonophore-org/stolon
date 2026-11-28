@@ -27,7 +27,7 @@ Classes: `stolon-subtabs`, `stolon-subtab-list`, `stolon-subtab`, `stolon-subtab
 
 * Left and Right move and select, wrapping and skipping a disabled tab. Home and End jump to the ends.
 * Only the selected tab has `tabindex="0"`.
-* `render` runs once, the first time a tab opens, and returns a node or an escaped HTML string, or fills the panel itself.
+* `render` runs once, the first time a tab opens, and returns a node or an escaped HTML string, or fills the panel itself. When it returns a promise, the panel stays behind a spinner until that promise and every request it started have come back.
 * A tab may carry plain `text` for its panel instead of a `render`.
 * An id is read as a string everywhere, so 2 and '2' name the same tab.
 
@@ -48,7 +48,7 @@ An in-page tab list with tab panels. Left and Right move between tabs, Home and 
 | `tabs` | <code>SubTab[]</code> | array of { id, label, text, disabled } where text is plain text for the panel [optional] |
 | `value` | <code>string &#124; number</code> | id of the tab to open first (default the first enabled tab) |
 | `label` | <code>string</code> | aria-label of the tab list (default 'Sections') |
-| `render` | <code>(tab: SubTab, panel: HTMLElement): Node &#124; string &#124; void</code> | function(tab, panel) called once, the first time the tab opens, that returns a node or an escaped HTML string for the panel or fills the panel itself [optional] |
+| `render` | <code>(tab: SubTab, panel: HTMLElement): Node &#124; string &#124; void &#124; PromiseLike&lt;unknown&gt;</code> | function(tab, panel) called once, the first time the tab opens, that returns a node or an escaped HTML string for the panel or fills the panel itself. When it returns a promise, the panel stays behind a spinner until that promise and every request it started have come back [optional] |
 | `onChange` | <code>(id: string, tab: SubTab): void</code> | function(id, tab) called when the selected tab changes [optional] |
 
 | Handle member | Type |
