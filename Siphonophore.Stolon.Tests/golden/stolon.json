@@ -319,7 +319,7 @@
     "dialog": 2469,
     "divider": 449,
     "duration-field": 3562,
-    "editor-sidecar": 2071,
+    "editor-sidecar": 2088,
     "field-adornments": 4990,
     "field-message": 2292,
     "file-picker": 2651,
@@ -430,5 +430,5 @@
     "web-push": 5309,
     "world-map": 7205
   },
-  "bytes": 639815
+  "bytes": 639832
 }

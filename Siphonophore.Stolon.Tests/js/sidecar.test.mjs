@@ -172,3 +172,12 @@ test('the shelf is hidden with no buttons, and only the body scrolls', async fun
     assert.match(css, /\.stolon-sidecar-shelf:empty,\s*\.stolon-sidecar-shelf\[hidden\] \{ display: none; \}/);
     assert.match(css, /\.stolon-dialog-content\.stolon-sidecar-panel \{[^}]*overflow: hidden/);
 });
+
+test('an editor sidecar shows its badge beside the title', async function () {
+    var { openEditorSidecar } = await import('../../src/js/editor-sidecar.js');
+    var handle = openEditorSidecar({ title: 'media.example.com', badge: { label: 'HTTPS', color: 'green' }, onSave: function () {} });
+    var badge = handle.element.querySelector('.stolon-sidecar-badge');
+    assert.equal(badge.textContent, 'HTTPS');
+    assert.ok(badge.classList.contains('stolon-green'));
+    handle.close();
+});

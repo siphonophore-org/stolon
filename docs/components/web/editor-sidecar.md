@@ -30,7 +30,7 @@ It returns the `openSidecar` handle plus `isDirty()` and `markClean()`.
 
 ## States and Modifiers
 
-* `title`, `subtitle`, `body`, `className`, `size`, `onClose`, `autofocus`, and `returnFocus` are as on [Sidecar](sidecar.md). It is `large` unless `size` is set.
+* `title`, `subtitle`, `badge`, `body`, `className`, `size`, `onClose`, `autofocus`, and `returnFocus` are as on [Sidecar](sidecar.md). It is `large` unless `size` is set.
 * `page` is the `createConfigPage` handle. An open editor then counts toward `guardUnsaved` and closes when the page hides.
 * `isNew` marks a record not saved yet. It has no Delete button.
 * `serialize()` returns a stable string of the editor state. `ready` is a promise to wait on before taking the clean snapshot, for fields still loading.

@@ -14,7 +14,7 @@ export interface EditorSidecarAction {
 }
 
 /** What openEditorSidecar takes. onSave returns false, or a promise of false, to keep the editor open, and actions adds buttons to the shelf. */
-export interface EditorSidecarOptions extends Pick<SidecarOptions, 'title' | 'subtitle' | 'body' | 'className' | 'size' | 'autofocus' | 'returnFocus'> {
+export interface EditorSidecarOptions extends Pick<SidecarOptions, 'title' | 'subtitle' | 'badge' | 'body' | 'className' | 'size' | 'autofocus' | 'returnFocus'> {
     page?: Pick<PageHandle, 'trackEditor' | 'untrackEditor'> | null;
     isNew?: boolean;
     serialize?(): string;
@@ -39,7 +39,7 @@ export interface EditorSidecarHandle extends SidecarHandle {
  * the createConfigPage handle, it counts toward the page unsaved guard and closes when the page hides.
  *
  * @param opts {
- *   title, subtitle, body, className, size : as openSidecar (size is 'large' unless set)
+ *   title, subtitle, badge, body, className, size : as openSidecar (size is 'large' unless set)
  *   page       : the createConfigPage handle [optional]
  *   isNew      : true for a record not saved yet, which has no Delete button (default false)
  *   serialize  : function() returning a stable string of the editor's state, for its change tracking
@@ -98,6 +98,7 @@ export function openEditorSidecar(opts?: EditorSidecarOptions): EditorSidecarHan
     var handle: EditorSidecarHandle = openSidecar({
         title: opts.title,
         subtitle: opts.subtitle,
+        badge: opts.badge,
         body: opts.body,
         size: opts.size || 'large',
         className: opts.className,

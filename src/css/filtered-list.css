@@ -48,6 +48,12 @@
 .stolon-filtered-sort { flex: 0 1 auto; width: auto; min-width: calc(var(--stolon-size-large) * 3.5); }
 .stolon-filtered-toolbar > .stolon-search ~ .stolon-filtered-select,
 .stolon-filtered-toolbar > .stolon-search ~ .stolon-filtered-sort { flex-grow: 1; }
+/* With three selects or more, a toolbar too narrow for them all beside the search gives the search the first line and the selects the next, so no select wraps alone */
+/* Example: <div class="stolon-filtered-toolbar"><div class="stolon-search"></div><select class="stolon-filtered-select"></select><select class="stolon-filtered-select"></select><select class="stolon-filtered-select"></select></div> */
+.stolon-filtered-toolbar:has(> .stolon-filtered-select ~ .stolon-filtered-select ~ .stolon-filtered-select) { container-type: inline-size; }
+@container (max-width: 680px) {
+    .stolon-filtered-toolbar > .stolon-search:has(~ .stolon-filtered-select ~ .stolon-filtered-select ~ .stolon-filtered-select) { flex-basis: 100%; }
+}
 
 /* Count cards that each turn a choice on and off: on is outlined in its status color, off is dimmed, and with none on every choice shows */
 /* Example: <div class="stolon-cards stolon-filtered-cards"><button class="stolon-card stolon-filtered-card stolon-green" aria-pressed="true"><span class="stolon-card-count">4</span><span class="stolon-card-label">Synced</span></button></div> */
